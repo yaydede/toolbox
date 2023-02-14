@@ -1,4 +1,14 @@
-delete_merged_file: true
+book_filename: "YA_TextBook"
+output_dir: "docs"
 language:
   ui:
     chapter_name: "Chapter "
+delete_merged_file: false
+new_session: yes
+split_by: section
+config:
+  toc:
+    collapse: section
+    scroll_highlight: true
+    before: null
+    after: null
