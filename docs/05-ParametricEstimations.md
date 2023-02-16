@@ -809,7 +809,7 @@ $$
 then, the overall predictive accuracy can be summarized with a matrix,  
 
 $$
-\begin{array}{ccc}{\text { Predicted vs. Reality}} & {{Y}=1} & {{Y}=0} \\ {\hat{Y}=1} & {\text { TP }_{}} & {\text { FP }_{}} \\ {\hat{Y}=0} & {\text { FN }_{}} & {\text { TN }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} & {Y=1} & {Y=0} \\ {\hat{Y}=1} & {\text { TP }_{}} & {\text { FP }_{}} \\ {\hat{Y}=0} & {\text { FN }_{}} & {\text { TN }_{}}\end{array}
 $$
 
 where, TP, FP, FN, TN are **"True positives", "False Positives", "False Negatives", "True Negatives"**, respectively.  This table is also know as **Confusion Table**.  There are many metrics that can be calculated from this table to measure the accuracy of our classifier.  We will spend more time on this this subject under Chapter 10 later.
