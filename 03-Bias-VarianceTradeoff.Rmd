@@ -790,7 +790,7 @@ $$
 \mathbf{sd}(F) =\hat{\sigma}+\frac{\hat{\sigma}}{\sqrt{n}}=\hat{\sigma}\left(1+\frac{1}{\sqrt{n}}\right)
 $$
   
-Therefore, $\mathbf{se}(\bar{X})$ changes from sample to sample, as $\hat{\sigma}$ will be different in each sample.  As we discussed earlier, when we use $\hat{\sigma}$ we should use $t$-distribution, instead of standard normal distribution.  Although they have the same critical vaules for 95% intervals, which is closed to 1.96 when the sample size larger than 100, we usually use critical $t$-values for the interval estimations.  
+Therefore, $\mathbf{se}(\bar{X})$ changes from sample to sample, as $\hat{\sigma}$ will be different in each sample.  As we discussed earlier, when we use $\hat{\sigma}$ we should use $t$-distribution, instead of standard normal distribution.  Although they have the same critical values for 95% intervals, which is closed to 1.96 when the sample size larger than 100, we usually use critical $t$-values for the interval estimations.  
 
 Note that when $\mathrm{E}[\bar{X}]\neq\mu_x$ the whole process of building a prediction interval collapses at the beginning.  Moreover, confidence or prediction intervals require that data must follow a normal distribution.  If the sample size is large enough (more than 35, roughly) the central limit theorem makes sure that the sampling distribution would be normal regardless of how the population is distributed.  In our example, since our sample sizes 3, the CLT does not hold.  Let's have a more realistic case in which we have a large population and multiple samples with $n=100$.
 

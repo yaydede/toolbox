@@ -750,8 +750,8 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.44828 0.11237
-## 3 0.010000      2   0.24138 0.48276 0.11560</code></pre>
+## 2 0.034483      1   0.27586 0.65517 0.12863
+## 3 0.010000      2   0.24138 0.62069 0.12640</code></pre>
 <p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.000000 in the table) in the root node. The <strong>relative</strong> improvement, or gain, due to a split is given by <code>CP</code> (cost complexity pruning), which is 0.724138 in the first split on <code>INSYS</code>. Therefore, the first split on <code>INSYS</code> reduces (improves) this error by 72.4138% to 27.5862% (1.000000 <code>rel error</code> - 0.724138 <code>CP</code>). This relative gain (<code>CP</code>) can be calculated as follows:</p>
 <p><span class="math display">\[
 \frac{\Delta}{G(\mathcal{N})}=\frac{G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)}{G(\mathcal{N})}.
@@ -774,10 +774,10 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01953 0.045723
-## 2 0.101694      1   0.41379 0.80152 0.164666
-## 3 0.028263      2   0.31209 0.84748 0.170679
-## 4 0.010000      3   0.28383 0.78744 0.159418</code></pre>
+## 1 0.586213      0   1.00000 1.01723 0.045451
+## 2 0.101694      1   0.41379 0.90855 0.168004
+## 3 0.028263      2   0.31209 0.88207 0.164696
+## 4 0.010000      3   0.28383 0.78430 0.147960</code></pre>
 <p>It is not so easy to follow the <code>rpart</code> calculations for classification. Although the explanations in the <a href="https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf">vignette</a> <span class="citation">(<a href="#ref-Atkinson_2022" role="doc-biblioref"><strong>Atkinson_2022?</strong></a>)</span> suggests that Gini is used for classification, it seems that cost complexity pruning (<code>cp</code>) is reported based on accuracy (misclassification error) <a href="https://stats.stackexchange.com/q/223211">rather than Gini</a> <span class="citation">(<a href="#ref-Alan_2016" role="doc-biblioref"><strong>Alan_2016?</strong></a>)</span>.</p>
 <p>As you see, when the outcome is not a factor variable, <code>rpart</code> applies a <strong>regression tree</strong> method, which minimizes the sum of squares, <span class="math inline">\(\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2\)</span>. However, when <span class="math inline">\(y_i\)</span> is a binary number with two values 0 and 1, the sum of squares becomes <span class="math inline">\(np(1-p)\)</span>, which gives the same relative gain as Gini. This is clear as both relative gains (our calculation and the calculation by <code>rapart()</code>above) are the same.</p>
 <p>What’s the variable importance of <code>rpart()</code>?</p>
@@ -823,15 +823,15 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.58621 0.12399
+## 2 0.103448      1  0.275862 0.68966 0.13070
 ## 3 0.034483      2  0.172414 0.58621 0.12399
-## 4 0.017241      6  0.034483 0.62069 0.12640
-## 5 0.000000      8  0.000000 0.62069 0.12640</code></pre>
+## 4 0.017241      6  0.034483 0.58621 0.12399
+## 5 0.000000      8  0.000000 0.55172 0.12140</code></pre>
 <div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="cart.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr22-1.png" width="672" /></p>
 <div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="cart.html#cb553-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
 <span id="cb553-2"><a href="cart.html#cb553-2" aria-hidden="true" tabindex="-1"></a>min_cp</span></code></pre></div>
-<pre><code>## [1] 0.1034483</code></pre>
+<pre><code>## [1] 0</code></pre>
 <p>Remember <code>rpart</code> has a built-in process for cross-validation. The <code>xerror</code> is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, more levels (each row represents a different height of the tree) in the tree mean that it has a lower classification error on the training. However, you run the risk of overfitting. Often, the cross-validation error will actually grow as the tree gets more levels.</p>
 <p>There are two common ways to prune a tree by <code>rpart</code>:</p>
 <ol style="list-style-type: decimal">
@@ -847,15 +847,18 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS
+## [1] FRCAR INCAR INSYS PVENT REPUL
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
-##        CP nsplit rel error  xerror    xstd
-## 1 0.72414      0   1.00000 1.00000 0.14282
-## 2 0.10345      1   0.27586 0.58621 0.12399</code></pre>
+##         CP nsplit rel error  xerror    xstd
+## 1 0.724138      0  1.000000 1.00000 0.14282
+## 2 0.103448      1  0.275862 0.68966 0.13070
+## 3 0.034483      2  0.172414 0.58621 0.12399
+## 4 0.017241      6  0.034483 0.58621 0.12399
+## 5 0.000000      8  0.000000 0.55172 0.12140</code></pre>
 <div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb557-1"><a href="cart.html#cb557-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr23-1.png" width="672" /></p>
 <p>Now we have applied two approaches, limiting tree growth and pruning a fully grown tree. We also have two different trees: “<strong>tree</strong>” and “<strong>ptree2</strong>”. How can we test their performances? We know that we cannot test it with the training data. When applying this in practice, we should have a test dataset to check their performance.</p>
@@ -914,9 +917,9 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.558 0.029633
-## 4 0.011333      5     0.504  0.532 0.029117
-## 5 0.010000      9     0.458  0.532 0.029117</code></pre>
+## 3 0.015000      3     0.534  0.564 0.029749
+## 4 0.011333      5     0.504  0.562 0.029710
+## 5 0.010000      9     0.458  0.556 0.029595</code></pre>
 <div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="cart.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr26-1.png" width="672" /></p>
 <p>Of course, we would like to see the tree’s prediction accuracy by using a test dataset and the confusion table metrics.</p>
