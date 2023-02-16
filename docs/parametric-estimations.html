@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Parametric Estimations | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 5 Parametric Estimations | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Parametric Estimations | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Parametric Estimations | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="parametric-vs.-nonparametric-methods.html"/>
+<link rel="next" href="nonparametric-estimations---basics.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="parametric-estimations" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Parametric Estimations<a href="parametric-estimations.html#parametric-estimations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>So far we have only considered models for numeric response variables. What happens if the response variable is categorical? Can we use linear models in these situations? Yes, we can. To understand how, let’s look at the ordinary least-square (OLS) regression, which is actually a specific case of the more general, generalized linear model (GLM). So, in general, GLMs relate the mean of the response to a linear combination of the predictors, <span class="math inline">\(\eta(x)\)</span>, through the use of a link function, <span class="math inline">\(g(.)\)</span>. That is,</p>
+<p><span class="math display" id="eq:5-1">\[\begin{equation}
+\eta(\mathbf{x})=g(\mathrm{E}[Y | \mathbf{X}=\mathbf{x}]),
+  \tag{5.1}
+\end{equation}\]</span></p>
+<p>Or,</p>
+<p><span class="math display" id="eq:5-2">\[\begin{equation}
+\eta(\mathbf{x})=\beta_{0}+\beta_{1} x_{1}+\beta_{2} x_{2}+\ldots+\beta_{p-1} x_{p-1} = g(\mathrm{E}[Y | \mathbf{X}=\mathbf{x}])
+  \tag{5.2}
+\end{equation}\]</span></p>
+<p>In the case of a OLS,</p>
+<p><span class="math display">\[
+g(\mathrm{E}[Y | \mathbf{X}=\mathbf{x}]) = E[Y | \mathbf{X}=\mathbf{x}],
+\]</span></p>
+<p>To illustrate the use of a GLM, we will focus on the case of binary response variable coded using 0 and 1. In practice, these 0s and 1s represent two possible outcomes such as “yes” or “no”, “sick” or “healthy”, etc.</p>
+<p><span class="math display">\[
+Y=\left\{\begin{array}{ll}{1} &amp; {\text { yes }} \\ {0} &amp; {\text { no }}\end{array}\right.
+\]</span></p>
+<div id="linear-probability-models-lpm" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Linear Probability Models (LPM)<a href="parametric-estimations.html#linear-probability-models-lpm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s use the dataset <strong>Vehicles</strong> from the <code>fueleconomy</code> package. We we ill create a new variable a new variable, <code>mpg</code>, which is 1 if the car’s hightway mpg is more than the average, 0 otherwise:</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="parametric-estimations.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  </span>
+<span id="cb206-2"><a href="parametric-estimations.html#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
+<span id="cb206-3"><a href="parametric-estimations.html#cb206-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
+<span id="cb206-4"><a href="parametric-estimations.html#cb206-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-5"><a href="parametric-estimations.html#cb206-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NAs</span></span>
+<span id="cb206-6"><a href="parametric-estimations.html#cb206-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
+<pre><code>## [1] 33442    12</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="parametric-estimations.html#cb208-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df[<span class="fu">complete.cases</span>(df), ]</span>
+<span id="cb208-2"><a href="parametric-estimations.html#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div>
+<pre><code>## [1] 33382    12</code></pre>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="parametric-estimations.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary outcome mpg = 1 if hwy &gt; mean(hwy), 0 otherwise</span></span>
+<span id="cb210-2"><a href="parametric-estimations.html#cb210-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="fu">mean</span>(data<span class="sc">$</span>hwy), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb210-3"><a href="parametric-estimations.html#cb210-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg)</span></code></pre></div>
+<pre><code>## 
+##     0     1 
+## 17280 16102</code></pre>
+<p>We are going to have a model that predicts <code>mpg</code> (i.e. <code>mpg</code> = 1) for each car depending on their attributes. If you check the data, you see that many variables are character variables. Although most functions, like <code>lm()</code>, accept character variables (and convert them to factor), it is a good practice to check each variable and convert them appropriate data types.</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="parametric-estimations.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data)) {</span>
+<span id="cb212-2"><a href="parametric-estimations.html#cb212-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.character</span>(data[,i])) data[,i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data[,i])</span>
+<span id="cb212-3"><a href="parametric-estimations.html#cb212-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb212-4"><a href="parametric-estimations.html#cb212-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    33382 obs. of  13 variables:
+##  $ id   : num  13309 13310 13311 14038 14039 ...
+##  $ make : Factor w/ 124 levels &quot;Acura&quot;,&quot;Alfa Romeo&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ model: Factor w/ 3174 levels &quot;1-Ton Truck 2WD&quot;,..: 28 28 28 29 29 29 29 29 29 30 ...
+##  $ year : num  1997 1997 1997 1998 1998 ...
+##  $ class: Factor w/ 34 levels &quot;Compact Cars&quot;,..: 29 29 29 29 29 29 29 29 29 1 ...
+##  $ trans: Factor w/ 46 levels &quot;Auto (AV-S6)&quot;,..: 32 43 32 32 43 32 32 43 32 32 ...
+##  $ drive: Factor w/ 7 levels &quot;2-Wheel Drive&quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
+##  $ cyl  : num  4 4 6 4 4 6 4 4 6 5 ...
+##  $ displ: num  2.2 2.2 3 2.3 2.3 3 2.3 2.3 3 2.5 ...
+##  $ fuel : Factor w/ 12 levels &quot;CNG&quot;,&quot;Diesel&quot;,..: 11 11 11 11 11 11 11 11 11 7 ...
+##  $ hwy  : num  26 28 26 27 29 26 27 29 26 23 ...
+##  $ cty  : num  20 22 18 19 21 17 20 21 17 18 ...
+##  $ mpg  : num  1 1 1 1 1 1 1 1 1 0 ...</code></pre>
+<p>Done! We are ready to have a model to predict <code>mpg</code>. For now, we’ll use only <code>fuel</code>.</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="parametric-estimations.html#cb214-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> data) <span class="co">#No intercept</span></span>
+<span id="cb214-2"><a href="parametric-estimations.html#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ fuel + 0, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.8571 -0.4832 -0.2694  0.5168  0.7306 
+## 
+## Coefficients:
+##                                 Estimate Std. Error t value Pr(&gt;|t|)    
+## fuelCNG                         0.362069   0.065383   5.538 3.09e-08 ***
+## fuelDiesel                      0.479405   0.016843  28.463  &lt; 2e-16 ***
+## fuelGasoline or E85             0.269415   0.015418  17.474  &lt; 2e-16 ***
+## fuelGasoline or natural gas     0.277778   0.117366   2.367   0.0180 *  
+## fuelGasoline or propane         0.000000   0.176049   0.000   1.0000    
+## fuelMidgrade                    0.302326   0.075935   3.981 6.87e-05 ***
+## fuelPremium                     0.507717   0.005364  94.650  &lt; 2e-16 ***
+## fuelPremium and Electricity     1.000000   0.497942   2.008   0.0446 *  
+## fuelPremium Gas or Electricity  0.857143   0.188205   4.554 5.27e-06 ***
+## fuelPremium or E85              0.500000   0.053081   9.420  &lt; 2e-16 ***
+## fuelRegular                     0.483221   0.003311 145.943  &lt; 2e-16 ***
+## fuelRegular Gas and Electricity 1.000000   0.176049   5.680 1.36e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4979 on 33370 degrees of freedom
+## Multiple R-squared:  0.4862, Adjusted R-squared:  0.486 
+## F-statistic:  2631 on 12 and 33370 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The estimated model is a probabilistic model since,</p>
+<p><span class="math display">\[
+E[Y | \mathbf{X}=\mathbf{Regular}]) = \text{Pr}(Y=1|\mathbf{X}=\mathbf{Regular}),
+\]</span></p>
+<p>In this context, the link function is called “identity” because it directly “links” the probability to the linear function of the predictor variables. Let’s see if we can verify this:</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="parametric-estimations.html#cb216-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>fuel, data<span class="sc">$</span>mpg)</span>
+<span id="cb216-2"><a href="parametric-estimations.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(<span class="fu">addmargins</span>(tab))</span></code></pre></div>
+<pre><code>##                                  0     1   Sum
+##                                               
+## CNG                             37    21    58
+## Diesel                         455   419   874
+## Gasoline or E85                762   281  1043
+## Gasoline or natural gas         13     5    18
+## Gasoline or propane              8     0     8
+## Midgrade                        30    13    43
+## Premium                       4242  4375  8617
+## Premium and Electricity          0     1     1
+## Premium Gas or Electricity       1     6     7
+## Premium or E85                  44    44    88
+## Regular                      11688 10929 22617
+## Regular Gas and Electricity      0     8     8
+## Sum                          17280 16102 33382</code></pre>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="parametric-estimations.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tab, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##                              
+##                                       0         1
+##   CNG                         0.6379310 0.3620690
+##   Diesel                      0.5205950 0.4794050
+##   Gasoline or E85             0.7305849 0.2694151
+##   Gasoline or natural gas     0.7222222 0.2777778
+##   Gasoline or propane         1.0000000 0.0000000
+##   Midgrade                    0.6976744 0.3023256
+##   Premium                     0.4922827 0.5077173
+##   Premium and Electricity     0.0000000 1.0000000
+##   Premium Gas or Electricity  0.1428571 0.8571429
+##   Premium or E85              0.5000000 0.5000000
+##   Regular                     0.5167794 0.4832206
+##   Regular Gas and Electricity 0.0000000 1.0000000</code></pre>
+<p>The frequency table shows the probability of each class (MPG = 1 or 0) for each fuel type. The OLS we estimated produces exactly the same results, that is,</p>
+<p><span class="math display">\[
+Pr[Y = 1 | x=\mathbf{Regular}]) = \beta_{0}+\beta_{1} x_{i}.
+\]</span></p>
+<p>Since <span class="math inline">\(Y\)</span> has only two possible outcomes (1 and 0), it has a specific probability distribution. First, let’s refresh our memories about Binomial and Bernoulli distributions. In general, if a random variable, <span class="math inline">\(X\)</span>, follows a <strong>binomial distribution</strong> with parameters <span class="math inline">\(n \in \mathbb{N}\)</span> and <span class="math inline">\(p \in [0,1]\)</span>, we write <span class="math inline">\(X \sim B(n, p)\)</span>. The probability of getting exactly <span class="math inline">\(k\)</span> successes in <span class="math inline">\(n\)</span> trials is given by the probability mass function:</p>
+<p><span class="math display" id="eq:5-3">\[\begin{equation}
+\operatorname{Pr}(X=k)=\left(\begin{array}{l}{n} \\ {k}\end{array}\right) p^{k}(1-p)^{n-k}
+  \tag{5.3}
+\end{equation}\]</span>
+for <span class="math inline">\(k = 0, 1, 2, ..., n\)</span>, where</p>
+<p><span class="math display">\[
+\left(\begin{array}{l}{n} \\ {k}\end{array}\right)=\frac{n !}{k !(n-k) !}
+\]</span></p>
+<p>Formula 5.3 can be understood as follows: <span class="math inline">\(k\)</span> successes occur with probability <span class="math inline">\(p^k\)</span> and <span class="math inline">\(n-k\)</span> failures occur with probability <span class="math inline">\((1-p)^{n−k}\)</span>. However, the <span class="math inline">\(k\)</span> successes can occur anywhere among the <span class="math inline">\(n\)</span> trials, and there are <span class="math inline">\(n!/k!(n!-k!)\)</span> different ways of distributing <span class="math inline">\(k\)</span> successes in a sequence of <span class="math inline">\(n\)</span> trials. Suppose a <em>biased coin</em> comes up heads with probability 0.3 when tossed. What is the probability of achieving 4 heads after 6 tosses?</p>
+<p><span class="math display">\[
+\operatorname{Pr}(4 \text { heads})=f(4)=\operatorname{Pr}(X=4)=\left(\begin{array}{l}{6} \\ {4}\end{array}\right) 0.3^{4}(1-0.3)^{6-4}=0.059535
+\]</span></p>
+<p>The <strong>Bernoulli distribution</strong> on the other hand, is a discrete probability distribution of a random variable which takes the value 1 with probability <span class="math inline">\(p\)</span> and the value 0 with probability <span class="math inline">\(q = (1 - p)\)</span>, that is, the probability distribution of any single experiment that asks a yes–no question. The <strong>Bernoulli distribution</strong> is a special case of the <strong>binomial distribution</strong>, where <span class="math inline">\(n = 1\)</span>. Symbolically, <span class="math inline">\(X \sim B(1, p)\)</span> has the same meaning as <span class="math inline">\(X \sim Bernoulli(p)\)</span>. Conversely, any binomial distribution, <span class="math inline">\(B(n, p)\)</span>, is the distribution of the sum of <span class="math inline">\(n\)</span> Bernoulli trials, <span class="math inline">\(Bernoulli(p)\)</span>, each with the same probability <span class="math inline">\(p\)</span>.</p>
+<p><span class="math display">\[
+\operatorname{Pr}(X=k) =p^{k}(1-p)^{1-k} \quad \text { for } k \in\{0,1\}
+\]</span></p>
+<p>Formally, the outcomes <span class="math inline">\(Y_i\)</span> are described as being Bernoulli-distributed data, where each outcome is determined by an unobserved probability <span class="math inline">\(p_i\)</span> that is specific to the outcome at hand, but related to the explanatory variables. This can be expressed in any of the following equivalent forms:</p>
+<p><span class="math display" id="eq:5-4">\[\begin{equation}
+\operatorname{Pr}\left(Y_{i}=y | x_{1, i}, \ldots, x_{m, i}\right)=\left\{\begin{array}{ll}{p_{i}} &amp; {\text { if } y=1} \\ {1-p_{i}} &amp; {\text { if } y=0}\end{array}\right.
+  \tag{5.4}
+\end{equation}\]</span></p>
+<p>The expression 5.4 is the probability mass function of the Bernoulli distribution, specifying the probability of seeing each of the two possible outcomes. Similarly, this can be written as follows, which avoids having to write separate cases and is more convenient for certain types of calculations. This relies on the fact that <span class="math inline">\(Y_{i}\)</span> can take only the value 0 or 1. In each case, one of the exponents will be 1, which will make the outcome either <span class="math inline">\(p_{i}\)</span> or 1−<span class="math inline">\(p_{i}\)</span>, as in 5.4.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p><span class="math display">\[
+\operatorname{Pr}\left(Y_{i}=y | x_{1, i}, \ldots, x_{m, i}\right)=p_{i}^{y}\left(1-p_{i}\right)^{(1-y)}
+\]</span></p>
+<p>Hence this shows that</p>
+<p><span class="math display">\[
+\operatorname{Pr}\left(Y_{i}=1 | x_{1, i}, \ldots, x_{m, i}\right)=p_{i}=E[Y_{i}  | \mathbf{X}=\mathbf{x}])
+\]</span></p>
+<p>Let’s have a more complex model:</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="parametric-estimations.html#cb220-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">data =</span> data)</span>
+<span id="cb220-2"><a href="parametric-estimations.html#cb220-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ fuel + drive + cyl, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.09668 -0.21869  0.01541  0.12750  0.97032 
+## 
+## Coefficients:
+##                                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                      0.858047   0.049540  17.320  &lt; 2e-16 ***
+## fuelDiesel                       0.194540   0.047511   4.095 4.24e-05 ***
+## fuelGasoline or E85              0.030228   0.047277   0.639  0.52258    
+## fuelGasoline or natural gas      0.031187   0.094466   0.330  0.74129    
+## fuelGasoline or propane          0.031018   0.132069   0.235  0.81432    
+## fuelMidgrade                     0.214471   0.070592   3.038  0.00238 ** 
+## fuelPremium                      0.189008   0.046143   4.096 4.21e-05 ***
+## fuelPremium and Electricity      0.746139   0.353119   2.113  0.03461 *  
+## fuelPremium Gas or Electricity   0.098336   0.140113   0.702  0.48279    
+## fuelPremium or E85               0.307425   0.059412   5.174 2.30e-07 ***
+## fuelRegular                      0.006088   0.046062   0.132  0.89485    
+## fuelRegular Gas and Electricity  0.092330   0.132082   0.699  0.48454    
+## drive4-Wheel Drive               0.125323   0.020832   6.016 1.81e-09 ***
+## drive4-Wheel or All-Wheel Drive -0.053057   0.016456  -3.224  0.00126 ** 
+## driveAll-Wheel Drive             0.333921   0.018879  17.687  &lt; 2e-16 ***
+## driveFront-Wheel Drive           0.497978   0.016327  30.499  &lt; 2e-16 ***
+## drivePart-time 4-Wheel Drive    -0.078447   0.039258  -1.998  0.04570 *  
+## driveRear-Wheel Drive            0.068346   0.016265   4.202 2.65e-05 ***
+## cyl                             -0.112089   0.001311 -85.488  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3501 on 33363 degrees of freedom
+## Multiple R-squared:  0.5094, Adjusted R-squared:  0.5091 
+## F-statistic:  1924 on 18 and 33363 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Since OLS is a “Gaussian” member of GLS family, we can also estimate it as GLS. We use <code>glm()</code> and define the family as “gaussian”.</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="parametric-estimations.html#cb222-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">family =</span> gaussian, <span class="at">data =</span> data)</span>
+<span id="cb222-2"><a href="parametric-estimations.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">round</span>(<span class="fu">coef</span>(model2),<span class="dv">2</span>), <span class="fu">round</span>(<span class="fu">coef</span>(model3),<span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>With this LPM model, we can now predict the classification of future cars in terms of high (<code>mpg</code> = 1) or low (<code>mpg</code> = 0), which was our objective. Let’s see how successful we are in identifying cars with <code>mpg</code> = 1 in our own sample.</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="parametric-estimations.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="co">#How many cars we have with mpg = 1 and mpg = 0 in our data</span></span>
+<span id="cb224-2"><a href="parametric-estimations.html#cb224-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg) </span></code></pre></div>
+<pre><code>## 
+##     0     1 
+## 17280 16102</code></pre>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="parametric-estimations.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="co">#In-sample fitted values or predicted probabilities for mpg = 1</span></span>
+<span id="cb226-2"><a href="parametric-estimations.html#cb226-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember our E(Y|X) is Pr(Y=1|X)</span></span>
+<span id="cb226-3"><a href="parametric-estimations.html#cb226-3" aria-hidden="true" tabindex="-1"></a>mpg_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model2)</span>
+<span id="cb226-4"><a href="parametric-estimations.html#cb226-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb226-5"><a href="parametric-estimations.html#cb226-5" aria-hidden="true" tabindex="-1"></a><span class="co">#If any predicted mpg above 0.5 should be considered as 1 </span></span>
+<span id="cb226-6"><a href="parametric-estimations.html#cb226-6" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&gt;</span> <span class="fl">0.5</span>]) </span></code></pre></div>
+<pre><code>## [1] 14079</code></pre>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="parametric-estimations.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&lt;=</span> <span class="fl">0.5</span>])</span></code></pre></div>
+<pre><code>## [1] 19303</code></pre>
+<p>Our prediction is significantly off: we predict many cars with <code>mpg</code> = 0 as having <code>mpg</code> = 1.</p>
+<p>Note that we are using 0.5 as our discriminating threshold to convert predicted probabilities to predicted “labels”. This is an arbitrary choice as we will see later</p>
+<p>Another issue with LPM can be see below:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="parametric-estimations.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpg_hat)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -0.7994  0.2187  0.4429  0.4824  0.9138  1.2088</code></pre>
+<p>The predicted probabilities (of <code>mpg</code> = 1) are not bounded between 1 and 0. We will talk about these issues later. None of these problems are major drawbacks for LPM. But, by its nature, LPM defines a constant marginal effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(Pr[Y = 1 | x)\)</span>.</p>
+<p><span class="math display">\[
+Pr(Y = 1 | x=\mathbf{Regular}) = \beta_{0}+\beta_{1} x_{i}.
+\]</span></p>
+<p>We can see it with a different example</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="parametric-estimations.html#cb232-1" aria-hidden="true" tabindex="-1"></a>model_n <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> cyl, <span class="at">data =</span> data)</span>
+<span id="cb232-2"><a href="parametric-estimations.html#cb232-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>cyl, data<span class="sc">$</span>mpg, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">1.2</span>))</span>
+<span id="cb232-3"><a href="parametric-estimations.html#cb232-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(data<span class="sc">$</span>cyl, model_n<span class="sc">$</span>fitted.values, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="05-ParametricEstimations_files/figure-html/p9-1.png" width="672" /></p>
+<p>Two things we see in the plot: first predicted probabilities are not bounded between 0 and 1. Second, the effect of <code>cyc</code> on <span class="math inline">\(Pr(Y = 1 | x)\)</span> is constant regardless of the value of <code>cyc</code>.</p>
+<p>We can of course add polynomial terms to LPM to deal with it. But, we may have a better model, Logistic regression, if we think that the constant marginal effect is an unrealistic assumption.</p>
+</div>
+<div id="logistic-regression" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Logistic Regression<a href="parametric-estimations.html#logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>First, let’s define some notation that we will use throughout. Note that many machine learning texts use <span class="math inline">\(p\)</span> as the number of parameters. Here we use it to denote probability.</p>
+<p><span class="math display">\[
+p(\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})
+\]</span></p>
+<p>With a binary (Bernoulli) response, we will mostly focus on the case when <span class="math inline">\(Y = 1\)</span>, since, with only two possibilities, it is trivial to obtain probabilities when <span class="math inline">\(Y = 0\)</span>.</p>
+<p><span class="math display">\[
+\begin{array}{c}{P(Y=0 | \mathbf{X}=\mathbf{x})+P(Y=1 | \mathbf{X}=\mathbf{x})=1} \\\\ {P(Y=0 | \mathbf{X}=\mathbf{x})=1-p(\mathbf{x})}\end{array}
+\]</span></p>
+<p>We begin with introducing the standard logistic function, which is a sigmoid function. It takes any real input <span class="math inline">\(z\)</span> and outputs a value between zero and one. The standard logistic function is defined as follows:</p>
+<p><span class="math display" id="eq:5-5">\[\begin{equation}
+\sigma(z)=\frac{e^{z}}{e^{z}+1}=\frac{1}{1+e^{-z}}
+  \tag{5.5}
+\end{equation}\]</span></p>
+<p>Here is an example:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="parametric-estimations.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb233-2"><a href="parametric-estimations.html#cb233-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb233-3"><a href="parametric-estimations.html#cb233-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>,<span class="dv">2</span>)</span>
+<span id="cb233-4"><a href="parametric-estimations.html#cb233-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>x))</span>
+<span id="cb233-5"><a href="parametric-estimations.html#cb233-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sigma <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;blue&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="05-ParametricEstimations_files/figure-html/p10-1.png" width="672" /></p>
+<p>This logistic function is nice because: (1) whatever the <span class="math inline">\(x\)</span>’s are <span class="math inline">\(\sigma(z)\)</span> is always between 0 and 1, (2) The effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(\sigma(z)\)</span> is not linear. That is, there is lower and upper thresholds in <span class="math inline">\(x\)</span> that before and after those values (around -2 and 2 here) the marginal effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(\sigma(z)\)</span> is very low. Therefore, it seems that if we use a logistic function and replace <span class="math inline">\(\sigma(z)\)</span> with <span class="math inline">\(p(x)\)</span>, we can solve issues related to these two major drawbacks of LPM.</p>
+<p>Let us assume that <span class="math inline">\(z = y = \beta_{0}+\beta_{1} x_{1}\)</span>. Then, the logistic function can now be written as:</p>
+<p><span class="math display" id="eq:5-6">\[\begin{equation}
+p(x)=P(Y=1|\mathbf{X}=\mathbf{x})=\frac{1}{1+e^{-\left(\beta_{0}+\beta_{1} x\right)}}
+  \tag{5.6}
+\end{equation}\]</span></p>
+<p>To understand why nonlinearity would be a desirable future in some probability predictions, let’s imagine we try to predict the effect of saving (<span class="math inline">\(x\)</span>) on homeownership (<span class="math inline">\(p(x)\)</span>). If you have no saving now (<span class="math inline">\(x=0\)</span>), additional $10K saving would not make a significant difference in your decision to buy a house (<span class="math inline">\(P(Y=1|x)\)</span>). Similarly, when you have $500K (<span class="math inline">\(x\)</span>) saving, additional $10K (<span class="math inline">\(dx\)</span>) saving should not make a big difference in your decision to buy a house. That’s why flat lower and upper tails of <span class="math inline">\(\sigma(z)\)</span> are nice futures reflecting very low marginal effects of <span class="math inline">\(x\)</span> on the probability of having a house in this case.</p>
+<p>After a simple algebra, we can also write the same function as follows,</p>
+<p><span class="math display" id="eq:5-7">\[\begin{equation}
+\ln \left(\frac{p(x)}{1-p(x)}\right)=\beta_{0}+\beta_{1} x,
+  \tag{5.7}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(p(x)/(1-p(x))\)</span> is called <strong>odds</strong>, a ratio of success over failure. The natural log of this ratio is called, <strong>log odds</strong>, or <strong>Logit</strong>, usually denoted as <span class="math inline">\(\mathbf(L)\)</span>.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="parametric-estimations.html#cb234-1" aria-hidden="true" tabindex="-1"></a>p_x <span class="ot">&lt;-</span> sigma</span>
+<span id="cb234-2"><a href="parametric-estimations.html#cb234-2" aria-hidden="true" tabindex="-1"></a>Logit <span class="ot">&lt;-</span> <span class="fu">log</span>(p_x<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p_x)) <span class="co">#By defult log() calculates natural logarithms</span></span>
+<span id="cb234-3"><a href="parametric-estimations.html#cb234-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Logit <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;red&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="05-ParametricEstimations_files/figure-html/p11-1.png" width="672" /></p>
+<p>In many cases, researchers use a logistic function, when the outcome variable in a regression is dichotomous. Although there are situations where the linear model is clearly problematic (as described above), there are many common situations where the linear model is just fine, and even has advantages.</p>
+<p>Let’s start by comparing the two models explicitly. If the outcome <span class="math inline">\(Y\)</span> is dichotomous with values 1 and 0, we define <span class="math inline">\(P(Y=1|X) = E(Y|X)\)</span> as proved earlier, which is just the probability that <span class="math inline">\(Y\)</span> is 1, given some value of the regressors <span class="math inline">\(X\)</span>. Then the linear and logistic probability models are:</p>
+<p><span class="math display">\[
+P(Y = 1|\mathbf{X}=\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x}) = \beta_{0}+\beta_{1} x_{1}+\beta_{2} x_{2}+\ldots+\beta_{k} x_{k},
+\]</span>
+<span class="math inline">\(~\)</span></p>
+<p><span class="math display">\[
+\ln \left(\frac{P(Y=1|\mathbf{X})}{1-P(Y=1|\mathbf{X})}\right)=\beta_{0}+\beta_{1} x_{1}+\ldots+\beta_{k} x_{k}
+\]</span></p>
+<p><span class="math inline">\(~\)</span></p>
+<p>While LPM assumes that the probability <span class="math inline">\(P\)</span> is a linear function of the regressors, the logistic model assumes that the natural log of the odds <span class="math inline">\(P/(1-P)\)</span> is a linear function of the regressors. Note that applying the inverse logit transformation allows us to obtain an expression for <span class="math inline">\(P(x)\)</span>. Finally, LPM can be estimated easily with OLS, the Logistic model needs MLE.</p>
+<p><span class="math display">\[
+p(\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})=\frac{1}{1+e^{-(\beta_{0}+\beta_{1} x_{1}+\cdots+\beta_{k} x_{k})}}
+\]</span>
+<span class="math inline">\(~\)</span></p>
+<p>The major advantage of LPM is its interpretability. In the linear model, if <span class="math inline">\(\beta_{2}\)</span> is (say) 0.05, that means that a one-unit increase in <span class="math inline">\(x_{2}\)</span> is associated with a 5-percentage point increase in the probability that <span class="math inline">\(Y\)</span> is 1. Just about everyone has some understanding of what it would mean to increase by 5 percentage points their probability of, say, voting, or dying, or becoming obese. In the logistic model, however, a change in <span class="math inline">\(x_{1}\)</span> changes the log odds, <span class="math inline">\(\text{log}(P/{(1-P)})\)</span>. Hence, the coefficient of a logistic regression requires additional steps to understand what it means: we convert it to the odd ratio (OR) or use the above equation to calculate fitted (predicted) probabilities.</p>
+<p>When we should use the logistic model? It should be the choice if it fits the data much better than the linear model. In other words, <strong>for a logistic model to fit better than a linear model, it must be the case that the log odds are a linear function of X, but the probability is not.</strong></p>
+<p>Lets review these concepts in a simulation exercise:</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="parametric-estimations.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating random data</span></span>
+<span id="cb235-2"><a href="parametric-estimations.html#cb235-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb235-3"><a href="parametric-estimations.html#cb235-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> </span>
+<span id="cb235-4"><a href="parametric-estimations.html#cb235-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb235-5"><a href="parametric-estimations.html#cb235-5" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> x</span>
+<span id="cb235-6"><a href="parametric-estimations.html#cb235-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb235-7"><a href="parametric-estimations.html#cb235-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Probablity is defined by a logistic function</span></span>
+<span id="cb235-8"><a href="parametric-estimations.html#cb235-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Therefore it is not a linear function of x!</span></span>
+<span id="cb235-9"><a href="parametric-estimations.html#cb235-9" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>z))</span>
+<span id="cb235-10"><a href="parametric-estimations.html#cb235-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb235-11"><a href="parametric-estimations.html#cb235-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember Bernoulli distribution defines Y as 1 or 0 </span></span>
+<span id="cb235-12"><a href="parametric-estimations.html#cb235-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb235-13"><a href="parametric-estimations.html#cb235-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb235-14"><a href="parametric-estimations.html#cb235-14" aria-hidden="true" tabindex="-1"></a><span class="co">#And we create our data</span></span>
+<span id="cb235-15"><a href="parametric-estimations.html#cb235-15" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(y, x)</span>
+<span id="cb235-16"><a href="parametric-estimations.html#cb235-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<pre><code>##   y          x
+## 1 0 -0.6264538
+## 2 0  0.1836433
+## 3 0 -0.8356286
+## 4 0  1.5952808
+## 5 0  0.3295078
+## 6 0 -0.8204684</code></pre>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="parametric-estimations.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y)</span></code></pre></div>
+<pre><code>## y
+##   0   1 
+## 353 147</code></pre>
+<p>We know that probability is defined by a logistic function (see above). What happens if we fit it as LPM, which is <span class="math inline">\(Pr(Y = 1 | x=\mathbf{x}) = \beta_{0}+\beta_{1} x_{i}\)</span>?</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="parametric-estimations.html#cb239-1" aria-hidden="true" tabindex="-1"></a>lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb239-2"><a href="parametric-estimations.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lpm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.76537 -0.25866 -0.08228  0.28686  0.82338 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.28746    0.01567   18.34   &lt;2e-16 ***
+## x            0.28892    0.01550   18.64   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3504 on 498 degrees of freedom
+## Multiple R-squared:  0.411,  Adjusted R-squared:  0.4098 
+## F-statistic: 347.5 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="parametric-estimations.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, </span>
+<span id="cb241-2"><a href="parametric-estimations.html#cb241-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab =</span> <span class="fl">0.7</span>,</span>
+<span id="cb241-3"><a href="parametric-estimations.html#cb241-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
+<span id="cb241-4"><a href="parametric-estimations.html#cb241-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lpm, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb241-5"><a href="parametric-estimations.html#cb241-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by LPM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
+<span id="cb241-6"><a href="parametric-estimations.html#cb241-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb241-7"><a href="parametric-estimations.html#cb241-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb241-8"><a href="parametric-estimations.html#cb241-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb241-9"><a href="parametric-estimations.html#cb241-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb241-10"><a href="parametric-estimations.html#cb241-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="05-ParametricEstimations_files/figure-html/p13-1.png" width="672" /></p>
+<p>How about a logistic regression?</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="parametric-estimations.html#cb242-1" aria-hidden="true" tabindex="-1"></a>logis <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data, <span class="at">family =</span> binomial)</span>
+<span id="cb242-2"><a href="parametric-estimations.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logis)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ x, family = binomial, data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3813  -0.4785  -0.2096   0.2988   2.4274  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -1.8253     0.1867  -9.776   &lt;2e-16 ***
+## x             2.7809     0.2615  10.635   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 605.69  on 499  degrees of freedom
+## Residual deviance: 328.13  on 498  degrees of freedom
+## AIC: 332.13
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="parametric-estimations.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">cex.lab =</span> <span class="fl">0.8</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
+<span id="cb244-2"><a href="parametric-estimations.html#cb244-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">predict</span>(logis, <span class="fu">data.frame</span>(x), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>),</span>
+<span id="cb244-3"><a href="parametric-estimations.html#cb244-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb244-4"><a href="parametric-estimations.html#cb244-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb244-5"><a href="parametric-estimations.html#cb244-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb244-6"><a href="parametric-estimations.html#cb244-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by GLM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
+<span id="cb244-7"><a href="parametric-estimations.html#cb244-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb244-8"><a href="parametric-estimations.html#cb244-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb244-9"><a href="parametric-estimations.html#cb244-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb244-10"><a href="parametric-estimations.html#cb244-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb244-11"><a href="parametric-estimations.html#cb244-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="05-ParametricEstimations_files/figure-html/p14-1.png" width="672" /></p>
+<p>As you can see, the estimated logistic regression coefficients are in line with our DGM coefficients (-2, 3).</p>
+<p><span class="math display">\[
+\log \left(\frac{\hat{p}(\mathbf{x})}{1-\hat{p}(\mathbf{x})}\right)=-1.8253+2.7809 x
+\]</span></p>
+<div id="estimating-logistic-regression" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Estimating Logistic Regression<a href="parametric-estimations.html#estimating-logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Since Logit is a linear function:</p>
+<p><span class="math display" id="eq:5-8">\[\begin{equation}
+Logit_i = \log \left(\frac{p\left(\mathbf{x}_{\mathbf{i}}\right)}{\left.1-p\left(\mathbf{x}_{\mathbf{i}}\right)\right)}\right)=\beta_{0}+\beta_{1} x_{i 1}+\cdots+\beta_{p-1} x_{i(p-1)},
+  \tag{5.8}
+\end{equation}\]</span></p>
+<p>it seems that we can estimate it by a regular OLS. But, we only observe <span class="math inline">\(Y=1\)</span> or <span class="math inline">\(Y=0\)</span> not <span class="math inline">\(p(\mathbf{x})\)</span>. To estimate the <span class="math inline">\(\beta\)</span> parameters, we apply the maximimum likelihood estimation method. First, we write the likelihood function, <span class="math inline">\(L(\beta)\)</span>, given the observed data, which is technically a joint probability density function that can be written a product of <span class="math inline">\(n\)</span> individual density functions:</p>
+<p><span class="math display">\[
+L(\boldsymbol{\beta})=\prod_{i=1}^{n} P\left(Y_{i}=y_{i} | \mathbf{X}_{\mathbf{i}}=\mathbf{x}_{\mathbf{i}}\right)
+\]</span>
+With some rearrangement, we make it more explicit:</p>
+<p><span class="math display">\[
+\begin{aligned} L(\boldsymbol{\beta}) &amp;=\prod_{i=1}^{n} p\left(\mathbf{x}_{\mathbf{i}}\right)^{y_{i}}\left(1-p\left(\mathbf{x}_{\mathbf{i}}\right)\right)^{\left(1-y_{i}\right)}  \end{aligned}
+\]</span>
+With a logarithmic transformation of this function, it becomes a log-likelihood function, which turns products into sums. Hence, it becomes a linear function:</p>
+<p><span class="math display" id="eq:5-9">\[\begin{equation}
+\begin{split}
+\begin{aligned}
+\ell\left(\beta_{0}, \beta\right) &amp;=\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)) \\
+&amp;=\sum_{i=1}^{n} \log (1-p\left(x_{i}\right))+\sum_{i=1}^{n} y_{i} \log \frac{p\left(x_{i}\right)}{1-p\left(x_{i}\right)} \\
+&amp;=\sum_{i=1}^{n} \log (1-p\left(x_{i}\right))+\sum_{i=1}^{n} y_{i}\left(\beta_{0}+\beta x_{i} \right) \\
+&amp;=\sum_{i=1}^{n} \log 1/(1+e^{z_i})+\sum_{i=1}^{n} y_{i}\left(z_i\right) \\
+&amp;=\sum_{i=1}^{n} -\log (1+e^{z_i})+\sum_{i=1}^{n} y_{i}\left(z_i\right),
+\end{aligned}
+\end{split}
+\tag{5.9}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(z_i = \beta_{0}+\beta_{1} x_{1i}+\cdots\)</span>.</p>
+<p>Having a function for log-likelihood, we simply need to chose the values of <span class="math inline">\(\beta\)</span> that maximize it. Typically, to find them, we would differentiate the log-likelihood with respect to the parameters (<span class="math inline">\(\beta\)</span>), set the derivatives equal to zero, and solve.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial \ell}{\partial \beta_{j}} &amp;=-\sum_{i=1}^{n} \frac{1}{1+e^{\beta_{0}+x_{i}  \beta}} e^{\beta_{0}+x_{i} \beta} x_{i j}+\sum_{i=1}^{n} y_{i} x_{i j} \\
+&amp;=\sum_{i=1}^{n}\left(y_{i}-p\left(x_{i} ; \beta_{0}, \beta\right)\right) x_{i j}
+\end{aligned}
+\]</span>
+Unfortunately, there is no closed form for the maximum. However, we can find the best values of <span class="math inline">\(\beta\)</span> by using algorithm (numeric) optimization methods (See Appendix).</p>
+</div>
+<div id="cost-functions" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Cost functions<a href="parametric-estimations.html#cost-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The cost functions represent optimization objectives in estimations and predictions. In linear regression, it’s a simple sum of squared errors, i.e. </p>
+<p><span class="math display" id="eq:5-10">\[\begin{equation}
+\mathbf{SSE}= \sum{(\hat{y}_i-y_i)^2}
+  \tag{5.10}
+\end{equation}\]</span></p>
+<p>If we use a similar cost function in <em>Logistic Regression</em> we would have a non-convex function with many local minimum points so that it would be hard to locate the global minimum. In logistic regression, as we have just seen, the log-likelihood function becomes the cost function. In the machine learning literature notation changes slightly:</p>
+<p><span class="math display" id="eq:5-11">\[\begin{equation}
+J &amp;=\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)),
+  \tag{5.11}
+\end{equation}\]</span></p>
+<p>where for each observation,</p>
+<p><span class="math display">\[
+p\left(\mathbf{x}_{\mathbf{i}}\right)=\frac{e^{\beta_{0}+\beta x_{i}}}{1+e^{\beta_{0}+\beta x_{i}}}
+\]</span></p>
+<p>Because it is more common to maximize a function in practice, the log likelihood function is inverted by adding a negative sign to the front. For classification problems, equation 5.11 is also called as “log loss“, “cross-entropy” and “negative log-likelihood” used interchangeably.</p>
+<p>Now that we have a cost function, we simply need to chose the values of <span class="math inline">\(\beta\)</span> that minimize it. Due to difficulties in multi-dimensional analytic solutions, we use gradient descent and some other types of algorithmic optimization methods.</p>
+<p>The same cost function can be written when <span class="math inline">\(y_i \in \{+1,-1\}\)</span></p>
+<p><span class="math display">\[
+g_i(\mathbf{w})= \begin{cases}-\log \left(p\left({\mathbf{x}_i}^{T} \mathbf{w}\right)\right) &amp; \text { if } y_{i}=+1 \\ -\log \left(1-p\left({\mathbf{x}_i}^{T} \mathbf{w}\right)\right) &amp; \text { if } y_{i}=-1\end{cases}
+\]</span></p>
+<p>We can then form the <em>Softmax</em> cost for Logistic regression by taking an average of these Log Error costs as</p>
+<p><span class="math display">\[
+g(\mathbf{w})=\frac{1}{n} \sum_{i=1}^{n} g_{i}(\mathbf{w}) .
+\]</span></p>
+<p>It is common to express the Softmax cost differently by re-writing the Log Error in a equivalent way as follows. Notice that with <span class="math inline">\(z = \mathbf{x}^{T} \mathbf{w}\)</span></p>
+<p><span class="math display">\[
+1-p(z)=1-\frac{1}{1+e^{-z}}=\frac{1+e^{-z}}{1+e^{-z}}-\frac{1}{1+e^{-z}}=\frac{e^{-z}}{1+e^{-z}}=\frac{1}{1+e^{z}}=p(-z)
+\]</span></p>
+<p>Hence, the point-wise cost function can be written as</p>
+<p><span class="math display">\[
+g_{i}(\mathbf{w})= \begin{cases}-\log \left(p\left({\mathbf{x}}_{i}^{T} \mathbf{w}\right)\right) &amp; \text { if } y_{i}=+1 \\ -\log \left(p\left(-{\mathbf{x}}_{i}^{T} \mathbf{w}\right)\right) &amp; \text { if } y_{i}=-1\end{cases}
+\]</span></p>
+<p>Now notice that because we are using the <em>label</em> values <span class="math inline">\(\pm 1\)</span> we can move the label value in each case inside the inner most parenthesis,</p>
+<p><span class="math display">\[
+g_{i}(\mathbf{w})=-\log \left(p\left(y_{i} {\mathbf{x}}_{i}^{T} \mathbf{w}\right)\right)
+\]</span>
+Finally since <span class="math inline">\(-\log (x)=\frac{1}{x}\)</span>, we can re-write the point-wise cost above equivalently as</p>
+<p><span class="math display">\[
+g_{i}(\mathbf{w})=\log \left(1+e^{-y_{i} \mathbf{x}_{i}^{T} \mathbf{w}}\right)
+\]</span></p>
+<p>The average of this point-wise cost over all <span class="math inline">\(n\)</span> points we have the common Softmax cost for logistic regression:</p>
+<p><span class="math display">\[
+g(\mathbf{w})=\frac{1}{n} \sum_{i=1}^{n} g_{i}(\mathbf{w})=\frac{1}{n} \sum_{i=1}^{n} \log \left(1+e^{-y_{i} \mathbf{x}_{i}^{T} \mathbf{w}}\right)
+\]</span></p>
+<p>This will be helpful when we make the comparisons between logistic regression and support vector machines in Chapter 15.</p>
+</div>
+<div id="deviance" class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Deviance<a href="parametric-estimations.html#deviance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>You have probably noticed that the output from <code>summary()</code> reports the “deviance” measures for logistic regressions. The “Null deviance” is the deviance for the null model, that is, a model with no predictors. The null deviance shows how well the response variable is predicted by a model that includes only the intercept (grand mean). What is <strong>deviance</strong>?</p>
+<p>It is defined as the difference of likelihoods between the fitted model and the saturated model:</p>
+<p><span class="math display" id="eq:5-12">\[\begin{equation}
+D=-2 \ell(\hat{\beta})+2 \ell(\text { saturated model })
+  \tag{5.12}
+\end{equation}\]</span></p>
+<p>This is also known as the <em>Likelihood Ratio Test</em> (LRT) that has been used to compare two nested models.</p>
+<p><span class="math display" id="eq:5-13">\[\begin{equation}
+\mathbf{L R T}=-2 \log\left(\frac{L_{s}(\hat{\theta})}{L_{g}(\hat{\theta})}\right)
+  \tag{5.13}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(L_s\)</span> in 5.13 is the likelihood for the null model and <span class="math inline">\(L_g\)</span> is the likelihood for the alternative model.</p>
+<p>The perfect model, known as the saturated model, denotes an abstract model that fits perfectly the sample, that is, the model such that <span class="math inline">\(P(Y=1 | \mathbf{X}=\mathbf{x})=Y_{i}\)</span>. As the likelihood of the saturated model is exactly one, the deviance can be expressed as</p>
+<p><span class="math display">\[
+D=-2 \ell(\hat{\beta})
+\]</span>
+Therefore, the deviance is always larger than or equal to zero, which means a perfect fit. We can evaluate the magnitude of the deviance relative to the null deviance,</p>
+<p><span class="math display">\[
+D_{0}=-2 \ell\left(\hat{\beta}_{0}\right),
+\]</span></p>
+<p>reflecting the deviance of the worst model, which has no predictors. Hence, this comparison shows how much our fitted model has improved relative to the benchmark. We can develop a metric, the (Pseudo) <span class="math inline">\(R^{2}\)</span> statistic:</p>
+<p><span class="math display" id="eq:5-14">\[\begin{equation}
+R^{2}=1-\frac{D}{D_{0}}
+  \tag{5.14}
+\end{equation}\]</span></p>
+<p>Similar to <span class="math inline">\(R^{2}\)</span>, the (Pseudo) <span class="math inline">\(R^{2}\)</span> is a quantity between 0 and 1. If the fit is perfect, then <span class="math inline">\(D = 0\)</span> and <span class="math inline">\(R^{2}=1\)</span>.</p>
+</div>
+<div id="predictive-accuracy" class="section level3 hasAnchor" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> Predictive accuracy<a href="parametric-estimations.html#predictive-accuracy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another way of evaluating the model’s fit is to look at its predictive accuracy. When we are interested simply in prediction in classification, but not in predicting the value of <span class="math inline">\(\hat{p(x)}\)</span>, such as</p>
+<p><span class="math display">\[
+\hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;\frac{1}{2}} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&lt;\frac{1}{2}}\end{array}\right.
+\]</span>
+then, the overall predictive accuracy can be summarized with a matrix,</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=0} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\]</span></p>
+<p>where, TP, FP, FN, TN are <strong>“True positives”, “False Positives”, “False Negatives”, “True Negatives”</strong>, respectively. This table is also know as <strong>Confusion Table</strong>. There are many metrics that can be calculated from this table to measure the accuracy of our classifier. We will spend more time on this this subject under Chapter 10 later.</p>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Intuitively, when <span class="math inline">\(n=1\)</span>, achieving head once (<span class="math inline">\(k=1\)</span>) is <span class="math inline">\(P(head)= p^{k}(1-p)^{1-k}=p\)</span> or <span class="math inline">\(P(tail)= p^{k}(1-p)^{1-k}=1-p.\)</span><a href="parametric-estimations.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="parametric-vs.-nonparametric-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="nonparametric-estimations---basics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/05-ParametricEstimations.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

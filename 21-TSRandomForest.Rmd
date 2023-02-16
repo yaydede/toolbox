@@ -1,0 +1,272 @@
+# Random Forest
+
+We will utilize embedding for direct forecasting with Random Forests.  We choose the random forests algorithm because it does not need an explicit tuning by a grid search.  In the practice, however, we can still search for the number of trees and the number of variables randomly sampled as candidates at each split.   
+
+Let's get our COVID-19 data:
+
+```{r tsr1, message=FALSE, warning=FALSE}
+library(tsibble)
+library(fpp3)
+
+load("~/Dropbox/ToolShed_draft/toronto2.rds")
+day <- seq.Date(from = as.Date("2020/03/01"),
+                         to = as.Date("2020/11/21"), by = 1)
+
+tdata <- tibble(Day = day, data[,-1])
+toronto2 <- tdata %>%
+  as_tsibble(index = Day)
+toronto2
+```
+As before, the data contain the first wave and the initial part of the second wave in Toronto for 2020. It is from [Ontario Data Catalogue](https://data.ontario.ca/en/dataset?groups=2019-novel-coronavirus#byPHU) sorted by episode dates (`Day`), which is the date when the first symptoms were started. The mobility data is from Facebook, `all_day_bing_tiles_visited_relative_change`, which is reflects positive or negative change in movement relative to baseline. The other variables related to tests are `delay`, which is the time between test results and the episode date, the gender distribution of people is given by `male`, `age` shows the average age among tested people any given day.  The last two variables, `temp` and `hum`, show the daily maximum day temperature and the average outdoor humidity during the day, respectively.
+
+Except for `age` all other variables are non-stationary.  We will take their first difference and make the series stationary before we proceed.
+
+```{r tsr2}
+df <- toronto2 %>%
+  mutate(dcases = difference(cases),
+         dmob = difference(mob),
+         ddelay = difference(delay),
+         dmale = difference(male),
+         dtemp = difference(temp),
+         dhum = difference(hum))
+
+dft <- df[ ,-c(2:5,7,8)] #removing levels
+dft <- dft[-1, c(1,3:7,2)] # reordering the columns
+```
+
+Let's first use a univariate setting for a single-window forecasting, which is the last 7 days.  
+
+## Univariate
+
+We will not have a grid search on the random forest algorithm, which could be added to the following script:  
+
+```{r tsr3, message=FALSE, warning=FALSE, cache=TRUE}
+library(randomForest)
+
+h = 7
+w <- 3:21 # a grid for window size
+
+fh <- matrix(0, length(w), h)
+rownames(fh) <- w
+colnames(fh) <- 1:h
+
+for(s in 1:length(w)){
+  dt <- as.data.frame(embed(as.matrix(dft[ ,2]), w[s]))
+  test_ind = nrow(dt) - (h)
+  train <- dt[1:test_ind, ]
+  test <- dt[-c(1:test_ind), ]
+  y <- train[ ,1]
+  X <- train[ ,-1]
+  
+    for (i in 1:h) {
+      fit <- randomForest(X, y)
+      fh[s, ] <- predict(fit, test[ ,-1])
+      y <- y[-1]
+      X <- X[-nrow(X), ]
+    }
+}
+
+fh
+```
+We can now see RMSPE for each row (window size):
+
+```{r tsr4}
+actual <- test[, 1]
+rmspe <- c()
+
+for (i in 1:nrow(fh)) {
+  rmspe[i] <- sqrt(mean((fh[i, ] - actual)^2))  
+}
+
+rmspe
+which.min(rmspe)
+```
+
+And, if we plot several series of our forecast with different window sizes:
+
+```{r tsr5}
+plot(actual, type = "l", col = "red",
+     ylim = c(-80, 50),
+     ylab = "Actual (red) vs. Forecasts",
+     xlab = "Last 7 days",
+     main = "7-Day Foerecasts",
+     lwd = 3)
+lines(fh[1, ], type = "l", col = "blue")
+lines(fh[2, ], type = "l", col = "green")
+lines(fh[5, ], type = "l", col = "orange")
+lines(fh[12, ], type = "l", col = "black")
+legend("bottomright",  
+       title = "Lags",
+       legend = c("3-day", "4-day", "7-day", "14-day"), 
+       col = c("blue", "green", "orange"), 
+       lty = c(1, 1, 1, 1, 1), bty = "o", cex = 0.75)
+```
+
+It seems that, as the window size gets larger, the forecast becomes increasingly smooth, perhaps missing the short term dynamics. Another observation is that, although "blue" (3-day window) has the minimum RMSPE, it is not able to capture ups and downs relative to 7-day or 14-day windows.  
+
+## Multivariate
+
+Can we increase the prediction accuracy with additional predictors?
+
+```{r tsr6, message=FALSE, warning=FALSE, cache=TRUE}
+library(randomForest)
+
+h = 7
+w <- 3:14 # a grid for window size
+
+fh <- matrix(0, length(w), h)
+rownames(fh) <- w
+colnames(fh) <- 1:h
+
+for(s in 1:length(w)){
+  dt <- as.data.frame(embed(as.matrix(dft[ ,-1]), w[s]))
+  test_ind = nrow(dt) - (h)
+  train <- dt[1:test_ind, ]
+  test <- dt[-c(1:test_ind), ]
+  y <- train[ ,1]
+  X <- train[ ,-1]
+  
+    for (i in 1:h) {
+      fit <- randomForest(X, y)
+      fh[s, ] <- predict(fit, test[ ,-1])
+      y <- y[-1]
+      X <- X[-nrow(X), ]
+    }
+}
+
+fh
+```
+```{r}
+actual <- test[,1]
+rmspe <- c()
+
+for (i in 1:nrow(fh)) {
+  rmspe[i] <- sqrt(mean((fh[i,]-actual)^2))  
+}
+
+rmspe
+which.min(rmspe)
+```
+
+```{r tsr7}
+plot(actual, type = "l", col = "red",
+     ylim = c(-80, +50),
+     ylab = "Actual (red) vs. Forecasts",
+     xlab = "Last 7 days",
+     main = "7-Day Foerecasts",
+     lwd = 3)
+lines(fh[1, ], type = "l", col = "blue")
+lines(fh[3, ], type = "l", col = "green")
+lines(fh[5, ], type = "l", col = "orange")
+lines(fh[12, ], type = "l", col = "black")
+legend("bottomright", 
+       title = "Lags",
+       legend = c("3-day", "5-day", "7-day", "14-day"), 
+       col = c("blue", "green", "orange", "black"), 
+       lty = c(1, 1, 1, 1, 1), bty = "o", cex = 0.75)
+```
+
+It seems that additional predictors do increase the accuracy. Again, relative to the best model (5-day window) our 7-day window correctly captures most ups and downs in the forecast.  Now, a visual inspection shows that all RMSPE's are lower than the univariate forecasts. We would tend to conclude that this is because of the new predictors, specially mobility, temperature, and humidity.  But, the COVID-19 data have many well-known issues related to measurement inaccuracies.  As a side note, we need to test if those differences are statistical significant or not (i.e. Diebold-Mariano Test).   
+
+## Rolling and expanding windows
+
+A seven-day window is not enough for a reliable judgment on the forecast accuracy.  One way to deal with this issue is to use rolling or expanding windows to predict the next h days. The following example shows a 1-day-ahead forecast with varying lags for embedding.  
+
+```{r tsr8, message=FALSE, warning=FALSE, cache=TRUE}
+library(randomForest)
+
+l = 3:10 # lags for embedding 
+ws = 150 # size of each rolling window
+rmspe <- c()
+
+all_fh <- vector(mode = "list", length = length(l))  
+all_y <-  vector(mode = "list", length = length(l))  
+
+for(s in 1:length(l)) {
+  dt <- as.data.frame(embed(as.matrix(dft[, -1]), l[s]))
+  nwin <- nrow(dt) - ws #number of windows
+  fh <- c()
+  y <- c()
+  
+  for(i in 1:nwin){
+    train <- dt[i:(ws + i - 1), ] # each loop, window moves one day forward
+    test <- dt[(ws + i), ]
+    
+    set.seed(i+s)
+    fit <- randomForest(train[, -1], train[, 1])
+    fh[i] <- predict(fit, test[, -1])
+    y[i] <- test[, 1] # to use later for plotting 
+  }
+  all_y[[s]] <- y
+  all_fh[[s]] <- fh  
+  err <- test[, 1] - fh
+  rmspe[s] <- sqrt(mean(err^2))
+}
+
+rmspe
+bst <- which.min(rmspe)
+l[bst] # Winning lag in embedding
+```
+
+To change the application above to an expanding-window forecast, we just need to change `dt[i:(ws + i - 1), ]` to `dt[1:(ws + i - 1), ]` in the script.  Now, we can plot the results:  
+
+```{r tsr9}
+par(mfrow=c(1,2))
+plot(all_y[[bst]], type = "l", col="red",
+     ylab = "Actual (red) vs Predicted (Blue)",
+     xlab = "Days",
+     main = "1-Day-Ahead")
+lines(all_fh[[bst]], col="blue")
+plot(all_y[[bst]][60:110], type = "o", col="red",
+     ylab = "Actual (red) vs Predicted (Blue)",
+     xlab = "Days",
+     main = "Last 50 Days")
+lines(all_fh[[bst]][60:110], col="blue")
+```
+  
+Getting the predicted values back to originals can be achieved by:
+
+$$
+\begin{aligned}
+& y_{t+1}=y_t+z_{t+1} \\
+& y_{t+2}=y_{t+1}+z_{t+2}=y_t+z_{t+1}+z_{t+2}
+\end{aligned}
+$$
+
+```{r tsr10}
+set.seed(321)
+y <- rnorm(10)   
+z <- diff(y)     # first differences
+back <- cumsum(c(y[1], z)) 
+cbind(y, back)
+```
+  
+Since our algorithm predict the changes in observations, a simple sum would do the job for back transformation. For example, as a starting point, our algorithm predicts the change in $Y$ from day 156 to 157 (window size 150 plus the best lag window, 6).  When we add this predicted change to the actual $Y$ at 156, it will give us the back-transformed forecast at day 157. 
+
+```{r tsr11}
+y <- df$cases
+
+# The first forecast is at ws (150) + l[best] (6) + 1, which is 157
+# The first actual Y should start a day earlier
+# removing all Y's until ws+l[bst]
+
+y_a_day_before <- y[-c(1:(ws+l[bst]-1))] 
+
+# This adds predicted changes to observed values a day earlier 
+back_forecast <- head(y_a_day_before, -1) + all_fh[[bst]] 
+
+# Actual Y's in the test set starting at ws (150) + l[best] (6) + 1, which is 157
+ytest <- y[-c(1:(ws+l[bst]))] 
+
+plot(ytest, type = "l", col = "blue",
+     ylab = "Actual Y (Blue) vs Forecast (Red)",
+     xlab = "Days",
+     main = "Back-transformed Forecast"
+     )
+lines(back_forecast, type = "l", col = "red")
+```
+
+It seems that, for most days, our algorithm simply forecasts the next day by using the value from a day before.  If we change our algorithm to a 7-day-ahead forecast, this would be  different.   This is also a common problem when the predictive model has a poor forecasting power.  Again, this is not due to our algorithm, but forecasting an epi curve with imperfect test data is almost impossible job, as we highlighted earlier. 
+
+In practice, however, there are several ways that we can improve the scripts above.  For example, we can consider the (rolling or expanding) window size as a hyperparameter.  We can also have an explicit training for the Random Forest algorithm.  We can have an ensemble forecasting by adding other predictive algorithms to the script, like boosting.  Further, we can develop a base forecast that would give us a benchmark to see how much our algorithm improves against that base. Moreover, we could apply a transformation to the data in order to stabilize the variance in all variables. 
+

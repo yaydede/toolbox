@@ -1,0 +1,479 @@
+# (PART) Labs {-}
+
+# R Lab 1 - Basics I
+
+What we will review in this lab:
+
+1. **R, RStudio, and R Packages**, 
+2. **Starting with RStudio**, 
+3. **Working Directory**, 
+4. **Data Types and Structures (Vectors and Matrices)**, 
+5. **R-Style Guide**
+
+## R, RStudio, and R Packages
+
+R is both a programming language and software environment for statistical computing, which is free and open-source.  
+
+With ever increasing availability of large amounts of data, it is critical to have the ability to analyze the data and learn from it for making informed decisions. Familiarity with software such as R allows users to visualize data, run statistical tests, and apply machine learning algorithms. Even if you already know other software, there are still good reasons to learn R:
+
+1. **R is free.** If your future employer does not already have R installed, you can always download it for free, unlike other proprietary software packages that require expensive licenses. You can always have access to R on your computer.
+
+2. **R gives you access to cutting-edge technology.** Top researchers develop statistical learning methods in R, and new algorithms are constantly added to the list of packages you can download.
+
+3. **R is a useful skill.** Employers that value analytics recognize R as useful and important. If for no other reason, learning R is worthwhile to help **boost your resume.**
+
+To get started, you will need to install two pieces of software:  
+
+**R**, the actual programming language: [**Download it from here.**](https://cran.r-project.org)
+– Chose your operating system, and select the most recent version.  
+
+**RStudio**, an excellent integrated development environment (IDE) for working with R, an interface used to interact with R: [**Download it from here.**](https://www.rstudio.com)  
+ 
+The following notes will serve as an introduction to the R basics that we will need in this book. At the beginning, these introductory R subjects may feel like an overwhelming amount of information. You are not expected to pick up everything the first time through. You should try all of the code from these examples and solve the practice exercises.  
+
+R is used both for software development and data analysis. We will not use it for software development but apply some concepts in that area.  Our main goal will be to analyze data, but we will also perform programming exercises that help illustrate certain algorithmic concepts.  
+
+Here is a very good article about R and Programming that everybody should read: [7 Reasons for policy professionals to get into R programming in 2019](http://gilesd-j.com/2019/01/07/7-reasons-for-policy-professionals-to-get-pumped-about-r-programming-in-2019/) [@Jones_2019].
+
+## RStudio
+  
+```{r, echo=FALSE}
+knitr::include_graphics("png/Rstudio.png")
+```  
+
+Source Pane, click on the plus sign  in the top left corner. From the drop-down menu, select **R Script**  . As shown in that dropdown menu, you can also open an R Script by pressing **Ctrl+Shift+N**. You should now see the screen above.  
+
+The **Console Pane** is the interface to R. If you opened R directly instead of opening RStudio, you would see just this console. You can type commands directly in the console. The console displays the results of any command you run. For example, type 2+4 in the command line and press enter. You should see the command you typed, the result of the command, and a new command line.  
+
+```{r, echo=FALSE}
+knitr::include_graphics("png/Rstudio2.png")
+```  
+
+To clear the console, you press **Ctrl+L** or type **cat("\014")** in the command line.  
+
+R code can be entered into the command line directly (in Console Pane) or saved to a script (Source Pane).  
+
+Let's try some coding.  
+
+```{r}
+2 + 3 #write this on the command line and hit Enter
+```
+
+Now write the same line into the script in Source Pane and **run** it  
+
+```{r, echo=FALSE}
+knitr::include_graphics("png/Rstudio5.png")
+```  
+
+
+The **Source Pane** is a text editor where you can type your code before running it. You can save your code in a text file called a script. Scripts have typically file names with the extension **.R**.  Any text shown in green is a comment in the script. You write a comment by adding a **#** to an RScript.  Anything to the right of a `#` is considered a comment and is thus ignored by R when running code.  Place your cursor anywhere on the first few lines of code and click **Run**. You can also run code by pressing **Ctrl+Enter**.  
+
+```{r, echo=FALSE}
+knitr::include_graphics("png/Rstudio3.png")
+```  
+
+
+The **Environment Pane** includes an Environment, a History tab, and a Connections tab. The Connections tab makes it easy to connect to any data source on your system.  
+
+The Environment tab displays any objects that you have created during your R session. For example, we created three variables: $x$, $y$, and $z$. R stored those variables as objects, and you can see them in the Environment pane. We will discuss R objects in more detail later. If you want to see a list of all objects in the current session, type `ls()` in the command line. You can remove an individual object from the environment with the `rm()` command. For example, remove x by typing `rm(x)` in the command line. You can remove all objects from the environment by clicking or typing `rm(list=ls())` in the command line.  The History tab keeps a record of all the commands you have run. To copy a command from the history into the console, select the command and press Enter.  
+
+The **Files Pane** includes several tabs that provide useful information.  The Files tab displays the contents of your working directory. The Plot tab shows all graphs that you have created. The Packages tab displays the R packages that you have installed in your System Library.  An R package typically includes code, data, documentation for the package and functions inside, and tests to check everything works as it should.  Check to see if the package **moments** has been installed. If you cannot find it, you need to install it by using the command `install.packages("moments")`. Once you have installed the package, you need to load it using the command `library(moments)`.  Or you can use install tab and follow the instructions and the go to package to check it to activate as shown below.  
+
+```{r, echo=FALSE}
+knitr::include_graphics("png/Rstudio4.png")
+```  
+
+The help tab has built-in documentation for packages and functions in R. The help is automatically available for any loaded packages. You can access that file by typing `help(mean)` or `?mean` in the command line. You can also use the search bar in the help tab.  One of the most difficult things to do when learning R is to know how to find help. Your very first helper should be **Google** where you post your error message or a short description of your issue. The ability to solve problems using this method is quickly becoming an extremely valuable skill. Ask your tutor or instructor in the lab, only after you use all other available sources.  
+
+**Do not be discouraged by running into errors and difficulties when learning R. (Or any technical skill.) It is simply part of the learning process.**  
+
+The Viewer tab displays HTML output. R packages such as R Markdown and Shiny create HTML outputs that you can view in the Viewer tab.  We'll see it later.  
+
+## Working directory
+
+Without further specification, files will be loaded from and saved to the working directory. The functions `getwd()` and `setwd()` will get and set the working directory, respectively.  
+
+```{r}
+getwd()
+#setwd("Book2022")
+
+#List all the objects in your local workspace using
+ls()
+
+#List all the files in your working directory using list.files() or 
+dir()
+
+#As we go through this lesson, you should be examining the help page 
+#for each new function. Check out the help page for list.files with the
+#command
+?list.files
+#or
+help("list.files")
+
+#Using the args() function on a function name is also a handy way to 
+#see what arguments a function can take.
+args(list.files)
+```
+
+## Data Types and Stuctures
+
+R has a number of basic data types.  
+
+**Numeric**: Also known as Double. The default type when dealing with numbers. 1,1.0,42.5  
+**Integer**: 1L,2L,42L  
+**Complex**: 4 + 2i  
+**Logical**: Two possible values: TRUE and FALSE. NA is also considered logical.  
+**Character**:"a","Statistics","1plus2."  
+
+R also has a number of basic data structures. A data structure is either **homogeneous** (all elements are of the same data type) or **heterogeneous** (elements can be of more than one data type):  You can think each data structure as **data container** where you data is stored.  Here are the main "container" or data structures.  Think it as Stata or Excel spread-sheets.  
+
+**Vector**: 1 dimension (column OR row) and homogeneous. That is every element of the vector has to be the same type. Each vector can be thought of as a variable.
+**Matrix**: 2 dimensions (column AND row) and homogeneous. That is every element of the matrix has to be the same type.  
+**Data Frame**: 2 dimensions (column AND row) and heterogeneous. That is every element of the data frame doesn't have to be the same type.  This is the main difference between a matrix and a data frame. Data frames are the most common data structure in any data analysis.
+**List**: 1 dimension and heterogeneous. Data can be multiple data structures.
+**Array**: 3+ dimensions and homogeneous.
+
+
+## Vectors
+Many operations in R make heavy use of vectors. Possibly the most common way to create a vector in R is using the `c()` function, which is short for “combine.” As the name suggests, it combines a list of elements separated by commas.  
+
+```{r}
+c(1, 5, 0, -1)
+```
+
+If we would like to store this vector in a **variable** we can do so with the assignment operator **<-** or **=**.  But the convention is `<-`  
+
+```{r}
+x <- c(1, 5, 0, -1)
+z = c(1, 5, 0, -1)
+x
+z
+```
+
+Because vectors must contain elements that are all the same type, R will automatically coerce to a single type when attempting to create a vector that combines multiple types.  
+
+```{r}
+c(10, "Machine Learning", FALSE)
+c(10, FALSE)
+c(10, TRUE)
+
+x <- c(10, "Machine Learning", FALSE) 
+str(x) #this tells us the structure of the object
+class(x)
+
+y <- c(10, FALSE)
+str(y)
+class(y)
+```
+
+If you want to create a vector based on a sequence of numbers, you can do it easily with an operator, which creates a sequence of integers between two specified integers.  
+
+```{r}
+y <- c(1:15)
+y
+
+#or
+y <- 1:8
+y
+```
+
+Note that scalars do not exists in R. They are simply vectors of length 1.  
+
+```{r}
+y <- 24  #this a vector with 1 element, 24
+```
+
+If you want to create a vector based on a specific sequence of numbers increasing or decreasing, you can use `seq()`  
+
+```{r}
+y <- seq(from = 1.5, to = 13, by = 0.9) #increasing
+y
+
+y <- seq(1.5, -13, -0.9) #decreasing.  Note that you can ignore the argument labels
+y
+```
+
+The other useful tool is `rep()`  
+
+```{r}
+rep("ML", times = 10)
+
+#or
+
+x <- c(1, 5, 0, -1)
+rep(x, times = 2)
+```
+
+And we can use them as follows.
+
+```{r}
+wow <- c(x, rep(seq(1, 9, 2), 3), c(1, 2, 3), 42, 2:4)
+wow
+```
+
+Another one, which can be used to create equal intervals.  
+
+```{r}
+g <- seq(6, 60, length = 4)
+g
+```
+
+And we can use longer names and calculate the number of elements in a vector:  
+
+```{r}
+length(wow)
+```
+
+## Subsetting Vectors
+
+One of the most confusing subjects in R is subsetting the data containers.  It's an important part in data management and if it is done in 2 steps, the whole operation becomes quite easy:  
+
+1. Identifying the index of the element that satisfies the required condition,
+2. Calling the index to subset the vector.  
+
+But before we start lets see a simple subsetting. (Note the square brackets)  
+
+```{r}
+#Suppose we have the following vector
+myvector <- c(1, 2, 3, 4, 5, 8, 4, 10, 12)
+
+#I can call each element with its index number:
+myvector[c(1,6)]
+myvector[4:7]
+myvector[-6]
+```
+
+Okay, we are ready ... 
+
+```{r}
+#Let's look at this vector
+myvector <- c(1, 2, 3, 4, 5, 8, 4, 10, 12)
+
+#We want to subset only those less than 5
+
+#Step 1: use a logical operator to identify the elements
+#meeting the condition.
+logi <- myvector < 5 
+logi
+
+#logi is a logical vector
+class(logi)
+
+#Step 2: use it for subsetting
+newvector <- myvector[logi==TRUE]
+newvector
+
+#or better
+newvector <- myvector[logi]
+newvector
+```
+
+This is good as it shows those 2 steps.  Perhaps, we can combine these 2 steps as follows:  
+
+```{r}
+newvector <- myvector[myvector < 5]
+newvector
+```
+
+Another way to do this is to use of `which()`, which gives us the index of each element that satisfies the condition.  
+
+```{r}
+ind <- which(myvector < 5)  # Step 1
+ind
+newvector <- myvector[ind]  # Step 2
+newvector
+```
+
+Or we can combine these 2 steps:  
+
+```{r}
+newvector <- myvector[which(myvector < 5)]
+newvector
+```
+
+Last one: find the 4's in `myvector` make them 8 (I know hard, but after a couple of tries it will seem easier):  
+
+```{r}
+
+myvector <- c(1, 2, 3, 4, 5, 8, 4, 10, 12)
+#I'll show you 3 ways to do that.
+
+#1st way to show the steps
+ind <- which(myvector==4) #identifying the index with 4
+newvector <- myvector[ind] + 4 # adding them 4
+myvector[ind] <- newvector #replacing those with the new values
+myvector
+
+#2nd and easier way
+myvector[which(myvector==4)] <- myvector[which(myvector==4)] + 4
+myvector
+
+#3nd and easiest way
+myvector[myvector==4] <- myvector[myvector==4] + 4
+myvector
+```
+
+What happens if the vector is a character vector?  How can we subset it?  We can use `grep()` as shown below:  
+
+```{r}
+m <- c("about", "aboard", "board", "bus", "cat", "abandon")
+
+#Now suppose that we need to pick the elements that contain "ab"
+
+#Same steps again
+a <- grep("ab", m) #similar to which() that gives us index numbers
+a
+
+newvector <- m[a]
+newvector
+```
+
+## Vectorization or vector operations
+
+One of the biggest strengths of R is its use of vectorized operations.  Lets see it in action!  
+
+```{r}
+x <- 1:10
+x
+x+1
+2 * x
+2 ^ x
+x ^ 2
+sqrt(x)
+log(x)
+```
+
+Its like a calculator!  
+
+```{r}
+y <- 1:10
+y
+x + y
+```
+
+How about this:  
+
+```{r}
+y <- 1:11
+x + y
+```
+
+OK, the warning is self-explanatory.  But what's "12" at the end?  
+It's the sum of the first element of `x`, which is 1 and the last element of `y`, which is 11.  
+
+## Matrices
+
+R stores matrices and arrays in a similar manner as vectors, but with the attribute called dimension. A matrix is an array that has two dimensions. Data in a matrix are organized into rows and columns. Matrices are commonly used while arrays are rare.  We will not see arrays in this book. Matrices are homogeneous data structures, just like atomic vectors, but they can have 2 dimensions, rows and columns, unlike vectors.  
+
+Matrices can be created using the **matrix** function.  
+
+```{r}
+#Let's create 5 x 4 numeric matrix containing numbers from 1 to 20
+mymatrix <- matrix(1:20, nrow = 5, ncol = 4)  #Here we order the number by columns
+mymatrix
+
+class(mymatrix)
+dim(mymatrix)
+
+mymatrix <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE)
+mymatrix
+```
+
+We will be using two different variables. Following the usual mathematical convention, lower-case x (or any other letter), which stores a vector and capital `X`, which stores a matrix. We can do this because R is case sensitive.  
+
+## Matrix Operations
+
+Now some key matrix operations:  
+
+```{r}
+
+X <- matrix(1:9, nrow = 3, ncol = 3)
+Y <- matrix(11:19, nrow = 3, ncol = 3)
+
+A <- X + Y
+A
+
+B <- X * Y
+B
+
+#The symbol %*% is called pipe operator.
+#And it carries out a matrix multiplication
+#different than a simple multiplication.
+
+C <- X%*%Y  
+C
+```
+
+Note that X * Y is not a matrix multiplication. It is element by element multiplication. (Same for X / Y). Instead, matrix multiplication uses `%*%`. Other matrix functions include `t()` which gives the transpose of a matrix and `solve()` which returns the inverse of a square matrix if it is invertible.  
+
+`matrix()` function is not the only way to create a matrix. Matrices can also be created by combining vectors as columns, using `cbind()`, or combining vectors as rows, using `rbind()`.  Look at this:  
+
+```{r}
+#Let's create 2 vectors.
+x <- rev(c(1:9))  #this can be done by c(9:1). I wanted to show rev()
+x
+
+y <- rep(2, 9)
+y
+
+A <- rbind(x, y)
+A
+
+B <- cbind(x, y)
+B
+
+#You can label each column and row
+colnames(B) <- c("column1", "column2")
+B
+```
+
+Here are some operations very useful when using matrices:  
+
+```{r}
+rowMeans(A)
+colMeans(B)
+rowSums(B)
+colSums(A)
+```
+
+Last thing: When vectors are coerced to become matrices, they are column vectors. So a vector of length n becomes an $n \times 1$ matrix after coercion.  
+
+```{r}
+x
+X <- as.matrix(x)
+X
+```
+
+## Subsetting Matrix
+
+Like vectors, matrices can be subsetted using square brackets, `[ ]`. However, since matrices are two-dimensional, we need to specify both row and column indices when subsetting.  
+
+```{r}
+Y
+Y[1,3]
+Y[,3]
+Y[2,]
+Y[2, c(1, 3)] # If we need more than a column (row), we use c()
+```
+
+Conditional subsetting is the same as before in vectors.  
+Let's solve this problem:  what's the number in column 1 in `Y` when the number in column 3 is 18?  
+
+```{r}
+Y
+Y[Y[,3]==18, 1]
+
+#What are the numbers in a row when the number in column 3 is 18?
+Y[Y[,3]==19, ]
+
+#Print the rows in Y when the number in column 3 is more than 17?
+Y[Y[,3] > 17, ]
+```
+
+We will see later how these conditional subsetting can be done much smoother with data frames.  
+
+## R-Style Guide
+
+The idea is simple: your R code, or any other code in different languages, should be written in a readable and maintainable style.  Here is a [blog](https://rpahl.github.io/r-some-blog/r-style-guide/) by Roman Pahl that may help you develop a better styling in your codes. (You may find in some chapters and labs that my codes are not following the "good" styling practices.  I am trying to improve!)  
+
+**Next: Lists and data frames**  

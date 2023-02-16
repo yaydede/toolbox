@@ -1,0 +1,237 @@
+# (PART) Penalized Regressions {-}
+
+# Parametric models in prediction {-}
+
+In simple regression or classification problems, we cannot train a parametric model in a way that the fitted model minimizes the out-of-sample prediction error.  We could (and did) fit the parametric models **manually** by adding or removing predictors and their interactions and polynomials.  As we have seen in earlier chapters, by dropping a variable in a regression, for example, it is possible to reduce the variance at the cost of a negligible increase in bias.  
+  
+In fitting the predictive model, some of the variables used in a multiple regression model may not be well associated with the response. Keeping those "irrelevant" variables often leads to unnecessary complexity in the resulting model. Regularization or penalization is an alternative and automated fitting procedure that refers to a process that removes irrelevant variables or shrinks the magnitude of their parameters, which can yield better prediction accuracy and model interpretability by preventing overfitting.
+
+There are several types of regularization techniques that can be used in parametric models.  Each of these techniques adds a different type of penalty term to the objective function and can be used in different situations depending on the characteristics of the data and the desired properties of the model.  Two methods, Ridge and Lasso, are two of well-known benchmark techniques that reduce the model complexity and prevent overfitting resulting from simple linear regression. 
+
+The general principle in penalization can be shown as 
+
+$$
+\widehat{m}_\lambda(\boldsymbol{x})=\operatorname{argmin}\left\{\sum_{i=1}^n \underbrace{\mathcal{L}\left(y_i, m(\boldsymbol{x})\right)}_{\text {loss function }}+\underbrace{\lambda\|m\|_{\ell_q}}_{\text {penalization }}\right\}
+$$
+
+where $\mathcal{L}$ could be conditional mean, quantiles, expectiles, $m$ could be linear, logit, splines, tree-based models, neural networks.  The penalization,  $\ell_q$, could be lasso ($\ell_1$) or ridge ($\ell_2$).  And, $\lambda$ regulates overfitting that can be determined by cross-validation or other methods.  It puts a price to pay for a having more flexible model:
+  
+- $\lambda\rightarrow0$: it interpolates data, low bias, high variance
+- $\lambda\rightarrow\infty$: linear model high bias, low variance
+
+There are two fundamental goals in statistical learning: achieving a high prediction accuracy and identifying relevant predictors. The second objective, variable selection, is particularly important when there is a true sparsity in the underlying model. By their nature, penalized parametric models are not well-performing tools for prediction.  But, they provide important tools for model selection specially when $p>N$ and the true model is sparse.  This section starts with two major models in regularized regressions, Ridge and Lasso, and develops an idea on sparse statistical modelling with Adaptive Lasso.
+
+Although there are many sources on the subject, perhaps the most fundamental one is [Statistical Learning with Sparsity](https://hastie.su.domains/StatLearnSparsity/) by Hastie et al. (2015).
+
+# Ridge
+
+We know that the least squares fitting procedure is that one estimates $\beta_{0}, \beta_{1}, \ldots, \beta_{p}$ that minimize the residual sum of squares:
+
+$$
+\mathrm{RSS}=\sum_{i=1}^{n}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p} \beta_{j} x_{i j}\right)^{2}
+$$
+Ridge regression is very similar to least squares, except that the coefficients are estimated by minimizing a slightly different quantity.
+
+$$
+\sum_{i=1}^{n}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p} \beta_{j} x_{i j}\right)^{2}+\lambda \sum_{j=1}^{p} \beta_{j}^{2} =\mathrm{RSS}+\lambda \sum_{j=1}^{p} \beta_{j}^{2},
+$$
+
+where $\lambda$ is the hyperparameter that can be tuned by cross-validation and grid search.  The last term, $\lambda \sum_{j} \beta_{j}^{2}$, is a constraint, which is also called shrinkage penalty.  This type of penalty is called as $\ell_{2}$.  As with Ordinary Least Squares (OLS), this cost function tries to minimize RSS but also penalizes the size of the coefficients.
+
+More specifically,
+  
+$$
+\hat{\beta}_\lambda^{\text {ridge }}=\operatorname{argmin}\left\{\left\|\mathbf{y}-\left(\beta_0+\mathbf{X} \beta\right)\right\|_{\ell_2}^2+\lambda\|\beta\|_{\ell_2}^2\right\}
+$$
+  
+Explicit solution:
+  
+$$
+\hat{\beta}_\lambda=\left(\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}\right)^{-1} \mathbf{X}^{\top} \mathbf{y}
+$$
+  
+where,
+
+- If $\lambda \rightarrow 0, \quad \hat{\beta}_0^{\text {ridge }}=\hat{\beta}^{\text {ols }}$, 
+- If $\lambda \rightarrow \infty, \quad \hat{\beta}_{\infty}^{\text {ridge }}=\mathbf{0}$.  
+
+
+The hyperparameter $\lambda$ controls the relative impact of the penalization on the regression coefficient estimates. When $\lambda = 0$, the cost function becomes RSS, that is the cost function of OLS and the estimations produce the least squares estimates. However, as $\lambda$ gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply a measure of the mean value of the response, when all features are zero.
+
+Lets apply this to the same data we used earlier, `Hitters` from the [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/) [@ISLR_2021] package:
+
+```{r ridge1, warning=FALSE, message=FALSE}
+library(ISLR)
+
+remove(list = ls())
+
+data(Hitters)
+df <- Hitters[complete.cases(Hitters$Salary), ]
+```
+
+We will use `glmnet` to fit a ridge regression. The generic function in `glmnet` is defined by 
+
+$$
+\min _{\beta_0, \beta} \frac{1}{N} \sum_{i=1}^N w_i l\left(y_i, \beta_0+\beta^T x_i\right)+\lambda\left[(1-\alpha)\|\beta\|_2^2 / 2+\alpha\|\beta\|_1\right] \text {, }
+$$
+where $l\left(y_i, \eta_i\right)$ is the negative log-likelihood contribution for observation $i$ and $\alpha$ is the elastic net penalty: lasso regression ( $\alpha=1$, the default) and ridge regression $(\alpha=0)$. As before, the tuning parameter $\lambda$ controls the overall strength of the penalty.  Since the penalty shrinks (ridge) the coefficients of correlated variables or pick one of them and discard the others (lasso), the variables are supposed to be standardized, which is done by `glmnet`.
+
+This function has slightly different syntax from other model-fitting functions that we have used so far in this book, such as the `y ~ X` syntax. Therefore, before we execute the syntax, we have the prepare the model so that `X` will be a matrix and `y` will be vector.  The matrix `X` has to be prepared before we proceed, which must be free of `NA`s.
+
+```{r ridge2, warning=FALSE, message=FALSE}
+X  <- model.matrix(Salary~., df)[,-1]
+y <- df$Salary
+```
+
+The `glmnet` package is maintained by Trevor Hastie who provides a friendly [vignette](https://glmnet.stanford.edu/articles/glmnet.html) [@Hastie_glmnet].  They describe the importance of `model.matrix()` in `glmnet` as follows:
+
+> (...)particularly useful for creating $x$; not only does it produce a matrix corresponding to the 19 predictors but it also automatically transforms any qualitative variables into dummy variables. The latter property is important because `glmnet()` can only take numerical, quantitative inputs.
+>
+
+Here is the example for a ridge regression:
+
+```{r ridge3, warning=FALSE, message=FALSE}
+library(glmnet)
+grid = 10^seq(10, -2, length = 100)
+model <- glmnet(X, y, alpha = 0, lambda = grid)
+```
+
+Although we defined the grid, we did not do a grid search explicitly by cross validation.  By default, the `glmnet()` function performs ridge regression for an automatically selected range of $\lambda$ values.  It ranges from the null model - only intercept when $\lambda$ is at the upper bound and the least squares fit when the $\lambda$ is at lower bound.  The application above is to show that we can also choose to implement the function over a grid of values.  Moreover, the `glmnet()` function standardizes the variables so that they are on the same scale. To turn off this default setting, use the argument `standardize=FALSE`.  
+
+The methods here, ridge and lasso, are parametric models.  Unlike non-parametric methods, each model is defined by a set of parameters or, as in our case, coefficients.  Therefore, when we do a grid search, each value of the hyperparameter ($\lambda$) is associated with one model defined by a set of coefficients.  In order to see the coefficients we need to apply another function, `coef()`.  Remember, we have 100 $\lambda's$.  Hence, `coef()` produces a 20 x 100 matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of $\lambda$).  
+
+```{r ridge4, warning=FALSE, message=FALSE}
+dim(coef(model))
+model$lambda[c(20,80)]
+coef(model)[, c(20,80)]
+```
+
+Due to the penalty, we see that the coefficient estimates are much smaller, when a large value of $\lambda$ is used.
+  
+We generally use the `predict()` function as before.  But, here we can also use it to estimate the ridge regression coefficients for a new value of $\lambda$.  Hence, if we don't want to rely on the internal grid search provided by `glmnet()`, we can do our own grid search by `predict()`.  This is an example when $\lambda = 50$, which wasn't in the grid.    
+
+```{r ridge5, warning=FALSE, message=FALSE}
+predict(model, s = 50, type = "coefficients")
+```
+  
+There are two ways that we can train ridge (and Lasso):
+  
+- Use our own training algorithm; 
+- Rely on `'glmnet` internal cross-validation process. 
+
+Here is an example for our own training algorithm for training ridge regression:   
+  
+```{r ridge6, warning=FALSE, message=FALSE, cache=TRUE}
+grid = 10^seq(10, -2, length = 100)
+
+MSPE <- c()
+MMSPE <- c()
+
+for(i in 1:length(grid)){
+  for(j in 1:100){
+    set.seed(j)
+    ind <- unique(sample(nrow(df), nrow(df), replace = TRUE))
+    
+    train <- df[ind, ]
+    xtrain <- model.matrix(Salary~., train)[,-1]
+    ytrain <- df[ind, "Salary"]
+    
+    test <- df[-ind, ]
+    xtest <- model.matrix(Salary~., test)[,-1]
+    ytest <- df[-ind, "Salary"]
+  
+    model <- glmnet(xtrain, ytrain, alpha = 0, lambda = grid[i], thresh = 1e-12)
+    yhat <- predict(model, s = grid[i], newx = xtest)
+    MSPE[j] <- mean((yhat - ytest)^2)
+    }
+  MMSPE[i] <- mean(MSPE)
+}
+
+min(MMSPE)
+grid[which.min(MMSPE)]
+plot(log(grid), MMSPE, type="o", col = "red", lwd = 3)
+```
+
+What is the tuned model using the last training test with this $\lambda$?  
+
+```{r ridge7, warning=FALSE, message=FALSE}
+lambda <- grid[which.min(MMSPE)]
+coeff <- predict(model, s = lambda , type = "coefficients", newx = xtrain)
+coeff
+```
+
+We may want to compare the ridge with a simple OLS:
+
+```{r ridge8, warning=FALSE, message=FALSE, cache=TRUE}
+MSPE <- c()
+
+for(j in 1:100){
+  set.seed(j)
+  ind <- unique(sample(nrow(df), nrow(df), replace = TRUE))
+  train <- df[ind, ]
+  test <- df[-ind,]
+  
+  model <- lm(Salary~., data = train)
+  yhat <- predict(model, newdata = test)
+  MSPE[j] <- mean((yhat - test$Salary)^2)
+}
+mean(MSPE)
+summary(model)
+```
+  
+The second way is to rely on the `glmnet` internal training process, `cv.glmnet`, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction.  A part of the following scripts follows the same algorithm as the one in the book ([Introduction to Statistical Learning](https://www.statlearning.com) - ISLR p.254).  This approach uses a specific grid on $\lambda$.    
+
+```{r ridge9, warning=FALSE, message=FALSE, cache=TRUE}
+# With a defined grid on lambda
+bestlam <- c()
+mse <- c()
+grid = 10^seq(10, -2, length = 100)
+
+for(i in 1:100){
+  set.seed(i)
+  train <- sample(1:nrow(X), nrow(X)*0.5) # 50% split
+  test <- c(-train)
+  ytest <- y[test]
+
+  #finding lambda
+  cv.out <- cv.glmnet(X[train,], y[train], alpha = 0)
+  bestlam[i] <- cv.out$lambda.min
+
+  #Predicting with that lambda
+  ridge.mod <- glmnet(X[train,], y[train], alpha = 0,
+                      lambda = grid, thresh = 1e-12)
+  yhat <- predict(ridge.mod, s = bestlam[i], newx = X[test,])
+  mse[i] <- mean((yhat - ytest)^2)
+}
+
+mean(bestlam)
+mean(mse)
+plot(bestlam, col = "blue")
+plot(mse, col = "pink")
+```
+
+Now the same application without a specific grid:  
+
+```{r ridge10, warning=FALSE, message=FALSE, cache=TRUE}
+bestlam <- c()
+mse <- c()
+
+# Without a pre-defined grid on lambda
+for(i in 1:100){
+  set.seed(i)
+  train <- sample(1:nrow(X), nrow(X)*0.5) # arbitrary split
+  test <- c(-train)
+  ytest <- y[test]
+  
+  cv.out <- cv.glmnet(X[train,], y[train], alpha = 0)
+  yhat <- predict(cv.out, s = "lambda.min", newx = X[test,])
+  mse[i] <- mean((yhat - ytest)^2)
+}
+
+mean(mse)
+plot(mse, col = "pink")
+```
+
+Ridge regression adds a penalty term that is the sum of the squares of the coefficients of the features in the model. This results in a penalty that is continuous and differentiable, which makes Ridge regression easy to optimize using gradient descent. Ridge regression can be useful when you have a large number of features, and you want to shrink the coefficients of all of the features towards zero, but you still want to keep all of the features in the model. Ridge regression works best in situations where the least squares estimates have high variance.
+
+On the other hand, Lasso (Least Absolute Shrinkage and Selection Operator) adds a penalty term that is the sum of the absolute values of the coefficients of the features in the model. This results in a penalty that is non-differentiable, which makes it more difficult to optimize using gradient descent. However, Lasso has the advantage of being able to set the coefficients of some features to exactly zero, effectively eliminating those features from the model. This can be useful when you have a large number of features, and you want to select a subset of the most important features to include in the model.

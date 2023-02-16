@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 31 Factor Analysis | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 31 Factor Analysis | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 31 Factor Analysis | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 31 Factor Analysis | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="principle-component-analysis.html"/>
+<link rel="next" href="graphical-network-analysis.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="factor-analysis" class="section level1 hasAnchor" number="31">
+<h1><span class="header-section-number">Chapter 31</span> Factor Analysis<a href="factor-analysis.html#factor-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Factor Analysis (FA) is a method for modeling observed variables, and their covariance structure, in terms of a smaller number of underlying latent (unobserved) “factors”. In FA the observed variables are modeled as linear functions of the “factors.” In PCA, we create new variables that are linear combinations of the observed variables. In both PCA and FA, the dimension of the data is reduced.</p>
+<p>A factor model can be thought of as a series of multiple regressions, predicting each of the observable variables <span class="math inline">\(X_{i}\)</span> from the values of the (unobservable) common factors <span class="math inline">\(f_{i}\)</span>:</p>
+<p><span class="math display">\[
+\begin{gathered}
+X_{1}=\mu_{1}+l_{11} f_{1}+l_{12} f_{2}+\cdots+l_{1 m} f_{m}+\epsilon_{1} \\
+X_{2}=\mu_{2}+l_{21} f_{1}+l_{22} f_{2}+\cdots+l_{2 m} f_{m}+\epsilon_{2} \\
+\vdots \\
+X_{p}=\mu_{p}+l_{p 1} f_{1}+l_{p 2} f_{2}+\cdots+l_{p m} f_{m}+\epsilon_{p}
+\end{gathered}
+\]</span></p>
+<p>where <span class="math inline">\(\mu_{i}\)</span> is the variable mean (intercept).</p>
+<p>The regression coefficients <span class="math inline">\(l_{i j}\)</span> (the partial slopes) for all of these multiple regressions are called factor <strong>loadings</strong>: <span class="math inline">\(l_{i j}=\)</span> is loading of the <span class="math inline">\(i^{t h}\)</span> variable on the <span class="math inline">\(j^{t h}\)</span> factor. With a matrix notation, we can show the matrix of factor loadings:</p>
+<p><span class="math display">\[
+\mathbf{L}=\left(\begin{array}{cccc}
+l_{11} &amp; l_{12} &amp; \ldots &amp; l_{1 m} \\
+l_{21} &amp; l_{22} &amp; \ldots &amp; l_{2 m} \\
+\vdots &amp; \vdots &amp; &amp; \vdots \\
+l_{p 1} &amp; l_{p 2} &amp; \ldots &amp; l_{p m}
+\end{array}\right)
+\]</span></p>
+<p>The errors <span class="math inline">\(\varepsilon_{i}\)</span> are called the <strong>specific factors</strong>. Here, <span class="math inline">\(\varepsilon_{i}=\)</span> specific factor for variable <span class="math inline">\(i\)</span>. When we collect them in a vector, we can express these series of multivariate regression as follows:</p>
+<p><span class="math display" id="eq:25-1">\[\begin{equation}
+\mathbf{X}=\boldsymbol{\mu}+\mathbf{L f}+\boldsymbol{\epsilon}
+  \tag{31.1}
+\end{equation}\]</span></p>
+<p>There are multiple assumptions:</p>
+<ul>
+<li><span class="math inline">\(E\left(\epsilon_{i}\right)=0\)</span> and <span class="math inline">\(\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}\)</span> (a.k.a “specific variance”),</li>
+<li><span class="math inline">\(E\left(f_{i}\right)=0\)</span> and <span class="math inline">\(\operatorname{var}\left(f_{i}\right)=1\)</span>,</li>
+<li><span class="math inline">\(\operatorname{cov}\left(f_{i}, f_{j}\right)=0\)</span> for <span class="math inline">\(i \neq j\)</span>,</li>
+<li><span class="math inline">\(\operatorname{cov}\left(\epsilon_{i}, \epsilon_{j}\right)=0\)</span> for <span class="math inline">\(i \neq j\)</span>,</li>
+<li><span class="math inline">\(\operatorname{cov}\left(\epsilon_{i}, f_{j}\right)=0\)</span>,</li>
+</ul>
+<p>Hence,</p>
+<ul>
+<li><span class="math inline">\(\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} l_{i j}^{2}+\psi_{i}\)</span>. The term <span class="math inline">\(\sum_{j=1}^{m} l_{i j}^{2}\)</span> is called the <strong>Communality</strong> for variable <span class="math inline">\(i\)</span>. The larger the communality, the better the model performance for the <span class="math inline">\(i\)</span> th variable.</li>
+<li><span class="math inline">\(\operatorname{cov}\left(X_{i}, X_{j}\right)=\sigma_{i j}=\sum_{k=1}^{m} l_{i k} l_{j k}\)</span>,</li>
+<li><span class="math inline">\(\operatorname{cov}\left(X_{i}, f_{j}\right)=l_{i j}\)</span></li>
+</ul>
+<p>The factor model for our variance-covariance matrix can then be expressed as:</p>
+<p><span class="math display" id="eq:25-2">\[\begin{equation}
+\Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
+  \tag{31.2}
+\end{equation}\]</span></p>
+<p>where,</p>
+<p><span class="math display">\[
+\boldsymbol{\Psi}=\left(\begin{array}{cccc}
+\psi_{1} &amp; 0 &amp; \ldots &amp; 0 \\
+0 &amp; \psi_{2} &amp; \ldots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \ldots &amp; \psi_{p}
+\end{array}\right)
+\]</span>
+And,</p>
+<p><span class="math display">\[
+\hat{l}_{i j}=\hat{e}_{j i} \sqrt{\hat{\lambda}_j}
+\]</span></p>
+<p>The total variance of each variable given in the factor model (27.2) can be explained by the sum of the shared variance with another variable, <span class="math inline">\(\mathbf{L} \mathbf{L}^{\prime}\)</span> (the common variance or <strong>communality</strong>) and the unique variance, <span class="math inline">\(\mathbf{\Psi}\)</span>, inherent to each variable (<strong>specific variance</strong>)</p>
+<p>There are multiple methods to estimate the parameters of a factor model. In general, two methods are most common: PCA and MLE. Let’s have an example. The data set is called <code>bfi</code> and comes from the <code>psych</code> package. It is made up of 25 self-report personality items from the International Personality Item Pool, gender, education level and age for 2800 subjects and used in the Synthetic Aperture Personality Assessment: The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate, 2 Moderately Inaccurate, 3 Slightly Inaccurate, 4 Slightly Accurate, 5 Moderately Accurate, 6 Very Accurate.</p>
+<div class="sourceCode" id="cb1120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1120-1"><a href="factor-analysis.html#cb1120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1120-2"><a href="factor-analysis.html#cb1120-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GPArotation)</span>
+<span id="cb1120-3"><a href="factor-analysis.html#cb1120-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;bfi&quot;</span>)</span>
+<span id="cb1120-4"><a href="factor-analysis.html#cb1120-4" aria-hidden="true" tabindex="-1"></a><span class="fu">describeData</span>(bfi, <span class="at">head =</span> <span class="dv">5</span>, <span class="at">tail=</span><span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## n.obs =  2800 of which  2236   are complete cases.   Number of variables =  28  of which all are numeric  TRUE  
+##           variable # n.obs type H1 H2 H3 H4 H5 T1 T2 T3 T4 T5
+## A1                 1  2784    1  2  2  5  4  2  6  2  2  5  2
+## A2                 2  2773    1  4  4  4  4  3  1  4  3  2  3
+## A3                 3  2774    1  3  5  5  6  3  3  4  5  2  1
+## A4                 4  2781    1  4  2  4  5  4  3  3  2  4  4
+## A5                 5  2784    1  4  5  4  5  5  3  5  5  4  2
+## C1                 6  2779    1  2  5  4  4  4  6  2  5  5  5
+## C2                 7  2776    1  3  4  5  4  4  6  3  5  5  5
+## C3                 8  2780    1  3  4  4  3  5  6  4  5  5  3
+## C4                 9  2774    1  4  3  2  5  3  1  4  1  2  3
+## C5                10  2784    1  4  4  5  5  2  1  3  1  6  3
+## E1                11  2777    1  3  1  2  5  2  1  2  2  2  3
+## E2                12  2784    1  3  1  4  3  2  4  2  2  2  3
+## E3                13  2775    1  3  6  4  4  5  5  4  6  4  1
+## E4                14  2791    1  4  4  4  4  4  5  4  3  5  2
+## E5                15  2779    1  4  3  5  4  5  6  3  6  4  2
+## N1                16  2778    1  3  3  4  2  2  1 NA  3  5  1
+## N2                17  2779    1  4  3  5  5  3  1  3  4  5  2
+## N3                18  2789    1  2  3  4  2  4  1  2  3  6  2
+## N4                19  2764    1  2  5  2  4  4 NA  3  3  4  1
+## N5                20  2771    1  3  5  3  1  3  1  3  1  1  1
+## O1                21  2778    1  3  4  4  3  3  6  6  5  5  3
+## O2                22  2800    1  6  2  2  3  3  1  3  1  2  1
+## O3                23  2772    1  3  4  5  4  4  6  5  6  5  3
+## O4                24  2786    1  4  3  5  3  3  6  4  4  5  5
+## O5                25  2780    1  3  3  2  5  3  1  2  3  1  1
+## gender            26  2800    1  1  2  2  2  1  1  1  2  1  2
+## education         27  2577    1 NA NA NA NA NA  3  4  4  4  4
+## age               28  2800    1 16 18 17 17 17 19 27 29 31 50</code></pre>
+<p>To get rid of missing observations and the last three variables,</p>
+<div class="sourceCode" id="cb1122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1122-1"><a href="factor-analysis.html#cb1122-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> bfi[<span class="fu">complete.cases</span>(bfi[,<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]),<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]</span>
+<span id="cb1122-2"><a href="factor-analysis.html#cb1122-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(bfi[,<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>])</span></code></pre></div>
+<pre><code>## [1] 2800   25</code></pre>
+<div class="sourceCode" id="cb1124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1124-1"><a href="factor-analysis.html#cb1124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
+<pre><code>## [1] 2436   25</code></pre>
+<p>The first decision that we need make is the number of factors that we will need to extract. For <span class="math inline">\(p=28\)</span>, the variance-covariance matrix <span class="math inline">\(\Sigma\)</span> contains
+<span class="math display">\[
+\frac{p(p+1)}{2}=\frac{25 \times 26}{2}=325
+\]</span>
+unique elements or entries. With <span class="math inline">\(m\)</span> factors, the number of parameters in the factor model would be</p>
+<p><span class="math display">\[
+p(m+1)=25(m+1)
+\]</span></p>
+<p>Taking <span class="math inline">\(m=5\)</span>, we have 150 parameters in the factor model. How do we choose <span class="math inline">\(m\)</span>? Although it is common to look at the results of the principal components analysis, often in social sciences, the underlying theory within the field of study indicates how many factors to expect.</p>
+<div class="sourceCode" id="cb1126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1126-1"><a href="factor-analysis.html#cb1126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(df)</span></code></pre></div>
+<p><img src="28-FactorAnalysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Let’s use the <code>factanal()</code> function of the build-in stats package</p>
+<div class="sourceCode" id="cb1127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1127-1"><a href="factor-analysis.html#cb1127-1" aria-hidden="true" tabindex="-1"></a>pa.out <span class="ot">&lt;-</span> <span class="fu">factanal</span>(df, <span class="at">factors =</span> <span class="dv">5</span>)</span>
+<span id="cb1127-2"><a href="factor-analysis.html#cb1127-2" aria-hidden="true" tabindex="-1"></a>pa.out</span></code></pre></div>
+<pre><code>## 
+## Call:
+## factanal(x = df, factors = 5)
+## 
+## Uniquenesses:
+##    A1    A2    A3    A4    A5    C1    C2    C3    C4    C5    E1    E2    E3 
+## 0.830 0.576 0.466 0.691 0.512 0.660 0.569 0.677 0.510 0.557 0.634 0.454 0.558 
+##    E4    E5    N1    N2    N3    N4    N5    O1    O2    O3    O4    O5 
+## 0.468 0.592 0.271 0.337 0.478 0.507 0.664 0.675 0.744 0.518 0.752 0.726 
+## 
+## Loadings:
+##    Factor1 Factor2 Factor3 Factor4 Factor5
+## A1  0.104                  -0.393         
+## A2          0.191   0.144   0.601         
+## A3          0.280   0.110   0.662         
+## A4          0.181   0.234   0.454  -0.109 
+## A5 -0.124   0.351           0.580         
+## C1                  0.533           0.221 
+## C2                  0.624   0.127   0.140 
+## C3                  0.554   0.122         
+## C4  0.218          -0.653                 
+## C5  0.272  -0.190  -0.573                 
+## E1         -0.587          -0.120         
+## E2  0.233  -0.674  -0.106  -0.151         
+## E3          0.490           0.315   0.313 
+## E4 -0.121   0.613           0.363         
+## E5          0.491   0.310   0.120   0.234 
+## N1  0.816                  -0.214         
+## N2  0.787                  -0.202         
+## N3  0.714                                 
+## N4  0.562  -0.367  -0.192                 
+## N5  0.518  -0.187           0.106  -0.137 
+## O1          0.182   0.103           0.524 
+## O2  0.163          -0.113   0.102  -0.454 
+## O3          0.276           0.153   0.614 
+## O4  0.207  -0.220           0.144   0.368 
+## O5                                 -0.512 
+## 
+##                Factor1 Factor2 Factor3 Factor4 Factor5
+## SS loadings      2.687   2.320   2.034   1.978   1.557
+## Proportion Var   0.107   0.093   0.081   0.079   0.062
+## Cumulative Var   0.107   0.200   0.282   0.361   0.423
+## 
+## Test of the hypothesis that 5 factors are sufficient.
+## The chi square statistic is 1490.59 on 185 degrees of freedom.
+## The p-value is 1.22e-202</code></pre>
+<p>The first chunk provides the “uniqueness” (specific variance) for each variable, which range from 0 to 1 . The uniqueness, sometimes referred to as noise, corresponds to the proportion of variability, which can not be explained by a linear combination of the factors. This is the <span class="math inline">\(\hat{\Psi}\)</span> in the equation above. A high uniqueness for a variable indicates that the factors do not account well for its variance.</p>
+<p>The next section reports the loadings ranging from <span class="math inline">\(-1\)</span> to <span class="math inline">\(1.\)</span> This is the <span class="math inline">\(\hat{\mathbf{L}}\)</span> in the equation (27.2) above. The loadings are the contribution of each original variable to the factor. Variables with a high loading are well explained by the factor. Notice there is no entry for certain variables since <span class="math inline">\(R\)</span> does not print loadings less than <span class="math inline">\(0.1\)</span>.</p>
+<p>The communalities for the <span class="math inline">\(i^{t h}\)</span> variable are computed by taking the sum of the squared loadings for that variable. This is expressed below:</p>
+<p><span class="math display">\[
+\hat{h}_i^2=\sum_{j=1}^m \hat{l}_{i j}^2
+\]</span></p>
+<p>This proportion of the variability is denoted as <strong>communality</strong>. Another way to calculate the communality is to subtract the uniquenesses from 1. An appropriate factor model results in low values for uniqueness and high values for communality.</p>
+<div class="sourceCode" id="cb1129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1129-1"><a href="factor-analysis.html#cb1129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings<span class="sc">^</span><span class="dv">2</span>,<span class="dv">1</span>,sum) <span class="co"># communality</span></span></code></pre></div>
+<pre><code>##        A1        A2        A3        A4        A5        C1        C2        C3 
+## 0.1703640 0.4237506 0.5337657 0.3088959 0.4881042 0.3401202 0.4313729 0.3227542 
+##        C4        C5        E1        E2        E3        E4        E5        N1 
+## 0.4900773 0.4427531 0.3659303 0.5459794 0.4422484 0.5319941 0.4079732 0.7294156 
+##        N2        N3        N4        N5        O1        O2        O3        O4 
+## 0.6630751 0.5222584 0.4932099 0.3356293 0.3253527 0.2558864 0.4815981 0.2484000 
+##        O5 
+## 0.2740596</code></pre>
+<div class="sourceCode" id="cb1131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1131-1"><a href="factor-analysis.html#cb1131-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings<span class="sc">^</span><span class="dv">2</span>,<span class="dv">1</span>,sum) <span class="co"># uniqueness</span></span></code></pre></div>
+<pre><code>##        A1        A2        A3        A4        A5        C1        C2        C3 
+## 0.8296360 0.5762494 0.4662343 0.6911041 0.5118958 0.6598798 0.5686271 0.6772458 
+##        C4        C5        E1        E2        E3        E4        E5        N1 
+## 0.5099227 0.5572469 0.6340697 0.4540206 0.5577516 0.4680059 0.5920268 0.2705844 
+##        N2        N3        N4        N5        O1        O2        O3        O4 
+## 0.3369249 0.4777416 0.5067901 0.6643707 0.6746473 0.7441136 0.5184019 0.7516000 
+##        O5 
+## 0.7259404</code></pre>
+<p>The table under the loadings reports the proportion of variance explained by each factor. The row <strong>Cumulative Var</strong> gives the cumulative proportion of variance explained. These numbers range from 0 to 1; <strong>Proportion Var</strong> shows the proportion of variance explained by each factor, and the row <strong>SS loadings</strong> gives the sum of squared loadings. This is sometimes used to determine the value of a particular factor. A factor is worth keeping if the SS loading is greater than 1 (<a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr">Kaiser’s rule</a>).</p>
+<p>The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Conventionally, we reject <span class="math inline">\(H_0\)</span> if the <span class="math inline">\(p\)</span>-value is less than <span class="math inline">\(0.05\)</span>. Such a result indicates that the number of factors is too low. The low <span class="math inline">\(p\)</span>-value in our example above leads us to reject the <span class="math inline">\(H_0\)</span>, and indicates that we fitted NOT an appropriate model.</p>
+<p>Finally, with our estimated factor model, we may calculate <span class="math inline">\(\hat{\Sigma}\)</span> and compare it to the observed correlation matrix, <span class="math inline">\(S\)</span>, by simple matrix algebra.</p>
+<div class="sourceCode" id="cb1133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1133-1"><a href="factor-analysis.html#cb1133-1" aria-hidden="true" tabindex="-1"></a>Lambda <span class="ot">&lt;-</span> pa.out<span class="sc">$</span>loadings</span>
+<span id="cb1133-2"><a href="factor-analysis.html#cb1133-2" aria-hidden="true" tabindex="-1"></a>Psi <span class="ot">&lt;-</span> <span class="fu">diag</span>(pa.out<span class="sc">$</span>uniquenesses)</span>
+<span id="cb1133-3"><a href="factor-analysis.html#cb1133-3" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> pa.out<span class="sc">$</span>correlation</span>
+<span id="cb1133-4"><a href="factor-analysis.html#cb1133-4" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> Lambda <span class="sc">%*%</span> <span class="fu">t</span>(Lambda) <span class="sc">+</span> Psi</span>
+<span id="cb1133-5"><a href="factor-analysis.html#cb1133-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(S) <span class="sc">-</span> <span class="fu">head</span>(Sigma), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##       A1    A2    A3    A4    A5    C1    C2    C3    C4    C5    E1    E2
+## A1  0.00 -0.12 -0.03  0.01  0.04  0.05  0.06  0.03  0.09  0.00  0.08  0.03
+## A2 -0.12  0.00  0.03  0.02 -0.03 -0.04 -0.05  0.03 -0.03  0.02 -0.04 -0.01
+## A3 -0.03  0.03  0.00  0.02  0.02 -0.02 -0.02 -0.02 -0.01 -0.01  0.03  0.01
+## A4  0.01  0.02  0.02  0.00 -0.02 -0.04  0.04 -0.06  0.01 -0.04  0.01  0.01
+## A5  0.04 -0.03  0.02 -0.02  0.00  0.02 -0.01  0.01  0.00  0.00  0.03  0.03
+## C1  0.05 -0.04 -0.02 -0.04  0.02  0.00  0.07  0.01  0.01  0.05  0.01  0.01
+##       E3    E4    E5    N1    N2    N3    N4    N5    O1    O2    O3    O4
+## A1  0.07  0.05  0.01 -0.01 -0.02  0.02  0.01  0.00  0.06  0.06  0.02 -0.02
+## A2 -0.06 -0.04  0.07  0.00  0.04 -0.03 -0.01 -0.01 -0.01 -0.01 -0.03  0.01
+## A3  0.01 -0.03 -0.01  0.02  0.01 -0.01 -0.02 -0.05  0.00 -0.02  0.00 -0.03
+## A4 -0.01  0.01 -0.02  0.02 -0.02  0.01 -0.02  0.00  0.02 -0.02  0.00 -0.02
+## A5  0.03  0.04 -0.01  0.00  0.00 -0.01 -0.01  0.00  0.00  0.00  0.00  0.00
+## C1 -0.02  0.06  0.02 -0.02 -0.01  0.02  0.01  0.01 -0.01  0.02  0.00  0.04
+##       O5
+## A1  0.07
+## A2 -0.05
+## A3 -0.01
+## A4 -0.01
+## A5  0.00
+## C1  0.02</code></pre>
+<p>This matrix is also called as the <strong>residual matrix</strong>.</p>
+<p>For more see: <a href="https://cran.r-project.org/web/packages/factoextra/readme/README.html" class="uri">https://cran.r-project.org/web/packages/factoextra/readme/README.html</a></p>
+
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="principle-component-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="graphical-network-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/28-FactorAnalysis.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

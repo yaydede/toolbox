@@ -1,0 +1,299 @@
+# Time Series Embedding
+
+In general, forecasting models use either direct or recursive forecasting, or their combinations (See [Taieb and Hyndman](https://robjhyndman.com/papers/rectify.pdf), 2012).  The difference between these two methods is related to discussion on prediction accuracy and forecasting variance. As we see below, recursive forecasting requires a parametric model and would face increasing forecasting error when the underlying model is not linear. Direct forecasting, however, can be achieved by a nonparametric predictive algorithm, while it may have a higher variance as the forecast horizon gets longer.  
+
+Multi-period recursive forecasting use a single time series model, like AR(1).  With iterative substitutions of the estimated model, any forecast period of $h$ can be computed.  Let's start with a simple AR(1) to see recursive forecasting:
+
+$$
+x_{t+1}=\alpha_0+\phi_1 x_t+\epsilon_{t}
+$$
+
+If we use this AR(1) to have a 3-period forecast:
+
+$$
+\hat{x}_{t+1}=\hat{\alpha}_0+\hat{\phi}_1 x_t, \\
+\hat{x}_{t+2}=\hat{\alpha}_0+\hat{\phi}_1 \hat{x}_{t+1}, \\
+\hat{x}_{t+3}=\hat{\alpha}_0+\hat{\phi}_1 \hat{x}_{t+2}
+$$
+With iterative substitutions:
+
+$$
+\hat{x}_{t+1}=\hat{\alpha}_0+\hat{\phi}_1 x_t ~~~~ 1^{st} ~ \text{Period}\\
+\hat{x}_{t+2}=\hat{\alpha}_0+\hat{\alpha}_0\hat{\alpha}_1+\hat{\phi}^2_1 x_{t} ~~~~ 2^{nd} ~ \text{Period}\\
+\hat{x}_{t+3}=\hat{\alpha}_0+\hat{\alpha}_0\hat{\alpha}_1+\hat{\alpha}_0\hat{\alpha}^2_1+\hat{\phi}^3_1 x_t~~~~ 3^{rd} ~ \text{Period}
+$$
+
+Of course, we can generalize it for $h$ periods:
+
+$$
+\hat{x}_{t+h}=\hat{\alpha}_0 \sum_{i=1}^h \hat{\phi}_1^{i-1}+\hat{\phi}_1^h x_t
+$$
+
+The estimated coefficients ($\hat{\alpha}_0$, $\hat{\phi}_1$) are the same; hence, we need only one model for any period.
+
+Alternatively, we can apply the direct multi-period forecasting, where a separate predictive model for each forecasting horizon between $h$ and $t$ is estimated. Here is the example with AR(1):
+
+$$
+x_{t+1}=\alpha_0+\alpha_1 x_t+\epsilon_{t}, \\
+x_{t+2}=\beta_0+\beta_1 x_t+\epsilon_{t}, \\
+x_{t+3}=\omega_0+\omega_1 x_t+\epsilon_{t}. \\
+$$
+  
+And, the 3-period direct forecasts with three different models:
+
+$$
+\hat{x}_{t+1}=\hat{\alpha}_0+\hat{\alpha}_1 x_t ~~~~ 1^{st} ~ \text{Period}\\
+\hat{x}_{t+2}=\hat{\beta}_0+\hat{\beta}_1 x_{t} ~~~~ 2^{nd} ~ \text{Period}\\
+\hat{x}_{t+3}=\hat{\omega}_0+\hat{\omega}_1x_t~~~~ 3^{rd} ~ \text{Period}
+$$
+ 
+## VAR for Recursive Forecasting
+
+The problem with a multi-period recursive forecasting becomes clear when we have multivariate model:
+
+$$
+y_{t+1}=\beta_0+\beta_1 y_t+\beta_2x_t+\epsilon_{t}
+$$
+
+If we want a 2-period forecast,
+
+$$
+\hat{y}_{t+2}=\hat{\beta}_0+\hat{\beta}_1 \hat{y}_{t+1}+\hat{\beta}_2 \hat{x}_{t+1},
+$$
+
+Hence, $\hat{x}_{t+1}$ has to be estimated.  This can be done with a Vector Autorregressive (VAR) framework.  A VAR model consists of multiple equations, one per variable. Each equation includes a constant and lags of all of the variables in the system.
+
+$$
+\begin{aligned}
+& y_{t}=c_1+\beta_{1} y_{t-1}+\beta_{2} x_{t-1}+\varepsilon_{t} \\
+& x_{t}=c_2+\phi_{1} x_{t-1}+\phi_{2} y_{t-1}+e_{t}
+\end{aligned}
+$$
+
+Each model is estimated using the principle of ordinary least squares, given that series are stationary. Forecasts in VAR are calculated with recursive iterations. Therefore, the set of equations generates forecasts for each variable. To decide the number of lags in each equation, the BIC is used  
+
+Let's have our COVID-19 data and include the mobility to forecasting
+
+```{r, message=FALSE, warning=FALSE}
+library(tsibble)
+library(fpp3)
+
+load("~/Dropbox/ToolShed_draft/dftoronto.RData")
+day <- seq.Date(from = as.Date("2020/03/01"),
+                         to = as.Date("2020/11/21"), by = 1)
+
+tdata <- tibble(Day = day, mob = data$mob, cases = data$cases)
+toronto <- tdata %>%
+  as_tsibble(index = Day)
+toronto
+```
+
+We will estimate the recursive forecasts for 1 to 14 days ahead. 
+
+```{r, message=FALSE, warning=FALSE}
+# We need make series stationary
+trdf <- toronto %>%
+            mutate(diffcases = difference(cases),
+                   diffmob = difference(mob))
+
+# VAR with BIC
+fit <- trdf[-1,] %>%
+  model(
+    VAR(vars(diffcases, diffmob), ic = "bic")
+  )
+glance(fit)
+fit %>% report()
+```
+```{r, warning=FALSE, message=FALSE}
+fit %>%
+  forecast(h=14) %>%
+  autoplot(trdf[-c(1:200),])
+```
+  
+We should have transformed both series by the Box-Cox transformation, but we ignored it above.
+
+## Embedding for Direct Forecast
+
+For direct forecasting, we need to rearrange the data in a way that we can estimate 7 models for forecasting ahead each day of 7 days.  We will use `embed()` function to show what we mean with rearranging data for AR(3), for example: 
+
+```{r}
+Y <- 1:10
+Y <- embed(Y, 3)
+colnames(Y)=c("Y(t)","Y(t-1)","Y(t-2)")
+Y
+```
+
+Now the key point is there is no a temporal dependence between each row so that shuffling this data after re-structuring it admissible.  Let's have an AR(1) example on this simulated data
+
+```{r}
+# Stationary data rho < 1 but = 0.85
+n <- 10000
+rho <- 0.85
+
+y <- c(0, n)
+set.seed(345)
+eps <- rnorm(n, 0, 1)
+
+for(j in 1:(n-1)) {
+  y[j+1] <- y[j]*rho + eps[j]
+  }
+
+ylagged <- y[2:n]
+
+par(mfrow=c(1,2))
+plot(ylagged, y[1:(n-1)], col = "lightpink",
+     ylab = "y", xlab = "y(t-1)")
+plot(y[1:500], type = "l", col = "red",
+     ylab = "y", xlab = "t")
+```
+   
+We will use an AR(1) estimation with OLS after embedding:
+
+```{r}
+y_em <- embed(y, 2)
+head(y)
+colnames(y_em) <- c("yt", "yt_1")
+head(y_em)
+```
+And estimation of AR(1) with OLS:
+
+```{r}
+y_em <- as.data.frame(y_em)
+ar1 <- lm(yt ~ yt_1 - 1, y_em)
+ar1
+```
+  
+Now, let's shuffle `y_em`:
+
+```{r}
+# Shuffle
+ind <- sample(nrow(y_em), nrow(y_em), replace = FALSE)
+y_em_sh <- y_em[ind, ]
+
+ar1 <- lm(yt ~ yt_1 - 1, y_em_sh)
+ar1
+```
+This proves the temporal independence across the observations in the rearranged data.  This is important because the temporal order in the time series data would not affect the cross-validation process or bootstrapping applications in a grid search anymore.  When we have this freedom, we can use all conventional machine learning applications on time series data, like random forests, which we see in the next chapter.   
+
+This re-arrangement can also be applied to multivariate data sets:
+
+```{r}
+tsdf <- matrix(c(1:10, 21:30), nrow = 10)
+colnames(tsdf) <- c("Y", "X")
+first <- embed(tsdf, 3)
+colnames(first) <- c("y(t)","x(t)","y(t-1)","x(t-1)", "y(t-2)", "x(t-2)")
+head(first)
+```
+Now, we need to have three models for three forecasting horizons.  Here are these models:
+
+$$
+\hat{y}_{t+1}=\hat{\alpha}_0+\hat{\alpha}_1 y_t + \hat{\alpha}_2 y_{t-1}+ \hat{\alpha}_3 x_t + \hat{\alpha}_4 x_{t-1}+ \hat{\alpha}_5 x_{t-2} ~~~~ 1^{st} ~ \text{Period}\\
+\hat{y}_{t+2}=\hat{\beta}_0+\hat{\beta}_1 y_t + \hat{\beta}_2 y_{t-1}+ \hat{\beta}_3 x_t + \hat{\beta}_4 x_{t-1}+ \hat{\beta}_5 x_{t-2} ~~~~ 2^{nd} ~ \text{Period}\\
+\hat{y}_{t+3}=\hat{\omega}_0+\hat{\omega}_1 y_t + \hat{\omega}_2 y_{t-1}+ \hat{\omega}_3 x_t + \hat{\omega}_4 x_{t-1}+ \hat{\omega}_5 x_{t-2} ~~~~ 3^{rd} ~ \text{Period}
+$$
+Each one of these models requires a different rearrangement in the data.  Here are the required arrangement for each model:    
+
+```{r, echo=FALSE}
+n <- nrow(first)
+second <- cbind(first[-1,1], first[-n,-1])
+colnames(second) <- c("y(t)","x(t-1)","y(t-2)","x(t-2)", "y(t-3)", "x(t-3)")
+third <- cbind(first[-c(1:2),1], first[-c(n,n-1),-1])
+colnames(third) <- c("y(t)","x(t-2)","y(t-3)","x(t-3)", "y(t-4)", "x(t-4)")
+head(first)
+head(second)
+head(third)
+```
+We already rearranged the data for the first model. if we remove the first row in `y(t)` and the last row in the remaining set, we can get the the data for the second model:
+
+```{r, echo=FALSE}
+colnames(first) <- NULL
+```
+
+```{r}
+cbind(first[-1,1], first[-nrow(first),-1])
+```
+We will use our COVID-19 data and a simple linear regression as an example of direct forecasting:
+
+```{r}
+# Preparing data
+df <- data.frame(dcases = trdf$diffcases, dmob = trdf$diffmob)
+df <- df[complete.cases(df), ]
+rownames(df) <- NULL
+df <-as.matrix(df)
+head(df)
+```
+
+Now we need to decide on two parameters: the window size, that is, how many lags will be included in each row; and how many days we will forecast.  The next section will use more advance functions for re-arranging the data and apply the direct forecasting with random forests. For now, let's use a 3-day window and a 3-day forecast: 
+  
+```{r}
+h = 3
+w = 3
+fh <- c() # storage for forecast
+
+# Start with first
+dt <- embed(df, w)
+y <- dt[,1]
+X <- dt[,-1]
+
+for (i in 1:h) {
+  fit <- lm(y ~ X)
+  l <- length(fit$fitted.values)
+  fh[i] <- fit$fitted.values[l]
+  y <- y[-1]
+  X <- X[-nrow(X),]
+}
+
+fh
+```
+
+```{r}
+plot(1:266, trdf$diffcases, col = "red", type = "l")
+lines(267:269, fh, col="blue")
+```
+
+We haven't used training and test sets above.  If we apply a proper splitting, we can even set the window size as our hyperparameter to minimize the forecast error:
+
+```{r}
+# We set the last 7 days as our test set
+train <- df[1:258, ]
+test <- df[-c(1:258), ]
+
+h = 7
+w <- 3:14 # a grid for window size
+
+fh <- matrix(0, length(w), h)
+rownames(fh) <- w
+colnames(fh) <- 1:7
+
+for(s in 1:length(w)){
+  dt <- embed(train, w[s])
+  y <- dt[,1]
+  X <- dt[,-1]
+    for (i in 1:h) {
+      fit <- lm(y ~ X)
+      fh[s,i] <- last(fit$fitted.values)
+      y <- y[-1]
+      X <- X[-nrow(X),]
+    }
+}
+
+fh
+```
+
+Rows in `fh` show the 7-day forecast for each window size.  We can see which window size is the best:
+
+```{r}
+rmspe <- c()
+
+for(i in 1: nrow(fh)){
+  rmspe[i] <- sqrt(mean((fh[i,]-test)^2))
+}
+
+rmspe
+which.min(rmspe)
+```
+
+We used the last 7 days in our data as our test set and previous days as our training set.  A natural question would be whether we could shuffle the data and use **any** 7 days as our test set?  The answer is yes, because we do not need to follow a temporal order in the data after rearranging it with embedding. This is important because we can add a bootstrapping loop to our grid search above and get better tuning for finding the best window size.
+
+We incorporate all these ideas with our random forest application in the next chapter. 
+

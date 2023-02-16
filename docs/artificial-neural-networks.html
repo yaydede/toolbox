@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 16 Artificial Neural Networks | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 16 Artificial Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 16 Artificial Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 16 Artificial Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="support-vector-machines.html"/>
+<link rel="next" href="parametric-models-in-prediction.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="artificial-neural-networks" class="section level1 hasAnchor" number="16">
+<h1><span class="header-section-number">Chapter 16</span> Artificial Neural Networks<a href="artificial-neural-networks.html#artificial-neural-networks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Artificial neural networks (ANNs) are a type of machine learning model that are inspired by the structure and function of the human brain. They consist of interconnected units called artificial neurons or nodes, which are organized into layers. The concept of artificial neural networks dates back to the 1940s, when Warren McCulloch and Walter Pitts (<a href="https://link.springer.com/article/10.1007/BF02478259">1944</a>) proposed a model of the neuron as a simple threshold logic unit. In the 1950s and 1960s, researchers began developing more complex models of the neuron and exploring the use of neural networks for tasks such as pattern recognition and machine translation. However, these early efforts were largely unsuccessful due to the limited computational power of the time.</p>
+<p>It wasn’t until the 1980s and 1990s that significant progress was made in the development of artificial neural networks, thanks to advances in computer technology and the availability of larger and more diverse datasets. In <a href="https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf">1986</a>, Geoffrey Hinton and his team developed the backpropagation algorithm, which revolutionized the field by allowing neural networks to be trained more efficiently and accurately. Since then, artificial neural networks have been applied to a wide range of tasks, including image and speech recognition, natural language processing, and even playing games like chess and Go. They have also been used in a variety of fields, including finance, healthcare, and transportation. Today, artificial neural networks are an important tool in the field of machine learning, and continue to be an active area of research and development.</p>
+<p>There have been many influential works published in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential papers in the history of ANNs:</p>
+<ul>
+<li><a href="https://psycnet.apa.org/record/1959-09865-001">Perceptrons</a> by Frank Rosenblatt (1957): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs.</li>
+<li><a href="https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf">Backpropagation</a> by Rumelhart, Hinton, and Williams (1986): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications.</li>
+<li><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf">LeNet-5</a> by Yann LeCun et al. (1998): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area.</li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/26017442/">Deep Learning</a> by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton (2015): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field.</li>
+<li><a href="https://www.deeplearningbook.org">Deep Learning</a> by Ian Goodfellow et al. (2016): This book provided a comprehensive overview of the state of the art in deep learning, which is a type of ANN with multiple layers of interconnected nodes. The book helped to popularize deep learning and contributed to its widespread adoption in a variety of fields.</li>
+</ul>
+<p>These are just a few examples of the many influential papers that have been published in the field of ANNs. There have been many other important contributions to the field as well, and the field continues to evolve and grow as new technologies and techniques are developed.</p>
+<p>Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks. Are Neural Networks is better than Support Vector Machines? The post by <a href="https://stats.stackexchange.com/questions/510052/are-neural-networks-better-than-svms">Igor F.</a> gives a nice starting example.</p>
+<div id="neural-network---the-idea" class="section level2 hasAnchor" number="16.1">
+<h2><span class="header-section-number">16.1</span> Neural Network - the idea<a href="artificial-neural-networks.html#neural-network---the-idea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s start with a predictive model with a single input (covariate). The simplest model could be a linear model:</p>
+<p><span class="math display">\[
+y \approx \alpha+\beta x
+\]</span></p>
+<p>Since this model could be a quite restrictive, we can have a more flexible one by a polynomial regression:</p>
+<p><span class="math display">\[
+y \approx \alpha+\beta_1 x+\beta_2 x^2+\beta_3 x^3+\ldots = \alpha+\sum_{m=1}^M \beta_m x^m
+\]</span></p>
+<p>We can see the first simple ANN as nonlinear functions of linear combinations:</p>
+<p><span class="math display">\[
+y \approx \alpha+\beta_1 f\left(\alpha_1+\delta_1 x\right)+\beta_2 f\left(\alpha_2+\delta_2 x\right)+\beta_3 f\left(\alpha_3+\delta_3 x\right)+\ldots\\
+= \alpha+\sum_{m=1}^M \beta_m f\left(\alpha_m+\delta_m x\right)
+\]</span></p>
+<p>where <span class="math inline">\(f(.)\)</span> is an <strong>activation</strong> function – a fixed nonlinear function. Common examples of activation functions are</p>
+<ul>
+<li>The <strong>logistic</strong> (or sigmoid) function: <span class="math inline">\(f(x)=\frac{1}{1+e^{-x}}\)</span>;</li>
+<li>The <strong>hyperbolic tangent</strong> function: <span class="math inline">\(f(x)=\tanh (x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}\)</span>;</li>
+<li>The Rectified Linear Unit (<strong>ReLU</strong>): <span class="math inline">\(f(x)=\max (0, x)\)</span>;</li>
+</ul>
+<p>The full list of activation functions can be found at <a href="https://en.wikipedia.org/wiki/Activation_function">Wikipedia</a>.</p>
+<p>Let us consider a realistic (simulated) sample:</p>
+<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb773-1"><a href="artificial-neural-networks.html#cb773-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb773-2"><a href="artificial-neural-networks.html#cb773-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb773-3"><a href="artificial-neural-networks.html#cb773-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">runif</span>(n))</span>
+<span id="cb773-4"><a href="artificial-neural-networks.html#cb773-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">12</span><span class="sc">*</span>(x <span class="sc">+</span> <span class="fl">0.2</span>))<span class="sc">/</span>(x <span class="sc">+</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb773-5"><a href="artificial-neural-networks.html#cb773-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x)</span>
+<span id="cb773-6"><a href="artificial-neural-networks.html#cb773-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main=</span><span class="st">&quot;Simulated data&quot;</span>,  <span class="at">col=</span> <span class="st">&quot;grey&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn1-1.png" width="672" /></p>
+<p>We can fit a polynomial regression with <span class="math inline">\(M = 3\)</span>:</p>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="artificial-neural-networks.html#cb774-1" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">3</span>))</span>
+<span id="cb774-2"><a href="artificial-neural-networks.html#cb774-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main=</span><span class="st">&quot;Polynomial: M = 3&quot;</span>,  <span class="at">col=</span> <span class="st">&quot;grey&quot;</span>)</span>
+<span id="cb774-3"><a href="artificial-neural-networks.html#cb774-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">predict</span>(ols), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn2-1.png" width="672" /></p>
+<p>Now, we can think of the line as weighted sum of fixed components: <span class="math inline">\(\alpha_1+\beta_1 x+\beta_2 x^2+\beta_3 x^3\)</span>.</p>
+<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="artificial-neural-networks.html#cb775-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parts</span></span>
+<span id="cb775-2"><a href="artificial-neural-networks.html#cb775-2" aria-hidden="true" tabindex="-1"></a>first <span class="ot">&lt;-</span> ols<span class="sc">$</span>coefficients[<span class="dv">2</span>]<span class="sc">*</span>x</span>
+<span id="cb775-3"><a href="artificial-neural-networks.html#cb775-3" aria-hidden="true" tabindex="-1"></a>second <span class="ot">&lt;-</span> ols<span class="sc">$</span>coefficients[<span class="dv">3</span>]<span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb775-4"><a href="artificial-neural-networks.html#cb775-4" aria-hidden="true" tabindex="-1"></a>third <span class="ot">&lt;-</span> ols<span class="sc">$</span>coefficients[<span class="dv">4</span>]<span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span></span>
+<span id="cb775-5"><a href="artificial-neural-networks.html#cb775-5" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> ols<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> first <span class="sc">+</span> second <span class="sc">+</span> third </span>
+<span id="cb775-6"><a href="artificial-neural-networks.html#cb775-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb775-7"><a href="artificial-neural-networks.html#cb775-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
+<span id="cb775-8"><a href="artificial-neural-networks.html#cb775-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>))</span>
+<span id="cb775-9"><a href="artificial-neural-networks.html#cb775-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, first, <span class="at">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>, <span class="at">main =</span> <span class="st">&quot;x&quot;</span>)</span>
+<span id="cb775-10"><a href="artificial-neural-networks.html#cb775-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, second, <span class="at">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">main =</span> <span class="fu">expression</span>(x<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb775-11"><a href="artificial-neural-networks.html#cb775-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, third, <span class="at">ylab =</span> <span class="st">&quot;y&quot;</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">main =</span> <span class="fu">expression</span>(x<span class="sc">^</span><span class="dv">3</span>))</span>
+<span id="cb775-12"><a href="artificial-neural-networks.html#cb775-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">ylab=</span><span class="st">&quot;y&quot;</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, </span>
+<span id="cb775-13"><a href="artificial-neural-networks.html#cb775-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">expression</span>(alpha <span class="sc">+</span> bx <span class="sc">+</span> bx<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> bx<span class="sc">^</span><span class="dv">3</span>))</span>
+<span id="cb775-14"><a href="artificial-neural-networks.html#cb775-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb775-15"><a href="artificial-neural-networks.html#cb775-15" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;Fixed Components&quot;</span>,</span>
+<span id="cb775-16"><a href="artificial-neural-networks.html#cb775-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">outer=</span><span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">col=</span><span class="st">&quot;olivedrab&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn3-1.png" width="672" /></p>
+<p>The polynomial regression is based on fixed components, or bases: <span class="math inline">\(x, x^2, x^3, \ldots, x^M.\)</span> The artificial neural net replaces these fixed components with adjustable ones or bases: <span class="math inline">\(f\left(\alpha_1+\delta_1 x\right)\)</span>, <span class="math inline">\(f\left(\alpha_2+\delta_2 x\right)\)</span>, <span class="math inline">\(\ldots, f\left(\alpha_M+\delta_M x\right).\)</span></p>
+<p>Each component is more flexible than a fixed component. They are adjustable with tunable internal parameters. They can express several shapes, not just one (fixed) shape. Hence, adjustable components enable to capture complex models with fewer components (smaller M).</p>
+<p>Let’s replace those fixed components <span class="math inline">\(x, x^2, x^3\)</span> in our polynomial regression with <span class="math inline">\(f\left(\alpha_1+\delta_1 x\right)\)</span>, <span class="math inline">\(f\left(\alpha_2+\delta_2 x\right)\)</span>, <span class="math inline">\(f\left(\alpha_3+\delta_3 x\right).\)</span></p>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="artificial-neural-networks.html#cb776-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(neuralnet)</span>
+<span id="cb776-2"><a href="artificial-neural-networks.html#cb776-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb776-3"><a href="artificial-neural-networks.html#cb776-3" aria-hidden="true" tabindex="-1"></a>nn <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(y <span class="sc">~</span> x, <span class="at">data =</span> df, <span class="at">hidden =</span> <span class="dv">3</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>) </span>
+<span id="cb776-4"><a href="artificial-neural-networks.html#cb776-4" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">compute</span>(nn, <span class="fu">data.frame</span>(x))<span class="sc">$</span>net.result</span>
+<span id="cb776-5"><a href="artificial-neural-networks.html#cb776-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main=</span><span class="st">&quot;Neural Networks: M=3&quot;</span>)</span>
+<span id="cb776-6"><a href="artificial-neural-networks.html#cb776-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, yhat, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn4-1.png" width="672" /></p>
+<p>Why did neural networks perform better than polynomial regression in the previous example? Again, adjustable components enable to capture complex models. Let’s delve little deeper. Here is the weight structure of</p>
+<p><span class="math display">\[
+y \approx \alpha+\sum_{m=1}^3 \beta_m f\left(\alpha_m+\delta_m x\right)\\
+= \alpha+\beta_1 f\left(\alpha_1+\delta_1 x\right)+\beta_2 f\left(\alpha_2+\delta_2 x\right)+\beta_3 f\left(\alpha_3+\delta_3 x\right)
+\]</span></p>
+<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb777-1"><a href="artificial-neural-networks.html#cb777-1" aria-hidden="true" tabindex="-1"></a>nn<span class="sc">$</span>weights</span></code></pre></div>
+<pre><code>## [[1]]
+## [[1]][[1]]
+##           [,1]      [,2]      [,3]
+## [1,]   1.26253   6.59977  2.504890
+## [2,] -18.95937 -12.24665 -5.700564
+## 
+## [[1]][[2]]
+##            [,1]
+## [1,]   2.407654
+## [2,]  13.032092
+## [3,]  19.923742
+## [4,] -32.173264</code></pre>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="artificial-neural-networks.html#cb779-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(nn, <span class="at">rep =</span> <span class="st">&quot;best&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn5-1.png" width="672" /></p>
+<p>We used sigmoid (logistic) activation functions</p>
+<p><span class="math display">\[
+\text{Node 1:} ~~~f(x)=\frac{1}{1+e^{-x}}=\frac{1}{1+e^{-(1.26253-18.95937x)}}\\
+\text{Node 2:} ~~~f(x)=\frac{1}{1+e^{-x}}=\frac{1}{1+e^{-(6.599773-12.24665x)}}\\
+\text{Node 3:} ~~~f(x)=\frac{1}{1+e^{-x}}=\frac{1}{1+e^{-(2.504890-5.700564x)}}
+\]</span></p>
+<p>We can calculate the value of each activation function by using our data, <span class="math inline">\(x\)</span>:</p>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="artificial-neural-networks.html#cb780-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, x)</span>
+<span id="cb780-2"><a href="artificial-neural-networks.html#cb780-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb780-3"><a href="artificial-neural-networks.html#cb780-3" aria-hidden="true" tabindex="-1"></a><span class="co"># to 1st Node</span></span>
+<span id="cb780-4"><a href="artificial-neural-networks.html#cb780-4" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">1</span>]][,<span class="dv">1</span>]</span>
+<span id="cb780-5"><a href="artificial-neural-networks.html#cb780-5" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> nn<span class="sc">$</span><span class="fu">act.fct</span>(X<span class="sc">%*%</span>n1)</span>
+<span id="cb780-6"><a href="artificial-neural-networks.html#cb780-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb780-7"><a href="artificial-neural-networks.html#cb780-7" aria-hidden="true" tabindex="-1"></a><span class="co"># to 2nd Node</span></span>
+<span id="cb780-8"><a href="artificial-neural-networks.html#cb780-8" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">1</span>]][,<span class="dv">2</span>]</span>
+<span id="cb780-9"><a href="artificial-neural-networks.html#cb780-9" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> nn<span class="sc">$</span><span class="fu">act.fct</span>(X<span class="sc">%*%</span>n2)</span>
+<span id="cb780-10"><a href="artificial-neural-networks.html#cb780-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb780-11"><a href="artificial-neural-networks.html#cb780-11" aria-hidden="true" tabindex="-1"></a><span class="co"># to 3rd Node</span></span>
+<span id="cb780-12"><a href="artificial-neural-networks.html#cb780-12" aria-hidden="true" tabindex="-1"></a>n3 <span class="ot">&lt;-</span> nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">1</span>]][,<span class="dv">3</span>]</span>
+<span id="cb780-13"><a href="artificial-neural-networks.html#cb780-13" aria-hidden="true" tabindex="-1"></a>f3 <span class="ot">&lt;-</span> nn<span class="sc">$</span><span class="fu">act.fct</span>(X<span class="sc">%*%</span>n3)</span>
+<span id="cb780-14"><a href="artificial-neural-networks.html#cb780-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb780-15"><a href="artificial-neural-networks.html#cb780-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>))</span>
+<span id="cb780-16"><a href="artificial-neural-networks.html#cb780-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, f1, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>, <span class="at">main =</span> <span class="fu">expression</span>(<span class="fu">f</span>(a1 <span class="sc">+</span> b1x)))</span>
+<span id="cb780-17"><a href="artificial-neural-networks.html#cb780-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, f2, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">main =</span> <span class="fu">expression</span>(<span class="fu">f</span>(a2 <span class="sc">+</span> b2x)))</span>
+<span id="cb780-18"><a href="artificial-neural-networks.html#cb780-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, f3, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">main =</span> <span class="fu">expression</span>(<span class="fu">f</span>(a3 <span class="sc">+</span> b3x)))</span>
+<span id="cb780-19"><a href="artificial-neural-networks.html#cb780-19" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;Flexible Components&quot;</span>,</span>
+<span id="cb780-20"><a href="artificial-neural-networks.html#cb780-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">outer=</span><span class="cn">TRUE</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">col=</span><span class="st">&quot;olivedrab&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn6-1.png" width="672" /></p>
+<p>Now we will go from these nodes to the “sink”:</p>
+<p><span class="math display">\[
+\frac{1}{1+e^{-(1.26253-18.95937x)}} \times 13.032092\\
+\frac{1}{1+e^{-(6.599773-12.24665x)}}\times 19.923742\\
+\frac{1}{1+e^{-(2.504890-5.700564x)}}\times -32.173264
+\]</span></p>
+<p>Fianlly we will add these with a “bias”, the intercept:</p>
+<p><span class="math display">\[
+2.407654 + \\
+\frac{1}{1+e^{-(1.26253-18.95937x)}} \times 13.032092+\\
+\frac{1}{1+e^{-(6.599773-12.24665x)}}\times 19.923742+\\
+\frac{1}{1+e^{-(2.504890-5.700564x)}}\times -32.173264
+\]</span></p>
+<p>Here are the results:</p>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="artificial-neural-networks.html#cb781-1" aria-hidden="true" tabindex="-1"></a><span class="co"># From Nodes to sink (Y) ##</span></span>
+<span id="cb781-2"><a href="artificial-neural-networks.html#cb781-2" aria-hidden="true" tabindex="-1"></a>f12 <span class="ot">&lt;-</span> f1<span class="sc">*</span>nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">2</span>]][<span class="dv">2</span>]</span>
+<span id="cb781-3"><a href="artificial-neural-networks.html#cb781-3" aria-hidden="true" tabindex="-1"></a>f22 <span class="ot">&lt;-</span> f2<span class="sc">*</span>nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">2</span>]][<span class="dv">3</span>]</span>
+<span id="cb781-4"><a href="artificial-neural-networks.html#cb781-4" aria-hidden="true" tabindex="-1"></a>f23 <span class="ot">&lt;-</span> f3<span class="sc">*</span>nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">2</span>]][<span class="dv">4</span>]</span>
+<span id="cb781-5"><a href="artificial-neural-networks.html#cb781-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb781-6"><a href="artificial-neural-networks.html#cb781-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Results</span></span>
+<span id="cb781-7"><a href="artificial-neural-networks.html#cb781-7" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> nn<span class="sc">$</span>weights[[<span class="dv">1</span>]][[<span class="dv">2</span>]][<span class="dv">1</span>] <span class="sc">+</span> f12 <span class="sc">+</span> f22 <span class="sc">+</span> f23</span>
+<span id="cb781-8"><a href="artificial-neural-networks.html#cb781-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main=</span><span class="st">&quot;ANN: M = 3&quot;</span>)</span>
+<span id="cb781-9"><a href="artificial-neural-networks.html#cb781-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, yhat, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn7-1.png" width="672" /></p>
+</div>
+<div id="backpropagation" class="section level2 hasAnchor" number="16.2">
+<h2><span class="header-section-number">16.2</span> Backpropagation<a href="artificial-neural-networks.html#backpropagation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In 1986, <a href="https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf">Rumelhart et al.</a> found a way to train neural networks, with the backpropagation algorithm. Today, we would call it a Gradient Descent using reverse-mode autodiff. Backpropagation is an algorithm used to train neural networks by adjusting the weights and biases of the network to minimize the cost function. Suppose we have a simple neural network as follows:</p>
+<p><img src="png/ANN1.png" width="65%" height="60%" /></p>
+<p>The first layer is the source layer (with <span class="math inline">\(X\)</span>). The second layer is called as hidden layer with three “neurons” each of which has an activation function (<span class="math inline">\(A\)</span>). The last layer is the “sink” or output layer. First, let’s define a loss function, MSPE:</p>
+<p><span class="math display">\[
+\text{MSPE}=\frac{1}{n} \sum_{i=1}^n\left(y_i-p\left(\mathbf{x}_i\right)\right)^2
+\]</span></p>
+<p>And we want to solve:</p>
+<p><span class="math display">\[
+\omega^{\star}=\operatorname{argmin}\left\{\frac{1}{n} \sum_{i=1}^n\left(y_i-p\left(\mathbf{x}_i\right)\right)^2\right\}
+\]</span></p>
+<p>To compute the gradient of the error with respect to a weight <span class="math inline">\(w\)</span> or a bias <span class="math inline">\(b\)</span>, we use the chain rule:</p>
+<p><span class="math display">\[
+\frac{\partial \text{MSPE}}{\partial w} =\frac{\partial \text{MSPE}}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial z}\frac{\partial z}{\partial w}
+\]</span>
+Remember, <span class="math inline">\(\hat{y} = f(x)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-(\alpha+wx)}}\)</span>, where <span class="math inline">\(w\)</span> is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network. This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it. However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called “stochastic.” One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.</p>
+<p>In a regular network, the number of parameters is very large and it gets larger even in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the artificial intelligence engineering. One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.</p>
+</div>
+<div id="neural-network---more-inputs" class="section level2 hasAnchor" number="16.3">
+<h2><span class="header-section-number">16.3</span> Neural Network - More inputs<a href="artificial-neural-networks.html#neural-network---more-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>With a set of covariates <span class="math inline">\(X=\left(1, x_1, x_2, \ldots, x_k\right)\)</span>, we have</p>
+<p><span class="math display">\[
+y \approx \alpha+\sum_{m=1}^M \beta_m f\left(\alpha_m+\textbf{X} \delta_m\right)=\\
+= \alpha+\beta_1 f\left(\alpha_1+\delta_{11} x_{1i}+\delta_{12} x_{2i} \dots +\delta_{1k} x_{ki}\right)+\dots\\
++\beta_M f\left(\alpha_{M1}+\delta_{M1} x_{1i}+\delta_{M2} x_{2i} \dots +\delta_{Mk} x_{ki}\right)
+\]</span></p>
+<p>By adding nonlinear functions of linear combinations with <span class="math inline">\(M&gt;1\)</span>, we have seen that we can capture nonlinearity. With multiple features, we can now capture interaction effects and, hence, obtain a more flexible model. This can be seen in blue and orange arrows in the following picture:</p>
+<p><img src="png/ANN2.png" width="65%" height="60%" /></p>
+<p>Let’s have an application using a Mincer equation and the data (SPS 1985 - cross-section data originating from the May 1985 Current Population Survey by the US Census Bureau) from <code>AER</code> package.</p>
+<p>Before we start, there are few important pre-processing steps to complete. First, ANN are inefficient when the data are not scaled. The reason is backpropagation. Since ANN use gradient descent, the different scales in features will cause different step sizes. Scaling the data before feeding it to the model enables the steps in gradient descent updated at the same rate for all the features. Second, indicator predictors should be included in the input matrix by dummy-coding. Note that, the standardization should avoid those indicator variables. Finally, the formula for the model needs to be constructed to initialize the algorithm. Let’s see all of these pre-processing steps below:</p>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="artificial-neural-networks.html#cb782-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
+<span id="cb782-2"><a href="artificial-neural-networks.html#cb782-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;CPS1985&quot;</span>)</span>
+<span id="cb782-3"><a href="artificial-neural-networks.html#cb782-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-4"><a href="artificial-neural-networks.html#cb782-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> CPS1985</span>
+<span id="cb782-5"><a href="artificial-neural-networks.html#cb782-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-6"><a href="artificial-neural-networks.html#cb782-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Scaling and Dummy coding</span></span>
+<span id="cb782-7"><a href="artificial-neural-networks.html#cb782-7" aria-hidden="true" tabindex="-1"></a>df[,<span class="fu">sapply</span>(df, is.numeric)] <span class="ot">&lt;-</span> <span class="fu">scale</span>((df[, <span class="fu">sapply</span>(df, is.numeric)]))</span>
+<span id="cb782-8"><a href="artificial-neural-networks.html#cb782-8" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>.<span class="sc">-</span><span class="dv">1</span>, <span class="at">data=</span> df, <span class="at">contrasts.arg =</span></span>
+<span id="cb782-9"><a href="artificial-neural-networks.html#cb782-9" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">lapply</span>(df[,<span class="fu">sapply</span>(df, is.factor)],</span>
+<span id="cb782-10"><a href="artificial-neural-networks.html#cb782-10" aria-hidden="true" tabindex="-1"></a>                              contrasts, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb782-11"><a href="artificial-neural-networks.html#cb782-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-12"><a href="artificial-neural-networks.html#cb782-12" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ddf)</span>
+<span id="cb782-13"><a href="artificial-neural-networks.html#cb782-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-14"><a href="artificial-neural-networks.html#cb782-14" aria-hidden="true" tabindex="-1"></a><span class="co"># formula to pass on ANN and lm()  </span></span>
+<span id="cb782-15"><a href="artificial-neural-networks.html#cb782-15" aria-hidden="true" tabindex="-1"></a>w.ind <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">colnames</span>(ddf)<span class="sc">==</span><span class="st">&quot;wage&quot;</span>)</span>
+<span id="cb782-16"><a href="artificial-neural-networks.html#cb782-16" aria-hidden="true" tabindex="-1"></a>frmnn <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;wage~&quot;</span>, <span class="fu">paste</span>(<span class="fu">colnames</span>(ddf[<span class="sc">-</span>w.ind]), <span class="at">collapse=</span><span class="st">&#39;+&#39;</span>)))</span>
+<span id="cb782-17"><a href="artificial-neural-networks.html#cb782-17" aria-hidden="true" tabindex="-1"></a>frmln <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;wage~&quot;</span>, <span class="st">&quot;I(experience^2)&quot;</span>, <span class="st">&quot;+&quot;</span>,</span>
+<span id="cb782-18"><a href="artificial-neural-networks.html#cb782-18" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">paste</span>(<span class="fu">colnames</span>(ddf[<span class="sc">-</span>w.ind]), <span class="at">collapse =</span> <span class="st">&quot;+&quot;</span>)))</span>
+<span id="cb782-19"><a href="artificial-neural-networks.html#cb782-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-20"><a href="artificial-neural-networks.html#cb782-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrapping loops instead of CV</span></span>
+<span id="cb782-21"><a href="artificial-neural-networks.html#cb782-21" aria-hidden="true" tabindex="-1"></a>mse.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb782-22"><a href="artificial-neural-networks.html#cb782-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){ </span>
+<span id="cb782-23"><a href="artificial-neural-networks.html#cb782-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb782-24"><a href="artificial-neural-networks.html#cb782-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb782-25"><a href="artificial-neural-networks.html#cb782-25" aria-hidden="true" tabindex="-1"></a>  trainid <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(ddf), <span class="fu">nrow</span>(ddf), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb782-26"><a href="artificial-neural-networks.html#cb782-26" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> ddf[trainid,]</span>
+<span id="cb782-27"><a href="artificial-neural-networks.html#cb782-27" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> ddf[<span class="sc">-</span>trainid,]</span>
+<span id="cb782-28"><a href="artificial-neural-networks.html#cb782-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb782-29"><a href="artificial-neural-networks.html#cb782-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Models </span></span>
+<span id="cb782-30"><a href="artificial-neural-networks.html#cb782-30" aria-hidden="true" tabindex="-1"></a>  fit.lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(frmln, <span class="at">data =</span> train)</span>
+<span id="cb782-31"><a href="artificial-neural-networks.html#cb782-31" aria-hidden="true" tabindex="-1"></a>  fit.nn <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frmnn, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="dv">1</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb782-32"><a href="artificial-neural-networks.html#cb782-32" aria-hidden="true" tabindex="-1"></a>                      <span class="at">linear.output =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb782-33"><a href="artificial-neural-networks.html#cb782-33" aria-hidden="true" tabindex="-1"></a>  fit.nn2 <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frmnn, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="dv">2</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>)</span>
+<span id="cb782-34"><a href="artificial-neural-networks.html#cb782-34" aria-hidden="true" tabindex="-1"></a>  fit.nn3 <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frmnn, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="dv">3</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>)</span>
+<span id="cb782-35"><a href="artificial-neural-networks.html#cb782-35" aria-hidden="true" tabindex="-1"></a>  fit.nn4 <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frmnn, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="dv">3</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb782-36"><a href="artificial-neural-networks.html#cb782-36" aria-hidden="true" tabindex="-1"></a>                       <span class="at">act.fct =</span> <span class="st">&quot;tanh&quot;</span>, <span class="at">linear.output =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb782-37"><a href="artificial-neural-networks.html#cb782-37" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb782-38"><a href="artificial-neural-networks.html#cb782-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prediction errors</span></span>
+<span id="cb782-39"><a href="artificial-neural-networks.html#cb782-39" aria-hidden="true" tabindex="-1"></a>  mse.test[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.lm, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb782-40"><a href="artificial-neural-networks.html#cb782-40" aria-hidden="true" tabindex="-1"></a>  mse.test[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.nn, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb782-41"><a href="artificial-neural-networks.html#cb782-41" aria-hidden="true" tabindex="-1"></a>  mse.test[i,<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.nn2, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb782-42"><a href="artificial-neural-networks.html#cb782-42" aria-hidden="true" tabindex="-1"></a>  mse.test[i,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.nn3, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb782-43"><a href="artificial-neural-networks.html#cb782-43" aria-hidden="true" tabindex="-1"></a>  mse.test[i,<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.nn4, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb782-44"><a href="artificial-neural-networks.html#cb782-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb782-45"><a href="artificial-neural-networks.html#cb782-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb782-46"><a href="artificial-neural-networks.html#cb782-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-47"><a href="artificial-neural-networks.html#cb782-47" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(mse.test)</span></code></pre></div>
+<pre><code>## [1] 0.7296417 0.8919442 0.9038211 1.0403616 0.8926576</code></pre>
+<p>This experiment alone shows that a <strong>linear</strong> Mincer equation (with <code>I(expreince^2)</code>) is a much better predictor than ANN. As the complexity of ANN rises with more neurons, the likelihood that ANN overfits goes up, which is the case in our experiment. In general, linear regression may be a good choice for simple, low-dimensional datasets with a strong linear relationship between the variables, while ANNs may be better suited for more complex, high-dimensional datasets with nonlinear relationships between variables.</p>
+<p>Overfitting can be a concern when using ANNs for prediction tasks. Overfitting occurs when a model is overly complex and has too many parameters relative to the size of the training data, leading it to fit the noise in the training data rather than the underlying pattern. As a result, the model may perform well on the training data but poorly on new, unseen data. One way to mitigate overfitting in ANNs is to use techniques such as regularization, which imposes constraints on the model to prevent it from becoming too complex. Another approach is to use techniques such as early stopping, which involves interrupting the training process when the model starts to overfit the training data.</p>
+</div>
+<div id="deep-learning" class="section level2 hasAnchor" number="16.4">
+<h2><span class="header-section-number">16.4</span> Deep Learning<a href="artificial-neural-networks.html#deep-learning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Simply, a Deep Neural Network (DNN), or Deep Learning, is an artificial neural network that has two or more hidden layers. Even greater flexibility is achieved via composition of activation functions:</p>
+<p><span class="math display">\[
+y \approx \alpha+\sum_{m=1}^M \beta_m f\left(\alpha_m^{(1)}+\underbrace{\sum_{p=1}^P f\left(\alpha_p^{(2)}+\textbf{X} \delta_p^{(2)}\right)}_{\text {it replaces } \textbf{X}} \delta_m^{(1)}\right)
+\]</span></p>
+<p>Before having an application, note that there are many packages that offer ANN implementations in R and even more with Python. For example, CRAN hosts more than 80 packages related to neural network modeling. Above, we just saw one example with <code>neuralnet</code>. The work by <a href="https://www.inmodelia.com/exemples/2021-0103-RJournal-SM-AV-CD-PK-JN.pdf">Mahdi et al, 2021</a> surveys and ranks these packages for their accuracy, reliability, and ease-of-use.</p>
+<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb784-1"><a href="artificial-neural-networks.html#cb784-1" aria-hidden="true" tabindex="-1"></a>mse.test <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb784-2"><a href="artificial-neural-networks.html#cb784-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){ </span>
+<span id="cb784-3"><a href="artificial-neural-networks.html#cb784-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb784-4"><a href="artificial-neural-networks.html#cb784-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb784-5"><a href="artificial-neural-networks.html#cb784-5" aria-hidden="true" tabindex="-1"></a>  trainid <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(ddf), <span class="fu">nrow</span>(ddf), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb784-6"><a href="artificial-neural-networks.html#cb784-6" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> ddf[trainid,]</span>
+<span id="cb784-7"><a href="artificial-neural-networks.html#cb784-7" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> ddf[<span class="sc">-</span>trainid,]</span>
+<span id="cb784-8"><a href="artificial-neural-networks.html#cb784-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb784-9"><a href="artificial-neural-networks.html#cb784-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Models</span></span>
+<span id="cb784-10"><a href="artificial-neural-networks.html#cb784-10" aria-hidden="true" tabindex="-1"></a>  fit.nn22 <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frmnn, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">threshold =</span> <span class="fl">0.05</span>)</span>
+<span id="cb784-11"><a href="artificial-neural-networks.html#cb784-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb784-12"><a href="artificial-neural-networks.html#cb784-12" aria-hidden="true" tabindex="-1"></a>  mse.test[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>wage <span class="sc">-</span> <span class="fu">predict</span>(fit.nn22, test))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb784-13"><a href="artificial-neural-networks.html#cb784-13" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb784-14"><a href="artificial-neural-networks.html#cb784-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb784-15"><a href="artificial-neural-networks.html#cb784-15" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mse.test)</span></code></pre></div>
+<pre><code>## [1] 1.211114</code></pre>
+<p>Increasing overfitting! Here is the plot for our DNN:</p>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="artificial-neural-networks.html#cb786-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.nn22, <span class="at">rep =</span> <span class="st">&quot;best&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn12-1.png" width="672" /></p>
+<p>A better plot could be obtained by using the <code>NeuralNetTools</code> package:</p>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb787-1"><a href="artificial-neural-networks.html#cb787-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(NeuralNetTools)</span>
+<span id="cb787-2"><a href="artificial-neural-networks.html#cb787-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotnet</span>(fit.nn22)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn13-1.png" width="672" /></p>
+<p>Training DNN is an important concept and we leave it to the end. As we see, deep neural networks can model complex non-linear relationships.
+With very complex problems, such as detecting hundreds of types of objects in high-resolution images, we need to train deeper NN, perhaps with 10 layers or more each with hundreds of neurons. Therefore, training a fully-connected DNN is a very slow process facing a severe risk of overfitting with millions of parameters. Moreover, gradients problems make lower layers very hard to train. Solutions: Convolutional Neural Networks (CNN or ConvNets) and Recurrent Neural Networks (RNN).</p>
+<p>Before moving on with these new DNN solutions, we should ask if we can obtain any information about the relationship between the prediction and predictors. The interpretability of an artificial neural network (ANN), which is known to be a “blackbox” method, can be an issue regardless of the complexity of the network. However, it is generally easier to understand the decisions made by a simple ANN than by a more complex one.</p>
+<p>A simple ANN might have only a few layers and a relatively small number of neurons, making it easier to understand how the input data is processed and how the final output is produced. However, even a simple ANN can still be a black box in the sense that the specific calculations and decisions made by the individual neurons within the network are not fully visible or understood. On the other hand, a more complex ANN with many layers and a large number of neurons can be more difficult to interpret, as the internal workings of the network are more complex and harder to understand. In these cases, it can be more challenging to understand how the ANN is making its decisions or to identify any biases or errors in its output. Overall, the interpretability of an ANN depends on the complexity of the network and the specific task it is being used for. Simple ANNs may be more interpretable, but even they can be considered black boxes to some extent.</p>
+<p>Here are a few resources that provide information about the interpretability of artificial neural networks (ANNs):</p>
+<ul>
+<li><a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning</a> by Christoph Molnar is a online book that provides an overview of interpretability in machine learning, including techniques for interpreting ANNs.</li>
+<li><a href="https://ieeexplore.ieee.org/document/8397411">Interpretability of Deep Neural Networks</a> by Chakraborty is a survey paper that discusses the interpretability of deep neural networks and presents an overview of the various techniques and approaches that have been developed to improve their interpretability.</li>
+</ul>
+<p>Before concluding this section we apply DNN to a classification problem using the same data that we have in Section 14.4.4:</p>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="artificial-neural-networks.html#cb788-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb788-2"><a href="artificial-neural-networks.html#cb788-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Carseats</span>
+<span id="cb788-3"><a href="artificial-neural-networks.html#cb788-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    400 obs. of  11 variables:
+##  $ Sales      : num  9.5 11.22 10.06 7.4 4.15 ...
+##  $ CompPrice  : num  138 111 113 117 141 124 115 136 132 132 ...
+##  $ Income     : num  73 48 35 100 64 113 105 81 110 113 ...
+##  $ Advertising: num  11 16 10 4 3 13 0 15 0 0 ...
+##  $ Population : num  276 260 269 466 340 501 45 425 108 131 ...
+##  $ Price      : num  120 83 80 97 128 72 108 120 124 124 ...
+##  $ ShelveLoc  : Factor w/ 3 levels &quot;Bad&quot;,&quot;Good&quot;,&quot;Medium&quot;: 1 2 3 3 1 1 3 2 3 3 ...
+##  $ Age        : num  42 65 59 55 38 78 71 67 76 76 ...
+##  $ Education  : num  17 10 12 14 13 16 15 10 10 17 ...
+##  $ Urban      : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 1 2 2 1 1 ...
+##  $ US         : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 1 2 1 2 1 2 ...</code></pre>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="artificial-neural-networks.html#cb790-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change SALES to a factor variable</span></span>
+<span id="cb790-2"><a href="artificial-neural-networks.html#cb790-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Sales <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(Carseats<span class="sc">$</span>Sales <span class="sc">&lt;=</span> <span class="dv">8</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb790-3"><a href="artificial-neural-networks.html#cb790-3" aria-hidden="true" tabindex="-1"></a>dff <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb790-4"><a href="artificial-neural-networks.html#cb790-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb790-5"><a href="artificial-neural-networks.html#cb790-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Scaling and Dummy coding</span></span>
+<span id="cb790-6"><a href="artificial-neural-networks.html#cb790-6" aria-hidden="true" tabindex="-1"></a>dff[,<span class="fu">sapply</span>(dff, is.numeric)] <span class="ot">&lt;-</span> <span class="fu">scale</span>((dff[, <span class="fu">sapply</span>(dff, is.numeric)]))</span>
+<span id="cb790-7"><a href="artificial-neural-networks.html#cb790-7" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>.<span class="sc">-</span><span class="dv">1</span>, <span class="at">data=</span> dff, <span class="at">contrasts.arg =</span></span>
+<span id="cb790-8"><a href="artificial-neural-networks.html#cb790-8" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">lapply</span>(dff[, <span class="fu">sapply</span>(dff, is.factor)],</span>
+<span id="cb790-9"><a href="artificial-neural-networks.html#cb790-9" aria-hidden="true" tabindex="-1"></a>                              contrasts, <span class="at">contrasts =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb790-10"><a href="artificial-neural-networks.html#cb790-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb790-11"><a href="artificial-neural-networks.html#cb790-11" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sales =</span> df<span class="sc">$</span>Sales, ddf)</span>
+<span id="cb790-12"><a href="artificial-neural-networks.html#cb790-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb790-13"><a href="artificial-neural-networks.html#cb790-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Formula</span></span>
+<span id="cb790-14"><a href="artificial-neural-networks.html#cb790-14" aria-hidden="true" tabindex="-1"></a>w.ind <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">colnames</span>(ddf)<span class="sc">==</span><span class="st">&quot;Sales&quot;</span>)</span>
+<span id="cb790-15"><a href="artificial-neural-networks.html#cb790-15" aria-hidden="true" tabindex="-1"></a>frm <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Sales~&quot;</span>, <span class="fu">paste</span>(<span class="fu">colnames</span>(ddf[<span class="sc">-</span>w.ind]), <span class="at">collapse=</span><span class="st">&#39;+&#39;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="artificial-neural-networks.html#cb791-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb791-2"><a href="artificial-neural-networks.html#cb791-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-3"><a href="artificial-neural-networks.html#cb791-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb791-4"><a href="artificial-neural-networks.html#cb791-4" aria-hidden="true" tabindex="-1"></a>AUC1 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb791-5"><a href="artificial-neural-networks.html#cb791-5" aria-hidden="true" tabindex="-1"></a>AUC2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb791-6"><a href="artificial-neural-networks.html#cb791-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-7"><a href="artificial-neural-networks.html#cb791-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb791-8"><a href="artificial-neural-networks.html#cb791-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb791-9"><a href="artificial-neural-networks.html#cb791-9" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(ddf), <span class="fu">nrow</span>(ddf), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb791-10"><a href="artificial-neural-networks.html#cb791-10" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> ddf[ind, ]</span>
+<span id="cb791-11"><a href="artificial-neural-networks.html#cb791-11" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> ddf[<span class="sc">-</span>ind, ]</span>
+<span id="cb791-12"><a href="artificial-neural-networks.html#cb791-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb791-13"><a href="artificial-neural-networks.html#cb791-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Models</span></span>
+<span id="cb791-14"><a href="artificial-neural-networks.html#cb791-14" aria-hidden="true" tabindex="-1"></a>  fit.ln <span class="ot">&lt;-</span> <span class="fu">glm</span>(frm, <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">&quot;logit&quot;</span>))</span>
+<span id="cb791-15"><a href="artificial-neural-networks.html#cb791-15" aria-hidden="true" tabindex="-1"></a>  fit.dnn <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frm, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="dv">2</span>, <span class="at">threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb791-16"><a href="artificial-neural-networks.html#cb791-16" aria-hidden="true" tabindex="-1"></a>                       <span class="at">linear.output =</span> <span class="cn">FALSE</span>, <span class="at">err.fct =</span> <span class="st">&quot;ce&quot;</span>)</span>
+<span id="cb791-17"><a href="artificial-neural-networks.html#cb791-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb791-18"><a href="artificial-neural-networks.html#cb791-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Predictions</span></span>
+<span id="cb791-19"><a href="artificial-neural-networks.html#cb791-19" aria-hidden="true" tabindex="-1"></a>  phat.ln <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit.ln, test, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb791-20"><a href="artificial-neural-networks.html#cb791-20" aria-hidden="true" tabindex="-1"></a>  phat.dnn <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit.dnn, test, <span class="at">type =</span> <span class="st">&quot;repsonse&quot;</span>)[,<span class="dv">2</span>]</span>
+<span id="cb791-21"><a href="artificial-neural-networks.html#cb791-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-22"><a href="artificial-neural-networks.html#cb791-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">#AUC for predicting Y = 1</span></span>
+<span id="cb791-23"><a href="artificial-neural-networks.html#cb791-23" aria-hidden="true" tabindex="-1"></a>  pred_rocr1 <span class="ot">&lt;-</span> ROCR<span class="sc">::</span><span class="fu">prediction</span>(phat.ln, test<span class="sc">$</span>Sales)</span>
+<span id="cb791-24"><a href="artificial-neural-networks.html#cb791-24" aria-hidden="true" tabindex="-1"></a>  auc_ROCR1 <span class="ot">&lt;-</span> ROCR<span class="sc">::</span><span class="fu">performance</span>(pred_rocr1, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb791-25"><a href="artificial-neural-networks.html#cb791-25" aria-hidden="true" tabindex="-1"></a>  AUC1[i] <span class="ot">&lt;-</span> auc_ROCR1<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb791-26"><a href="artificial-neural-networks.html#cb791-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-27"><a href="artificial-neural-networks.html#cb791-27" aria-hidden="true" tabindex="-1"></a>  pred_rocr2 <span class="ot">&lt;-</span> ROCR<span class="sc">::</span><span class="fu">prediction</span>(phat.dnn, test<span class="sc">$</span>Sales)</span>
+<span id="cb791-28"><a href="artificial-neural-networks.html#cb791-28" aria-hidden="true" tabindex="-1"></a>  auc_ROCR2 <span class="ot">&lt;-</span> ROCR<span class="sc">::</span><span class="fu">performance</span>(pred_rocr2, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb791-29"><a href="artificial-neural-networks.html#cb791-29" aria-hidden="true" tabindex="-1"></a>  AUC2[i] <span class="ot">&lt;-</span> auc_ROCR2<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb791-30"><a href="artificial-neural-networks.html#cb791-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb791-31"><a href="artificial-neural-networks.html#cb791-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb791-32"><a href="artificial-neural-networks.html#cb791-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-33"><a href="artificial-neural-networks.html#cb791-33" aria-hidden="true" tabindex="-1"></a>(<span class="fu">c</span>(<span class="fu">mean</span>(AUC1), <span class="fu">mean</span>(AUC2)))</span></code></pre></div>
+<pre><code>## [1] 0.9471081 0.9186785</code></pre>
+<p>Again the results are not very convincing to use DNN in this example. Let’s have a more complex task with <a href="https://www.kaggle.com/datasets/piyushgoyal443/red-wine-dataset?resource=download">Red Wine</a> dataset from Kaggle (<a href="https://www.sciencedirect.com/science/article/abs/pii/S0167923609001377">Cortez et.al, 2009</a>). Our job us to use 11 attributes to classify each wine</p>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="artificial-neural-networks.html#cb793-1" aria-hidden="true" tabindex="-1"></a>dfr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;wineQualityReds.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb793-2"><a href="artificial-neural-networks.html#cb793-2" aria-hidden="true" tabindex="-1"></a>dfr <span class="ot">&lt;-</span> dfr[,<span class="sc">-</span><span class="dv">1</span>] <span class="co"># removing the index</span></span>
+<span id="cb793-3"><a href="artificial-neural-networks.html#cb793-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dfr<span class="sc">$</span>quality)</span></code></pre></div>
+<pre><code>## 
+##   3   4   5   6   7   8 
+##  10  53 681 638 199  18</code></pre>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="artificial-neural-networks.html#cb795-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s remove the outlier qualities:</span></span>
+<span id="cb795-2"><a href="artificial-neural-networks.html#cb795-2" aria-hidden="true" tabindex="-1"></a>indo <span class="ot">&lt;-</span> <span class="fu">which</span>(dfr<span class="sc">$</span>quality<span class="sc">==</span><span class="st">&quot;3&quot;</span><span class="sc">|</span>dfr<span class="sc">$</span>quality<span class="sc">==</span><span class="st">&quot;8&quot;</span>)</span>
+<span id="cb795-3"><a href="artificial-neural-networks.html#cb795-3" aria-hidden="true" tabindex="-1"></a>dfr <span class="ot">&lt;-</span> dfr[<span class="sc">-</span>indo, ]</span>
+<span id="cb795-4"><a href="artificial-neural-networks.html#cb795-4" aria-hidden="true" tabindex="-1"></a>dfr<span class="sc">$</span>quality <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dfr<span class="sc">$</span>quality)</span>
+<span id="cb795-5"><a href="artificial-neural-networks.html#cb795-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dfr<span class="sc">$</span>quality)</span></code></pre></div>
+<pre><code>## 
+##   4   5   6   7 
+##  53 681 638 199</code></pre>
+<p>Let’s scale it and get the formula</p>
+<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="artificial-neural-networks.html#cb797-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scaling and Dummy coding</span></span>
+<span id="cb797-2"><a href="artificial-neural-networks.html#cb797-2" aria-hidden="true" tabindex="-1"></a>dfr[,<span class="fu">sapply</span>(dfr, is.numeric)] <span class="ot">&lt;-</span> <span class="fu">scale</span>((dfr[, <span class="fu">sapply</span>(dfr, is.numeric)]))</span>
+<span id="cb797-3"><a href="artificial-neural-networks.html#cb797-3" aria-hidden="true" tabindex="-1"></a>ddf <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>quality <span class="sc">-</span><span class="dv">1</span>, <span class="at">data =</span> dfr)</span>
+<span id="cb797-4"><a href="artificial-neural-networks.html#cb797-4" aria-hidden="true" tabindex="-1"></a>w.ind <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">colnames</span>(dfr)<span class="sc">==</span><span class="st">&quot;quality&quot;</span>)</span>
+<span id="cb797-5"><a href="artificial-neural-networks.html#cb797-5" aria-hidden="true" tabindex="-1"></a>dfr <span class="ot">&lt;-</span> dfr[,<span class="sc">-</span>w.ind] <span class="co"># removing &#39;quality`</span></span>
+<span id="cb797-6"><a href="artificial-neural-networks.html#cb797-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ddf, dfr)</span>
+<span id="cb797-7"><a href="artificial-neural-networks.html#cb797-7" aria-hidden="true" tabindex="-1"></a>frm <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="fu">paste</span>(<span class="fu">colnames</span>(ddf), <span class="at">collapse=</span><span class="st">&#39;+&#39;</span>), <span class="st">&quot;~&quot;</span>, </span>
+<span id="cb797-8"><a href="artificial-neural-networks.html#cb797-8" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">paste</span>(<span class="fu">colnames</span>(dfr), <span class="at">collapse=</span><span class="st">&#39;+&#39;</span>)))</span>
+<span id="cb797-9"><a href="artificial-neural-networks.html#cb797-9" aria-hidden="true" tabindex="-1"></a>frm</span></code></pre></div>
+<pre><code>## quality4 + quality5 + quality6 + quality7 ~ fixed.acidity + volatile.acidity + 
+##     citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + 
+##     total.sulfur.dioxide + density + pH + sulphates + alcohol</code></pre>
+<p>And, our simple DNN application</p>
+<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb799-1"><a href="artificial-neural-networks.html#cb799-1" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df)<span class="sc">*</span>.<span class="dv">7</span>)</span>
+<span id="cb799-2"><a href="artificial-neural-networks.html#cb799-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df[ind,]</span>
+<span id="cb799-3"><a href="artificial-neural-networks.html#cb799-3" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind,]</span>
+<span id="cb799-4"><a href="artificial-neural-networks.html#cb799-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb799-5"><a href="artificial-neural-networks.html#cb799-5" aria-hidden="true" tabindex="-1"></a>fit.nn <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(frm, <span class="at">data =</span> train, <span class="at">hidden =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>), <span class="at">threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb799-6"><a href="artificial-neural-networks.html#cb799-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">linear.output =</span> <span class="cn">FALSE</span>, <span class="at">err.fct =</span> <span class="st">&quot;ce&quot;</span>)</span>
+<span id="cb799-7"><a href="artificial-neural-networks.html#cb799-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb799-8"><a href="artificial-neural-networks.html#cb799-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.nn, <span class="at">rep =</span> <span class="st">&quot;best&quot;</span>)</span></code></pre></div>
+<p><img src="15-NN_files/figure-html/nn18-1.png" width="672" /></p>
+<p>And our prediction:</p>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="artificial-neural-networks.html#cb800-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(utiml)</span>
+<span id="cb800-2"><a href="artificial-neural-networks.html#cb800-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb800-3"><a href="artificial-neural-networks.html#cb800-3" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit.nn, test)</span>
+<span id="cb800-4"><a href="artificial-neural-networks.html#cb800-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(phat)</span></code></pre></div>
+<pre><code>##          [,1]      [,2]      [,3]        [,4]
+## 11 0.04931942 0.6859165 0.2825146 0.007453298
+## 14 0.02015208 0.2300976 0.5716617 0.050629158
+## 16 0.08538068 0.8882124 0.0550048 0.009824072
+## 17 0.03592572 0.5136539 0.5273030 0.006685037
+## 22 0.03616818 0.5173671 0.5263112 0.006541895
+## 27 0.03092853 0.4318134 0.5389403 0.011412135</code></pre>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="artificial-neural-networks.html#cb802-1" aria-hidden="true" tabindex="-1"></a>label.hat <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(phat, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="fu">as.numeric</span>(x <span class="sc">==</span> <span class="fu">max</span>(x))))</span>
+<span id="cb802-2"><a href="artificial-neural-networks.html#cb802-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(label.hat)</span></code></pre></div>
+<pre><code>##    [,1] [,2] [,3] [,4]
+## 11    0    1    0    0
+## 14    0    0    1    0
+## 16    0    1    0    0
+## 17    0    0    1    0
+## 22    0    0    1    0
+## 27    0    0    1    0</code></pre>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="artificial-neural-networks.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion Table</span></span>
+<span id="cb804-2"><a href="artificial-neural-networks.html#cb804-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">apply</span>(phat, <span class="dv">1</span>, which.max)</span>
+<span id="cb804-3"><a href="artificial-neural-networks.html#cb804-3" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">colnames</span>(test)[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb804-4"><a href="artificial-neural-networks.html#cb804-4" aria-hidden="true" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> fck[pred]</span>
+<span id="cb804-5"><a href="artificial-neural-networks.html#cb804-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb804-6"><a href="artificial-neural-networks.html#cb804-6" aria-hidden="true" tabindex="-1"></a>act<span class="ot">&lt;-</span> <span class="fu">apply</span>(test[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>], <span class="dv">1</span>, which.max)</span>
+<span id="cb804-7"><a href="artificial-neural-networks.html#cb804-7" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> fck[act]</span>
+<span id="cb804-8"><a href="artificial-neural-networks.html#cb804-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb804-9"><a href="artificial-neural-networks.html#cb804-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(predicted, actual)</span></code></pre></div>
+<pre><code>##           actual
+## predicted  quality4 quality5 quality6 quality7
+##   quality5        4      107       32        3
+##   quality6        7       78      160       51
+##   quality7        1        0       11       18</code></pre>
+<p>This is just an example and the results are not reflecting a trained model. Advance DNN applications with a proper training requires a longer time and more capable machines. We can do a grid search on different number of hidden layers and neurons. However, a large datasets and more complex DNNs need better applications, like, <code>Keras</code> that uses GPU on Linux systems allowing a much better efficiency in training. So far, we have used the <code>neuralnet</code> package. There are several packages in R that are capable of implementing and training artificial neural networks (ANNs), and the most suitable one for your needs will depend on your specific requirements and preferences. Some popular packages for implementing ANNs in R include:</p>
+<ul>
+<li><code>nnet</code>: This package is specifically designed for training and using feedforward neural networks, which are a type of ANN that consists of layers of interconnected “neurons” that process and transmit information. It provides functions for building and training feedforward networks, and for making predictions with them.</li>
+<li><code>caret</code>: As we’ve seen before, this is a general-purpose package for building and evaluating machine learning models, including ANNs. It provides functions for building and training ANNs, and for tuning their hyperparameters using techniques like cross-validation. It also offers a wide range of functions for preprocessing and analyzing data, and for evaluating the performance of trained models.</li>
+<li><code>deepnet</code>: This package is designed for building and training deep learning models, which are a type of ANN with many layers that are capable of learning complex patterns in data. It provides functions for building and training deep learning models using a variety of techniques, including backpropagation, autoencoders, and convolutional neural networks (CNNs).</li>
+</ul>
+<p>Ultimately, the best package for ANNs in R will depend on your specific needs and requirements. If you are looking for a powerful and flexible package for building and training ANNs, <code>neuralnet</code> or <code>deepnet</code> may be good options. If you just need a simple and easy-to-use package for training feedforward networks and making predictions, <code>nnet</code> may be a good choice. If you want a general-purpose package that can handle a wide range of machine learning tasks, including ANNs, <code>caret</code> may be a good option.</p>
+<p>Deep neural networks (DNNs) are neural networks with many layers, which can be difficult to train because of the large number of parameters that need to be optimized. This can make the training process computationally intensive and prone to overfitting. Convolutional neural networks (CNNs), on the other hand, are specifically designed to process data that has a grid-like structure, such as an image. One key aspect of CNNs is that they use convolutional layers, which apply a set of filters to the input data and produce a set of transformed feature maps. These filters are able to detect specific features in the input data, such as edges, corners, or textures, and are able to share these features across the input data. This means that the number of parameters in a CNN is typically much smaller than in a DNN, which makes the model easier to train and less prone to overfitting.</p>
+<p>Overall, CNNs are well-suited for tasks such as image classification, object detection and, speech recognition. We will not cover the details of CNN here. There are several packages available in R for working with CNNs. <code>Keras</code> running on <code>TensowFlow</code> is one of the most efficient engines in building artificial neural networks.</p>
+<p>Finally, in a deep neural network, “dropout” and “regularization” are techniques used to prevent overfitting. Dropout is a regularization technique that randomly drops out, or removes, a certain percentage of neurons from the network during training. This has the effect of reducing the complexity of the model, as it can’t rely on any one neuron or group of neurons to make predictions. Regularization is a general term that refers to any method used to prevent overfitting in a machine learning model. There are many types of regularization techniques, which add a penalty term to the parameters of the the activation functions.</p>
+<p>We will be back to ANN later in Section VII - Time Series.</p>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="support-vector-machines.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="parametric-models-in-prediction.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/15-NN.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

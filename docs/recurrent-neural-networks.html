@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 25 Recurrent Neural Networks | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 25 Recurrent Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 25 Recurrent Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 25 Recurrent Neural Networks | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="random-forest-1.html"/>
+<link rel="next" href="matrix-decompositions.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="recurrent-neural-networks" class="section level1 hasAnchor" number="25">
+<h1><span class="header-section-number">Chapter 25</span> Recurrent Neural Networks<a href="recurrent-neural-networks.html#recurrent-neural-networks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Recurrent neural networks (RNNs) are a type of artificial neural network that are particularly well-suited for processing sequential data, such as time series, natural language, and speech. They are called “recurrent” because they perform the same task for every element in a sequence, with the output being dependent on the previous computations.</p>
+<p>The idea of using neural networks to process sequential data dates back to the 1980s, but it wasn’t until the late 1990s that RNNs began to see widespread use. One of the key developments in this period was the use of long short-term memory (LSTM) units, which are a type of “memory” cell that can store information for long periods of time and help prevent the vanishing gradients problem that can occur when training RNNs.</p>
+<p>The RNN processes the input data using a series of “neurons”. Each neuron receives input from other neurons and from the input data, processes them using an activation function, and sends the output to other neurons as an input or to the final output of the network. Hence, the output of a neuron at a given time step is used as the input to the same neuron at the next time step, allowing the network to incorporate information from previous time steps into its current computation. The RNN process can be illustrated as follows:</p>
+<p><img src="png/RNN2.png" width="85%" height="90%" /></p>
+<p>The network above is designed such that it takes input <span class="math inline">\(X_t\)</span> sequentially. Each <span class="math inline">\(X_t\)</span> feeds into a hidden layer that has a vector of activation functions, <span class="math inline">\(A_t\)</span>. Except for the first starting point, each activation function also feeds into the next activation function, <span class="math inline">\(A_{t+1}\)</span>, sequentially. The connection between each activation function (<span class="math inline">\(h\)</span> - hidden state) reflects the fact that RNN uses the last period’s prediction as an input in the next period. The weight vectors are denoted <span class="math inline">\(a = \{\omega_0, \omega_1\}\)</span>, <span class="math inline">\(b = \{\theta_1\}\)</span>, and <span class="math inline">\(c = \{\beta_0, \beta_1\}\)</span>, as expressed below:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; A_1=g\left(\omega_0+\omega_1 X_1\right)\\
+&amp; A_2=g\left(\omega_0+\omega_1 X_2+\theta_1 A_1\right) \\
+&amp; =g\left(\omega_0+\omega_1 X_2+\theta_1 g\left(\omega_0+\omega_1 X_1\right)\right) \\
+&amp; A_3=g\left(\omega_0+\omega_1 X_3+\theta_1 A_2\right) \\
+&amp; =g\left(\omega_0+\omega_1 X_3+\theta_1 g\left(\omega_0+\omega_1 X_2+\theta_1 g\left(\omega_0+\omega_1 X_1\right)\right)\right. \\
+&amp; ~~~~~~~~~~~~~~~~\vdots\\
+&amp; A_t=g\left(\omega_0+\omega_1 X_t+\theta_1 A_{t-1}\right)
+\end{aligned}
+\]</span></p>
+<p>Note that weights are the same in each sequence. Although each output layer produces a prediction, the final output is the network’s prediction.</p>
+<p><span class="math display">\[
+Y_{t}=\beta_0+ \beta_k A_{t}
+\]</span></p>
+<p>In case of multiple inputs at time <span class="math inline">\(t\)</span>, <span class="math inline">\(X_{t}=\left(X_{t1}, X_{t2}, \ldots, X_{tp}\right)\)</span>, and multiple units (<span class="math inline">\(k\)</span>) in the hidden layer, <span class="math inline">\(A_t = \left(A_{t1}, A_{t2}, \ldots, A_{tk}\right)\)</span>, the network at time <span class="math inline">\(t\)</span> becomes:</p>
+<p><span class="math display">\[
+A_{k, t}=g\left(\omega_{k 0}+\sum_{j=1}^p \omega_{k j} X_{t j}+\sum_{v=1}^k \theta_{k v} A_{v,t-1}\right).
+\]</span>
+For example, for two units and two variables, <span class="math inline">\(A_{k,t}\)</span> will be</p>
+<p><span class="math display">\[
+A_{1,t}=g\left(\omega_{10}+ \omega_{1 1} X_{t,1}+\omega_{1 2} X_{t,2}+
+\theta_{1 1} A_{1,t-1}+\theta_{1 2} A_{2,t-1}\right),\\
+A_{2,t}=g\left(\omega_{20}+ \omega_{2 1} X_{t, 1}+\omega_{2 2} X_{t,2}+
+\theta_{2 1} A_{1,t-1}+\theta_{2 2} A_{2,t-1}\right)
+\]</span>
+and the output <span class="math inline">\(O_{\ell}\)</span> is computed as</p>
+<p><span class="math display">\[
+Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
+\]</span></p>
+<div id="keras" class="section level2 hasAnchor" number="25.1">
+<h2><span class="header-section-number">25.1</span> Keras<a href="recurrent-neural-networks.html#keras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will use the Keras deep-learning framework (<a href="https://keras.rstudio.com" class="uri">https://keras.rstudio.com</a>) and the package <code>keras</code>, which provides high-level building blocks for developing deep-learning models. Keras operates on several tensor libraries to tensor manipulations and differentiation, one of which is TensorFlow.</p>
+<p>Tensors are simply multidimensional arrays, which are a generalization of vectors and matrices to an arbitrary number of dimensions. For example, vectors are 1D tensors, matrices are used for 2D tensors, and arrays (which support any number of dimensions) are used for multi-dimensional objects. Keras works on CPUs, but the most efficient implementations of Keras use NVIDIA GPUs and properly configured CUDA and cuDNN libraries. For CPU-based installation of Keras, which is what we use in this chapter, we suggest the following steps after installing the <code>keras</code> package.</p>
+<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb982-1"><a href="recurrent-neural-networks.html#cb982-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.unsetenv (&quot;RETICULATE_PYTHON&quot;)</span></span>
+<span id="cb982-2"><a href="recurrent-neural-networks.html#cb982-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes : sinstall_github(&quot;Istudio/reticulate&quot;)</span></span>
+<span id="cb982-3"><a href="recurrent-neural-networks.html#cb982-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reticulate::install_miniconda()</span></span>
+<span id="cb982-4"><a href="recurrent-neural-networks.html#cb982-4" aria-hidden="true" tabindex="-1"></a><span class="co"># keras::install_keras ()</span></span></code></pre></div>
+<p>The best source using Keras for artificial neural network projects with R is “Deep Learning with R” by Chollet and Allaire. In this section, we will use the <code>keras</code> package (on CPU) for two main time series applications: RNN and LSTM.</p>
+<p>Let’s set up our COVID-19 data and standardize each of the variables.</p>
+<div class="sourceCode" id="cb983"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb983-1"><a href="recurrent-neural-networks.html#cb983-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb983-2"><a href="recurrent-neural-networks.html#cb983-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span>
+<span id="cb983-3"><a href="recurrent-neural-networks.html#cb983-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb983-4"><a href="recurrent-neural-networks.html#cb983-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;~/Dropbox/ToolShed_draft/toronto2.rds&quot;</span>)</span>
+<span id="cb983-5"><a href="recurrent-neural-networks.html#cb983-5" aria-hidden="true" tabindex="-1"></a>toronto2 <span class="ot">&lt;-</span> data</span>
+<span id="cb983-6"><a href="recurrent-neural-networks.html#cb983-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> toronto2 <span class="sc">%&gt;%</span></span>
+<span id="cb983-7"><a href="recurrent-neural-networks.html#cb983-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dcases =</span> <span class="fu">difference</span>(cases),</span>
+<span id="cb983-8"><a href="recurrent-neural-networks.html#cb983-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">dmob =</span> <span class="fu">difference</span>(mob),</span>
+<span id="cb983-9"><a href="recurrent-neural-networks.html#cb983-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">ddelay =</span> <span class="fu">difference</span>(delay),</span>
+<span id="cb983-10"><a href="recurrent-neural-networks.html#cb983-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">dmale =</span> <span class="fu">difference</span>(male),</span>
+<span id="cb983-11"><a href="recurrent-neural-networks.html#cb983-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">dtemp =</span> <span class="fu">difference</span>(temp),</span>
+<span id="cb983-12"><a href="recurrent-neural-networks.html#cb983-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">dhum =</span> <span class="fu">difference</span>(hum))</span>
+<span id="cb983-13"><a href="recurrent-neural-networks.html#cb983-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb983-14"><a href="recurrent-neural-networks.html#cb983-14" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> df[ ,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">8</span>)] <span class="co">#removing levels</span></span>
+<span id="cb983-15"><a href="recurrent-neural-networks.html#cb983-15" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> dft[<span class="sc">-</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>,<span class="dv">2</span>)] <span class="co"># reordering the columns</span></span>
+<span id="cb983-16"><a href="recurrent-neural-networks.html#cb983-16" aria-hidden="true" tabindex="-1"></a>sdtf <span class="ot">&lt;-</span> <span class="fu">scale</span>(dft) <span class="co">#</span></span>
+<span id="cb983-17"><a href="recurrent-neural-networks.html#cb983-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sdtf)</span></code></pre></div>
+<pre><code>##        dcases        dmob     ddelay       dmale      dtemp        age
+## 2  0.04202890 -0.21389272 -7.6496254  2.16845790  2.4818892  0.5144024
+## 3  0.10622289  0.30023017  1.8050246 -2.58211378 -0.4756078  1.6374603
+## 4 -0.11845609  0.45271551  2.9516317 -3.56924556  0.3182466  1.1383235
+## 5 -0.02216510  0.05796098 -1.2461163  1.24302186 -0.6779629  0.9600603
+## 6  0.07412590 -0.41612714 -2.1128735  0.62606450 -0.3697605 -0.6086555
+## 7 -0.08635909  0.47965067 -0.7048789  0.00910714 -0.5347577  0.6703827</code></pre>
+<p>There are four stages in developing ANN models in Keras:</p>
+<ul>
+<li>Preparing the training set with input tensors and target tensors;</li>
+<li>Defining the model, that is a network of layers;</li>
+<li>Choosing the learning parameters: a loss function, an optimizer, and some metrics to monitor</li>
+<li>And finally fitting this model to the training set</li>
+</ul>
+</div>
+<div id="input-tensors" class="section level2 hasAnchor" number="25.2">
+<h2><span class="header-section-number">25.2</span> Input Tensors<a href="recurrent-neural-networks.html#input-tensors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will define a three dimensional array that contains time series data. First, let’s see an array:</p>
+<div class="sourceCode" id="cb985"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb985-1"><a href="recurrent-neural-networks.html#cb985-1" aria-hidden="true" tabindex="-1"></a><span class="co"># array</span></span>
+<span id="cb985-2"><a href="recurrent-neural-networks.html#cb985-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb985-3"><a href="recurrent-neural-networks.html#cb985-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span>
+<span id="cb985-4"><a href="recurrent-neural-networks.html#cb985-4" aria-hidden="true" tabindex="-1"></a>adata <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(x1, x2), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>))</span>
+<span id="cb985-5"><a href="recurrent-neural-networks.html#cb985-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(adata)</span></code></pre></div>
+<pre><code>## [1] 3 3 2</code></pre>
+<div class="sourceCode" id="cb987"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb987-1"><a href="recurrent-neural-networks.html#cb987-1" aria-hidden="true" tabindex="-1"></a>adata</span></code></pre></div>
+<pre><code>## , , 1
+## 
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9</code></pre>
+<div class="sourceCode" id="cb989"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb989-1"><a href="recurrent-neural-networks.html#cb989-1" aria-hidden="true" tabindex="-1"></a>adata[<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    1
+## [2,]    4    4
+## [3,]    7    7</code></pre>
+<p>Now, we create our data matrix:</p>
+<div class="sourceCode" id="cb991"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb991-1"><a href="recurrent-neural-networks.html#cb991-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
+<span id="cb991-2"><a href="recurrent-neural-networks.html#cb991-2" aria-hidden="true" tabindex="-1"></a>toydata <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">101</span><span class="sc">:</span><span class="dv">200</span>, <span class="dv">201</span><span class="sc">:</span><span class="dv">300</span>), <span class="dv">100</span>)</span>
+<span id="cb991-3"><a href="recurrent-neural-networks.html#cb991-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(toydata) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>)</span>
+<span id="cb991-4"><a href="recurrent-neural-networks.html#cb991-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(toydata)</span></code></pre></div>
+<pre><code>##      y  x1  x2
+## [1,] 1 101 201
+## [2,] 2 102 202
+## [3,] 3 103 203
+## [4,] 4 104 204
+## [5,] 5 105 205
+## [6,] 6 106 206</code></pre>
+<p>Suppose that this is daily data and we try to make 1-day-ahead predictions. In preparing the input tensor, we need to decide how many earlier days we need to predict the next day’s value. Suppose that we decide on 5 days. As we seen before, we transform the data by embedding to a new structure:</p>
+<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb993-1"><a href="recurrent-neural-networks.html#cb993-1" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> <span class="fu">embed</span>(toydata, <span class="dv">6</span>)</span>
+<span id="cb993-2"><a href="recurrent-neural-networks.html#cb993-2" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> datam[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb993-3"><a href="recurrent-neural-networks.html#cb993-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datam)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+## [1,]    6    5  105  205    4  104  204    3  103   203     2   102   202     1
+## [2,]    7    6  106  206    5  105  205    4  104   204     3   103   203     2
+## [3,]    8    7  107  207    6  106  206    5  105   205     4   104   204     3
+## [4,]    9    8  108  208    7  107  207    6  106   206     5   105   205     4
+## [5,]   10    9  109  209    8  108  208    7  107   207     6   106   206     5
+## [6,]   11   10  110  210    9  109  209    8  108   208     7   107   207     6
+##      [,15] [,16]
+## [1,]   101   201
+## [2,]   102   202
+## [3,]   103   203
+## [4,]   104   204
+## [5,]   105   205
+## [6,]   106   206</code></pre>
+<p>The second line in the code above removes the contemporaneous features. We should have <span class="math inline">\(100 - 5 = 95\)</span> samples, in each one we have 3 features and 5 timesteps. The first two samples, each is a matrix of <span class="math inline">\(5 \times 3\)</span>, are shown below:</p>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1  101  201
+## [2,]    2  102  202
+## [3,]    3  103  203
+## [4,]    4  104  204
+## [5,]    5  105  205</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    2  102  202
+## [2,]    3  103  203
+## [3,]    4  104  204
+## [4,]    5  105  205
+## [5,]    6  106  206</code></pre>
+<p>The outcome variable <span class="math inline">\(y\)</span> is 6 and 7 in the first and second samples. Let’s see how we can manipulate our embedded data <code>datam</code> to achieve it:</p>
+<div class="sourceCode" id="cb997"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb997-1"><a href="recurrent-neural-networks.html#cb997-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datam)</span>
+<span id="cb997-2"><a href="recurrent-neural-networks.html#cb997-2" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(datam[, <span class="sc">-</span><span class="dv">1</span>]) <span class="co"># Removing Y</span></span>
+<span id="cb997-3"><a href="recurrent-neural-networks.html#cb997-3" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="dv">3</span>, <span class="dv">5</span>))</span>
+<span id="cb997-4"><a href="recurrent-neural-networks.html#cb997-4" aria-hidden="true" tabindex="-1"></a>f2[<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    5    4    3    2    1
+## [2,]  105  104  103  102  101
+## [3,]  205  204  203  202  201</code></pre>
+<p>We need reverse the order</p>
+<div class="sourceCode" id="cb999"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb999-1"><a href="recurrent-neural-networks.html#cb999-1" aria-hidden="true" tabindex="-1"></a>f3 <span class="ot">&lt;-</span> f2[,, <span class="dv">5</span><span class="sc">:</span><span class="dv">1</span>]</span>
+<span id="cb999-2"><a href="recurrent-neural-networks.html#cb999-2" aria-hidden="true" tabindex="-1"></a>f3[<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    2    3    4    5
+## [2,]  101  102  103  104  105
+## [3,]  201  202  203  204  205</code></pre>
+<p>And, taking the transposition,</p>
+<div class="sourceCode" id="cb1001"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1001-1"><a href="recurrent-neural-networks.html#cb1001-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(f3[<span class="dv">1</span>,,])</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1  101  201
+## [2,]    2  102  202
+## [3,]    3  103  203
+## [4,]    4  104  204
+## [5,]    5  105  205</code></pre>
+<p>For the whole array of <code>datam</code>, we use array transposition:</p>
+<div class="sourceCode" id="cb1003"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1003-1"><a href="recurrent-neural-networks.html#cb1003-1" aria-hidden="true" tabindex="-1"></a>f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb1003-2"><a href="recurrent-neural-networks.html#cb1003-2" aria-hidden="true" tabindex="-1"></a>f4[<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1  101  201
+## [2,]    2  102  202
+## [3,]    3  103  203
+## [4,]    4  104  204
+## [5,]    5  105  205</code></pre>
+<p>Now, we are ready to apply all these steps to our toy data with a function:</p>
+<div class="sourceCode" id="cb1005"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1005-1"><a href="recurrent-neural-networks.html#cb1005-1" aria-hidden="true" tabindex="-1"></a>tensorin <span class="ot">&lt;-</span> <span class="cf">function</span>(l, x){</span>
+<span id="cb1005-2"><a href="recurrent-neural-networks.html#cb1005-2" aria-hidden="true" tabindex="-1"></a>  maxl <span class="ot">=</span> l<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb1005-3"><a href="recurrent-neural-networks.html#cb1005-3" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> <span class="fu">embed</span>(x, maxl)</span>
+<span id="cb1005-4"><a href="recurrent-neural-networks.html#cb1005-4" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> xm[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)] </span>
+<span id="cb1005-5"><a href="recurrent-neural-networks.html#cb1005-5" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xm)</span>
+<span id="cb1005-6"><a href="recurrent-neural-networks.html#cb1005-6" aria-hidden="true" tabindex="-1"></a>  f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xm[, <span class="sc">-</span><span class="dv">1</span>]) </span>
+<span id="cb1005-7"><a href="recurrent-neural-networks.html#cb1005-7" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> xm[, <span class="dv">1</span>]</span>
+<span id="cb1005-8"><a href="recurrent-neural-networks.html#cb1005-8" aria-hidden="true" tabindex="-1"></a>  f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="fu">ncol</span>(x), l))</span>
+<span id="cb1005-9"><a href="recurrent-neural-networks.html#cb1005-9" aria-hidden="true" tabindex="-1"></a>  f3 <span class="ot">&lt;-</span> f2[,, l<span class="sc">:</span><span class="dv">1</span>]</span>
+<span id="cb1005-10"><a href="recurrent-neural-networks.html#cb1005-10" aria-hidden="true" tabindex="-1"></a>  f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb1005-11"><a href="recurrent-neural-networks.html#cb1005-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(f4, y)</span>
+<span id="cb1005-12"><a href="recurrent-neural-networks.html#cb1005-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb1005-13"><a href="recurrent-neural-networks.html#cb1005-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1005-14"><a href="recurrent-neural-networks.html#cb1005-14" aria-hidden="true" tabindex="-1"></a>tensored <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">5</span>, toydata)</span>
+<span id="cb1005-15"><a href="recurrent-neural-networks.html#cb1005-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> tensored[<span class="dv">1</span>]</span>
+<span id="cb1005-16"><a href="recurrent-neural-networks.html#cb1005-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> tensored[<span class="dv">2</span>]</span>
+<span id="cb1005-17"><a href="recurrent-neural-networks.html#cb1005-17" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1  101  201
+## [2,]    2  102  202
+## [3,]    3  103  203
+## [4,]    4  104  204
+## [5,]    5  105  205</code></pre>
+<div class="sourceCode" id="cb1007"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1007-1"><a href="recurrent-neural-networks.html#cb1007-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<p>Note that this type of data transformation can be achieved several different ways. We can apply it to our COVID-19 data for 7-day windows:</p>
+<div class="sourceCode" id="cb1009"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1009-1"><a href="recurrent-neural-networks.html#cb1009-1" aria-hidden="true" tabindex="-1"></a>trnt <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">7</span>, sdtf)</span>
+<span id="cb1009-2"><a href="recurrent-neural-networks.html#cb1009-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> trnt[<span class="dv">1</span>]</span>
+<span id="cb1009-3"><a href="recurrent-neural-networks.html#cb1009-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trnt[<span class="dv">2</span>]</span>
+<span id="cb1009-4"><a href="recurrent-neural-networks.html#cb1009-4" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>,,]</span></code></pre></div>
+<pre><code>##             [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
+## [1,] -2.58211378 -0.4756078  1.6374603  0.04202890 -0.21389272 -7.6496254
+## [2,] -3.56924556  0.3182466  1.1383235  0.10622289  0.30023017  1.8050246
+## [3,]  1.24302186 -0.6779629  0.9600603 -0.11845609  0.45271551  2.9516317
+## [4,]  0.62606450 -0.3697605 -0.6086555 -0.02216510  0.05796098 -1.2461163
+## [5,]  0.00910714 -0.5347577  0.6703827  0.07412590 -0.41612714 -2.1128735
+## [6,]  3.46406836  2.4663234  1.1383235 -0.08635909  0.47965067 -0.7048789
+## [7,] -2.48614263  1.9215213 -0.6641151  0.04202890  0.02204745  0.3698224</code></pre>
+<div class="sourceCode" id="cb1011"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1011-1"><a href="recurrent-neural-networks.html#cb1011-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [1] 0.2346109</code></pre>
+<p>Obviously, our choice of <span class="math inline">\(l\)</span> (7) is arbitrary and should be decided with a proper validation.</p>
+</div>
+<div id="plain-rnn" class="section level2 hasAnchor" number="25.3">
+<h2><span class="header-section-number">25.3</span> Plain RNN<a href="recurrent-neural-networks.html#plain-rnn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As we have the input tensor stored as an array of (258, 7, 6), we are ready to design our network for an RNN with one layer with 24 hidden units (neurons):</p>
+<div class="sourceCode" id="cb1013"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1013-1"><a href="recurrent-neural-networks.html#cb1013-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb1013-2"><a href="recurrent-neural-networks.html#cb1013-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1013-3"><a href="recurrent-neural-networks.html#cb1013-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_simple_rnn</span>(<span class="at">units =</span> <span class="dv">24</span>,</span>
+<span id="cb1013-4"><a href="recurrent-neural-networks.html#cb1013-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">input_shape =</span> <span class="fu">list</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
+<span id="cb1013-5"><a href="recurrent-neural-networks.html#cb1013-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dropout =</span> <span class="fl">0.1</span>, <span class="at">recurrent_dropout =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1013-6"><a href="recurrent-neural-networks.html#cb1013-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1013-7"><a href="recurrent-neural-networks.html#cb1013-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(<span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb1013-8"><a href="recurrent-neural-networks.html#cb1013-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">loss =</span> <span class="st">&quot;mse&quot;</span>)</span></code></pre></div>
+<p>As before, neural networks consist of layers and neurons in each layer. Since we use sequence data stored in 3D tensors of shape (samples, timesteps, features) we will use recurrent layers for our RNN. The term <code>layer_dense</code> is the output layer.</p>
+<p>We also (arbitrarily) specify two types of dropout for the units feeding into the hidden layer. The first one is set for the input feeding into a layer. The second one is for the previous hidden units feeding into the same layer.</p>
+<p>One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These “dropped out” inputs may be variables in the data sample or activations from a previous layer. This is a conventional regularization method to in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: <code>dropout</code>, a float specifying the dropout rate for input units of the layer, and <code>recurrent_dropout</code>, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid.</p>
+<p>It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.</p>
+<p>Before fitting the model, we need to split the data. We have 258 observations in total. We will take the last 50 observations as our test set:</p>
+<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1014-1"><a href="recurrent-neural-networks.html#cb1014-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X[[<span class="dv">1</span>]])</span></code></pre></div>
+<pre><code>## [1] 258   7   6</code></pre>
+<div class="sourceCode" id="cb1016"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1016-1"><a href="recurrent-neural-networks.html#cb1016-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">208</span></span>
+<span id="cb1016-2"><a href="recurrent-neural-networks.html#cb1016-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">208</span><span class="sc">:</span><span class="fu">dim</span>(X[[<span class="dv">1</span>]])[<span class="dv">1</span>]</span></code></pre></div>
+<p>And, finally we fit our RNN. There are two hyperparameters that Keras use in fitting RNN: batch size and epoch. They are both related to how and how many times the weights in the network will be updated</p>
+<p>The batch size is the number of observations (“samples”) used in its gradient descent to update its internal parameters. For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data. The stochastic gradient descent, on the other hand, uses randomly selected each observation. While the batch gradient descent is efficient (fast) it is not as robust as the stochastic gradient descent. Therefore, Keras uses a mini-batch gradient descent as a parameter that balance the between efficiency and robustness.</p>
+<p>The number of epochs is the number of times the algorithm works trough the complete training dataset. We need multiple passes through the entire data because updating the weights with gradient descent in a single pass (one epoch) is not enough. But, when the number of epochs goes up, the algorithm updates the weights more. As a result, the curve goes from underfitting (very few runs) to overfitting (too many runs).</p>
+<p>Hence, these two parameters, batch size and epoch, should be set as hyperparameters. Note that we pick arbitrary numbers below.</p>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1017-1"><a href="recurrent-neural-networks.html#cb1017-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
+<span id="cb1017-2"><a href="recurrent-neural-networks.html#cb1017-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train,, ], y[[<span class="dv">1</span>]][train], <span class="at">batch_size =</span> <span class="dv">12</span>, <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1017-3"><a href="recurrent-neural-networks.html#cb1017-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span></span>
+<span id="cb1017-4"><a href="recurrent-neural-networks.html#cb1017-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(X[[<span class="dv">1</span>]][test,, ], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1017-5"><a href="recurrent-neural-networks.html#cb1017-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1017-6"><a href="recurrent-neural-networks.html#cb1017-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb1017-7"><a href="recurrent-neural-networks.html#cb1017-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn17-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1018-1"><a href="recurrent-neural-networks.html#cb1018-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction</span></span>
+<span id="cb1018-2"><a href="recurrent-neural-networks.html#cb1018-2" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1018-3"><a href="recurrent-neural-networks.html#cb1018-3" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1018-4"><a href="recurrent-neural-networks.html#cb1018-4" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(X[[<span class="dv">1</span>]][test,, ])</span>
+<span id="cb1018-5"><a href="recurrent-neural-networks.html#cb1018-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<pre><code>## [1] 0.2491995</code></pre>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1020-1"><a href="recurrent-neural-networks.html#cb1020-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<pre><code>## [1] 1.495303</code></pre>
+<p>Although it could be done easily as we shown in the previous chapter, we will not back-transform the predictions to levels. Here is the plot for the last 50 days:</p>
+<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1022-1"><a href="recurrent-neural-networks.html#cb1022-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y[[<span class="dv">1</span>]][test], <span class="at">type =</span><span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1022-2"><a href="recurrent-neural-networks.html#cb1022-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1022-3"><a href="recurrent-neural-networks.html#cb1022-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1022-4"><a href="recurrent-neural-networks.html#cb1022-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;RNN Forecasting for Covid-19 Cases - in differences&quot;</span>)</span>
+<span id="cb1022-5"><a href="recurrent-neural-networks.html#cb1022-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn18-1.png" width="672" /></p>
+<p>It looks like, our RNN without a proper training is capturing most ups and downs correctly. There are three groups of hyperparameters that we need to search by validation:</p>
+<ul>
+<li>How many days we need in the past to predict the next day’s value? (we picked 7),</li>
+<li>The number of units per layer (we picked 24),</li>
+<li>Regularization parameters, <code>dropout</code> and <code>recurrent_dropout</code> (we picked 0.1 for both),</li>
+<li>Stochastic gradient descent parameters, <code>batch_size</code> and <code>epochs</code> (we picked 12 and 75)</li>
+</ul>
+<p>All these parameters that we picked arbitrarily should be selected by a proper validation. Model tuning in ANN highly depends on the package we use in deep learning. Keras with TensorFlow is one the top AI engines available for all type of networks. The best source for learning more on deep learning using Keras is “Deep Learning with R” by Chollet and Allaire.</p>
+</div>
+<div id="lstm" class="section level2 hasAnchor" number="25.4">
+<h2><span class="header-section-number">25.4</span> LSTM<a href="recurrent-neural-networks.html#lstm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One issue with RNN is that, although it is able to retain information trough time by its recurrent network, it quickly forgets long-term dependencies. This problem is called the <em>vanishing gradient problem</em> and can be easily seen here:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; A_3=g\left(\omega_0+\omega_1 X_3+\theta_1 A_2\right) \\
+&amp; =g\left(\omega_0+\omega_1 X_3+\theta_1 g\left(\omega_0+\omega_1 X_2+ \theta_1 g\left(\omega_0+\omega_1 X_1\right)\right)\right. \\
+\end{aligned}
+\]</span></p>
+<p>Although this has only two iterations, the function has <span class="math inline">\(\theta_1^2\)</span> (if <span class="math inline">\(g()\)</span> is ReLu). For example, if <span class="math inline">\(\theta_1 = 0.5\)</span>, the effect of <span class="math inline">\(A_5\)</span> on <span class="math inline">\(A_1\)</span> will be regulated by <span class="math inline">\(\theta_1^4 = 0.0625\)</span>. We can argue that <span class="math inline">\(\theta_1\)</span> could be one (random walk). But, the first differencing will usually remove the unit root in the data <span class="math inline">\(\theta_1\)</span> will be bounded between 0 and 1.</p>
+<p>If we only need to look at <em>recent</em> information to predict the present, RNN would be fine even with this problem. But, the gap between the relevant information to predict the present could be very large and RNN quickly forgets those long-term dependencies. Long Short-Term Memory network (LSTM) layers in RNN are designed to solve this problem.</p>
+<p>Similar to RNN, LSTMs also have a chain-like structure, but the repeating activation module has a different structure. Unlike RNN, which has only a single neural network layer in the repeating activation modules, the LSTM activation module has four interacting each other.</p>
+<p><img src="png/LSTM3.png" width="75%" height="80%" /></p>
+<p>The key difference between LSTM and RNN is the cell state <span class="math inline">\(C_t\)</span> (the horizontal red line). The cell state functions like a conveyor belt and each LSTM repeating module is able to add to and remove from this belt through three gates, , as shown.</p>
+<p>This figure shows how LSTM works. We have three gates as numbered in the figure (G1, G2, and G3). Each gate is regulated by a sigmoid neural net layer (<span class="math inline">\(\frac{1}{1+e^{-x}}\)</span>), which outputs numbers between zero and one. Hence, it works like a regulator or “gate keeper”.</p>
+<p>The first gate (G1) is the <strong>Forget Gate</strong>, the first layer of the four layers, which takes <span class="math inline">\(H_{t-1}\)</span> and <span class="math inline">\(X_t\)</span> into a sigmoid function,</p>
+<p><span class="math display">\[
+f_t=\sigma\left(w_f \cdot\left[H_{t-1}, X_t\right]+b_f\right)
+\]</span>
+and produces a number between 0 and 1. This percentage reflects the degree of <span class="math inline">\(C_{t-1}\)</span> that will be forgotten. For example, if it is zero, nothing in <span class="math inline">\(C_{t-1}\)</span> will be let through on the belt (cell state). It is interesting to note that this degree, how much of the long-term information will be kept, is determined by the recent information (<span class="math inline">\(H_{t-1}\)</span>, <span class="math inline">\(X_t\)</span>). That is, if the recent information is very relevant for the prediction, the network will tune this sigmoid function so that the output will be a percentage close to 0, which will reduce the effect of the long-term information in the past, <span class="math inline">\(C_{t-1}\)</span>, on prediction.</p>
+<p>The second gate (G2), <strong>the Input Gate</strong>, uses the same inputs, <span class="math inline">\(H_{t-1}\)</span> and <span class="math inline">\(X_t\)</span>, but has two layers. The first later is again a sigmoid function that works as a gate keeper. The second layer is a tanh function (<span class="math inline">\(\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}}\)</span>) that produces a number between <span class="math inline">\(-1\)</span> and <span class="math inline">\(+1\)</span>. The objective of this layer is to update cell state <span class="math inline">\(C_{t-1}\)</span> by adding <span class="math inline">\(\tilde{C_{t}}\)</span>, which contains the recent information hidden in <span class="math inline">\(H_{t-1}\)</span> and <span class="math inline">\(X_t\)</span>. This process happens in two steps:</p>
+<p><span class="math display">\[
+\begin{aligned}
+i_t &amp; =\sigma\left(w_i \cdot\left[H_{t-1}, X_t\right]+b_i\right) \\
+\tilde{C}_t &amp; =\tanh \left(w_\tilde{C} \cdot\left[H_{t-1}, X_t\right]+b_\tilde{C}\right)
+\end{aligned}
+\]</span>
+The first step, <span class="math inline">\(i_t\)</span>, is a sigmoid function, hence a “gate keeper”. We already get it in the first layer with different weights: <span class="math inline">\(f_t=\sigma\left(w_f \cdot\left[h_{t-1}, x_t\right]+b_f\right)\)</span>. The second later, tanh function, produces the information (<span class="math inline">\(h_{t-1}, x_t\)</span>) in a candidate value normalized between <span class="math inline">\(-1\)</span> and <span class="math inline">\(+1\)</span>. When the network multiplies <span class="math inline">\(\tilde{C_{t}}\)</span> with <span class="math inline">\(i_t\)</span> (<span class="math inline">\(i_t \times \tilde{C_{t}}\)</span>), this new candidate value between <span class="math inline">\(-1\)</span> and <span class="math inline">\(+1\)</span> will be scaled by <span class="math inline">\(i_t\)</span> that reflects how much the network would like to update <span class="math inline">\(C_{t-1}\)</span>:</p>
+<p><span class="math display">\[
+C_t=f_t \times C_{t-1}+i_t \times \tilde{C}_t
+\]</span></p>
+<p>While the first two gates are about regulating the cell state (<span class="math inline">\(C_t\)</span>), the last one (G3) is the <strong>Output Gate</strong>. The prediction at time <span class="math inline">\(t\)</span>, <span class="math inline">\(H_t\)</span>, has two inputs: <span class="math inline">\(C_t\)</span> and the recent information, <span class="math inline">\(H_{t-1}\)</span> and <span class="math inline">\(X_t\)</span>. The output gate will decide how it will balance between these two sources and produce <span class="math inline">\(H_t\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+o_t &amp; =\sigma\left(w_o\left[H_{t-1}, X_t\right]+b_o\right) \\
+H_t &amp; =o_t \times \tanh \left(C_t\right)
+\end{aligned}
+\]</span>
+Note that the tanh activation in the output function could be changed depending on the type of network we build.</p>
+<p>The LSTM network that we described so far is a conceptual one. In practice, however, there are many different variants of LSTM. One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. (<a href="https://arxiv.org/abs/1409.1259">2014</a>). The details of GRU is beyond this book. But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp. One of the accessible sources to learn different types of RNN is <a href="http://colah.github.io">blog posts</a> by Christopher Olah.</p>
+<p>Now, we return to the application of LSTM to our COVID-19 data. We use the “Adam” optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well. Below, the code shows an arbitrary network with LSTM.</p>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1023-1"><a href="recurrent-neural-networks.html#cb1023-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span>   </span>
+<span id="cb1023-2"><a href="recurrent-neural-networks.html#cb1023-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units=</span><span class="dv">128</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>), <span class="at">activation=</span><span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1023-3"><a href="recurrent-neural-networks.html#cb1023-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units=</span><span class="dv">64</span>, <span class="at">activation =</span> <span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1023-4"><a href="recurrent-neural-networks.html#cb1023-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units=</span><span class="dv">32</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1023-5"><a href="recurrent-neural-networks.html#cb1023-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units=</span><span class="dv">16</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1023-6"><a href="recurrent-neural-networks.html#cb1023-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units=</span><span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>)</span>
+<span id="cb1023-7"><a href="recurrent-neural-networks.html#cb1023-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1023-8"><a href="recurrent-neural-networks.html#cb1023-8" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
+<span id="cb1023-9"><a href="recurrent-neural-networks.html#cb1023-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
+<span id="cb1023-10"><a href="recurrent-neural-networks.html#cb1023-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
+<span id="cb1023-11"><a href="recurrent-neural-networks.html#cb1023-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1023-12"><a href="recurrent-neural-networks.html#cb1023-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## Model: &quot;sequential_1&quot;
+## ________________________________________________________________________________
+##  Layer (type)                       Output Shape                    Param #     
+## ================================================================================
+##  lstm (LSTM)                        (None, 128)                     69120       
+##  dense_4 (Dense)                    (None, 64)                      8256        
+##  dense_3 (Dense)                    (None, 32)                      2080        
+##  dense_2 (Dense)                    (None, 16)                      528         
+##  dense_1 (Dense)                    (None, 1)                       17          
+## ================================================================================
+## Total params: 80,001
+## Trainable params: 80,001
+## Non-trainable params: 0
+## ________________________________________________________________________________</code></pre>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1025-1"><a href="recurrent-neural-networks.html#cb1025-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(X[[<span class="dv">1</span>]][train,, ], y[[<span class="dv">1</span>]][train],</span>
+<span id="cb1025-2"><a href="recurrent-neural-networks.html#cb1025-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">batch_size =</span> <span class="dv">12</span>, <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1025-3"><a href="recurrent-neural-networks.html#cb1025-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test,, ], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1025-4"><a href="recurrent-neural-networks.html#cb1025-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1025-5"><a href="recurrent-neural-networks.html#cb1025-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1025-6"><a href="recurrent-neural-networks.html#cb1025-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn20-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1026"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1026-1"><a href="recurrent-neural-networks.html#cb1026-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test,, ])</span>
+<span id="cb1026-2"><a href="recurrent-neural-networks.html#cb1026-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1026-3"><a href="recurrent-neural-networks.html#cb1026-3" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1026-4"><a href="recurrent-neural-networks.html#cb1026-4" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1026-5"><a href="recurrent-neural-networks.html#cb1026-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<pre><code>## [1] -0.0434925</code></pre>
+<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1028-1"><a href="recurrent-neural-networks.html#cb1028-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<pre><code>## [1] 1.762835</code></pre>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="recurrent-neural-networks.html#cb1030-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y[[<span class="dv">1</span>]][test], <span class="at">type =</span><span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1030-2"><a href="recurrent-neural-networks.html#cb1030-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1030-3"><a href="recurrent-neural-networks.html#cb1030-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1030-4"><a href="recurrent-neural-networks.html#cb1030-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
+<span id="cb1030-5"><a href="recurrent-neural-networks.html#cb1030-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">1</span>)</span>
+<span id="cb1030-6"><a href="recurrent-neural-networks.html#cb1030-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn20-2.png" width="672" /></p>
+<p>Although LSTM does a good job for the last 10 days, there are specific days that it is way off. That’s why it has a higher RMSPE than RNN we had earlier.
+Before concluding this chapter, let’s change our network setting slightly and see the results</p>
+<div class="sourceCode" id="cb1031"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1031-1"><a href="recurrent-neural-networks.html#cb1031-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span>   </span>
+<span id="cb1031-2"><a href="recurrent-neural-networks.html#cb1031-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units=</span><span class="dv">24</span>, <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>), <span class="at">activation=</span><span class="st">&quot;tanh&quot;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb1031-3"><a href="recurrent-neural-networks.html#cb1031-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units=</span><span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1031-4"><a href="recurrent-neural-networks.html#cb1031-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
+<span id="cb1031-5"><a href="recurrent-neural-networks.html#cb1031-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
+<span id="cb1031-6"><a href="recurrent-neural-networks.html#cb1031-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
+<span id="cb1031-7"><a href="recurrent-neural-networks.html#cb1031-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1031-8"><a href="recurrent-neural-networks.html#cb1031-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1031-9"><a href="recurrent-neural-networks.html#cb1031-9" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## Model: &quot;sequential_2&quot;
+## ________________________________________________________________________________
+##  Layer (type)                       Output Shape                    Param #     
+## ================================================================================
+##  lstm_1 (LSTM)                      (None, 24)                      2976        
+##  dense_5 (Dense)                    (None, 1)                       25          
+## ================================================================================
+## Total params: 3,001
+## Trainable params: 3,001
+## Non-trainable params: 0
+## ________________________________________________________________________________</code></pre>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1033-1"><a href="recurrent-neural-networks.html#cb1033-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(X[[<span class="dv">1</span>]][train,, ], y[[<span class="dv">1</span>]][train],</span>
+<span id="cb1033-2"><a href="recurrent-neural-networks.html#cb1033-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">batch_size =</span> <span class="dv">12</span>, <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1033-3"><a href="recurrent-neural-networks.html#cb1033-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test,, ], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1033-4"><a href="recurrent-neural-networks.html#cb1033-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1033-5"><a href="recurrent-neural-networks.html#cb1033-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1033-6"><a href="recurrent-neural-networks.html#cb1033-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn21-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1034-1"><a href="recurrent-neural-networks.html#cb1034-1" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1034-2"><a href="recurrent-neural-networks.html#cb1034-2" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1034-3"><a href="recurrent-neural-networks.html#cb1034-3" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test,, ])</span>
+<span id="cb1034-4"><a href="recurrent-neural-networks.html#cb1034-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<pre><code>## [1] 0.2535225</code></pre>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1036-1"><a href="recurrent-neural-networks.html#cb1036-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span>y_act)<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<pre><code>## [1] 1.490992</code></pre>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1038-1"><a href="recurrent-neural-networks.html#cb1038-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y[[<span class="dv">1</span>]][test], <span class="at">type =</span><span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1038-2"><a href="recurrent-neural-networks.html#cb1038-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1038-3"><a href="recurrent-neural-networks.html#cb1038-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1038-4"><a href="recurrent-neural-networks.html#cb1038-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
+<span id="cb1038-5"><a href="recurrent-neural-networks.html#cb1038-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">1</span>)</span>
+<span id="cb1038-6"><a href="recurrent-neural-networks.html#cb1038-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="22-TSNeural_files/figure-html/tsnn21-2.png" width="672" /></p>
+<p>Building a network that does relatively a good job requires a well-designed validation process and a good network architecture that can be achieved after several trials.</p>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="random-forest-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="matrix-decompositions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/22-TSNeural.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

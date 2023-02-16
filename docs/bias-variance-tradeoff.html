@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Bias-Variance Tradeoff | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 3 Bias-Variance Tradeoff | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Bias-Variance Tradeoff | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Bias-Variance Tradeoff | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="learning-systems.html"/>
+<link rel="next" href="overfitting.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bias-variance-tradeoff" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Bias-Variance Tradeoff<a href="bias-variance-tradeoff.html#bias-variance-tradeoff" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The intuition behind the subject formally covered in the following chapters is simple: if a “thing” is more specific to a certain “environment”, it would be less generalizable for other environments. The “thing” is our predictive model, the “environment” is the data, our sample. If we build a model that fits (predicts) our sample very well, it would be too specific for that data but less generalizable for other samples. What’s the “sweet spot” between being “specific” and “generalizable” when we build a predictive model?</p>
+<div id="estimator-and-mse" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Estimator and MSE<a href="bias-variance-tradeoff.html#estimator-and-mse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The task is to <strong>estimate an unknown population parameter</strong>, say <span class="math inline">\(\theta\)</span>, which could be a simple mean of <span class="math inline">\(X\)</span>, <span class="math inline">\(\mu_x\)</span>, or a more complex slope coefficient, <span class="math inline">\(\beta\)</span>, of an unknown DGM. We use a random sample from the population and <span class="math inline">\(\hat{\theta}\)</span> as an estimator of <span class="math inline">\(\theta\)</span>.</p>
+<p>We need to choose the best estimator to estimate <span class="math inline">\(\theta\)</span> among many possible estimators. For example, if we want to estimate <span class="math inline">\(\mu_x\)</span>, we could use,</p>
+<p><span class="math display">\[
+\bar{X}=\frac{1}{n} \sum_{i=1}^{n} x_{i}
+\]</span>
+or alternatively,</p>
+<p><span class="math display">\[
+\hat{X}=0.5 x_{1}+0.5x_{n}
+\]</span></p>
+<p>Therefore, we need to define what makes an estimator the “best” among others. The sampling distribution, which is the probability distribution of all possible <strong>estimates</strong> obtained from repeated sampling, would help us develop some principles. The first and the most important criteria should be that the expected mean of all estimates obtained from repeated samples should be equal to <span class="math inline">\(\mu_x\)</span>. Any estimator satisfying this condition is called as an <strong>unbiased</strong> estimator.</p>
+<p>However, if <span class="math inline">\(x\)</span>’s are independently and identically distributed (i.i.d), it can be shown that those two estimators, <span class="math inline">\(\bar{X}\)</span> and <span class="math inline">\(\hat{X}\)</span>, are both unbiased. That is, <span class="math inline">\(\mathbf{E}(\bar{X})= \mathbf{E}(\hat{X})=\mu_x\)</span>. Although, it would be easy to obtain an algebraic proof, a simulation exercise can help us visualize it. In fact, we can add a third estimator, <span class="math inline">\(\tilde{X}=x_3\)</span>, which is also unbiased.</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="bias-variance-tradeoff.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Population</span></span>
+<span id="cb130-2"><a href="bias-variance-tradeoff.html#cb130-2" aria-hidden="true" tabindex="-1"></a>populationX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">12</span>)</span>
+<span id="cb130-3"><a href="bias-variance-tradeoff.html#cb130-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb130-4"><a href="bias-variance-tradeoff.html#cb130-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Container to have repeated samples</span></span>
+<span id="cb130-5"><a href="bias-variance-tradeoff.html#cb130-5" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">2000</span>, <span class="dv">3</span>)</span>
+<span id="cb130-6"><a href="bias-variance-tradeoff.html#cb130-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(samples) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;FirstX&quot;</span>, <span class="st">&quot;SecondX&quot;</span>, <span class="st">&quot;ThirdX&quot;</span>)</span>
+<span id="cb130-7"><a href="bias-variance-tradeoff.html#cb130-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb130-8"><a href="bias-variance-tradeoff.html#cb130-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Random samples from population</span></span>
+<span id="cb130-9"><a href="bias-variance-tradeoff.html#cb130-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb130-10"><a href="bias-variance-tradeoff.html#cb130-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)) {</span>
+<span id="cb130-11"><a href="bias-variance-tradeoff.html#cb130-11" aria-hidden="true" tabindex="-1"></a>  samples[i, ] <span class="ot">&lt;-</span> <span class="fu">sample</span>(populationX, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb130-12"><a href="bias-variance-tradeoff.html#cb130-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb130-13"><a href="bias-variance-tradeoff.html#cb130-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples)</span></code></pre></div>
+<pre><code>##      FirstX SecondX ThirdX
+## [1,]     12      12     12
+## [2,]      3      12      3
+## [3,]      3       3     12
+## [4,]      0       3      3
+## [5,]      0       3     12
+## [6,]      0      12     12</code></pre>
+<p>In this simulation the population has only 3 values (0, 3, 12) but our sample can draw the same number multiple times. Each row is displaying the first few samples of 2000 random samples drawn from the population. Each column shows the order of observations, or random draws, <span class="math inline">\(x_1, x_2, x_3\)</span>. This example may seem strange because of its population size, but for the sake of simplicity, it works fine in our experiment. We know the population <span class="math inline">\(\mu_x\)</span> is 5, which is the mean of our three values (0, 3, 12) in the population. Knowing this, we can test the following points:</p>
+<ol style="list-style-type: decimal">
+<li>Is <span class="math inline">\(X\)</span> i.i.d? An identical distribution requires <span class="math inline">\(\mathbf{E}(x_1)=\mathbf{E}(x_2)=\mathbf{E}(x_3)\)</span> and <span class="math inline">\(\mathbf{Var}(x_1)=\mathbf{Var}(x_2)=\mathbf{Var}(x_3)\)</span>. And an independent distribution requires <span class="math inline">\(\mathbf{Corr}(x_i,x_j)=0\)</span> where <span class="math inline">\(i\neq{j}\)</span>.<br />
+</li>
+<li>Are the three estimators unbiased. That is, whether <span class="math inline">\(\mathbf{E}(\bar{X})= \mathbf{E}(\hat{X})= \mathbf{E}(\tilde{X}) = \mu_x\)</span>.</li>
+</ol>
+<p>Let’s see:</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="bias-variance-tradeoff.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb132-2"><a href="bias-variance-tradeoff.html#cb132-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-3"><a href="bias-variance-tradeoff.html#cb132-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if E(x_1)=E(x_2)=E(x_3)</span></span>
+<span id="cb132-4"><a href="bias-variance-tradeoff.html#cb132-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">colMeans</span>(samples),<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##  FirstX SecondX  ThirdX 
+##    5.07    5.00    5.13</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="bias-variance-tradeoff.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if Var(x_1)=Var(x_2)=Var(x_3)</span></span>
+<span id="cb134-2"><a href="bias-variance-tradeoff.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(samples, <span class="dv">2</span>, var)</span></code></pre></div>
+<pre><code>##   FirstX  SecondX   ThirdX 
+## 26.42172 25.39669 26.31403</code></pre>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="bias-variance-tradeoff.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check correlation</span></span>
+<span id="cb136-2"><a href="bias-variance-tradeoff.html#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(samples)</span></code></pre></div>
+<pre><code>##               FirstX      SecondX       ThirdX
+## FirstX   1.000000000 -0.025157827 -0.005805772
+## SecondX -0.025157827  1.000000000 -0.002157489
+## ThirdX  -0.005805772 -0.002157489  1.000000000</code></pre>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="bias-variance-tradeoff.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that if we use only unique set of samples</span></span>
+<span id="cb138-2"><a href="bias-variance-tradeoff.html#cb138-2" aria-hidden="true" tabindex="-1"></a>uniqsam <span class="ot">&lt;-</span> <span class="fu">unique</span>(samples)</span>
+<span id="cb138-3"><a href="bias-variance-tradeoff.html#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(uniqsam)</span></code></pre></div>
+<pre><code>##  FirstX SecondX  ThirdX 
+##       5       5       5</code></pre>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="bias-variance-tradeoff.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(uniqsam, <span class="dv">2</span>, var)</span></code></pre></div>
+<pre><code>##  FirstX SecondX  ThirdX 
+##      27      27      27</code></pre>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="bias-variance-tradeoff.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(uniqsam)</span></code></pre></div>
+<pre><code>##         FirstX SecondX ThirdX
+## FirstX       1       0      0
+## SecondX      0       1      0
+## ThirdX       0       0      1</code></pre>
+<p>It seems that the i.i.d condition is satisfied. Now, we need to answer the second question, whether the estimators are unbiased or not. For this, we need to apply each estimator to each sample:</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="bias-variance-tradeoff.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Xbar</span></span>
+<span id="cb144-2"><a href="bias-variance-tradeoff.html#cb144-2" aria-hidden="true" tabindex="-1"></a>X_bar <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb144-3"><a href="bias-variance-tradeoff.html#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)){</span>
+<span id="cb144-4"><a href="bias-variance-tradeoff.html#cb144-4" aria-hidden="true" tabindex="-1"></a>  X_bar[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(samples[i, ]) <span class="sc">/</span> <span class="fu">ncol</span>(samples)</span>
+<span id="cb144-5"><a href="bias-variance-tradeoff.html#cb144-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb144-6"><a href="bias-variance-tradeoff.html#cb144-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb144-7"><a href="bias-variance-tradeoff.html#cb144-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X_bar)</span></code></pre></div>
+<pre><code>## [1] 5.064</code></pre>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="bias-variance-tradeoff.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Xhat</span></span>
+<span id="cb146-2"><a href="bias-variance-tradeoff.html#cb146-2" aria-hidden="true" tabindex="-1"></a>X_hat <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb146-3"><a href="bias-variance-tradeoff.html#cb146-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)){</span>
+<span id="cb146-4"><a href="bias-variance-tradeoff.html#cb146-4" aria-hidden="true" tabindex="-1"></a>  X_hat[i] <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>samples[i, <span class="dv">1</span>] <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>samples[i, <span class="dv">3</span>]</span>
+<span id="cb146-5"><a href="bias-variance-tradeoff.html#cb146-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb146-6"><a href="bias-variance-tradeoff.html#cb146-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb146-7"><a href="bias-variance-tradeoff.html#cb146-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X_hat)</span></code></pre></div>
+<pre><code>## [1] 5.097</code></pre>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="bias-variance-tradeoff.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Xtilde</span></span>
+<span id="cb148-2"><a href="bias-variance-tradeoff.html#cb148-2" aria-hidden="true" tabindex="-1"></a>X_tilde <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb148-3"><a href="bias-variance-tradeoff.html#cb148-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)){</span>
+<span id="cb148-4"><a href="bias-variance-tradeoff.html#cb148-4" aria-hidden="true" tabindex="-1"></a>  X_tilde[i] <span class="ot">&lt;-</span> samples[i,<span class="dv">3</span>]</span>
+<span id="cb148-5"><a href="bias-variance-tradeoff.html#cb148-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb148-6"><a href="bias-variance-tradeoff.html#cb148-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-7"><a href="bias-variance-tradeoff.html#cb148-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X_tilde)</span></code></pre></div>
+<pre><code>## [1] 5.127</code></pre>
+<p>Yes, they are unbiased because <span class="math inline">\(\mathbf{E}(\bar{X})\approx \mathbf{E}(\hat{X}) \approx \mathbf{E}(\tilde{X}) \approx \mu_x \approx 5\)</span>.</p>
+<p>But this is not enough. Which estimator is better? The answer is the one with the smallest variance. We call it an “efficient” estimator. The reason is that the interval estimation of <span class="math inline">\(\mu_x\)</span> will be narrower when the sampling distribution has a smaller variance. Let’s see which one has the smallest variance:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="bias-variance-tradeoff.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(X_bar)</span></code></pre></div>
+<pre><code>## [1] 8.490149</code></pre>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="bias-variance-tradeoff.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(X_hat)</span></code></pre></div>
+<pre><code>## [1] 13.10739</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="bias-variance-tradeoff.html#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(X_tilde)</span></code></pre></div>
+<pre><code>## [1] 26.31403</code></pre>
+<p>The <span class="math inline">\(\bar{X}\)</span> has the smallest variance among the unbiased estimators, <span class="math inline">\(\bar{X}=\frac{1}{n} \sum_{i=1}^{n} x_{i}\)</span>, <span class="math inline">\(\hat{X}=0.5 x_{1}+0.5x_{n}\)</span>, and <span class="math inline">\(\tilde{X}=x_3\)</span>.</p>
+<p>In practice we have only one sample. We know that if the sample size is big enough (more than 50, for example), the sampling distribution would be normal according to <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">the Central Limit Theorem (CLT)</a>. In other words, if the number of observations in each sample large enough, <span class="math inline">\(\bar{X} \sim N(\mu_x, \sigma^{2}/n)\)</span> or when population variance is not known <span class="math inline">\(\bar{X} \sim \mathcal{T}\left(\mu, S^{2}\right)\)</span> where <span class="math inline">\(S\)</span> is the standard deviation of the sample and <span class="math inline">\(\mathcal{T}\)</span> is the Student’s <span class="math inline">\(t\)</span>-distribution.</p>
+<p>Why is this important? Because it works like a magic: with only one sample, we can <strong>generalize</strong> the results for the population. We will not cover the details of interval estimation here, but by knowing <span class="math inline">\(\bar{X}\)</span> and the sample variance <span class="math inline">\(S\)</span>, we can have the following interval for the <span class="math inline">\(\mu_{x}\)</span>:</p>
+<p><span class="math display">\[
+\left(\bar{x}-t^{*} \frac{s}{\sqrt{n}}, \bar{x}+t^{*} \frac{s}{\sqrt{n}}\right)
+\]</span></p>
+<p>where <span class="math inline">\(t^*\)</span>, the critical values in <span class="math inline">\(t\)</span>-distribution, are usually around 1.96 for samples more than 100 observations and for the 95% confidence level. This interval would be completely wrong or misleading if <span class="math inline">\(\mathbf{E}(\bar{X}) \neq \mu_x\)</span> and would be useless if it is very wide, which is caused by a large variance. That’s the reason why we don’t like large variances.</p>
+<p>Let’s summarize the important steps in estimations:</p>
+<ol style="list-style-type: decimal">
+<li>The main task is to estimate the population parameter from a sample.</li>
+<li>The requirement for a (linear) estimator is <strong>unbiasedness</strong>.</li>
+<li>An <strong>unbiased</strong> estimator is called as the <strong>B</strong>est <strong>L</strong>inear <strong>U</strong>nbiased <strong>E</strong>stimator (BLUE) of a population parameter if it has the <strong>minimum variance</strong> among all other <strong>unbiased</strong> estimators.</li>
+</ol>
+<p>These steps are also observed when we use Mean Squared Error (MSE) to evaluate each estimator’s performance. The MSE of an estimator <span class="math inline">\(\hat{\theta}\)</span> with respect to an unknown population parameter <span class="math inline">\(\theta\)</span> is defined as</p>
+<p><span class="math display">\[
+\mathbf{MSE}(\hat{\theta})=\mathbf{E}_{\hat{\theta}}\left[(\hat{\theta}-\theta)^{2}\right]=\mathbf{E}_{\hat{\theta}}\left[(\hat{\theta}-\mathbf{E}(\hat{\theta}))^{2}\right]
+\]</span></p>
+<p>Since we choose only unbiased estimators, <span class="math inline">\(\mathbf{E}(\hat{\theta})=\theta\)</span>, this expression becomes <span class="math inline">\(\mathbf{Var}(\hat{\theta})\)</span>. Hence, evaluating the performance of all alternative <strong>unbiased</strong> estimators by MSE is actually comparing their variances and picking up the smallest one. More specifically,</p>
+<p><span class="math display" id="eq:3-1">\[\begin{equation}
+\mathbf{MSE}\left(\hat{\theta}\right)=\mathbf{E}\left[\left(\hat{\theta}-\theta\right)^{2}\right]=\mathbf{E}\left\{\left(\hat{\theta}-\mathbf{E}\left(\hat{\theta}\right)+\mathbf{E}\left(\hat{\theta}\right)-\theta\right)^{2}\right\}
+  \tag{3.1}
+\end{equation}\]</span></p>
+<p><span class="math display">\[
+=\mathbf{E}\left\{\left(\left[\hat{\theta}-\mathbf{E}\left(\hat{\theta}\right)\right]+\left[\mathbf{E}\left(\hat{\theta}\right)-\theta\right]\right)^{2}\right\}
+\]</span></p>
+<p><span class="math display" id="eq:3-2">\[\begin{equation}
+\begin{aligned}
+\mathbf{MSE}(\hat{\theta})=&amp; \mathbf{E}\left\{\left[\hat{\theta}-\mathbf{E}\left(\hat{\theta}\right)\right]^{2}\right\}+\mathbf{E}\left\{\left[\mathbf{E}\left(\hat{\theta}\right)-\theta\right]^{2}\right\} \\
+&amp;+2 \mathbf{E}\left\{\left[\hat{\theta}-\mathbf{E}\left(\hat{\theta}\right)\right]\left[\mathbf{E}\left(\hat{\theta}\right)-\theta\right]\right\}
+\end{aligned}
+  \tag{3.2}
+\end{equation}\]</span></p>
+<p>The first term in 3.2 is the variance. The second term is outside of expectation, as <span class="math inline">\([\mathbf{E}(\hat{\theta})-\theta]\)</span> is not random, which represents the bias. The last term is zero. This is because <span class="math inline">\([\mathbf{E}(\hat{\theta})-\theta]\)</span> is not random, therefore it is again outside of expectations:</p>
+<p><span class="math display">\[
+2\left[\mathbf{E}\left(\hat{\theta}\right)-\theta\right] \mathbf{E}\left\{\left[\hat{\theta}-\mathbf{E}\left(\hat{\theta}\right)\right]\right\},
+\]</span>
+and the last term is zero since <span class="math inline">\(\mathbf{E}(\hat{\theta})-\mathbf{E}(\hat{\theta}) = 0\)</span>. Hence,</p>
+<p><span class="math display">\[
+\mathbf{MSE}\left(\hat{\theta}\right)=\mathbf{Var}\left(\hat{\theta}\right)+\left[\mathbf{bias}\left(\hat{\theta}\right)\right]^{2}
+\]</span></p>
+<p>Because we choose only unbiased estimators, <span class="math inline">\(\mathbf{E}(\hat{\theta})=\theta\)</span>, this expression becomes <span class="math inline">\(\mathbf{Var}(\hat{\theta})\)</span>. In our case, the estimator can be <span class="math inline">\(\hat{\theta}=\bar{X}\)</span> and what we try to estimate is <span class="math inline">\(\theta = \mu_x\)</span>.</p>
+</div>
+<div id="prediction---mspe" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Prediction - MSPE<a href="bias-variance-tradeoff.html#prediction---mspe" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s follow the same example. Our task is now different. We want to <strong>predict</strong> the unobserved value of <span class="math inline">\(X\)</span> rather than to estimate <span class="math inline">\(\mu_x\)</span>. Therefore, we need a <strong>predictor</strong>, not an <strong>estimator</strong>. What makes a good predictor? Is unbiasedness one of them? If we use a biased estimator such as</p>
+<p><span class="math display">\[
+X^*=\frac{1}{n-4} \sum_{i=1}^{n} x_{i}
+\]</span></p>
+<p>to predict <span class="math inline">\(x_0\)</span>, would being a biased estimator make it automatically a bad predictor? To answer these questions, we need to look at MSE again. Since our task is prediction, we (usually) change its name to <strong>mean square prediction error</strong> (MSPE).</p>
+<p><span class="math display" id="eq:3-3">\[\begin{equation}
+\mathbf{MSPE}=\mathbf{E}\left[(x_0-\hat{f})^{2}\right]=\mathbf{E}\left[(f+\varepsilon_0-\hat{f})^{2}\right]
+  \tag{3.3}
+\end{equation}\]</span></p>
+<p>Similar to the best estimator, a predictor with the smallest MSPE will be our choice among other alternative predictors. Let’s summarize some important facts about our MSPE here:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(x_0\)</span> is the number we want to predict and <span class="math inline">\(\hat{f}\)</span> is the predictor, which could be <span class="math inline">\(\mathbf{E}(\bar{X})\)</span>, <span class="math inline">\(\mathbf{E}(\hat{X})\)</span>, or <span class="math inline">\(\mathbf{E}(\tilde{X})\)</span> or any other predictor.</li>
+<li><span class="math inline">\(x_0 = \mu_x + \varepsilon_0\)</span>, where <span class="math inline">\(f = \mu_x\)</span>. Hence, <span class="math inline">\(\mathbf{E}[x_0]=f\)</span> so that <span class="math inline">\(\mathbf{E}[\varepsilon_0]=0\)</span>.</li>
+<li><span class="math inline">\(\mathbf{E}[f]=f\)</span>. In other words, the expected value of a constant is a constant: <span class="math inline">\(\mathbf{E}[\mu_x]=\mu_x\)</span>.</li>
+<li><span class="math inline">\(\mathbf{Var}[x_0]=\mathbf{E}\left[(x_0-\mathbf{E}[x_0])^{2}\right]=\mathbf{E}\left[(x_0-f)^{2}\right]=\mathbf{E}\left[(f+\varepsilon_0-f)^{2}\right]=\mathbf{E}\left[\varepsilon_0^{2}\right]=\mathbf{Var}[\varepsilon_0]=\sigma^{2}.\)</span></li>
+</ol>
+<p>Note that we can use MSPE here because our example is not a classification problem. When we have a binary outcome to predict, the loss function would have a different structure. We will see the performance evaluation in classification problems later.</p>
+<p>Before running a simulation, let’s look at MSPE closer. We will drop the subscript <span class="math inline">\(0\)</span> to keep the notation simple. With a trick, adding and subtracting <span class="math inline">\(\mathbf{E}(\hat{f})\)</span>, MSPE becomes</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=\mathbf{E}\left[(x-\hat{f})^{2}\right]=\mathbf{E}\left[(f+\varepsilon-\hat{f})^{2}\right]=\mathbf{E}\left[(f+\varepsilon-\hat{f}+\mathbf{E}[\hat{f}]-\mathbf{E}[\hat{f}])^{2}\right]
+\]</span>
+<span class="math display">\[
+=\mathbf{E}\left[(f-\mathbf{E}[\hat{f}])^{2}\right]+\mathbf{E}\left[\varepsilon^{2}\right]+\mathbf{E}\left[(\mathbf{E}[\hat{f}]-\hat{f})^{2}\right]+2 \mathbf{E}[(f-\mathbf{E}[\hat{f}]) \varepsilon]+2 \mathbf{E}[\varepsilon(\mathbf{E}[\hat{f}]-\hat{f})]+\\2 \mathbf{E}[(\mathbf{E}[\hat{f}]-\hat{f})(f-\mathbf{E}[\hat{f}])],
+\]</span></p>
+<p>which can be simplified with the following few steps:</p>
+<ol style="list-style-type: decimal">
+<li>The first term, <span class="math inline">\(\mathbf{E}\left[(f-\mathbf{E}[\hat{f}])^{2}\right]\)</span>, is <span class="math inline">\((f-\mathbf{E}[\hat{f}])^{2}\)</span>, because <span class="math inline">\((f-\mathbf{E}[\hat{f}])^{2}\)</span> is a constant.</li>
+<li>Similarly, the same term, <span class="math inline">\((f-\mathbf{E}[\hat{f}])^{2}\)</span> is in the <span class="math inline">\(4^{th}\)</span> term. Hence, <span class="math inline">\(2 \mathbf{E}[(f-\mathbf{E}[\hat{f}]) \varepsilon]\)</span> can be written as <span class="math inline">\(2(f-\mathbf{E}[\hat{f}]) \mathbf{E}[\varepsilon]\)</span>.<br />
+</li>
+<li>Finally, the <span class="math inline">\(5^{th}\)</span> term, <span class="math inline">\(2 \mathbf{E}[\varepsilon(\mathbf{E}[\hat{f}]-\hat{f})]\)</span>, can be written as <span class="math inline">\(2 \mathbf{E}[\varepsilon] \mathbf{E}[\mathbf{E}[\hat{f}]-\hat{f}]\)</span>. (Note that <span class="math inline">\(\varepsilon\)</span> and <span class="math inline">\(\hat{f}\)</span> are independent)</li>
+</ol>
+<p>As a result we have:<br />
+<span class="math display">\[
+\mathbf{MSPE}=(f-\mathbf{E}[\hat{f}])^{2}+\mathbf{E}\left[\varepsilon^{2}\right]+\mathbf{E}\left[(\mathbf{E}[\hat{f}]-\hat{f})^{2}\right]+2(f-\mathbf{E}[\hat{f}]) \mathbf{E}[\varepsilon]+2 \mathbf{E}[\varepsilon] \mathbf{E}[\mathbf{E}[\hat{f}]-\hat{f}]+\\2 \mathbf{E}[\mathbf{E}[\hat{f}]-\hat{f}](f-\mathbf{E}[\hat{f}])
+\]</span></p>
+<p>The <span class="math inline">\(4^{th}\)</span> and the <span class="math inline">\(5^{th}\)</span> terms are zero because <span class="math inline">\(\mathbf{E}[\varepsilon]=0\)</span>. The last term is also zero because <span class="math inline">\(\mathbf{E}[\mathbf{E}[\hat{f}]-\hat{f}]\)</span> is <span class="math inline">\(\mathbf{E}[\hat{f}]-\mathbf{E}[\hat{f}]\)</span>. Hence, we have:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=(f-\mathbf{E}[\hat{f}])^{2}+\mathbf{E}\left[\varepsilon^{2}\right]+\mathbf{E}\left[(\mathbf{E}[\hat{f}]-\hat{f})^{2}\right]
+\]</span></p>
+<p>Let’s look at the second term first. It’s called as “<strong>irreducible error</strong>” because it comes with the data. Thus, we can write:</p>
+<p><span class="math display" id="eq:3-4">\[\begin{equation}
+\mathbf{MSPE}=(\mu_x-\mathbf{E}[\hat{f}])^{2}+\mathbf{E}\left[(\mathbf{E}[\hat{f}]-\hat{f})^{2}\right]+\mathbf{Var}\left[x\right]
+  \tag{3.4}
+\end{equation}\]</span></p>
+<p>The first term of 3.4 is the bias squared. It would be zero for an unbiased estimator, that is, if <span class="math inline">\(\mathbf{E}[\hat{f}]=\mu_x.\)</span> The second term is the variance of the estimator. For example, if the predictor is <span class="math inline">\(\bar{X}\)</span> it would be <span class="math inline">\(\mathbf{E}\left[(\bar{X} -\mathbf{E}[\bar{X}])^{2}\right]\)</span>. Hence, the variance comes from the sampling distribution.</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=\mathbf{Bias}[\hat{f}]^{2}+\mathbf{Var}[\hat{f}]+\sigma^{2}
+\]</span></p>
+<p>These two terms together, the bias-squared and the variance of <span class="math inline">\(\hat{f}\)</span>, is called <strong>reducible error</strong>. Hence, the MSPE can be written as</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=\mathbf{Reducible~Error}+\mathbf{Irreducible~Error}
+\]</span></p>
+<p>Now, our job is to pick a <strong>predictor</strong> that will have the minimum MSPE among alternatives. Obviously, we can pick <span class="math inline">\(\bar{X}\)</span> because it has a zero-bias. But now, unlike an <strong>estimator</strong>, we can accept some bias as long as the MSPE is lower. More specifically, we can allow a predictor to have a bias if it reduces the variance more than the bias itself. In predictions, we can have a reduction in MSPE by allowing a <strong>trade-off between variance and bias</strong>. How can we achieve it? For example, our predictor would be a constant, say 4, which, although it’s a biased estimator, has <strong>a zero variance</strong>. However, the MSPE would probably increase because the bias would be much larger than the reduction in the variance.</p>
+<div id="trade-off" class="section level4 unnumbered hasAnchor">
+<h4>Trade-off<a href="bias-variance-tradeoff.html#trade-off" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Although conceptually the variance-bias trade-off seems intuitive, at least mathematically, we need to ask another practical question: how can we calculate MSPE? How can we see the segments of MSPE in a simulations?</p>
+<p>We will use the same example. We have a population with three numbers: 0, 3, and 12. We sample from this “population” multiple times. Now the task is to use each sample and come up with a predictor (a prediction rule) to predict a number or multiple numbers drawn from the same population.</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="bias-variance-tradeoff.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The same example here again</span></span>
+<span id="cb156-2"><a href="bias-variance-tradeoff.html#cb156-2" aria-hidden="true" tabindex="-1"></a>populationX <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">12</span>)</span>
+<span id="cb156-3"><a href="bias-variance-tradeoff.html#cb156-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-4"><a href="bias-variance-tradeoff.html#cb156-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A container to have 2000 samples</span></span>
+<span id="cb156-5"><a href="bias-variance-tradeoff.html#cb156-5" aria-hidden="true" tabindex="-1"></a>Ms <span class="ot">&lt;-</span> <span class="dv">2000</span> </span>
+<span id="cb156-6"><a href="bias-variance-tradeoff.html#cb156-6" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, Ms, <span class="dv">3</span>)</span>
+<span id="cb156-7"><a href="bias-variance-tradeoff.html#cb156-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(samples) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;FirstX&quot;</span>, <span class="st">&quot;SecondX&quot;</span>, <span class="st">&quot;ThirdX&quot;</span>)</span>
+<span id="cb156-8"><a href="bias-variance-tradeoff.html#cb156-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-9"><a href="bias-variance-tradeoff.html#cb156-9" aria-hidden="true" tabindex="-1"></a><span class="co"># All samples (with replacement always)</span></span>
+<span id="cb156-10"><a href="bias-variance-tradeoff.html#cb156-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb156-11"><a href="bias-variance-tradeoff.html#cb156-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)) {</span>
+<span id="cb156-12"><a href="bias-variance-tradeoff.html#cb156-12" aria-hidden="true" tabindex="-1"></a>  samples[i, ] <span class="ot">&lt;-</span> <span class="fu">sample</span>(populationX, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb156-13"><a href="bias-variance-tradeoff.html#cb156-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb156-14"><a href="bias-variance-tradeoff.html#cb156-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples)</span></code></pre></div>
+<pre><code>##      FirstX SecondX ThirdX
+## [1,]     12      12     12
+## [2,]      3      12      3
+## [3,]      3       3     12
+## [4,]      0       3      3
+## [5,]      0       3     12
+## [6,]      0      12     12</code></pre>
+<p>Now suppose that we come up with two predictors: <span class="math inline">\(\hat{f}_1 = 9\)</span> and <span class="math inline">\(\hat{f}_2 = \bar{X}\)</span>:</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="bias-variance-tradeoff.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Container to record all predictions</span></span>
+<span id="cb158-2"><a href="bias-variance-tradeoff.html#cb158-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, Ms, <span class="dv">2</span>)</span>
+<span id="cb158-3"><a href="bias-variance-tradeoff.html#cb158-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-4"><a href="bias-variance-tradeoff.html#cb158-4" aria-hidden="true" tabindex="-1"></a><span class="co"># fhat_1 = 9</span></span>
+<span id="cb158-5"><a href="bias-variance-tradeoff.html#cb158-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Ms) {</span>
+<span id="cb158-6"><a href="bias-variance-tradeoff.html#cb158-6" aria-hidden="true" tabindex="-1"></a>  predictions[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb158-7"><a href="bias-variance-tradeoff.html#cb158-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb158-8"><a href="bias-variance-tradeoff.html#cb158-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-9"><a href="bias-variance-tradeoff.html#cb158-9" aria-hidden="true" tabindex="-1"></a><span class="co"># fhat_2 - mean</span></span>
+<span id="cb158-10"><a href="bias-variance-tradeoff.html#cb158-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Ms) {</span>
+<span id="cb158-11"><a href="bias-variance-tradeoff.html#cb158-11" aria-hidden="true" tabindex="-1"></a>  predictions[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>(samples[i,])<span class="sc">/</span><span class="fu">length</span>(samples[i,])</span>
+<span id="cb158-12"><a href="bias-variance-tradeoff.html#cb158-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb158-13"><a href="bias-variance-tradeoff.html#cb158-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-14"><a href="bias-variance-tradeoff.html#cb158-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(predictions)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    9   12
+## [2,]    9    6
+## [3,]    9    6
+## [4,]    9    2
+## [5,]    9    5
+## [6,]    9    8</code></pre>
+<p>Now let’s have our MSPE decomposition:</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="bias-variance-tradeoff.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MSPE</span></span>
+<span id="cb160-2"><a href="bias-variance-tradeoff.html#cb160-2" aria-hidden="true" tabindex="-1"></a>MSPE <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, Ms, <span class="dv">2</span>)</span>
+<span id="cb160-3"><a href="bias-variance-tradeoff.html#cb160-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Ms) {</span>
+<span id="cb160-4"><a href="bias-variance-tradeoff.html#cb160-4" aria-hidden="true" tabindex="-1"></a>  MSPE[i,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((populationX<span class="sc">-</span>predictions[i,<span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb160-5"><a href="bias-variance-tradeoff.html#cb160-5" aria-hidden="true" tabindex="-1"></a>  MSPE[i,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>((populationX<span class="sc">-</span>predictions[i,<span class="dv">2</span>])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb160-6"><a href="bias-variance-tradeoff.html#cb160-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb160-7"><a href="bias-variance-tradeoff.html#cb160-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(MSPE)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   42   75
+## [2,]   42   27
+## [3,]   42   27
+## [4,]   42   35
+## [5,]   42   26
+## [6,]   42   35</code></pre>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="bias-variance-tradeoff.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bias</span></span>
+<span id="cb162-2"><a href="bias-variance-tradeoff.html#cb162-2" aria-hidden="true" tabindex="-1"></a>bias1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(populationX)<span class="sc">-</span><span class="fu">mean</span>(predictions[,<span class="dv">1</span>])</span>
+<span id="cb162-3"><a href="bias-variance-tradeoff.html#cb162-3" aria-hidden="true" tabindex="-1"></a>bias2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(populationX)<span class="sc">-</span><span class="fu">mean</span>(predictions[,<span class="dv">2</span>])</span>
+<span id="cb162-4"><a href="bias-variance-tradeoff.html#cb162-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-5"><a href="bias-variance-tradeoff.html#cb162-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Variance (predictor)</span></span>
+<span id="cb162-6"><a href="bias-variance-tradeoff.html#cb162-6" aria-hidden="true" tabindex="-1"></a>var1 <span class="ot">&lt;-</span> <span class="fu">var</span>(predictions[,<span class="dv">1</span>])</span>
+<span id="cb162-7"><a href="bias-variance-tradeoff.html#cb162-7" aria-hidden="true" tabindex="-1"></a>var2 <span class="ot">&lt;-</span> <span class="fu">var</span>(predictions[,<span class="dv">2</span>])</span>
+<span id="cb162-8"><a href="bias-variance-tradeoff.html#cb162-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-9"><a href="bias-variance-tradeoff.html#cb162-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Variance (epsilon)</span></span>
+<span id="cb162-10"><a href="bias-variance-tradeoff.html#cb162-10" aria-hidden="true" tabindex="-1"></a>var_eps <span class="ot">&lt;-</span> <span class="fu">mean</span>((populationX<span class="sc">-</span><span class="fu">mean</span>(populationX))<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p>Let’s put them in a table:</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="bias-variance-tradeoff.html#cb163-1" aria-hidden="true" tabindex="-1"></a>VBtradeoff <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb163-2"><a href="bias-variance-tradeoff.html#cb163-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(VBtradeoff) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;fhat_1&quot;</span>, <span class="st">&quot;fhat_2&quot;</span>)</span>
+<span id="cb163-3"><a href="bias-variance-tradeoff.html#cb163-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(VBtradeoff) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Bias&quot;</span>, <span class="st">&quot;Var(fhat)&quot;</span>, <span class="st">&quot;Var(eps)&quot;</span>, <span class="st">&quot;MSPE&quot;</span>)</span>
+<span id="cb163-4"><a href="bias-variance-tradeoff.html#cb163-4" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> bias1<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb163-5"><a href="bias-variance-tradeoff.html#cb163-5" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> bias2<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb163-6"><a href="bias-variance-tradeoff.html#cb163-6" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> var1</span>
+<span id="cb163-7"><a href="bias-variance-tradeoff.html#cb163-7" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> var2</span>
+<span id="cb163-8"><a href="bias-variance-tradeoff.html#cb163-8" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> var_eps</span>
+<span id="cb163-9"><a href="bias-variance-tradeoff.html#cb163-9" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> var_eps</span>
+<span id="cb163-10"><a href="bias-variance-tradeoff.html#cb163-10" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE[,<span class="dv">1</span>])</span>
+<span id="cb163-11"><a href="bias-variance-tradeoff.html#cb163-11" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE[,<span class="dv">2</span>])</span>
+<span id="cb163-12"><a href="bias-variance-tradeoff.html#cb163-12" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(VBtradeoff, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##          Bias Var(fhat) Var(eps)  MSPE
+## fhat_1 16.000      0.00       26 42.00
+## fhat_2  0.004      8.49       26 34.49</code></pre>
+<p>This table shows the decomposition of MSPE. The first column is the contribution to the MSPE from the bias; the second column is the contribution from the variance of the predictor. These together make up the reducible error. The third column is the variance that comes from the data, the irreducible error. The last column is, of course, the total MSPE, and we can see that <span class="math inline">\(\hat{f}_2\)</span> is the better predictor because of its lower MSPE. This decomposition would be checked with</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="bias-variance-tradeoff.html#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(MSPE)</span></code></pre></div>
+<pre><code>## [1] 42.00 34.49</code></pre>
+</div>
+</div>
+<div id="biased-estimator-as-a-predictor" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Biased estimator as a predictor<a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We saw earlier that <span class="math inline">\(\bar{X}\)</span> is a better estimator. But if we have some bias in our predictor, can we reduce MSPE? Let’s define a biased estimator of <span class="math inline">\(\mu_x\)</span>:</p>
+<p><span class="math display">\[
+\hat{X}_{biased} = \hat{\mu}_x=\alpha \bar{X}
+\]</span></p>
+<p>The sample mean <span class="math inline">\(\bar{X}\)</span> is an unbiased estimator of <span class="math inline">\(\mu_x\)</span>. The magnitude of the bias is <span class="math inline">\(\alpha\)</span> and as it goes to 1, the bias becomes zero. As before, we are given one sample with three observations from the same distribution (population). We want to guess the value of a new data point from the same distribution. We will make the prediction with the best predictor which has the minimum MSPE. By using the same decomposition we can show that:</p>
+<p><span class="math display">\[
+\hat{\mu}_x=\alpha \bar{X}
+\]</span></p>
+<p><span class="math display">\[
+\mathbf{E}[\hat{\mu}_x]=\alpha \mu_x
+\]</span></p>
+<p><span class="math display">\[
+\mathbf{MSPE}=[(1-\alpha) \mu_x]^{2}+\frac{1}{n} \alpha^{2} \sigma_{\varepsilon}^{2}+\sigma_{\varepsilon}^{2}
+\]</span></p>
+<p>Our first observation is that when <span class="math inline">\(\alpha\)</span> is one, the bias will be zero. Since it seems that MSPE is a convex function of <span class="math inline">\(\alpha\)</span>, we can search for <span class="math inline">\(\alpha\)</span> that minimizes MSPE. The first-order-condition would give us the solution:</p>
+<p><span class="math display">\[
+\frac{\partial \mathbf{MSPE}}{\partial \alpha} =0 \rightarrow ~~ \alpha = \frac{\mu^2_x}{\mu^2_x+\sigma^2_\varepsilon/n}&lt;1
+\]</span></p>
+<p>Let’s see if this level of bias would improve MSPE that we found earlier:</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="bias-variance-tradeoff.html#cb167-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb167-2"><a href="bias-variance-tradeoff.html#cb167-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="bias-variance-tradeoff.html#cb167-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The magnitude of bias</span></span>
+<span id="cb167-4"><a href="bias-variance-tradeoff.html#cb167-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> (<span class="fu">mean</span>(populationX))<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>((<span class="fu">mean</span>(populationX)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> var_eps<span class="sc">/</span><span class="dv">3</span>))</span>
+<span id="cb167-5"><a href="bias-variance-tradeoff.html#cb167-5" aria-hidden="true" tabindex="-1"></a>alpha</span></code></pre></div>
+<pre><code>## [1] 0.7425743</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="bias-variance-tradeoff.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Biased predictor</span></span>
+<span id="cb169-2"><a href="bias-variance-tradeoff.html#cb169-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Ms) {</span>
+<span id="cb169-3"><a href="bias-variance-tradeoff.html#cb169-3" aria-hidden="true" tabindex="-1"></a>  pred[i] <span class="ot">&lt;-</span> alpha<span class="sc">*</span>predictions[i, <span class="dv">2</span>]</span>
+<span id="cb169-4"><a href="bias-variance-tradeoff.html#cb169-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb169-5"><a href="bias-variance-tradeoff.html#cb169-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb169-6"><a href="bias-variance-tradeoff.html#cb169-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if E(alpha*Xbar) = alpha*mu_x</span></span>
+<span id="cb169-7"><a href="bias-variance-tradeoff.html#cb169-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pred)</span></code></pre></div>
+<pre><code>## [1] 3.760396</code></pre>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="bias-variance-tradeoff.html#cb171-1" aria-hidden="true" tabindex="-1"></a>alpha<span class="sc">*</span><span class="fu">mean</span>(populationX)</span></code></pre></div>
+<pre><code>## [1] 3.712871</code></pre>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="bias-variance-tradeoff.html#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MSPE</span></span>
+<span id="cb173-2"><a href="bias-variance-tradeoff.html#cb173-2" aria-hidden="true" tabindex="-1"></a>MSPE_biased <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb173-3"><a href="bias-variance-tradeoff.html#cb173-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>Ms) {</span>
+<span id="cb173-4"><a href="bias-variance-tradeoff.html#cb173-4" aria-hidden="true" tabindex="-1"></a>  MSPE_biased[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((populationX<span class="sc">-</span>pred[i])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb173-5"><a href="bias-variance-tradeoff.html#cb173-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb173-6"><a href="bias-variance-tradeoff.html#cb173-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(MSPE_biased)</span></code></pre></div>
+<pre><code>## [1] 32.21589</code></pre>
+<p>Let’s add this predictor into our table:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="bias-variance-tradeoff.html#cb175-1" aria-hidden="true" tabindex="-1"></a>VBtradeoff <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb175-2"><a href="bias-variance-tradeoff.html#cb175-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(VBtradeoff) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;fhat_1&quot;</span>, <span class="st">&quot;fhat_2&quot;</span>, <span class="st">&quot;fhat_3&quot;</span>)</span>
+<span id="cb175-3"><a href="bias-variance-tradeoff.html#cb175-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(VBtradeoff) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Bias&quot;</span>, <span class="st">&quot;Var(fhat)&quot;</span>, <span class="st">&quot;Var(eps)&quot;</span>, <span class="st">&quot;MSPE&quot;</span>)</span>
+<span id="cb175-4"><a href="bias-variance-tradeoff.html#cb175-4" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> bias1<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb175-5"><a href="bias-variance-tradeoff.html#cb175-5" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> bias2<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb175-6"><a href="bias-variance-tradeoff.html#cb175-6" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">3</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> (<span class="fu">mean</span>(populationX)<span class="sc">-</span><span class="fu">mean</span>(pred))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb175-7"><a href="bias-variance-tradeoff.html#cb175-7" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> var1</span>
+<span id="cb175-8"><a href="bias-variance-tradeoff.html#cb175-8" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> var2</span>
+<span id="cb175-9"><a href="bias-variance-tradeoff.html#cb175-9" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">3</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">var</span>(pred)</span>
+<span id="cb175-10"><a href="bias-variance-tradeoff.html#cb175-10" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> var_eps</span>
+<span id="cb175-11"><a href="bias-variance-tradeoff.html#cb175-11" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> var_eps</span>
+<span id="cb175-12"><a href="bias-variance-tradeoff.html#cb175-12" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">3</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> var_eps</span>
+<span id="cb175-13"><a href="bias-variance-tradeoff.html#cb175-13" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">1</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE[,<span class="dv">1</span>])</span>
+<span id="cb175-14"><a href="bias-variance-tradeoff.html#cb175-14" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">2</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE[,<span class="dv">2</span>])</span>
+<span id="cb175-15"><a href="bias-variance-tradeoff.html#cb175-15" aria-hidden="true" tabindex="-1"></a>VBtradeoff[<span class="dv">3</span>,<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE_biased)</span>
+<span id="cb175-16"><a href="bias-variance-tradeoff.html#cb175-16" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(VBtradeoff, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##          Bias Var(fhat) Var(eps)   MSPE
+## fhat_1 16.000     0.000       26 42.000
+## fhat_2  0.004     8.490       26 34.490
+## fhat_3  1.537     4.682       26 32.216</code></pre>
+<p>When we allow some bias in our predictor the variance drops from 8.490 to 4.682. Since the decrease in variance is bigger than the increase in bias, the MSPE goes down. This example shows the difference between estimation and prediction for a simplest predictor, the mean of <span class="math inline">\(X.\)</span> We will see a more complex example when we have a regression later.</p>
+<p>Before moving on to the next section, let’s ask a question: what if we use in-sample data points to calculate MSPE. In our simple case, suppose you have the <span class="math inline">\(3^{rd}\)</span> sample, {3, 3, 12}. Would you still choose <span class="math inline">\(\bar{X}\)</span> as your predictor? Suppose you calculate MSPE by in-sample data points using the <span class="math inline">\(3^{rd}\)</span> sample. Would <span class="math inline">\(\hat{f}(x) = \bar{X}\)</span> be still your choice of predictor? If we use it, the MSPE would be 18, which is not bad and may be much lower than that of some arbitrary number, say 9, as a predictor.</p>
+<p>In search of a better predictor, however, <span class="math inline">\(\hat{f}(x) = {x_i}\)</span>, will give us a lower MSPE, which will be zero. In other words, it interpolates the data. This is called the <strong>overfitting</strong> problem because the predictor could have the worst MSPE if it’s tested on out-sample data points.</p>
+</div>
+<div id="dropping-a-variable-in-a-regression" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Dropping a variable in a regression<a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can assume that the outcome <span class="math inline">\(y_i\)</span> is determined by the following function:</p>
+<p><span class="math display">\[
+y_{i}=\beta_0+\beta_1 x_{i}+\varepsilon_{i}, ~~~~ i=1, \ldots, n
+\]</span>
+where <span class="math inline">\(\varepsilon_{i} \sim N\left(0, \sigma^{2}\right)\)</span>, <span class="math inline">\(\mathrm{Cov}\left(\varepsilon_{i}, \varepsilon_{j}\right)=0\)</span> for <span class="math inline">\(i\neq j.\)</span> Although unrealistic, for now we assume that <span class="math inline">\(x_i\)</span> is <strong>fixed</strong> (non-stochastic) for simplicity in notations. That means in each sample we have same <span class="math inline">\(x_i\)</span>. We can write this function as</p>
+<p><span class="math display">\[
+y_{i}=f(x_i)+\varepsilon_{i}, ~~~~ i=1, \ldots, n
+\]</span></p>
+<p>As usual, <span class="math inline">\(f(x_i)\)</span> is the deterministic part (DGM) and <span class="math inline">\(\varepsilon_i\)</span> is the random part in the function that together determine the value of <span class="math inline">\(y_i\)</span>. Again, we are living in two universes: the population and a sample. Since none of the elements in population is known to us, we can only <strong>assume</strong> what <span class="math inline">\(f(x)\)</span> would be. Based on a sample and the assumption about DGM, we choose an estimator of <span class="math inline">\(f(x)\)</span>,</p>
+<p><span class="math display">\[
+\hat{f}(x) = \hat{\beta}_0+\hat{\beta}_1 x_{i},
+\]</span></p>
+<p>which is BLUE of <span class="math inline">\(f(x)\)</span>, when it is estimated with OLS given the assumptions about <span class="math inline">\(\varepsilon_i\)</span> stated above. Since the task of this estimation is to satisfy the <strong>unbiasedness</strong> condition, i.e. <span class="math inline">\(\mathrm{E}[\hat{f}(x)]=f(x)\)</span>, it can be achieved only if <span class="math inline">\(\mathrm{E}[\hat{\beta_0}]=\beta_0\)</span> and <span class="math inline">\(\mathrm{E}[\hat{\beta_1}]=\beta_1\)</span>. At the end of this process, we can understand the effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(y\)</span>, signified by the unbiased slope coefficient <span class="math inline">\(\hat{\beta_1}\)</span>. This is not as an easy job as it sounds in this simple example. Finding an unbiased estimator of <span class="math inline">\(\beta\)</span> is the main challenge in the field of econometrics.</p>
+<p>In <strong>prediction</strong>, on the other hand, our main task is <strong>not</strong> to find unbiased estimator of <span class="math inline">\(f(x)\)</span>. We just want to <strong>predict</strong> <span class="math inline">\(y_0\)</span> given <span class="math inline">\(x_0\)</span>. The subscript <span class="math inline">\(0\)</span> tells us that we want to predict <span class="math inline">\(y\)</span> for a specific value of <span class="math inline">\(x\)</span>. Hence we can write it as,</p>
+<p><span class="math display">\[
+y_{0}=\beta_0+\beta_1 x_{0}+\varepsilon_{0},
+\]</span></p>
+<p>In other words, when <span class="math inline">\(x_0=5\)</span>, for example, <span class="math inline">\(y_0\)</span> will be determined by <span class="math inline">\(f(x_0)\)</span> and the random error, <span class="math inline">\(\varepsilon_0\)</span>, which has the same variance, <span class="math inline">\(\sigma^2\)</span>, as <span class="math inline">\(\varepsilon_i\)</span>. Hence, when <span class="math inline">\(x_0=5\)</span>, although <span class="math inline">\(f(x_0)\)</span> is fixed, <span class="math inline">\(y_0\)</span> will vary because of its random part, <span class="math inline">\(\varepsilon_0\)</span>. This in an irreducible uncertainty in predicting <span class="math inline">\(y_0\)</span> given <span class="math inline">\(f(x_0)\)</span>. We do not know about the population. Therefore, we do not know what <span class="math inline">\(f(x_0)\)</span> is. We can have a sample from the population and build a model <span class="math inline">\(\hat{f}(x)\)</span> so that <span class="math inline">\(\hat{f}(x_0)\)</span> would be as close to <span class="math inline">\(f(x_0)\)</span> as possible. But this introduces another layer of uncertainty in predicting <span class="math inline">\(y_0\)</span>. Since each sample is random and different, <span class="math inline">\(\hat{f}(x_0)\)</span> will be a function of the sample: <span class="math inline">\(\hat{f}(x_0, S_m)\)</span>. Of course, we will have one sample in practice. However, if this variation is high, it would be highly likely that our predictions, <span class="math inline">\(\hat{f}(x_0, S_m)\)</span>, would be far off from <span class="math inline">\(f(x_0)\)</span>.</p>
+<p>We can use an <strong>unbiased</strong> estimator for prediction, but as we have seen before, we may be able to improve MSPE if we allow some <strong>bias</strong> in <span class="math inline">\(\hat{f}(x)\)</span>. To see this potential trade-off, we look at the decomposition of MSPE with a simplified notation:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=\mathrm{E}\left[(y_0-\hat{f})^{2}\right]=\mathrm{E}\left[(f+\varepsilon-\hat{f})^{2}\right]
+\]</span>
+<span class="math display">\[
+\mathbf{MSPE}=\mathrm{E}\left[(f+\varepsilon-\hat{f}+\mathrm{E}[\hat{f}]-\mathrm{E}[\hat{f}])^{2}\right]
+\]</span></p>
+<p>We have seen this before. Since we calculate MSPE for <span class="math inline">\(x_i = x_0\)</span>, we call it the conditional MSPE, which can be expressed as <span class="math inline">\(\mathbf{MSPE}=\mathbf{E}\left[(y_0-\hat{f})^{2}|x=x_0\right]\)</span>. We will see unconditional MSPE, which is the average of all possible data points later in last two sections. The simplification will follow the same steps, and we will have:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=(f-\mathrm{E}[\hat{f}])^{2}+\mathrm{E}\left[(\mathrm{E}[\hat{f}]-\hat{f})^{2}\right]+\mathrm{E}\left[\varepsilon^{2}\right]
+\]</span></p>
+<p>Let’s look at the first term first:</p>
+<p><span class="math display">\[
+\left(f-\mathrm{E}[\hat{f}]\right)^{2}=\left(\beta_0+\beta_1 x_{0}-\mathrm{E}[\hat{\beta}_0]-x_{0}\mathrm{E}[\hat{\beta}_1]\right)^2=\left((\beta_0-\mathrm{E}[\hat{\beta}_0])+x_{0}(\beta_1-\mathrm{E}[\hat{\beta}_1])\right)^2.
+\]</span></p>
+<p>Hence, it shows the bias (squared) in parameters.</p>
+<p>The second term is the variance of <span class="math inline">\(\hat{f}(x)\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{E}\left[(\mathrm{E}[\hat{f}]-\hat{f})^{2}\right]=\mathrm{Var}[\hat{f}(x)]=\mathrm{Var}[\hat{\beta}_0+\hat{\beta}_1 x_{0}]=\mathrm{Var}[\hat{\beta}_0]+x_{0}^2\mathrm{Var}[\hat{\beta}_1]+2x_{0}\mathrm{Cov}[\hat{\beta}_0,\hat{\beta}_1]
+\]</span></p>
+<p>As expected, the model’s variance is the sum of the variances of estimators and their covariance. Again, the variance can be thought of variation of <span class="math inline">\(\hat{f}(x)\)</span> from sample to sample.</p>
+<p>With the irreducible prediction error <span class="math inline">\(\mathrm{E}[\varepsilon^{2}]=\sigma^2\)</span>,</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=(\mathbf{bias})^{2}+\mathbf{Var}(\hat{f})+\sigma^2.
+\]</span></p>
+<p>Suppose that our OLS estimators are <strong>unbiased</strong> and that <span class="math inline">\(\mathrm{Cov}[\hat{\beta}_0,\hat{\beta}_1]=0\)</span>. In that case,</p>
+<p><span class="math display">\[
+\mathbf{MSPE}_{OLS}  =\mathrm{Var}(\hat{\beta}_{0})+x_{0}^2\mathrm{Var}(\hat{\beta}_{1})+\sigma^2
+\]</span></p>
+<p>Before going further, let’s summarize the meaning of this measure. The mean squared prediction error of unbiased <span class="math inline">\(\hat{f}(x_0)\)</span>, or how much <span class="math inline">\(\hat{f}(x_0)\)</span> deviates from <span class="math inline">\(y_0\)</span> is defined by two factors: First, <span class="math inline">\(y_0\)</span> itself varies around <span class="math inline">\(f(x_0)\)</span> by <span class="math inline">\(\sigma^2\)</span>. This is irreducible. Second, <span class="math inline">\(\hat{f}(x_0)\)</span> varies from sample to sample. The model’s variance is the sum of variations in estimated coefficients from sample to sample, which can be reducible.</p>
+<p>Suppose that <span class="math inline">\(\hat{\beta}_{1}\)</span> has a large variance. Hence, we can ask what would happen if we dropped the variable:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}_{Biased~OLS}  = \mathbf{Bias}^2+\mathbf{Var}(\hat{\beta}_{0})+\sigma^2
+\]</span></p>
+<p>When we take the difference:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}_{OLS} -\mathbf{MSPE}_{Biased~OLS} =x_{0}^2\mathbf{Var}(\hat{\beta}_{1}) - \mathbf{Bias}^2
+\]</span></p>
+<p>This expression shows that dropping a variable would decrease the expected prediction error if:</p>
+<p><span class="math display">\[
+x_{0}^2\mathbf{Var}(\hat{\beta}_{1}) &gt; \mathbf{Bias}^2 ~~\Rightarrow~~  \mathbf{MSPE}_{Biased~OLS} &lt; \mathbf{MSPE}_{OLS}
+\]</span></p>
+<p><strong>This option, omitting a variable, is unthinkable if our task is to obtain an unbiased estimator</strong> of <span class="math inline">\({f}(x)\)</span>, but improves the prediction accuracy if the condition above is satisfied. Let’s expand this example into a two-variable case:</p>
+<p><span class="math display">\[
+y_{i}=\beta_0+\beta_1 x_{1i}+\beta_2 x_{2i}+\varepsilon_{i}, ~~~~ i=1, \ldots, n.
+\]</span></p>
+<p>Thus, the bias term becomes</p>
+<p><span class="math display">\[
+\left(f-\mathrm{E}[\hat{f}]\right)^{2}=\left((\beta_0-\mathrm{E}[\hat{\beta}_0])+x_{10}(\beta_1-\mathrm{E}[\hat{\beta}_1])+x_{20}(\beta_2-\mathrm{E}[\hat{\beta}_2])\right)^2.
+\]</span></p>
+<p>And let’s assume that <span class="math inline">\(\mathrm{Cov}[\hat{\beta}_0,\hat{\beta}_1]=\mathrm{Cov}[\hat{\beta}_0,\hat{\beta}_2]=0\)</span>, but <span class="math inline">\(\mathrm{Cov}[\hat{\beta}_1,\hat{\beta}_2] \neq 0\)</span>. Hence, the variance of <span class="math inline">\(\hat{f}(x)\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{Var}[\hat{f}(x)]=\mathrm{Var}[\hat{\beta}_0+\hat{\beta}_1 x_{10}+\hat{\beta}_2 x_{20}]=\mathrm{Var}[\hat{\beta}_0]+x_{10}^2\mathrm{Var}[\hat{\beta}_1]+x_{20}^2\mathrm{Var}[\hat{\beta}_2]+\\2x_{10}x_{20}\mathrm{Cov}[\hat{\beta}_1,\hat{\beta}_2].
+\]</span></p>
+<p>This two-variable example shows that as the number of variables rises, the covariance between variables inflates the model’s variance further. This fact captured by Variance Inflation Factor (<a href="https://en.wikipedia.org/wiki/Variance_inflation_factor">VIF</a>) in econometrics is a key point in high-dimensional models for two reasons: First, dropping a variable highly correlated with other variables would reduce the model’s variance substantially. Second, a highly correlated variable also has limited new information among other variables. Hence dropping a highly correlated variable (with a high variance) would have a less significant effect on the prediction accuracy while reducing the model’s variance substantially.</p>
+<p>Suppose that we want to predict <span class="math inline">\(y_0\)</span> for <span class="math inline">\(\left[x_{10},~ x_{20}\right]\)</span> and <span class="math inline">\(\mathrm{Var}[\hat{\beta}_2] \approx 10~\text{x}~\mathrm{Var}[\hat{\beta}_1]\)</span>. Hence, we consider dropping <span class="math inline">\(x_2\)</span>. To evaluate the effect of this decision on MSPE, we take the difference between two MSPE’s:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}_{OLS} -\mathbf{MSPE}_{Biased~OLS} =x_{20}^2\mathrm{Var}(\hat{\beta}_{2}) + 2x_{10}x_{20}\mathrm{Cov}[\hat{\beta}_1,\hat{\beta}_2] - \mathbf{Bias}^2
+\]</span></p>
+<p>Thus, dropping <span class="math inline">\(x_2\)</span> would decrease the prediction error if</p>
+<p><span class="math display">\[
+x_{20}^2\mathrm{Var}(\hat{\beta}_{2}) + 2x_{10}x_{20}\mathrm{Cov}[\hat{\beta}_1,\hat{\beta}_2]&gt; \mathbf{Bias}^2 ~~\Rightarrow~~  \mathbf{MSPE}_{Biased~OLS} &lt; \mathbf{MSPE}_{OLS}
+\]</span></p>
+<p>We know from Elementary Econometrics that <span class="math inline">\(\mathrm{Var}(\hat{\beta}_j)\)</span> increases by <span class="math inline">\(\sigma^2\)</span>, decreases by the <span class="math inline">\(\mathrm{Var}(x_j)\)</span>, and rises by the correlation between <span class="math inline">\(x_j\)</span> and other <span class="math inline">\(x\)</span>’s. Let’s look at <span class="math inline">\(\mathrm{Var}(\hat{\beta}_j)\)</span> closer:</p>
+<p><span class="math display">\[
+\mathrm{Var}\left(\hat{\beta}_{j}\right)=\frac{{\sigma}^{2}}{\mathrm{Var}\left(x_{j}\right)} \cdot \frac{1}{1-R_{j}^{2}},
+\]</span></p>
+<p>where <span class="math inline">\(R_j^2\)</span> is <span class="math inline">\(R^2\)</span> in the regression on <span class="math inline">\(x_j\)</span> on the remaining <span class="math inline">\((k-2)\)</span> regressors (<span class="math inline">\(x\)</span>’s). The second term is called the variance-inflating factor (VIF). As usual, a higher variability in a particular <span class="math inline">\(x\)</span> leads to proportionately less variance in the corresponding coefficient estimate. Note that, however, as <span class="math inline">\(R_j^2\)</span> get closer to one, that is, as the correlation between <span class="math inline">\(x_j\)</span> with other regressors approaches to unity, <span class="math inline">\(\mathrm{Var}(\hat{\beta}_j)\)</span> goes to infinity.</p>
+<p>The variance of <span class="math inline">\(\varepsilon_i\)</span>, <span class="math inline">\(\sigma^2\)</span>, indicates how much <span class="math inline">\(y_i\)</span>’s deviate from the <span class="math inline">\(f(x)\)</span>. Since <span class="math inline">\(\sigma^2\)</span> is typically unknown, we estimate it from <strong>the sample</strong> as</p>
+<p><span class="math display">\[
+\widehat{\sigma}^{2}=\frac{1}{(n-k+1)} \sum_{i=1}^{n}\left(y_{i}-\hat{f}(x)\right)^{2}
+\]</span></p>
+<p>Remember that we have multiple samples, hence if our estimator is <strong>unbiased</strong>, we can prove that <span class="math inline">\(\mathbf{E}(\hat{\sigma}^2)=\sigma^2\)</span>. The proof is not important now. However, <span class="math inline">\(\mathrm{Var}(\hat{\beta}_j)\)</span> becomes</p>
+<p><span class="math display">\[
+\mathbf{Var}\left(\hat{\beta}_{j}\right)=\frac{\sum_{i=1}^{n}\left(y_{i}-\hat{f}(x)\right)^{2}}{(n-k+1)\mathrm{Var}\left(x_{j}\right)} \cdot \frac{1}{1-R_{j}^{2}},
+\]</span></p>
+<p>It is clear now that a greater sample size, <span class="math inline">\(n\)</span>, results in a proportionately less variance in the coefficient estimates. On the other hand, as the number of regressors, <span class="math inline">\(k\)</span>, goes up, the variance goes up. In large <span class="math inline">\(n\)</span> and small <span class="math inline">\(k\)</span>, the trade-off by dropping a variable would be insignificant. However, as <span class="math inline">\(k/n\)</span> rises, the trade-off becomes more important.</p>
+<p>Let’s have a simulation example to conclude this section. Here are the steps for our simulation:</p>
+<ol style="list-style-type: decimal">
+<li>There is a random variable, <span class="math inline">\(y\)</span>, that we want to predict.</li>
+<li><span class="math inline">\(y_{i}=f(x_i)+\varepsilon_{i}\)</span>.</li>
+<li>DGM is <span class="math inline">\(f(x_i)=\beta_0+\beta_1 x_{1i}+\beta_2 x_{2i}\)</span></li>
+<li><span class="math inline">\(\varepsilon_{i} \sim N(0, \sigma^2)\)</span>.</li>
+<li>The steps above define the <strong>population</strong>. We will withdraw <span class="math inline">\(M\)</span> number of <strong>samples</strong> from this population.</li>
+<li>Using each sample (<span class="math inline">\(S_m\)</span>, where <span class="math inline">\(m=1, \ldots, M\)</span>), we will estimate two models: <strong>unbiased</strong> <span class="math inline">\(\hat{f}(x)_{OLS}\)</span> and <strong>biased</strong> <span class="math inline">\(\hat{f}(x)_{Biased~OLS}\)</span></li>
+<li>Using these models we will predict <span class="math inline">\(y&#39;_i\)</span> from a different sample (<span class="math inline">\(T\)</span>) drawn from the same population. We can call it the “unseen” dataset or the “test” dataset, which contains out-of-sample data points, <span class="math inline">\((y&#39;_i, x_{1i}, x_{2i})\)</span>., where <span class="math inline">\(i=1, \ldots, n\)</span>.</li>
+</ol>
+<p>Before we start, we need to be clear how we define MSPE in our simulation. Since we will predict every <span class="math inline">\(y&#39;_i\)</span> with corresponding predictors <span class="math inline">\((x_{1i}, x_{2i})\)</span> in test set <span class="math inline">\(T\)</span> by each <span class="math inline">\(\hat{f}(x_{1i}, x_{2i}, S_m))\)</span> estimated by each sample, we calculate the following <strong>unconditional</strong> MSPE:</p>
+<p><span class="math display">\[
+\mathbf{MSPE}=\mathbf{E}_{S}\mathbf{E}_{S_{m}}\left[(y&#39;_i-\hat{f}(x_{1i}, x_{2i}, S_m))^{2}\right]=\\\mathbf{E}_S\left[\frac{1}{n} \sum_{i=1}^{n}\left(y_{i}^{\prime}-\hat{f}(x_{1i}, x_{2i}, S_m)\right)^{2}\right],\\m=1, \ldots, M
+\]</span></p>
+<p>We first calculate MSPE for all data points in the test set using <span class="math inline">\(\hat{f}(x_{1T}, x_{2T}, S_m)\)</span>, and then take the average of <span class="math inline">\(M\)</span> samples.</p>
+<p>We will show the sensitivity of trade-off by the size of irreducible error. The simulation below plots <span class="math inline">\(diff= \mathbf{MSPE}_{OLS}-\mathbf{MSPE}_{Biased~OLS}\)</span> against <span class="math inline">\(\sigma\)</span>.</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="bias-variance-tradeoff.html#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for X - fixed at repeated samples</span></span>
+<span id="cb177-2"><a href="bias-variance-tradeoff.html#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Argument l is used for correlation and with 0.01</span></span>
+<span id="cb177-3"><a href="bias-variance-tradeoff.html#cb177-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation between x_1 and x_2 is 0.7494</span></span>
+<span id="cb177-4"><a href="bias-variance-tradeoff.html#cb177-4" aria-hidden="true" tabindex="-1"></a>xfunc <span class="ot">&lt;-</span> <span class="cf">function</span>(n, l){</span>
+<span id="cb177-5"><a href="bias-variance-tradeoff.html#cb177-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb177-6"><a href="bias-variance-tradeoff.html#cb177-6" aria-hidden="true" tabindex="-1"></a>  x_1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">25</span>) </span>
+<span id="cb177-7"><a href="bias-variance-tradeoff.html#cb177-7" aria-hidden="true" tabindex="-1"></a>  x_2 <span class="ot">&lt;-</span> l<span class="sc">*</span>x_1<span class="sc">+</span><span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
+<span id="cb177-8"><a href="bias-variance-tradeoff.html#cb177-8" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;x_1&quot;</span> <span class="ot">=</span> x_1, <span class="st">&quot;x_2&quot;</span> <span class="ot">=</span> x_2)</span>
+<span id="cb177-9"><a href="bias-variance-tradeoff.html#cb177-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(X)</span>
+<span id="cb177-10"><a href="bias-variance-tradeoff.html#cb177-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb177-11"><a href="bias-variance-tradeoff.html#cb177-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-12"><a href="bias-variance-tradeoff.html#cb177-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that we can model dependencies with copulas in R</span></span>
+<span id="cb177-13"><a href="bias-variance-tradeoff.html#cb177-13" aria-hidden="true" tabindex="-1"></a><span class="co"># More specifically by using mvrnorn() function.  However, here</span></span>
+<span id="cb177-14"><a href="bias-variance-tradeoff.html#cb177-14" aria-hidden="true" tabindex="-1"></a><span class="co"># We want one variable with a higher variance. which is easier to do manaully</span></span>
+<span id="cb177-15"><a href="bias-variance-tradeoff.html#cb177-15" aria-hidden="true" tabindex="-1"></a><span class="co"># More: https://datascienceplus.com/modelling-dependence-with-copulas/ </span></span>
+<span id="cb177-16"><a href="bias-variance-tradeoff.html#cb177-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-17"><a href="bias-variance-tradeoff.html#cb177-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for test set - with different X&#39;s but same distribution.</span></span>
+<span id="cb177-18"><a href="bias-variance-tradeoff.html#cb177-18" aria-hidden="true" tabindex="-1"></a>unseen <span class="ot">&lt;-</span> <span class="cf">function</span>(n, sigma, l){</span>
+<span id="cb177-19"><a href="bias-variance-tradeoff.html#cb177-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb177-20"><a href="bias-variance-tradeoff.html#cb177-20" aria-hidden="true" tabindex="-1"></a>  x_11 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">25</span>) </span>
+<span id="cb177-21"><a href="bias-variance-tradeoff.html#cb177-21" aria-hidden="true" tabindex="-1"></a>  x_22 <span class="ot">&lt;-</span> l<span class="sc">*</span>x_11<span class="sc">+</span><span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="fl">0.2</span>)</span>
+<span id="cb177-22"><a href="bias-variance-tradeoff.html#cb177-22" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x_11 <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x_22   </span>
+<span id="cb177-23"><a href="bias-variance-tradeoff.html#cb177-23" aria-hidden="true" tabindex="-1"></a>  y_u <span class="ot">&lt;-</span> f <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, sigma) </span>
+<span id="cb177-24"><a href="bias-variance-tradeoff.html#cb177-24" aria-hidden="true" tabindex="-1"></a>  un <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;y&quot;</span> <span class="ot">=</span> y_u, <span class="st">&quot;x_1&quot;</span> <span class="ot">=</span> x_11, <span class="st">&quot;x_2&quot;</span> <span class="ot">=</span> x_22)</span>
+<span id="cb177-25"><a href="bias-variance-tradeoff.html#cb177-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(un)</span>
+<span id="cb177-26"><a href="bias-variance-tradeoff.html#cb177-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb177-27"><a href="bias-variance-tradeoff.html#cb177-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-28"><a href="bias-variance-tradeoff.html#cb177-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for simulation (M - number of samples)</span></span>
+<span id="cb177-29"><a href="bias-variance-tradeoff.html#cb177-29" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="cf">function</span>(M, n, sigma, l){</span>
+<span id="cb177-30"><a href="bias-variance-tradeoff.html#cb177-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb177-31"><a href="bias-variance-tradeoff.html#cb177-31" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">xfunc</span>(n, l) <span class="co"># Repeated X&#39;s in each sample</span></span>
+<span id="cb177-32"><a href="bias-variance-tradeoff.html#cb177-32" aria-hidden="true" tabindex="-1"></a>  un <span class="ot">&lt;-</span> <span class="fu">unseen</span>(n, sigma, l) <span class="co"># Out-of sample (y, x_1, x_2)</span></span>
+<span id="cb177-33"><a href="bias-variance-tradeoff.html#cb177-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-34"><a href="bias-variance-tradeoff.html#cb177-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># containers</span></span>
+<span id="cb177-35"><a href="bias-variance-tradeoff.html#cb177-35" aria-hidden="true" tabindex="-1"></a>  MSPE_ols <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, M)</span>
+<span id="cb177-36"><a href="bias-variance-tradeoff.html#cb177-36" aria-hidden="true" tabindex="-1"></a>  MSPE_b <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, M)</span>
+<span id="cb177-37"><a href="bias-variance-tradeoff.html#cb177-37" aria-hidden="true" tabindex="-1"></a>  coeff <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, M, <span class="dv">3</span>)</span>
+<span id="cb177-38"><a href="bias-variance-tradeoff.html#cb177-38" aria-hidden="true" tabindex="-1"></a>  coeff_b <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, M, <span class="dv">2</span>)</span>
+<span id="cb177-39"><a href="bias-variance-tradeoff.html#cb177-39" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, M, n)</span>
+<span id="cb177-40"><a href="bias-variance-tradeoff.html#cb177-40" aria-hidden="true" tabindex="-1"></a>  yhat_b <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, M, n)</span>
+<span id="cb177-41"><a href="bias-variance-tradeoff.html#cb177-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb177-42"><a href="bias-variance-tradeoff.html#cb177-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop for samples</span></span>
+<span id="cb177-43"><a href="bias-variance-tradeoff.html#cb177-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>M) {</span>
+<span id="cb177-44"><a href="bias-variance-tradeoff.html#cb177-44" aria-hidden="true" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>X<span class="sc">$</span>x_1 <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>X<span class="sc">$</span>x_2   <span class="co"># DGM</span></span>
+<span id="cb177-45"><a href="bias-variance-tradeoff.html#cb177-45" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> f <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, sigma)</span>
+<span id="cb177-46"><a href="bias-variance-tradeoff.html#cb177-46" aria-hidden="true" tabindex="-1"></a>    samp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;y&quot;</span> <span class="ot">=</span> y, X)</span>
+<span id="cb177-47"><a href="bias-variance-tradeoff.html#cb177-47" aria-hidden="true" tabindex="-1"></a>    ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>., samp) <span class="co"># Unbaised OLS</span></span>
+<span id="cb177-48"><a href="bias-variance-tradeoff.html#cb177-48" aria-hidden="true" tabindex="-1"></a>    ols_b <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>x_1, samp) <span class="co">#Biased OLS</span></span>
+<span id="cb177-49"><a href="bias-variance-tradeoff.html#cb177-49" aria-hidden="true" tabindex="-1"></a>    coeff[i,] <span class="ot">&lt;-</span> ols<span class="sc">$</span>coefficients</span>
+<span id="cb177-50"><a href="bias-variance-tradeoff.html#cb177-50" aria-hidden="true" tabindex="-1"></a>    coeff_b[i,] <span class="ot">&lt;-</span> ols_b<span class="sc">$</span>coefficients</span>
+<span id="cb177-51"><a href="bias-variance-tradeoff.html#cb177-51" aria-hidden="true" tabindex="-1"></a>    yhat[i,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, un)</span>
+<span id="cb177-52"><a href="bias-variance-tradeoff.html#cb177-52" aria-hidden="true" tabindex="-1"></a>    yhat_b[i,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols_b, un)</span>
+<span id="cb177-53"><a href="bias-variance-tradeoff.html#cb177-53" aria-hidden="true" tabindex="-1"></a>    MSPE_ols[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((un<span class="sc">$</span>y<span class="sc">-</span>yhat[i])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb177-54"><a href="bias-variance-tradeoff.html#cb177-54" aria-hidden="true" tabindex="-1"></a>    MSPE_b[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((un<span class="sc">$</span>y<span class="sc">-</span>yhat_b[i])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb177-55"><a href="bias-variance-tradeoff.html#cb177-55" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb177-56"><a href="bias-variance-tradeoff.html#cb177-56" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">=</span> <span class="fu">mean</span>(MSPE_ols)<span class="sc">-</span><span class="fu">mean</span>(MSPE_b)</span>
+<span id="cb177-57"><a href="bias-variance-tradeoff.html#cb177-57" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">list</span>(d, MSPE_b, MSPE_ols, coeff, coeff_b, yhat, yhat_b)</span>
+<span id="cb177-58"><a href="bias-variance-tradeoff.html#cb177-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(output)</span>
+<span id="cb177-59"><a href="bias-variance-tradeoff.html#cb177-59" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb177-60"><a href="bias-variance-tradeoff.html#cb177-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-61"><a href="bias-variance-tradeoff.html#cb177-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity of (MSPE_biased)-(MSPE_ols)</span></span>
+<span id="cb177-62"><a href="bias-variance-tradeoff.html#cb177-62" aria-hidden="true" tabindex="-1"></a><span class="co"># different sigma for the irreducible error</span></span>
+<span id="cb177-63"><a href="bias-variance-tradeoff.html#cb177-63" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">20</span>, <span class="dv">1</span>)</span>
+<span id="cb177-64"><a href="bias-variance-tradeoff.html#cb177-64" aria-hidden="true" tabindex="-1"></a>MSPE_dif <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(sigma))</span>
+<span id="cb177-65"><a href="bias-variance-tradeoff.html#cb177-65" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span> <span class="fu">length</span>(sigma)) {</span>
+<span id="cb177-66"><a href="bias-variance-tradeoff.html#cb177-66" aria-hidden="true" tabindex="-1"></a>  MSPE_dif[i] <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="dv">1000</span>, <span class="dv">100</span>, sigma[i], <span class="fl">0.01</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb177-67"><a href="bias-variance-tradeoff.html#cb177-67" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb177-68"><a href="bias-variance-tradeoff.html#cb177-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-69"><a href="bias-variance-tradeoff.html#cb177-69" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sigma, MSPE_dif, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Difference in MSPE vs. sigma&quot;</span>,</span>
+<span id="cb177-70"><a href="bias-variance-tradeoff.html#cb177-70" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="fl">0.9</span>, <span class="at">cex.main=</span> <span class="fl">0.8</span>, <span class="at">cex.lab =</span> <span class="fl">0.7</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="03-Bias-VarianceTradeoff_files/figure-html/bvt11-1.png" width="672" /></p>
+<p>The simulation shows that the <strong>biased</strong> <span class="math inline">\(\hat{f}(x)\)</span> has a better predcition accuracy as the “noise” in the data gets higher. The reason can be understood if we look at <span class="math inline">\(\mathrm{Var}(\hat{\beta}_{2}) + 2\mathrm{Cov}[\hat{\beta}_1,\hat{\beta}_2]\)</span> closer:</p>
+<p><span class="math display">\[
+\mathbf{Var}\left(\hat{\beta}_{2}\right)=\frac{\sigma^{2}}{\mathrm{Var}\left(x_{2}\right)} \cdot \frac{1}{1-r_{1,2}^{2}},
+\]</span></p>
+<p>where <span class="math inline">\(r_{1,2}^{2}\)</span> is the coefficient of correlation between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>. And,</p>
+<p><span class="math display">\[
+\mathbf{Cov}\left(\hat{\beta}_{1},\hat{\beta}_{2}\right)=\frac{-r_{1,2}^{2}\sigma^{2}}{\sqrt{\mathrm{Var}\left(x_{1}\right)\mathrm{Var}\left(x_{2}\right)}} \cdot \frac{1}{1-r_{1,2}^{2}},
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{MSPE}_{O L S}-&amp; \mathbf{MSPE}_{Biased~OLS}=\mathrm{Var}\left(\hat{\beta}_{2}\right)+2 \mathrm{Cov}\left[\hat{\beta}_{1}, \hat{\beta}_{2}\right]-\mathbf{Bias}^{2}=\\
+&amp; \frac{\sigma^{2}}{1-r_{1,2}^{2}}\left(\frac{1}{\mathrm{V a r}\left(x_{2}\right)}+\frac{-2 r_{1,2}^{2}}{\sqrt{\mathrm{V a r}\left(x_{1}\right) \mathrm{V a r}\left(x_{2}\right)}}\right)-\mathbf{Bias}^{2}
+\end{aligned}
+\]</span></p>
+<p>Given the bias due to the omitted variable <span class="math inline">\(x_2\)</span>, this expression shows the difference as a function of <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(r_{1,2}^{2}\)</span> and explains why the biased-OLS estimator have increasingly better predictions.</p>
+<p>As a final experiment, let’s have the same simulation that shows the relationship between correlation and trade-off. To create different correlations between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, we use the <code>xfunc()</code> we created earlier. The argument <span class="math inline">\(l\)</span> is used to change the the correlation and can be seen below. In our case, when <span class="math inline">\(l=0.01\)</span> <span class="math inline">\(r_{1,2}^{2}=0.7494\)</span>.</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="bias-variance-tradeoff.html#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for X for correlation</span></span>
+<span id="cb178-2"><a href="bias-variance-tradeoff.html#cb178-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">xfunc</span>(<span class="dv">100</span>, <span class="fl">0.001</span>)</span>
+<span id="cb178-3"><a href="bias-variance-tradeoff.html#cb178-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X)</span></code></pre></div>
+<pre><code>##            x_1        x_2
+## x_1 1.00000000 0.06838898
+## x_2 0.06838898 1.00000000</code></pre>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="bias-variance-tradeoff.html#cb180-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">xfunc</span>(<span class="dv">100</span>, <span class="fl">0.0011</span>)</span>
+<span id="cb180-2"><a href="bias-variance-tradeoff.html#cb180-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X)</span></code></pre></div>
+<pre><code>##            x_1        x_2
+## x_1 1.00000000 0.08010547
+## x_2 0.08010547 1.00000000</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="bias-variance-tradeoff.html#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We use this in our simulation</span></span>
+<span id="cb182-2"><a href="bias-variance-tradeoff.html#cb182-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">xfunc</span>(<span class="dv">100</span>, <span class="fl">0.01</span>)</span>
+<span id="cb182-3"><a href="bias-variance-tradeoff.html#cb182-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X)</span></code></pre></div>
+<pre><code>##           x_1       x_2
+## x_1 1.0000000 0.7494025
+## x_2 0.7494025 1.0000000</code></pre>
+<p>Now the simulation with different levels of correlation:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="bias-variance-tradeoff.html#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity of (MSPE_biased)-(MSPE_ols)</span></span>
+<span id="cb184-2"><a href="bias-variance-tradeoff.html#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="co"># different levels of correlation when sigma^2=7</span></span>
+<span id="cb184-3"><a href="bias-variance-tradeoff.html#cb184-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.011</span>, <span class="fl">0.0001</span>)</span>
+<span id="cb184-4"><a href="bias-variance-tradeoff.html#cb184-4" aria-hidden="true" tabindex="-1"></a>MSPE_dif <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(l))</span>
+<span id="cb184-5"><a href="bias-variance-tradeoff.html#cb184-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span> <span class="fu">length</span>(l)) {</span>
+<span id="cb184-6"><a href="bias-variance-tradeoff.html#cb184-6" aria-hidden="true" tabindex="-1"></a>  MSPE_dif[i] <span class="ot">&lt;-</span> <span class="fu">sim</span>(<span class="dv">1000</span>, <span class="dv">100</span>, <span class="dv">7</span>, l[i])[[<span class="dv">1</span>]]</span>
+<span id="cb184-7"><a href="bias-variance-tradeoff.html#cb184-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb184-8"><a href="bias-variance-tradeoff.html#cb184-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-9"><a href="bias-variance-tradeoff.html#cb184-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(l, MSPE_dif, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">main=</span> <span class="st">&quot;Difference in MSPE vs Correlation b/w X&#39;s&quot;</span>,</span>
+<span id="cb184-10"><a href="bias-variance-tradeoff.html#cb184-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex=</span><span class="fl">0.9</span>, <span class="at">cex.main=</span> <span class="fl">0.8</span>, <span class="at">cex.lab =</span> <span class="fl">0.7</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="03-Bias-VarianceTradeoff_files/figure-html/bvt13-1.png" width="672" /></p>
+<p>As the correlation between <span class="math inline">\(x\)</span>’s goes up, <span class="math inline">\(\mathbf{MSPE}_{OLS}-\mathbf{MSPE}_{Biased~OLS}\)</span> rises. Later we will have a high-dimensional dataset (large <span class="math inline">\(k\)</span>) to show the importance of correlation.</p>
+</div>
+<div id="uncertainty-in-estimations-and-predictions" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Uncertainty in estimations and predictions<a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we look back how we built our estimation and prediction simulations, we can see one thing: we had withdrawn 2000 samples and applied our estimators and predictors to each sample. More specifically, we had 2000 estimates from the estimator <span class="math inline">\(\bar{X}\)</span> and 2000 predictions by <span class="math inline">\(\hat{f}\)</span>. Hence, we have a sampling uncertainty that is captured by the variance of the distribution of estimates, which is also known as the sampling distribution.</p>
+<p>Sampling distributions are probability distributions that provide the set of possible values for the estimates and will inform us of how appropriately our current estimator is able to explain the population data. And if the estimator is BLUE of <span class="math inline">\(\mu_x\)</span>, the sampling distribution of <span class="math inline">\(\bar{X}\)</span> can be defined as <span class="math inline">\(\bar{X}\sim \mathcal{T}\left(\mu, S^{2}\right)\)</span> where <span class="math inline">\(S\)</span> is the standard deviation of the sample and <span class="math inline">\(\mathcal{T}\)</span> is the Student’s <span class="math inline">\(t\)</span>-distribution. This concept is the key point in inferential statistics as it helps us build the interval estimation of the true parameter, <span class="math inline">\(\mu_x\)</span>. The variation of <span class="math inline">\(\bar{X}\)</span> from sample to sample is important as it makes the interval wider or narrower.</p>
+<p>Similar to estimation, we make predictions in each sample by the best <span class="math inline">\(\hat{f}\)</span>. Since each sample is a random pick from the population, the prediction would be different from sample to sample. Unlike estimations, however, we allow bias in predictors in exchange with a reduction in variance, which captures the variation of predictions across samples. Although it was easy to calculate the variance of our predictions across samples with simulations, in practice, we have only one sample to calculate our prediction. While we may consider developing a theoretical concept similar to sampling distribution to have an <strong>interval prediction</strong>, since we allow a variance-bias trade-off in predictions, it would not be as simple as before to develop a confidence interval around our predictions. Although capturing the uncertainty is not simple task and an active research area, we will see in the following chapters how we can create bootstrapping confidence intervals for our predictive models.</p>
+<p>It is tempting to come to an idea that, when we are able to use an unbiased <strong>estimator</strong> as a <strong>predictor</strong>, perhaps due to an insignificant difference between their MSPEs, we may have a more reliable interval prediction, which quantifies the uncertainty in predictions. However, although machine learning predictions are subject to a lack of reliable interval predictions, finding an <strong>unbiased</strong> estimator specifically in regression-based models is not a simple task either. There are many reasons that the condition of unbiasedness, <span class="math inline">\(\mathrm{E}(\hat{\theta})=\theta\)</span>, may be easily violated. Reverse causality, simultaneity, endogeneity, unobserved heterogeneity, selection bias, model misspecification, measurement errors in covariates are some of the well-known and very common reasons for biased estimations in the empirical world and the major challenges in the field of econometrics today.</p>
+<p>This section will summarize the forecast error, <strong>F</strong>, and the prediction interval when we use an <strong>unbiased estimator</strong> as a predictor. Here is the definition of forecast error, which is the difference between <span class="math inline">\(x_0\)</span> and the predicted <span class="math inline">\(\hat{x}_0\)</span> in our case:</p>
+<p><span class="math display">\[
+F=x_0-\hat{x}_0=\mu_x+\varepsilon_0-\bar{X}
+\]</span></p>
+<p>If we construct a standard normal variable from <span class="math inline">\(F\)</span>:</p>
+<p><span class="math display">\[
+z= \frac{F-\mathrm{E}[F]}{\sqrt{\mathrm{Var}(F)}}=\frac{F}{\sqrt{\mathrm{Var}(F)}}=\frac{x_0-\hat{x}_0}{\sqrt{\mathrm{Var}(F)}}\sim N(0,1)
+\]</span></p>
+<p>where <span class="math inline">\(\mathrm{E}[F]=0\)</span> because <span class="math inline">\(\mathrm{E}[\bar{X}]=\mu_x\)</span> and <span class="math inline">\(\mathrm{E}[\varepsilon]=0\)</span>.</p>
+<p>We know that approximately 95% observations of any standard normal variable can be between <span class="math inline">\(\pm{1.96}\mathbf{sd}\)</span> Since the standard deviation is 1:</p>
+<p><span class="math display">\[
+\mathbf{Pr} = (-1.96 \leqslant z \leqslant 1.96) = 0.95.
+\]</span>
+Or,</p>
+<p><span class="math display">\[
+\mathbf{Pr} = \left(-1.96 \leqslant \frac{x_0-\hat{x}_0}{\mathbf{sd}(F)} \leqslant 1.96\right) = 0.95.
+\]</span></p>
+<p>With a simple algebra this becomes,</p>
+<p><span class="math display">\[
+\mathbf{Pr} \left(\hat{x}_0-1.96\mathbf{sd}(F) \leqslant x_0 \leqslant \hat{x}_0+1.96\mathbf{sd}(F)\right) = 0.95.
+\]</span></p>
+<p>This is called a 95% <strong>confidence interval</strong> or <strong>prediction interval</strong> for <span class="math inline">\(x_0\)</span>. We need to calculate <span class="math inline">\(\mathbf{sd}(F)\)</span>. We have derived it before, but let’s repeat it here again:</p>
+<p><span class="math display">\[
+\mathbf{Var}(F) = \mathrm{Var}\left(\mu_x+\varepsilon_0-\bar{X}\right)=\mathrm{Var}\left(\mu_x\right)+\mathrm{Var}\left(\varepsilon_0\right)+\mathrm{Var}\left(\bar{X}\right)\\ = \mathrm{Var}\left(\varepsilon_0\right)+\mathrm{Var}\left(\bar{X}\right)\\=\sigma^2+\mathrm{Var}\left(\bar{X}\right)
+\]</span></p>
+<p>What’s <span class="math inline">\(\mathbf{Var}(\bar{X})\)</span>? With the assumption of i.i.d.</p>
+<p><span class="math display">\[
+\mathbf{Var}(\bar{X}) = \mathrm{Var}\left(\frac{1}{n}\sum_{i=1}^{n} x_{i}\right) =\frac{1}{n^2} \sum_{i=1}^{n}\mathrm{Var}(x_{i})=\frac{1}{n^2} \sum_{i=1}^{n}\sigma^2=\frac{1}{n^2} n\sigma^2=\frac{\sigma^2}{n}.
+\]</span></p>
+<p>We do not know <span class="math inline">\(\sigma^2\)</span> but we can approximate it by <span class="math inline">\(\hat{\sigma}^2\)</span>, which is the variance of the sample.</p>
+<p><span class="math display">\[
+\mathbf{Var}(\bar{X}) = \frac{\hat{\sigma}^2}{n}~~\Rightarrow~~ \mathbf{se}(\bar{X}) = \frac{\hat{\sigma}}{\sqrt{n}}
+\]</span></p>
+<p>Note that the terms, standard deviation and standard error, often lead to confusion about their interchangeability. We use the term standard error for the sampling distribution (standard error of the mean - SEM): the standard error measures how far the sample mean is likely to be from the population mean. Whereas the standard deviation of the sample (population) is the degree to which individuals within the sample (population) differ from the sample (population) mean.</p>
+<p>Now we can get <span class="math inline">\(\mathbf{sd}(F)\)</span>:</p>
+<p><span class="math display">\[
+\mathbf{sd}(F) =\hat{\sigma}+\frac{\hat{\sigma}}{\sqrt{n}}=\hat{\sigma}\left(1+\frac{1}{\sqrt{n}}\right)
+\]</span></p>
+<p>Therefore, <span class="math inline">\(\mathbf{se}(\bar{X})\)</span> changes from sample to sample, as <span class="math inline">\(\hat{\sigma}\)</span> will be different in each sample. As we discussed earlier, when we use <span class="math inline">\(\hat{\sigma}\)</span> we should use <span class="math inline">\(t\)</span>-distribution, instead of standard normal distribution. Although they have the same critical vaules for 95% intervals, which is closed to 1.96 when the sample size larger than 100, we usually use critical <span class="math inline">\(t\)</span>-values for the interval estimations.</p>
+<p>Note that when <span class="math inline">\(\mathrm{E}[\bar{X}]\neq\mu_x\)</span> the whole process of building a prediction interval collapses at the beginning. Moreover, confidence or prediction intervals require that data must follow a normal distribution. If the sample size is large enough (more than 35, roughly) the central limit theorem makes sure that the sampling distribution would be normal regardless of how the population is distributed. In our example, since our sample sizes 3, the CLT does not hold. Let’s have a more realistic case in which we have a large population and multiple samples with <span class="math inline">\(n=100\)</span>.</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="bias-variance-tradeoff.html#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Better example</span></span>
+<span id="cb185-2"><a href="bias-variance-tradeoff.html#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb185-3"><a href="bias-variance-tradeoff.html#cb185-3" aria-hidden="true" tabindex="-1"></a>popx <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">10</span>, <span class="dv">2</span>))</span>
+<span id="cb185-4"><a href="bias-variance-tradeoff.html#cb185-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(popx)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   2.000   8.000   9.000   9.489  11.000  17.000</code></pre>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="bias-variance-tradeoff.html#cb187-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">200</span>)</span>
+<span id="cb187-2"><a href="bias-variance-tradeoff.html#cb187-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb187-3"><a href="bias-variance-tradeoff.html#cb187-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(samples)) {</span>
+<span id="cb187-4"><a href="bias-variance-tradeoff.html#cb187-4" aria-hidden="true" tabindex="-1"></a>  samples[i,] <span class="ot">&lt;-</span> <span class="fu">sample</span>(popx, <span class="fu">ncol</span>(samples), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb187-5"><a href="bias-variance-tradeoff.html#cb187-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb187-6"><a href="bias-variance-tradeoff.html#cb187-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+## [1,]   10   10    9   10    8    9   11    8   13    10
+## [2,]   11   13    5   11    6    9    9    9   10     9
+## [3,]   12   12   11    9    7    7    5   10    9     6
+## [4,]    9    8   12    8   10   11    8    8   10    10
+## [5,]   15    9   10   10   10   10   10   11    9     7
+## [6,]    8    9   11    9   10   10   10   13   11    15</code></pre>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="bias-variance-tradeoff.html#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rowMeans</span>(samples), <span class="at">breaks =</span> <span class="dv">20</span>, <span class="at">cex.main=</span><span class="fl">0.8</span>,</span>
+<span id="cb189-2"><a href="bias-variance-tradeoff.html#cb189-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab =</span> <span class="fl">0.8</span>, <span class="at">main =</span> <span class="st">&quot;Histogram of X_bar&#39;s&quot;</span>,</span>
+<span id="cb189-3"><a href="bias-variance-tradeoff.html#cb189-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;X_bar&quot;</span>)</span></code></pre></div>
+<p><img src="03-Bias-VarianceTradeoff_files/figure-html/bvt14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="bias-variance-tradeoff.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">rowMeans</span>(samples))</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   9.005   9.390   9.485   9.486   9.581   9.940</code></pre>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="bias-variance-tradeoff.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(popx)</span></code></pre></div>
+<pre><code>## [1] 9.4895</code></pre>
+<p>As you can see, the sampling distribution of <span class="math inline">\(\bar{X}\)</span> is almost normal ranging from 9 to 9.94 with mean 9.486. We can see also that it’s an unbiased estimator of <span class="math inline">\(\mu_x\)</span>.</p>
+<p>When we use <span class="math inline">\(\bar{X}\)</span> from a sample to predict <span class="math inline">\(x\)</span>, we can quantify the uncertainty in this prediction by building a 95% confidence interval. Let’s use sample 201 to show the interval.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="bias-variance-tradeoff.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Our sample</span></span>
+<span id="cb194-2"><a href="bias-variance-tradeoff.html#cb194-2" aria-hidden="true" tabindex="-1"></a>sample_0 <span class="ot">&lt;-</span> samples[<span class="dv">201</span>,]</span>
+<span id="cb194-3"><a href="bias-variance-tradeoff.html#cb194-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample_0)</span></code></pre></div>
+<pre><code>## [1] 9.35</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="bias-variance-tradeoff.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sd(F)</span></span>
+<span id="cb196-2"><a href="bias-variance-tradeoff.html#cb196-2" aria-hidden="true" tabindex="-1"></a>sdF <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(sample_0))<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(sample_0))) </span>
+<span id="cb196-3"><a href="bias-variance-tradeoff.html#cb196-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-4"><a href="bias-variance-tradeoff.html#cb196-4" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample_0) <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>sdF</span>
+<span id="cb196-5"><a href="bias-variance-tradeoff.html#cb196-5" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample_0) <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>sdF</span>
+<span id="cb196-6"><a href="bias-variance-tradeoff.html#cb196-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(lower, upper)</span></code></pre></div>
+<pre><code>## [1]  5.387422 13.312578</code></pre>
+<p>The range of this 95% prediction interval quantifies the prediction accuracy when we use 9.35 as a predictor, which implies that the value of a randomly picked <span class="math inline">\(x\)</span> from the same population could be predicted to be between those numbers. When we change the sample, the interval changes due to differences in the mean and the variance of the sample.</p>
+</div>
+<div id="prediction-interval-for-unbiased-ols-predictor" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Prediction interval for unbiased OLS predictor<a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will end this chapter by setting up a confidence interval for predictions made by an unbiased <span class="math inline">\(\hat{f}(x)\)</span>. We follow the same steps as in section 4. Note that the definition of the forecast error,</p>
+<p><span class="math display">\[
+F=y_0-\hat{f}(x_0)=f(x_0)+\varepsilon_0-\hat{f}(x_0),
+\]</span></p>
+<p>is the base in MSPE. We will have here a simple textbook example to identify some important elements in prediction interval. Our model is,</p>
+<p><span class="math display">\[
+y_{i}=\beta_0+\beta_1 x_{1i}+\varepsilon_{i}, ~~~~ i=1, \ldots, n
+\]</span></p>
+<p>where <span class="math inline">\(\varepsilon_{i} \sim N\left(0, \sigma^{2}\right)\)</span>, <span class="math inline">\(\mathrm{Cov}\left(\varepsilon_{i}, \varepsilon_{j}\right)=0\)</span> for <span class="math inline">\(i\neq j\)</span>. We can write this function as</p>
+<p><span class="math display">\[
+y_{i}=f(x_i)+\varepsilon_{i}, ~~~~ i=1, \ldots, n
+\]</span></p>
+<p>Based on a sample and the assumption about DGM, we choose an estimator of <span class="math inline">\(f(x)\)</span>,</p>
+<p><span class="math display">\[
+\hat{f}(x) = \hat{\beta}_0+\hat{\beta}_1 x_{1i},
+\]</span></p>
+<p>which is BLUE of <span class="math inline">\(f(x)\)</span>, when it is estimated with OLS given the assumptions about <span class="math inline">\(\varepsilon_i\)</span> stated above. Then, the forecast error is</p>
+<p><span class="math display">\[
+F=y_0-\hat{f}(x_0)=\beta_0+\beta_1 x_{0}+\varepsilon_{0}-\hat{\beta}_0+\hat{\beta}_1 x_{0},
+\]</span></p>
+<p>Since our <span class="math inline">\(\hat{f}(x)\)</span> is an unbiased estimator of <span class="math inline">\(f(x)\)</span>, <span class="math inline">\(\mathrm{E}(F)=0\)</span>. And, given that <span class="math inline">\(\varepsilon_{0}\)</span> is independent of <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> and <span class="math inline">\(\beta_0\)</span> as well as <span class="math inline">\(\beta_1 x_{0}\)</span> are non-stochastic (i.e. they have zero variance), then</p>
+<p><span class="math display">\[
+\mathbf{Var}(F)=\mathrm{Var}\left(\varepsilon_{0}\right)+\mathrm{Var}\left(\hat{\beta_0}+\hat{\beta_1} x_{0}\right),
+\]</span></p>
+<p>which is</p>
+<p><span class="math display">\[
+\mathbf{Var}(F)=\sigma^{2}+\mathrm{Var}(\hat{\beta}_0)+x_{0}^{2} \mathrm{Var}(\hat{\beta}_1)+2 x_{0} \mathrm{Cov}(\hat{\beta}_0, \hat{\beta}_1).
+\]</span>
+More specifically,</p>
+<p><span class="math display">\[
+\mathbf{Var}(F)=\sigma^{2}+\sigma^{2}\left(\frac{1}{n}+\frac{\bar{x}^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)+x_{0}^{2}\left( \frac{\sigma^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)-2 x_{0}\left( \sigma^{2} \frac{\bar{x}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right).
+\]</span></p>
+<p>After simplifying it, we get the textbook expression of the forecast variance:</p>
+<p><span class="math display">\[
+\mathbf{Var}(F)=\sigma^{2}\left(1+\frac{1}{n}+\frac{\left(x_{0}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
+\]</span></p>
+<p>We have seen it before: as the noise in the data (<span class="math inline">\(\sigma^2\)</span>) goes up, the variance increases. More importantly, as <span class="math inline">\(x_0\)</span> moves away from <span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(\mathrm{Var}(F)\)</span> rises further. Intuitively, rare incidence in data should have more uncertainty in predicting the outcome. The rarity of <span class="math inline">\(x_0\)</span> will be quantified by <span class="math inline">\(x_0-\bar{x}\)</span> and the uncertainty in prediction is captured by <span class="math inline">\(\mathrm{Var}(F)\)</span>.</p>
+<p>Finally, using the fact that <span class="math inline">\(\varepsilon\)</span> is normally distributed, with <span class="math inline">\(\mathrm{E}(F)=0\)</span>, we just found that <span class="math inline">\(F \sim N(0, \mathrm{Var}(F))\)</span>. Hence, the 95% prediction interval for <span class="math inline">\(n&gt;100\)</span> will approximately be:</p>
+<p><span class="math display">\[
+\mathbf{Pr} \left(\hat{f}_0-1.96\mathbf{sd}(F) \leqslant y_0 \leqslant \hat{f}_0+1.96\mathbf{sd}(F)\right) = 0.95.
+\]</span></p>
+<p>When we replace <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(\hat{\sigma}^2\)</span>, <span class="math inline">\(F\)</span> will have a Student’s <span class="math inline">\(t\)</span> distribution and the critical values (1.96) will be different specially if <span class="math inline">\(n&lt;100\)</span>. Since this interval is for <span class="math inline">\(x_0\)</span>, we can have a range of <span class="math inline">\(x\)</span> and have a nice plot showing the conficence interval around the point predictions for each <span class="math inline">\(x\)</span>.</p>
+<p>Let’s have a simulation with a simple one-variable regression to see the uncertainty in prediction. We need one sample and one out-sample dataset for prediction.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="bias-variance-tradeoff.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting one-sample.</span></span>
+<span id="cb198-2"><a href="bias-variance-tradeoff.html#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb198-3"><a href="bias-variance-tradeoff.html#cb198-3" aria-hidden="true" tabindex="-1"></a>x_1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">1</span>) </span>
+<span id="cb198-4"><a href="bias-variance-tradeoff.html#cb198-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> x_1 <span class="co"># DGM</span></span>
+<span id="cb198-5"><a href="bias-variance-tradeoff.html#cb198-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> f <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb198-6"><a href="bias-variance-tradeoff.html#cb198-6" aria-hidden="true" tabindex="-1"></a>inn <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x_1)</span>
+<span id="cb198-7"><a href="bias-variance-tradeoff.html#cb198-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-8"><a href="bias-variance-tradeoff.html#cb198-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting out-of-sample data points.</span></span>
+<span id="cb198-9"><a href="bias-variance-tradeoff.html#cb198-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb198-10"><a href="bias-variance-tradeoff.html#cb198-10" aria-hidden="true" tabindex="-1"></a>x_1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>) <span class="co"># sd =10 to see the prediction of outlier X&#39;s</span></span>
+<span id="cb198-11"><a href="bias-variance-tradeoff.html#cb198-11" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> x_1 <span class="co"># DGM</span></span>
+<span id="cb198-12"><a href="bias-variance-tradeoff.html#cb198-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> f <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">1</span>) </span>
+<span id="cb198-13"><a href="bias-variance-tradeoff.html#cb198-13" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, x_1)</span>
+<span id="cb198-14"><a href="bias-variance-tradeoff.html#cb198-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-15"><a href="bias-variance-tradeoff.html#cb198-15" aria-hidden="true" tabindex="-1"></a><span class="co"># OLS</span></span>
+<span id="cb198-16"><a href="bias-variance-tradeoff.html#cb198-16" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>., inn)</span>
+<span id="cb198-17"><a href="bias-variance-tradeoff.html#cb198-17" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, out)</span>
+<span id="cb198-18"><a href="bias-variance-tradeoff.html#cb198-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-19"><a href="bias-variance-tradeoff.html#cb198-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s have a Variance(f) function</span></span>
+<span id="cb198-20"><a href="bias-variance-tradeoff.html#cb198-20" aria-hidden="true" tabindex="-1"></a><span class="co"># since variance is not fixed and changes by x_0</span></span>
+<span id="cb198-21"><a href="bias-variance-tradeoff.html#cb198-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-22"><a href="bias-variance-tradeoff.html#cb198-22" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="cf">function</span>(xzero){</span>
+<span id="cb198-23"><a href="bias-variance-tradeoff.html#cb198-23" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(inn)</span>
+<span id="cb198-24"><a href="bias-variance-tradeoff.html#cb198-24" aria-hidden="true" tabindex="-1"></a>  sigma2_hat <span class="ot">&lt;-</span> <span class="fu">sum</span>((inn<span class="sc">$</span>y <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">2</span>) <span class="co">#we replace it with sample variance</span></span>
+<span id="cb198-25"><a href="bias-variance-tradeoff.html#cb198-25" aria-hidden="true" tabindex="-1"></a>  num<span class="ot">=</span> (xzero <span class="sc">-</span> <span class="fu">mean</span>(inn<span class="sc">$</span>x_1))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb198-26"><a href="bias-variance-tradeoff.html#cb198-26" aria-hidden="true" tabindex="-1"></a>  denom <span class="ot">=</span> <span class="fu">sum</span>((inn<span class="sc">$</span>x_1 <span class="sc">-</span> <span class="fu">mean</span>(inn<span class="sc">$</span>x_1))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb198-27"><a href="bias-variance-tradeoff.html#cb198-27" aria-hidden="true" tabindex="-1"></a>  var <span class="ot">&lt;-</span> sigma2_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n <span class="sc">+</span> num<span class="sc">/</span>denom)</span>
+<span id="cb198-28"><a href="bias-variance-tradeoff.html#cb198-28" aria-hidden="true" tabindex="-1"></a>  x0 <span class="ot">&lt;-</span> xzero</span>
+<span id="cb198-29"><a href="bias-variance-tradeoff.html#cb198-29" aria-hidden="true" tabindex="-1"></a>  outcome <span class="ot">&lt;-</span> <span class="fu">c</span>(var, x0)</span>
+<span id="cb198-30"><a href="bias-variance-tradeoff.html#cb198-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(outcome)</span>
+<span id="cb198-31"><a href="bias-variance-tradeoff.html#cb198-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb198-32"><a href="bias-variance-tradeoff.html#cb198-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-33"><a href="bias-variance-tradeoff.html#cb198-33" aria-hidden="true" tabindex="-1"></a>varF <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(out), <span class="dv">2</span>)</span>
+<span id="cb198-34"><a href="bias-variance-tradeoff.html#cb198-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(out)) {</span>
+<span id="cb198-35"><a href="bias-variance-tradeoff.html#cb198-35" aria-hidden="true" tabindex="-1"></a>  varF[i, ] <span class="ot">&lt;-</span> <span class="fu">v</span>(out<span class="sc">$</span>x_1[i])</span>
+<span id="cb198-36"><a href="bias-variance-tradeoff.html#cb198-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb198-37"><a href="bias-variance-tradeoff.html#cb198-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-38"><a href="bias-variance-tradeoff.html#cb198-38" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;sd&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">sqrt</span>(varF[,<span class="dv">1</span>])), <span class="st">&quot;x0&quot;</span> <span class="ot">=</span> varF[,<span class="dv">2</span>], <span class="st">&quot;yhat&quot;</span> <span class="ot">=</span> yhat,</span>
+<span id="cb198-39"><a href="bias-variance-tradeoff.html#cb198-39" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;upper&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(yhat <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>(varF[,<span class="dv">1</span>])),</span>
+<span id="cb198-40"><a href="bias-variance-tradeoff.html#cb198-40" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;lower&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(yhat <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>(varF[,<span class="dv">1</span>])))</span>
+<span id="cb198-41"><a href="bias-variance-tradeoff.html#cb198-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-42"><a href="bias-variance-tradeoff.html#cb198-42" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(plotrix)</span>
+<span id="cb198-43"><a href="bias-variance-tradeoff.html#cb198-43" aria-hidden="true" tabindex="-1"></a><span class="fu">plotCI</span>(data<span class="sc">$</span>x0, data<span class="sc">$</span>yhat , <span class="at">ui=</span>data<span class="sc">$</span>upper,</span>
+<span id="cb198-44"><a href="bias-variance-tradeoff.html#cb198-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">li=</span>data<span class="sc">$</span>lower, <span class="at">pch=</span><span class="dv">21</span>, <span class="at">pt.bg=</span><span class="fu">par</span>(<span class="st">&quot;bg&quot;</span>), <span class="at">scol =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>,</span>
+<span id="cb198-45"><a href="bias-variance-tradeoff.html#cb198-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">&quot;Prediction interval for each y_0&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;yhat(-)(+)1.96sd&quot;</span>,</span>
+<span id="cb198-46"><a href="bias-variance-tradeoff.html#cb198-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab=</span><span class="st">&quot;x_0&quot;</span>, <span class="at">cex.main =</span> <span class="fl">0.8</span>, <span class="at">cex.lab =</span> <span class="fl">0.8</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="03-Bias-VarianceTradeoff_files/figure-html/bvt16-1.png" width="672" /></p>
+<p>As the <span class="math inline">\(x_0\)</span> moves away from the mean, which is zero in our simulation, the prediction uncertainty captured by the range of confidence intervals becomes larger.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="learning-systems.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="overfitting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/03-Bias-VarianceTradeoff.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

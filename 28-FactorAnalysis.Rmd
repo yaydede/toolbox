@@ -1,0 +1,149 @@
+# Factor Analysis
+
+Factor Analysis (FA) is a method for modeling observed variables, and their covariance structure, in terms of a smaller number of underlying latent (unobserved) "factors". In FA the observed variables are modeled as linear functions of the "factors." In PCA, we create new variables that are linear combinations of the observed variables.  In both PCA and FA, the dimension of the data is reduced. 
+
+A factor model can be thought of as a series of multiple regressions, predicting each of the observable variables $X_{i}$ from the values of the (unobservable) common factors $f_{i}$:
+
+$$
+\begin{gathered}
+X_{1}=\mu_{1}+l_{11} f_{1}+l_{12} f_{2}+\cdots+l_{1 m} f_{m}+\epsilon_{1} \\
+X_{2}=\mu_{2}+l_{21} f_{1}+l_{22} f_{2}+\cdots+l_{2 m} f_{m}+\epsilon_{2} \\
+\vdots \\
+X_{p}=\mu_{p}+l_{p 1} f_{1}+l_{p 2} f_{2}+\cdots+l_{p m} f_{m}+\epsilon_{p}
+\end{gathered}
+$$
+
+where $\mu_{i}$ is the variable mean (intercept).
+
+The regression coefficients $l_{i j}$ (the partial slopes) for all of these multiple regressions are called factor **loadings**: $l_{i j}=$ is loading of the $i^{t h}$ variable on the $j^{t h}$ factor. With a matrix notation, we can show the matrix of factor loadings:
+
+$$
+\mathbf{L}=\left(\begin{array}{cccc}
+l_{11} & l_{12} & \ldots & l_{1 m} \\
+l_{21} & l_{22} & \ldots & l_{2 m} \\
+\vdots & \vdots & & \vdots \\
+l_{p 1} & l_{p 2} & \ldots & l_{p m}
+\end{array}\right)
+$$
+  
+The errors $\varepsilon_{i}$ are called the **specific factors**. Here, $\varepsilon_{i}=$ specific factor for variable $i$. When we collect them in a vector, we can express these series of multivariate regression as follows:
+
+\begin{equation}
+\mathbf{X}=\boldsymbol{\mu}+\mathbf{L f}+\boldsymbol{\epsilon}
+  (\#eq:25-1)
+\end{equation} 
+
+There are multiple assumptions:
+  
+- $E\left(\epsilon_{i}\right)=0$ and $\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}$ (a.k.a "specific variance"), 
+- $E\left(f_{i}\right)=0$ and $\operatorname{var}\left(f_{i}\right)=1$,
+- $\operatorname{cov}\left(f_{i}, f_{j}\right)=0$ for $i \neq j$,
+- $\operatorname{cov}\left(\epsilon_{i}, \epsilon_{j}\right)=0$ for $i \neq j$,
+- $\operatorname{cov}\left(\epsilon_{i}, f_{j}\right)=0$,
+
+Hence,
+  
+- $\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} l_{i j}^{2}+\psi_{i}$. The term $\sum_{j=1}^{m} l_{i j}^{2}$ is called the **Communality** for variable $i$.  The larger the communality, the better the model performance for the $i$ th variable.
+- $\operatorname{cov}\left(X_{i}, X_{j}\right)=\sigma_{i j}=\sum_{k=1}^{m} l_{i k} l_{j k}$, 
+- $\operatorname{cov}\left(X_{i}, f_{j}\right)=l_{i j}$
+  
+The factor model for our variance-covariance matrix can then be expressed as:
+
+\begin{equation}
+\Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
+  (\#eq:25-2)
+\end{equation} 
+
+where,
+
+$$
+\boldsymbol{\Psi}=\left(\begin{array}{cccc}
+\psi_{1} & 0 & \ldots & 0 \\
+0 & \psi_{2} & \ldots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \ldots & \psi_{p}
+\end{array}\right)
+$$
+And, 
+
+$$
+\hat{l}_{i j}=\hat{e}_{j i} \sqrt{\hat{\lambda}_j}
+$$
+
+The total variance of each variable given in the factor model (27.2) can be explained by the sum of the shared variance with another variable, $\mathbf{L} \mathbf{L}^{\prime}$ (the common variance or **communality**) and the unique variance, $\mathbf{\Psi}$, inherent to each variable (**specific variance**)
+
+There are multiple methods to estimate the parameters of a factor model.  In general, two methods are most common: PCA and MLE.  Let's have an example.  The data set is called `bfi` and comes from the `psych` package. It is made up of 25 self-report personality items from the International Personality Item Pool, gender, education level and age for 2800 subjects and used in the Synthetic Aperture Personality Assessment: The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate, 2 Moderately Inaccurate, 3 Slightly Inaccurate, 4 Slightly Accurate, 5 Moderately Accurate, 6 Very Accurate.
+
+```{r fa1, warning=FALSE, message=FALSE}
+library(psych)
+library(GPArotation)
+data("bfi")
+describeData(bfi, head = 5, tail=5)
+```
+  
+To get rid of missing observations and the last three variables,
+
+```{r fa2}
+df <- bfi[complete.cases(bfi[,1:25]),1:25]
+dim(bfi[,1:25])
+dim(df)
+```
+
+The first decision that we need make  is the number of factors that we will need to extract.  For $p=28$, the variance-covariance matrix $\Sigma$ contains
+$$
+\frac{p(p+1)}{2}=\frac{25 \times 26}{2}=325
+$$
+unique elements or entries. With $m$ factors, the number of parameters in the factor model would be
+  
+$$
+p(m+1)=25(m+1)
+$$
+
+Taking $m=5$, we have 150 parameters in the factor model.  How do we choose $m$?  Although it is  common to look at the results of the principal components analysis, often in social sciences, the underlying theory within the field of study indicates how many factors to expect.  
+
+```{r, message=FALSE, warning=FALSE}
+scree(df)
+```
+
+Let's use the `factanal()` function of the build-in stats package
+
+```{r fa3, message=FALSE, warning=FALSE}
+pa.out <- factanal(df, factors = 5)
+pa.out
+```
+
+The first chunk provides the "uniqueness" (specific variance) for each variable, which range from 0 to 1 . The uniqueness, sometimes referred to as noise, corresponds to the proportion of variability, which can not be explained by a linear combination of the factors. This is the $\hat{\Psi}$ in the equation above. A high uniqueness for a variable indicates that the factors do not account well for its variance.
+
+The next section reports the loadings ranging from $-1$ to $1.$ This is the $\hat{\mathbf{L}}$ in the equation (27.2) above. The loadings are the contribution of each original variable to the factor. Variables with a high loading are well explained by the factor. Notice there is no entry for certain variables since $R$ does not print loadings less than $0.1$.
+
+The communalities for the $i^{t h}$ variable are computed by taking the sum of the squared loadings for that variable. This is expressed below:
+
+$$
+\hat{h}_i^2=\sum_{j=1}^m \hat{l}_{i j}^2
+$$
+
+This proportion of the variability is denoted as **communality**. Another way to calculate the communality is to subtract the uniquenesses from 1. An appropriate factor model results in low values for uniqueness and high values for communality.
+
+```{r fa4}
+apply(pa.out$loadings^2,1,sum) # communality
+1 - apply(pa.out$loadings^2,1,sum) # uniqueness
+```
+  
+The table under the loadings reports the proportion of variance explained by each factor. The row **Cumulative Var** gives the cumulative proportion of variance explained. These numbers range from 0 to 1; **Proportion Var** shows the proportion of variance explained by each factor, and the row **SS loadings** gives the sum of squared loadings. This is sometimes used to determine the value of a particular factor. A factor is worth keeping if the SS loading is greater than 1 ([Kaiser’s rule](https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr)).
+
+The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Conventionally, we reject $H_0$ if the $p$-value is less than $0.05$. Such a result indicates that the number of factors is too low. The low $p$-value in our example above leads us to reject the $H_0$, and indicates that we fitted NOT an appropriate model. 
+
+Finally, with our estimated factor model, we may calculate $\hat{\Sigma}$ and compare it to the observed correlation matrix, $S$, by simple matrix algebra. 
+
+```{r fa5}
+Lambda <- pa.out$loadings
+Psi <- diag(pa.out$uniquenesses)
+S <- pa.out$correlation
+Sigma <- Lambda %*% t(Lambda) + Psi
+round(head(S) - head(Sigma), 2)
+```
+
+This matrix is also called as the **residual matrix**. 
+
+For more see: <https://cran.r-project.org/web/packages/factoextra/readme/README.html>
+

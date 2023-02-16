@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Classification Example | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 11 Classification Example | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Classification Example | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Classification Example | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="tuning-in-classification.html"/>
+<link rel="next" href="cart.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="classification-example" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Classification Example<a href="classification-example.html#classification-example" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>We can conclude this section with a classification example. We will use <code>Adult</code> dataset. The information on the dataset is given at the <a href="https://archive.ics.uci.edu/ml/datasets/Adult">Machine Learning Repository at UCI</a> <span class="citation">(<a href="#ref-Kohavi_1996" role="doc-biblioref"><strong>Kohavi_1996?</strong></a>)</span>:</p>
+<p>The prediction task is to determine whether a person makes over $50K a year. This question would be similar to the question of <em>whether the person makes less than 50K</em>. However, we need to be careful in defining which class will be <strong>positive</strong> or <strong>negative</strong>. Suppose we have <span class="math inline">\(Y\)</span>, 0 and 1, and we define 1 as a <em>positive</em> class:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1+} &amp; {{Y}=0-} \\ {\hat{Y}=1+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=0-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\]</span>
+Now suppose we define 1 as a negative class:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=0+} &amp; {{Y}=1-} \\ {\hat{Y}=0+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=1-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\]</span>
+Of course this is just a notational difference and nothing changes in calculations. But some performance measures, especially, sensitivity (TPR) and fall-out (FPR) will be different.</p>
+<p>We are going to use the original train set again to avoid some data cleaning jobs that we mentioned in Chapter 5.</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="classification-example.html#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download adult income data</span></span>
+<span id="cb453-2"><a href="classification-example.html#cb453-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb453-3"><a href="classification-example.html#cb453-3" aria-hidden="true" tabindex="-1"></a><span class="co"># url.train &lt;- &quot;http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data&quot;</span></span>
+<span id="cb453-4"><a href="classification-example.html#cb453-4" aria-hidden="true" tabindex="-1"></a><span class="co"># url.names &lt;- &quot;http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names&quot;</span></span>
+<span id="cb453-5"><a href="classification-example.html#cb453-5" aria-hidden="true" tabindex="-1"></a><span class="co"># download.file(url.train, destfile = &quot;adult_train.csv&quot;)</span></span>
+<span id="cb453-6"><a href="classification-example.html#cb453-6" aria-hidden="true" tabindex="-1"></a><span class="co"># download.file(url.names, destfile = &quot;adult_names.txt&quot;)</span></span>
+<span id="cb453-7"><a href="classification-example.html#cb453-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb453-8"><a href="classification-example.html#cb453-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the training set into memory</span></span>
+<span id="cb453-9"><a href="classification-example.html#cb453-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;adult_train.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb453-10"><a href="classification-example.html#cb453-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb453-11"><a href="classification-example.html#cb453-11" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, </span>
+<span id="cb453-12"><a href="classification-example.html#cb453-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;WorkClass&quot;</span>,</span>
+<span id="cb453-13"><a href="classification-example.html#cb453-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;fnlwgt&quot;</span>,</span>
+<span id="cb453-14"><a href="classification-example.html#cb453-14" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Education&quot;</span>,</span>
+<span id="cb453-15"><a href="classification-example.html#cb453-15" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;EducationNum&quot;</span>,</span>
+<span id="cb453-16"><a href="classification-example.html#cb453-16" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;MaritalStatus&quot;</span>,</span>
+<span id="cb453-17"><a href="classification-example.html#cb453-17" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Occupation&quot;</span>,</span>
+<span id="cb453-18"><a href="classification-example.html#cb453-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Relationship&quot;</span>,</span>
+<span id="cb453-19"><a href="classification-example.html#cb453-19" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Race&quot;</span>,</span>
+<span id="cb453-20"><a href="classification-example.html#cb453-20" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Sex&quot;</span>,</span>
+<span id="cb453-21"><a href="classification-example.html#cb453-21" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;CapitalGain&quot;</span>,</span>
+<span id="cb453-22"><a href="classification-example.html#cb453-22" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;CapitalLoss&quot;</span>,</span>
+<span id="cb453-23"><a href="classification-example.html#cb453-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;HoursPerWeek&quot;</span>,</span>
+<span id="cb453-24"><a href="classification-example.html#cb453-24" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;NativeCountry&quot;</span>,</span>
+<span id="cb453-25"><a href="classification-example.html#cb453-25" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;IncomeLevel&quot;</span>)</span>
+<span id="cb453-26"><a href="classification-example.html#cb453-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb453-27"><a href="classification-example.html#cb453-27" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df) <span class="ot">&lt;-</span> varNames</span>
+<span id="cb453-28"><a href="classification-example.html#cb453-28" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df</span></code></pre></div>
+<p>In each machine learning application, the data preparation stage (i.e. cleaning the data, organizing the columns and rows, checking out the columns’ names, checking the types of each feature, identifying and handling the missing observations, etc) is a very important step and should be dealt with a good care.</p>
+<p>First, let’s see if the data balanced or not:</p>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="classification-example.html#cb454-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>IncomeLevel)</span>
+<span id="cb454-2"><a href="classification-example.html#cb454-2" aria-hidden="true" tabindex="-1"></a>tbl</span></code></pre></div>
+<pre><code>## 
+##  &lt;=50K   &gt;50K 
+##  24720   7841</code></pre>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="classification-example.html#cb456-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="dv">2</span>] <span class="sc">/</span> tbl[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>##      &gt;50K 
+## 0.3171926</code></pre>
+<p>There are multiple variables that are <code>chr</code> in the data.</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="classification-example.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    32561 obs. of  15 variables:
+##  $ Age          : int  39 50 38 53 28 37 49 52 31 42 ...
+##  $ WorkClass    : chr  &quot; State-gov&quot; &quot; Self-emp-not-inc&quot; &quot; Private&quot; &quot; Private&quot; ...
+##  $ fnlwgt       : int  77516 83311 215646 234721 338409 284582 160187 209642 45781 159449 ...
+##  $ Education    : chr  &quot; Bachelors&quot; &quot; Bachelors&quot; &quot; HS-grad&quot; &quot; 11th&quot; ...
+##  $ EducationNum : int  13 13 9 7 13 14 5 9 14 13 ...
+##  $ MaritalStatus: chr  &quot; Never-married&quot; &quot; Married-civ-spouse&quot; &quot; Divorced&quot; &quot; Married-civ-spouse&quot; ...
+##  $ Occupation   : chr  &quot; Adm-clerical&quot; &quot; Exec-managerial&quot; &quot; Handlers-cleaners&quot; &quot; Handlers-cleaners&quot; ...
+##  $ Relationship : chr  &quot; Not-in-family&quot; &quot; Husband&quot; &quot; Not-in-family&quot; &quot; Husband&quot; ...
+##  $ Race         : chr  &quot; White&quot; &quot; White&quot; &quot; White&quot; &quot; Black&quot; ...
+##  $ Sex          : chr  &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; ...
+##  $ CapitalGain  : int  2174 0 0 0 0 0 0 0 14084 5178 ...
+##  $ CapitalLoss  : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ HoursPerWeek : int  40 13 40 40 40 40 16 45 50 40 ...
+##  $ NativeCountry: chr  &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; ...
+##  $ IncomeLevel  : chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="classification-example.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>WorkClass)</span></code></pre></div>
+<pre><code>## 
+##                 ?       Federal-gov         Local-gov      Never-worked 
+##              1836               960              2093                 7 
+##           Private      Self-emp-inc  Self-emp-not-inc         State-gov 
+##             22696              1116              2541              1298 
+##       Without-pay 
+##                14</code></pre>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="classification-example.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>NativeCountry)</span></code></pre></div>
+<pre><code>## 
+##                           ?                    Cambodia 
+##                         583                          19 
+##                      Canada                       China 
+##                         121                          75 
+##                    Columbia                        Cuba 
+##                          59                          95 
+##          Dominican-Republic                     Ecuador 
+##                          70                          28 
+##                 El-Salvador                     England 
+##                         106                          90 
+##                      France                     Germany 
+##                          29                         137 
+##                      Greece                   Guatemala 
+##                          29                          64 
+##                       Haiti          Holand-Netherlands 
+##                          44                           1 
+##                    Honduras                        Hong 
+##                          13                          20 
+##                     Hungary                       India 
+##                          13                         100 
+##                        Iran                     Ireland 
+##                          43                          24 
+##                       Italy                     Jamaica 
+##                          73                          81 
+##                       Japan                        Laos 
+##                          62                          18 
+##                      Mexico                   Nicaragua 
+##                         643                          34 
+##  Outlying-US(Guam-USVI-etc)                        Peru 
+##                          14                          31 
+##                 Philippines                      Poland 
+##                         198                          60 
+##                    Portugal                 Puerto-Rico 
+##                          37                         114 
+##                    Scotland                       South 
+##                          12                          80 
+##                      Taiwan                    Thailand 
+##                          51                          18 
+##             Trinadad&amp;Tobago               United-States 
+##                          19                       29170 
+##                     Vietnam                  Yugoslavia 
+##                          67                          16</code></pre>
+<p>We can see that there is only one observation in <code>Holand-Netherlands</code>. This is a problem because it will be either in the training set or the test set. Therefore, when you estimate without taking care of it, it will give this error:</p>
+<p><code>Error in model.frame.default(Terms, newdata, na.action = na.action, xlev = object$xlevels) : factor NativeCountry has new levels Holand-Netherlands</code></p>
+<p>We will see later how to take care of these issues in a loop with several error handling options. But now, let’s drop this observation:</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="classification-example.html#cb464-1" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">which</span>(data<span class="sc">$</span>NativeCountry <span class="sc">==</span><span class="st">&quot; Holand-Netherlands&quot;</span>)</span>
+<span id="cb464-2"><a href="classification-example.html#cb464-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">-</span>ind, ]</span></code></pre></div>
+<p>Although some packages like <code>lm()</code> and <code>glm()</code> can use character variables, we should take care of them properly before any type of data analysis. Here is an example:</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="classification-example.html#cb465-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data</span>
+<span id="cb465-2"><a href="classification-example.html#cb465-2" aria-hidden="true" tabindex="-1"></a><span class="co">#converting by a loop</span></span>
+<span id="cb465-3"><a href="classification-example.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df)) {</span>
+<span id="cb465-4"><a href="classification-example.html#cb465-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(df[, i]))</span>
+<span id="cb465-5"><a href="classification-example.html#cb465-5" aria-hidden="true" tabindex="-1"></a>    df[, i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df[, i])</span>
+<span id="cb465-6"><a href="classification-example.html#cb465-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb465-7"><a href="classification-example.html#cb465-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb465-8"><a href="classification-example.html#cb465-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data</span>
+<span id="cb465-9"><a href="classification-example.html#cb465-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Converting with `apply()` family</span></span>
+<span id="cb465-10"><a href="classification-example.html#cb465-10" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">sapply</span>(df, is.character)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df[<span class="fu">sapply</span>(df, is.character)],</span>
+<span id="cb465-11"><a href="classification-example.html#cb465-11" aria-hidden="true" tabindex="-1"></a>                                       as.factor)</span></code></pre></div>
+<p>The job is to use LPM, Logistic, and kNN models to see which one could be a better predictive model for the data. In LPM and Logistic, we do not (yet) have any parameter to tune for a better prediction. Although we could use a degree of polynomials for selected features, we will set aside that option for now. We will later see regularization methods for parametric models, which will make LPM and logistic models “trainable”. In kNN, <span class="math inline">\(k\)</span> is the hyperparameter to train the model.</p>
+<p>There are several key points to keep in mind in this classification practice:</p>
+<ul>
+<li>What performance metric(s) are we going to use for comparing the alternative models?</li>
+<li>How are we going to transform the predicted probabilities to classes (0’s and 1’s) so that we can have the confusion matrix?</li>
+</ul>
+<p>Let’s start with LPM first.</p>
+<div id="lpm" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> LPM<a href="classification-example.html#lpm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb466-1"><a href="classification-example.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anyNA</span>(data)</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="classification-example.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Our LPM requires</span></span>
+<span id="cb468-2"><a href="classification-example.html#cb468-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>IncomeLevel<span class="sc">==</span><span class="st">&quot; &lt;=50K&quot;</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb468-3"><a href="classification-example.html#cb468-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[, <span class="sc">-</span><span class="dv">15</span>]</span></code></pre></div>
+<p>Now, we are ready. We will use ROC and AUC for comparing the models.</p>
+<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb469-1"><a href="classification-example.html#cb469-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb469-2"><a href="classification-example.html#cb469-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb469-3"><a href="classification-example.html#cb469-3" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb469-4"><a href="classification-example.html#cb469-4" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">100</span> <span class="co"># number of times we loop</span></span>
+<span id="cb469-5"><a href="classification-example.html#cb469-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb469-6"><a href="classification-example.html#cb469-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>t) {</span>
+<span id="cb469-7"><a href="classification-example.html#cb469-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb469-8"><a href="classification-example.html#cb469-8" aria-hidden="true" tabindex="-1"></a>  shuffle <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(data), <span class="fu">nrow</span>(data), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb469-9"><a href="classification-example.html#cb469-9" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb469-10"><a href="classification-example.html#cb469-10" aria-hidden="true" tabindex="-1"></a>  testind <span class="ot">&lt;-</span> shuffle[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(data) <span class="sc">/</span> k)]</span>
+<span id="cb469-11"><a href="classification-example.html#cb469-11" aria-hidden="true" tabindex="-1"></a>  trainind <span class="ot">&lt;-</span> shuffle[<span class="sc">-</span>testind]</span>
+<span id="cb469-12"><a href="classification-example.html#cb469-12" aria-hidden="true" tabindex="-1"></a>  trdf <span class="ot">&lt;-</span> data[trainind, ] <span class="co">#80% of the data</span></span>
+<span id="cb469-13"><a href="classification-example.html#cb469-13" aria-hidden="true" tabindex="-1"></a>  tsdf <span class="ot">&lt;-</span> data[testind, ] <span class="co">#20% of data set a side</span></span>
+<span id="cb469-14"><a href="classification-example.html#cb469-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb469-15"><a href="classification-example.html#cb469-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#LPM</span></span>
+<span id="cb469-16"><a href="classification-example.html#cb469-16" aria-hidden="true" tabindex="-1"></a>  model1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> trdf, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb469-17"><a href="classification-example.html#cb469-17" aria-hidden="true" tabindex="-1"></a>  phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model1, tsdf)</span>
+<span id="cb469-18"><a href="classification-example.html#cb469-18" aria-hidden="true" tabindex="-1"></a>  phat[phat <span class="sc">&lt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb469-19"><a href="classification-example.html#cb469-19" aria-hidden="true" tabindex="-1"></a>  phat[phat <span class="sc">&gt;</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb469-20"><a href="classification-example.html#cb469-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb469-21"><a href="classification-example.html#cb469-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ROC &amp; AUC (from ROCR)</span></span>
+<span id="cb469-22"><a href="classification-example.html#cb469-22" aria-hidden="true" tabindex="-1"></a>  phat_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(phat, <span class="st">&quot;Y&quot;</span> <span class="ot">=</span> tsdf<span class="sc">$</span>Y)</span>
+<span id="cb469-23"><a href="classification-example.html#cb469-23" aria-hidden="true" tabindex="-1"></a>  pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat_df[, <span class="dv">1</span>], phat_df[, <span class="dv">2</span>])</span>
+<span id="cb469-24"><a href="classification-example.html#cb469-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb469-25"><a href="classification-example.html#cb469-25" aria-hidden="true" tabindex="-1"></a>  auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb469-26"><a href="classification-example.html#cb469-26" aria-hidden="true" tabindex="-1"></a>  AUC[i] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb469-27"><a href="classification-example.html#cb469-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb469-28"><a href="classification-example.html#cb469-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb469-29"><a href="classification-example.html#cb469-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AUC, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>)</span>
+<span id="cb469-30"><a href="classification-example.html#cb469-30" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="fu">mean</span>(AUC), <span class="at">b =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc18-1.png" width="672" /></p>
+<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb470-1"><a href="classification-example.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(AUC)</span></code></pre></div>
+<pre><code>## [1] 0.8936181</code></pre>
+<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb472-1"><a href="classification-example.html#cb472-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">var</span>(AUC))</span></code></pre></div>
+<pre><code>## [1] 0.003810335</code></pre>
+<p>Let’s see the ROC curve from the last run.</p>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="classification-example.html#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ROC from the last run by `ROCR`</span></span>
+<span id="cb474-2"><a href="classification-example.html#cb474-2" aria-hidden="true" tabindex="-1"></a>perf <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="st">&quot;tpr&quot;</span>, <span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb474-3"><a href="classification-example.html#cb474-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf, <span class="at">colorize =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb474-4"><a href="classification-example.html#cb474-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc19-1.png" width="672" /></p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="classification-example.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And our &quot;own&quot; ROC (we will use ROCR in this book, though)</span></span>
+<span id="cb475-2"><a href="classification-example.html#cb475-2" aria-hidden="true" tabindex="-1"></a>phator <span class="ot">&lt;-</span> phat[<span class="fu">order</span>(phat)]</span>
+<span id="cb475-3"><a href="classification-example.html#cb475-3" aria-hidden="true" tabindex="-1"></a>phator[phator <span class="sc">&lt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb475-4"><a href="classification-example.html#cb475-4" aria-hidden="true" tabindex="-1"></a>phator[phator <span class="sc">&gt;</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb475-5"><a href="classification-example.html#cb475-5" aria-hidden="true" tabindex="-1"></a>phator <span class="ot">&lt;-</span> <span class="fu">unique</span>(phator)</span>
+<span id="cb475-6"><a href="classification-example.html#cb475-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-7"><a href="classification-example.html#cb475-7" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb475-8"><a href="classification-example.html#cb475-8" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb475-9"><a href="classification-example.html#cb475-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-10"><a href="classification-example.html#cb475-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(phator)) {</span>
+<span id="cb475-11"><a href="classification-example.html#cb475-11" aria-hidden="true" tabindex="-1"></a>  yHat <span class="ot">&lt;-</span> phat <span class="sc">&gt;</span> phator[i]</span>
+<span id="cb475-12"><a href="classification-example.html#cb475-12" aria-hidden="true" tabindex="-1"></a>  conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, tsdf<span class="sc">$</span>Y)</span>
+<span id="cb475-13"><a href="classification-example.html#cb475-13" aria-hidden="true" tabindex="-1"></a>  ct <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table)</span>
+<span id="cb475-14"><a href="classification-example.html#cb475-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">sum</span>(<span class="fu">dim</span>(ct)) <span class="sc">&gt;</span> <span class="dv">3</span>) {</span>
+<span id="cb475-15"><a href="classification-example.html#cb475-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">#here we ignore the min and max thresholds</span></span>
+<span id="cb475-16"><a href="classification-example.html#cb475-16" aria-hidden="true" tabindex="-1"></a>    TPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">/</span> (ct[<span class="dv">2</span>, <span class="dv">2</span>] <span class="sc">+</span> ct[<span class="dv">1</span>, <span class="dv">2</span>])</span>
+<span id="cb475-17"><a href="classification-example.html#cb475-17" aria-hidden="true" tabindex="-1"></a>    FPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">/</span> (ct[<span class="dv">1</span>, <span class="dv">1</span>] <span class="sc">+</span> ct[<span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb475-18"><a href="classification-example.html#cb475-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb475-19"><a href="classification-example.html#cb475-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb475-20"><a href="classification-example.html#cb475-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-21"><a href="classification-example.html#cb475-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Flat and vertical sections are omitted</span></span>
+<span id="cb475-22"><a href="classification-example.html#cb475-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FPR,</span>
+<span id="cb475-23"><a href="classification-example.html#cb475-23" aria-hidden="true" tabindex="-1"></a>     TPR,</span>
+<span id="cb475-24"><a href="classification-example.html#cb475-24" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb475-25"><a href="classification-example.html#cb475-25" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb475-26"><a href="classification-example.html#cb475-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;ROC&quot;</span>)</span>
+<span id="cb475-27"><a href="classification-example.html#cb475-27" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc19-2.png" width="672" /></p>
+<p>What’s the confusion table at the “best” discriminating threshold? The answer is the one where the difference between TPR and FPR is maximized: <strong>Youden’s J Statistics</strong>. Note that this answers would be different if we have different weights in TPR and FPR. We may also have different targets, maximum FPR, for example.</p>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="classification-example.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Youden&#39;s J Statistics</span></span>
+<span id="cb476-2"><a href="classification-example.html#cb476-2" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> TPR <span class="sc">-</span> FPR</span>
+<span id="cb476-3"><a href="classification-example.html#cb476-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb476-4"><a href="classification-example.html#cb476-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The best discriminating threshold</span></span>
+<span id="cb476-5"><a href="classification-example.html#cb476-5" aria-hidden="true" tabindex="-1"></a>opt_th <span class="ot">&lt;-</span> phator[<span class="fu">which.max</span>(J)]</span>
+<span id="cb476-6"><a href="classification-example.html#cb476-6" aria-hidden="true" tabindex="-1"></a>opt_th</span></code></pre></div>
+<pre><code>## [1] 0.318723</code></pre>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="classification-example.html#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR and FPR at this threshold</span></span>
+<span id="cb478-2"><a href="classification-example.html#cb478-2" aria-hidden="true" tabindex="-1"></a>TPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.8494898</code></pre>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="classification-example.html#cb480-1" aria-hidden="true" tabindex="-1"></a>FPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.2024676</code></pre>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="classification-example.html#cb482-1" aria-hidden="true" tabindex="-1"></a>J[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.6470222</code></pre>
+<p>And the confusion table (from the last run):</p>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="classification-example.html#cb484-1" aria-hidden="true" tabindex="-1"></a>yHat <span class="ot">&lt;-</span> phat <span class="sc">&gt;</span> opt_th</span>
+<span id="cb484-2"><a href="classification-example.html#cb484-2" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, tsdf<span class="sc">$</span>Y)</span>
+<span id="cb484-3"><a href="classification-example.html#cb484-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb484-4"><a href="classification-example.html#cb484-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to rotate the table (we did before)</span></span>
+<span id="cb484-5"><a href="classification-example.html#cb484-5" aria-hidden="true" tabindex="-1"></a>rot <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb484-6"><a href="classification-example.html#cb484-6" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, rev)</span>
+<span id="cb484-7"><a href="classification-example.html#cb484-7" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">apply</span>(t, <span class="dv">1</span>, rev)</span>
+<span id="cb484-8"><a href="classification-example.html#cb484-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">t</span>(tt))</span>
+<span id="cb484-9"><a href="classification-example.html#cb484-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb484-10"><a href="classification-example.html#cb484-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb484-11"><a href="classification-example.html#cb484-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Better looking table</span></span>
+<span id="cb484-12"><a href="classification-example.html#cb484-12" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">rot</span>(conf_table)</span>
+<span id="cb484-13"><a href="classification-example.html#cb484-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
+<span id="cb484-14"><a href="classification-example.html#cb484-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
+<span id="cb484-15"><a href="classification-example.html#cb484-15" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
+<pre><code>##           
+## yHat       Y = 1 Y = 0
+##   Yhat = 1  1332  1001
+##   Yhat = 0   236  3943</code></pre>
+<p>Note that the optimal threshold is almost the ratio of cases in the data around 31%. We will come back to this issue later.</p>
+</div>
+<div id="logistic-regression-1" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Logistic Regression<a href="classification-example.html#logistic-regression-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="classification-example.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb486-2"><a href="classification-example.html#cb486-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb486-3"><a href="classification-example.html#cb486-3" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb486-4"><a href="classification-example.html#cb486-4" aria-hidden="true" tabindex="-1"></a>t <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb486-5"><a href="classification-example.html#cb486-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb486-6"><a href="classification-example.html#cb486-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>t) {</span>
+<span id="cb486-7"><a href="classification-example.html#cb486-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb486-8"><a href="classification-example.html#cb486-8" aria-hidden="true" tabindex="-1"></a>  shuffle <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(data), <span class="fu">nrow</span>(data), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb486-9"><a href="classification-example.html#cb486-9" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb486-10"><a href="classification-example.html#cb486-10" aria-hidden="true" tabindex="-1"></a>  testind <span class="ot">&lt;-</span> shuffle[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(data) <span class="sc">/</span> k)]</span>
+<span id="cb486-11"><a href="classification-example.html#cb486-11" aria-hidden="true" tabindex="-1"></a>  trainind <span class="ot">&lt;-</span> shuffle[<span class="sc">-</span>testind]</span>
+<span id="cb486-12"><a href="classification-example.html#cb486-12" aria-hidden="true" tabindex="-1"></a>  trdf <span class="ot">&lt;-</span> data[trainind,] <span class="co">#80% of the data</span></span>
+<span id="cb486-13"><a href="classification-example.html#cb486-13" aria-hidden="true" tabindex="-1"></a>  tsdf <span class="ot">&lt;-</span> data[testind,] <span class="co">#20% of data set a side</span></span>
+<span id="cb486-14"><a href="classification-example.html#cb486-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb486-15"><a href="classification-example.html#cb486-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Logistic</span></span>
+<span id="cb486-16"><a href="classification-example.html#cb486-16" aria-hidden="true" tabindex="-1"></a>  model2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(Y <span class="sc">~</span> ., <span class="at">data =</span> trdf, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb486-17"><a href="classification-example.html#cb486-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Note &quot;response&quot;.  It predicts phat. Another option is &quot;class&quot;</span></span>
+<span id="cb486-18"><a href="classification-example.html#cb486-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#which predicts yhat by using 0.5</span></span>
+<span id="cb486-19"><a href="classification-example.html#cb486-19" aria-hidden="true" tabindex="-1"></a>  phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model2, tsdf, <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb486-20"><a href="classification-example.html#cb486-20" aria-hidden="true" tabindex="-1"></a>  phat[phat <span class="sc">&lt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb486-21"><a href="classification-example.html#cb486-21" aria-hidden="true" tabindex="-1"></a>  phat[phat <span class="sc">&gt;</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb486-22"><a href="classification-example.html#cb486-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb486-23"><a href="classification-example.html#cb486-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ROC &amp; AUC (from ROCR)</span></span>
+<span id="cb486-24"><a href="classification-example.html#cb486-24" aria-hidden="true" tabindex="-1"></a>  phat_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(phat, <span class="st">&quot;Y&quot;</span> <span class="ot">=</span> tsdf<span class="sc">$</span>Y)</span>
+<span id="cb486-25"><a href="classification-example.html#cb486-25" aria-hidden="true" tabindex="-1"></a>  pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat_df[, <span class="dv">1</span>], phat_df[, <span class="dv">2</span>])</span>
+<span id="cb486-26"><a href="classification-example.html#cb486-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb486-27"><a href="classification-example.html#cb486-27" aria-hidden="true" tabindex="-1"></a>  auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb486-28"><a href="classification-example.html#cb486-28" aria-hidden="true" tabindex="-1"></a>  AUC[i] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb486-29"><a href="classification-example.html#cb486-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb486-30"><a href="classification-example.html#cb486-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb486-31"><a href="classification-example.html#cb486-31" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AUC, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>)</span>
+<span id="cb486-32"><a href="classification-example.html#cb486-32" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="fu">mean</span>(AUC), <span class="at">b =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="classification-example.html#cb487-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(AUC)</span></code></pre></div>
+<pre><code>## [1] 0.908179</code></pre>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="classification-example.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">var</span>(AUC))</span></code></pre></div>
+<pre><code>## [1] 0.003593404</code></pre>
+<p>Both LPM and Logistic methods are linear classifiers. We can add polynomials and interactions manually to capture possible nonlinearities in the data but that would be an impossible job as the number of features would grow exponentially. This brings us to a nonparametric classifier, kNN.</p>
+</div>
+<div id="knn" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> kNN<a href="classification-example.html#knn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will train kNN with the choice of <span class="math inline">\(k\)</span> and use AUC as our performance criteria in choosing <span class="math inline">\(k\)</span>.</p>
+<div id="knn-10-fold-cv" class="section level3 hasAnchor" number="11.3.1">
+<h3><span class="header-section-number">11.3.1</span> kNN 10-fold CV<a href="classification-example.html#knn-10-fold-cv" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>There are several packages in R for kNN applications: <code>knn()</code> from the <code>class</code> package and <code>knn3()</code> in the <code>caret</code> package. We will use <code>knn3()</code> in the caret package. Since kNN use distances, we should scale the numerical variables first to make their magnitudes on the same scale.</p>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="classification-example.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb491-2"><a href="classification-example.html#cb491-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-3"><a href="classification-example.html#cb491-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;adult_train.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb491-4"><a href="classification-example.html#cb491-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-5"><a href="classification-example.html#cb491-5" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, </span>
+<span id="cb491-6"><a href="classification-example.html#cb491-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;WorkClass&quot;</span>,</span>
+<span id="cb491-7"><a href="classification-example.html#cb491-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;fnlwgt&quot;</span>,</span>
+<span id="cb491-8"><a href="classification-example.html#cb491-8" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Education&quot;</span>,</span>
+<span id="cb491-9"><a href="classification-example.html#cb491-9" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;EducationNum&quot;</span>,</span>
+<span id="cb491-10"><a href="classification-example.html#cb491-10" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;MaritalStatus&quot;</span>,</span>
+<span id="cb491-11"><a href="classification-example.html#cb491-11" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Occupation&quot;</span>,</span>
+<span id="cb491-12"><a href="classification-example.html#cb491-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Relationship&quot;</span>,</span>
+<span id="cb491-13"><a href="classification-example.html#cb491-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Race&quot;</span>,</span>
+<span id="cb491-14"><a href="classification-example.html#cb491-14" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Sex&quot;</span>,</span>
+<span id="cb491-15"><a href="classification-example.html#cb491-15" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;CapitalGain&quot;</span>,</span>
+<span id="cb491-16"><a href="classification-example.html#cb491-16" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;CapitalLoss&quot;</span>,</span>
+<span id="cb491-17"><a href="classification-example.html#cb491-17" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;HoursPerWeek&quot;</span>,</span>
+<span id="cb491-18"><a href="classification-example.html#cb491-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;NativeCountry&quot;</span>,</span>
+<span id="cb491-19"><a href="classification-example.html#cb491-19" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;IncomeLevel&quot;</span>)</span>
+<span id="cb491-20"><a href="classification-example.html#cb491-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-21"><a href="classification-example.html#cb491-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> varNames</span>
+<span id="cb491-22"><a href="classification-example.html#cb491-22" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data</span>
+<span id="cb491-23"><a href="classification-example.html#cb491-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-24"><a href="classification-example.html#cb491-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping single observation</span></span>
+<span id="cb491-25"><a href="classification-example.html#cb491-25" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">which</span>(df<span class="sc">$</span>NativeCountry<span class="sc">==</span><span class="st">&quot; Holand-Netherlands&quot;</span>)</span>
+<span id="cb491-26"><a href="classification-example.html#cb491-26" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, ]</span>
+<span id="cb491-27"><a href="classification-example.html#cb491-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-28"><a href="classification-example.html#cb491-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Scaling the numerical variables</span></span>
+<span id="cb491-29"><a href="classification-example.html#cb491-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))</span>
+<span id="cb491-30"><a href="classification-example.html#cb491-30" aria-hidden="true" tabindex="-1"></a>   <span class="cf">if</span>(<span class="fu">is.integer</span>(df[,i])) df[,i] <span class="ot">&lt;-</span> <span class="fu">scale</span>(df[,i])</span>
+<span id="cb491-31"><a href="classification-example.html#cb491-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-32"><a href="classification-example.html#cb491-32" aria-hidden="true" tabindex="-1"></a><span class="co">#Converting the character variables to factor</span></span>
+<span id="cb491-33"><a href="classification-example.html#cb491-33" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">sapply</span>(df, is.character)] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df[<span class="fu">sapply</span>(df, is.character)],</span>
+<span id="cb491-34"><a href="classification-example.html#cb491-34" aria-hidden="true" tabindex="-1"></a>                                       as.factor)</span>
+<span id="cb491-35"><a href="classification-example.html#cb491-35" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    32560 obs. of  15 variables:
+##  $ Age          : num [1:32560, 1] 0.0307 0.8371 -0.0427 1.057 -0.7758 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 38.6
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 13.6
+##  $ WorkClass    : Factor w/ 9 levels &quot; ?&quot;,&quot; Federal-gov&quot;,..: 8 7 5 5 5 5 5 7 5 5 ...
+##  $ fnlwgt       : num [1:32560, 1] -1.064 -1.009 0.245 0.426 1.408 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 189783
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 105548
+##  $ Education    : Factor w/ 16 levels &quot; 10th&quot;,&quot; 11th&quot;,..: 10 10 12 2 10 13 7 12 13 10 ...
+##  $ EducationNum : num [1:32560, 1] 1.13 1.13 -0.42 -1.2 1.13 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 10.1
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 2.57
+##  $ MaritalStatus: Factor w/ 7 levels &quot; Divorced&quot;,&quot; Married-AF-spouse&quot;,..: 5 3 1 3 3 3 4 3 5 3 ...
+##  $ Occupation   : Factor w/ 15 levels &quot; ?&quot;,&quot; Adm-clerical&quot;,..: 2 5 7 7 11 5 9 5 11 5 ...
+##  $ Relationship : Factor w/ 6 levels &quot; Husband&quot;,&quot; Not-in-family&quot;,..: 2 1 2 1 6 6 2 1 2 1 ...
+##  $ Race         : Factor w/ 5 levels &quot; Amer-Indian-Eskimo&quot;,..: 5 5 5 3 3 5 3 5 5 5 ...
+##  $ Sex          : Factor w/ 2 levels &quot; Female&quot;,&quot; Male&quot;: 2 2 2 2 1 1 1 2 1 2 ...
+##  $ CapitalGain  : num [1:32560, 1] 0.148 -0.146 -0.146 -0.146 -0.146 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 1078
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 7385
+##  $ CapitalLoss  : num [1:32560, 1] -0.217 -0.217 -0.217 -0.217 -0.217 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 87.2
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 403
+##  $ HoursPerWeek : num [1:32560, 1] -0.0354 -2.2221 -0.0354 -0.0354 -0.0354 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 40.4
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 12.3
+##  $ NativeCountry: Factor w/ 41 levels &quot; ?&quot;,&quot; Cambodia&quot;,..: 39 39 39 39 6 39 23 39 39 39 ...
+##  $ IncomeLevel  : Factor w/ 2 levels &quot; &lt;=50K&quot;,&quot; &gt;50K&quot;: 1 1 1 1 1 1 1 2 2 2 ...</code></pre>
+<p>Now we are ready. Here is our kNN training:</p>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="classification-example.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb493-2"><a href="classification-example.html#cb493-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb493-3"><a href="classification-example.html#cb493-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-4"><a href="classification-example.html#cb493-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#for the same results, no need otherwise</span></span>
+<span id="cb493-5"><a href="classification-example.html#cb493-5" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb493-6"><a href="classification-example.html#cb493-6" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb493-7"><a href="classification-example.html#cb493-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-8"><a href="classification-example.html#cb493-8" aria-hidden="true" tabindex="-1"></a>ind_test <span class="ot">&lt;-</span> sh[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df) <span class="sc">/</span> h)]</span>
+<span id="cb493-9"><a href="classification-example.html#cb493-9" aria-hidden="true" tabindex="-1"></a>ind_train <span class="ot">&lt;-</span> sh[<span class="sc">-</span>ind_test]</span>
+<span id="cb493-10"><a href="classification-example.html#cb493-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-11"><a href="classification-example.html#cb493-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Put 10% a side as a test set</span></span>
+<span id="cb493-12"><a href="classification-example.html#cb493-12" aria-hidden="true" tabindex="-1"></a>trdf <span class="ot">&lt;-</span> df[ind_train, ]</span>
+<span id="cb493-13"><a href="classification-example.html#cb493-13" aria-hidden="true" tabindex="-1"></a>tsdf <span class="ot">&lt;-</span> df[ind_test, ]</span>
+<span id="cb493-14"><a href="classification-example.html#cb493-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-15"><a href="classification-example.html#cb493-15" aria-hidden="true" tabindex="-1"></a><span class="co"># h - fold CV</span></span>
+<span id="cb493-16"><a href="classification-example.html#cb493-16" aria-hidden="true" tabindex="-1"></a>nval <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fu">nrow</span>(trdf) <span class="sc">/</span> h)</span>
+<span id="cb493-17"><a href="classification-example.html#cb493-17" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb493-18"><a href="classification-example.html#cb493-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-19"><a href="classification-example.html#cb493-19" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb493-20"><a href="classification-example.html#cb493-20" aria-hidden="true" tabindex="-1"></a>MAUC2 <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb493-21"><a href="classification-example.html#cb493-21" aria-hidden="true" tabindex="-1"></a>k_opt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb493-22"><a href="classification-example.html#cb493-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-23"><a href="classification-example.html#cb493-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>h) {</span>
+<span id="cb493-24"><a href="classification-example.html#cb493-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">&lt;</span> h) {</span>
+<span id="cb493-25"><a href="classification-example.html#cb493-25" aria-hidden="true" tabindex="-1"></a>    ind_val <span class="ot">&lt;-</span> <span class="fu">c</span>(((i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> nval <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(i <span class="sc">*</span> nval))</span>
+<span id="cb493-26"><a href="classification-example.html#cb493-26" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
+<span id="cb493-27"><a href="classification-example.html#cb493-27" aria-hidden="true" tabindex="-1"></a>    ind_val <span class="ot">&lt;-</span> <span class="fu">c</span>(((i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> nval <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(ind))</span>
+<span id="cb493-28"><a href="classification-example.html#cb493-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb493-29"><a href="classification-example.html#cb493-29" aria-hidden="true" tabindex="-1"></a>  ind_train <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(trdf))[<span class="sc">-</span>ind_val]</span>
+<span id="cb493-30"><a href="classification-example.html#cb493-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb493-31"><a href="classification-example.html#cb493-31" aria-hidden="true" tabindex="-1"></a>  df_train <span class="ot">&lt;-</span> trdf[ind_train, ]</span>
+<span id="cb493-32"><a href="classification-example.html#cb493-32" aria-hidden="true" tabindex="-1"></a>  df_val <span class="ot">&lt;-</span> trdf[ind_val, ]</span>
+<span id="cb493-33"><a href="classification-example.html#cb493-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb493-34"><a href="classification-example.html#cb493-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(k)) {</span>
+<span id="cb493-35"><a href="classification-example.html#cb493-35" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">knn3</span>(IncomeLevel <span class="sc">~</span> ., <span class="at">data =</span> df_train, <span class="at">k =</span> k[s])</span>
+<span id="cb493-36"><a href="classification-example.html#cb493-36" aria-hidden="true" tabindex="-1"></a>    phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, df_val, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb493-37"><a href="classification-example.html#cb493-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb493-38"><a href="classification-example.html#cb493-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">#AUC</span></span>
+<span id="cb493-39"><a href="classification-example.html#cb493-39" aria-hidden="true" tabindex="-1"></a>    pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[, <span class="dv">2</span>], df_val<span class="sc">$</span>IncomeLevel)</span>
+<span id="cb493-40"><a href="classification-example.html#cb493-40" aria-hidden="true" tabindex="-1"></a>    auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb493-41"><a href="classification-example.html#cb493-41" aria-hidden="true" tabindex="-1"></a>    AUC[s] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb493-42"><a href="classification-example.html#cb493-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb493-43"><a href="classification-example.html#cb493-43" aria-hidden="true" tabindex="-1"></a>  MAUC2[i] <span class="ot">&lt;-</span> AUC[<span class="fu">which.max</span>(AUC)]</span>
+<span id="cb493-44"><a href="classification-example.html#cb493-44" aria-hidden="true" tabindex="-1"></a>  k_opt[i] <span class="ot">&lt;-</span> k[<span class="fu">which.max</span>(AUC)]</span>
+<span id="cb493-45"><a href="classification-example.html#cb493-45" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that kNN would best fit on data sets with true numeric variables. Now we can find the tuned kNN (i.e.the best “k”) and apply the trained kNN for prediction using the test data we split at the beginning</p>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="classification-example.html#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(k_opt, MAUC2)</span></code></pre></div>
+<pre><code>##       k_opt     MAUC2
+##  [1,]    49 0.9020390
+##  [2,]    37 0.9015282
+##  [3,]    27 0.8911303
+##  [4,]    45 0.8967005
+##  [5,]    47 0.9035859
+##  [6,]    21 0.9004941
+##  [7,]    33 0.8937860
+##  [8,]    37 0.8985006
+##  [9,]    43 0.8918030
+## [10,]    39 0.8862083</code></pre>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="classification-example.html#cb496-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(k_opt)</span></code></pre></div>
+<pre><code>## [1] 37.8</code></pre>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="classification-example.html#cb498-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(MAUC2)</span></code></pre></div>
+<pre><code>## [1] 0.8965776</code></pre>
+<p>We can compare kNN with LPM (and Logistic) by AUC (not the one given above!) but “k” is not stable. Although, we can go with the mean of “k” or the mode of “k”, we can address this problem by changing the order of loops and using bootstrapping in our training instead of 10-fold CV, which would also increase the number or loops hence the running time.</p>
+<p>Before jumping into this possible solution, we need to think about what we have done so far. We trained our kNN. That is, we got the value of our hyperparameter. We should use our tuned kNN to test it on the test data that we put aside at the beginning. The proper way to that, however, is to have several loops, instead of one like what we did here, and calculate the test AUC for comparison, which is similar to what we did in LPM and Logistic before. We will not do it here as the running time would be very long, which, by the way, shows the importance of having fast “machines” as well as efficient algorithms.</p>
+<p>A more stable, but much longer, suggestion for tuning our kNN application is using a bootstrapping method. It runs multiple loops and takes the average of AUC with the same “k”. The example below is restricted to 20 runs for each “k”. Note that bootstrapping (See Chapter 37.5) is a process of resampling with replacement (all values in the sample have an equal probability of being selected, including multiple times, so a value could have duplicates).</p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="classification-example.html#cb500-1" aria-hidden="true" tabindex="-1"></a> <span class="do">#### Test/Train split - as before!########</span></span>
+<span id="cb500-2"><a href="classification-example.html#cb500-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># however, this is done only once here.</span></span>
+<span id="cb500-3"><a href="classification-example.html#cb500-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># Should be done in a loop multiple times</span></span>
+<span id="cb500-4"><a href="classification-example.html#cb500-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-5"><a href="classification-example.html#cb500-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb500-6"><a href="classification-example.html#cb500-6" aria-hidden="true" tabindex="-1"></a> sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb500-7"><a href="classification-example.html#cb500-7" aria-hidden="true" tabindex="-1"></a> h <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb500-8"><a href="classification-example.html#cb500-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-9"><a href="classification-example.html#cb500-9" aria-hidden="true" tabindex="-1"></a> ind_test <span class="ot">&lt;-</span> sh[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df)<span class="sc">/</span>h)]</span>
+<span id="cb500-10"><a href="classification-example.html#cb500-10" aria-hidden="true" tabindex="-1"></a> ind_train <span class="ot">&lt;-</span> sh[<span class="sc">-</span>ind_test]</span>
+<span id="cb500-11"><a href="classification-example.html#cb500-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-12"><a href="classification-example.html#cb500-12" aria-hidden="true" tabindex="-1"></a> <span class="co"># Put 10% a side as a test set</span></span>
+<span id="cb500-13"><a href="classification-example.html#cb500-13" aria-hidden="true" tabindex="-1"></a> trdf <span class="ot">&lt;-</span> df[ind_train, ]</span>
+<span id="cb500-14"><a href="classification-example.html#cb500-14" aria-hidden="true" tabindex="-1"></a> tsdf <span class="ot">&lt;-</span> df[ind_test, ]</span>
+<span id="cb500-15"><a href="classification-example.html#cb500-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-16"><a href="classification-example.html#cb500-16" aria-hidden="true" tabindex="-1"></a> <span class="do">########## Bootstrapping ############</span></span>
+<span id="cb500-17"><a href="classification-example.html#cb500-17" aria-hidden="true" tabindex="-1"></a> <span class="co"># Note that we use `by=2` to reduce the running time</span></span>
+<span id="cb500-18"><a href="classification-example.html#cb500-18" aria-hidden="true" tabindex="-1"></a> <span class="co"># With a faster machine, that could be set to 1.</span></span>
+<span id="cb500-19"><a href="classification-example.html#cb500-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-20"><a href="classification-example.html#cb500-20" aria-hidden="true" tabindex="-1"></a> k <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb500-21"><a href="classification-example.html#cb500-21" aria-hidden="true" tabindex="-1"></a> m <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co"># number of bootstrap loops (could be higher to, like 50)</span></span>
+<span id="cb500-22"><a href="classification-example.html#cb500-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-23"><a href="classification-example.html#cb500-23" aria-hidden="true" tabindex="-1"></a> MAUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-24"><a href="classification-example.html#cb500-24" aria-hidden="true" tabindex="-1"></a> k_opt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-25"><a href="classification-example.html#cb500-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-26"><a href="classification-example.html#cb500-26" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(k)){</span>
+<span id="cb500-27"><a href="classification-example.html#cb500-27" aria-hidden="true" tabindex="-1"></a>   AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-28"><a href="classification-example.html#cb500-28" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb500-29"><a href="classification-example.html#cb500-29" aria-hidden="true" tabindex="-1"></a>     <span class="co">#Here is the heart of bootstrapped tuning</span></span>
+<span id="cb500-30"><a href="classification-example.html#cb500-30" aria-hidden="true" tabindex="-1"></a>     <span class="fu">set.seed</span>(l) </span>
+<span id="cb500-31"><a href="classification-example.html#cb500-31" aria-hidden="true" tabindex="-1"></a>     bind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(trdf), <span class="fu">nrow</span>(trdf), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb500-32"><a href="classification-example.html#cb500-32" aria-hidden="true" tabindex="-1"></a>     uind <span class="ot">&lt;-</span> <span class="fu">unique</span>(bind)</span>
+<span id="cb500-33"><a href="classification-example.html#cb500-33" aria-hidden="true" tabindex="-1"></a>     df_train <span class="ot">&lt;-</span> df[uind, ]</span>
+<span id="cb500-34"><a href="classification-example.html#cb500-34" aria-hidden="true" tabindex="-1"></a>     df_val <span class="ot">&lt;-</span> df[<span class="sc">-</span>uind, ]</span>
+<span id="cb500-35"><a href="classification-example.html#cb500-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-36"><a href="classification-example.html#cb500-36" aria-hidden="true" tabindex="-1"></a>     model <span class="ot">&lt;-</span> <span class="fu">knn3</span>(IncomeLevel <span class="sc">~</span>., <span class="at">data =</span> df_train, <span class="at">k =</span> k[i])</span>
+<span id="cb500-37"><a href="classification-example.html#cb500-37" aria-hidden="true" tabindex="-1"></a>     phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, df_val, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb500-38"><a href="classification-example.html#cb500-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-39"><a href="classification-example.html#cb500-39" aria-hidden="true" tabindex="-1"></a>     <span class="co">#AUC</span></span>
+<span id="cb500-40"><a href="classification-example.html#cb500-40" aria-hidden="true" tabindex="-1"></a>     pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[,<span class="dv">2</span>], df_val<span class="sc">$</span>IncomeLevel)</span>
+<span id="cb500-41"><a href="classification-example.html#cb500-41" aria-hidden="true" tabindex="-1"></a>     auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb500-42"><a href="classification-example.html#cb500-42" aria-hidden="true" tabindex="-1"></a>     AUC[l] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb500-43"><a href="classification-example.html#cb500-43" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb500-44"><a href="classification-example.html#cb500-44" aria-hidden="true" tabindex="-1"></a>   MAUC[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(AUC)</span>
+<span id="cb500-45"><a href="classification-example.html#cb500-45" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
+<p>OK … now finding the optimal “k”</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="classification-example.html#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(k, MAUC, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc27-1.png" width="672" /></p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="classification-example.html#cb502-1" aria-hidden="true" tabindex="-1"></a>MAUC[<span class="fu">which.max</span>(MAUC)]</span></code></pre></div>
+<pre><code>## [1] 0.895667</code></pre>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="classification-example.html#cb504-1" aria-hidden="true" tabindex="-1"></a>k[<span class="fu">which.max</span>(MAUC)]</span></code></pre></div>
+<pre><code>## [1] 49</code></pre>
+<p>This algorithm can be more efficient with parallel processing using multicore loop applications, which we will see In Chapter 14 (14.4.2). The other way to reduce the running time is to make the increments in the grid (for “k”) larger, like 10, and then find the region where AUC is highest. Then, we can have a finer grid for that specific region to identify the best “k”.</p>
+<p>Before concluding this chapter, note that <code>knn3()</code> handles factor variables itself. This is an internal process, a good one. Remember, <code>knn()</code> could not do that and requires all features to be numeric. How could we do that? One way to handle it is to convert all factor variables to dummy (binary numerical) codes as shown below. This is also called as “one-hot encoding” in practice. This type of knowledge, what type of data handling is required by a package and how we can achieve it, is very important in data analytics.</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="classification-example.html#cb506-1" aria-hidden="true" tabindex="-1"></a>dftmp <span class="ot">&lt;-</span> df[,<span class="sc">-</span><span class="dv">15</span>]</span>
+<span id="cb506-2"><a href="classification-example.html#cb506-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-3"><a href="classification-example.html#cb506-3" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">sapply</span>(dftmp, is.factor)<span class="sc">==</span><span class="cn">TRUE</span>)</span>
+<span id="cb506-4"><a href="classification-example.html#cb506-4" aria-hidden="true" tabindex="-1"></a>fctdf <span class="ot">&lt;-</span> dftmp[,ind]</span>
+<span id="cb506-5"><a href="classification-example.html#cb506-5" aria-hidden="true" tabindex="-1"></a>numdf <span class="ot">&lt;-</span> dftmp[, <span class="sc">-</span>ind]</span>
+<span id="cb506-6"><a href="classification-example.html#cb506-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-7"><a href="classification-example.html#cb506-7" aria-hidden="true" tabindex="-1"></a><span class="co">#dummy coding</span></span>
+<span id="cb506-8"><a href="classification-example.html#cb506-8" aria-hidden="true" tabindex="-1"></a>fctdum <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>. <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> fctdf)</span>
+<span id="cb506-9"><a href="classification-example.html#cb506-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-10"><a href="classification-example.html#cb506-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Binding</span></span>
+<span id="cb506-11"><a href="classification-example.html#cb506-11" aria-hidden="true" tabindex="-1"></a>df_dum <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Y =</span> df<span class="sc">$</span>IncomeLevel, numdf, fctdum)</span></code></pre></div>
+<p>Now, it can also be used with <code>knn()</code> from the <code>class</code> package. Note that kNN gets unstable as the number of variables increases. We can see it by calculating test AUC multiple times by adding an outer loop to our algorithm.</p>
+</div>
+<div id="knn-with-caret-1" class="section level3 hasAnchor" number="11.3.2">
+<h3><span class="header-section-number">11.3.2</span> kNN with <code>caret</code><a href="classification-example.html#knn-with-caret-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="classification-example.html#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="co"># kNN needs a proper levels with caret!</span></span>
+<span id="cb507-2"><a href="classification-example.html#cb507-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>IncomeLevel)[<span class="fu">levels</span>(df<span class="sc">$</span>IncomeLevel)<span class="sc">==</span><span class="st">&quot; &lt;=50K&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Less&quot;</span></span>
+<span id="cb507-3"><a href="classification-example.html#cb507-3" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>IncomeLevel)[<span class="fu">levels</span>(df<span class="sc">$</span>IncomeLevel)<span class="sc">==</span><span class="st">&quot; &gt;50K&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;More&quot;</span></span>
+<span id="cb507-4"><a href="classification-example.html#cb507-4" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(df<span class="sc">$</span>IncomeLevel)</span></code></pre></div>
+<pre><code>## [1] &quot;Less&quot; &quot;More&quot;</code></pre>
+<div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb509-1"><a href="classification-example.html#cb509-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### Test/Train split ########</span></span>
+<span id="cb509-2"><a href="classification-example.html#cb509-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb509-3"><a href="classification-example.html#cb509-3" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb509-4"><a href="classification-example.html#cb509-4" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb509-5"><a href="classification-example.html#cb509-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-6"><a href="classification-example.html#cb509-6" aria-hidden="true" tabindex="-1"></a>ind_test <span class="ot">&lt;-</span> sh[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df)<span class="sc">/</span>h)]</span>
+<span id="cb509-7"><a href="classification-example.html#cb509-7" aria-hidden="true" tabindex="-1"></a>ind_train <span class="ot">&lt;-</span> sh[<span class="sc">-</span>ind_test]</span>
+<span id="cb509-8"><a href="classification-example.html#cb509-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-9"><a href="classification-example.html#cb509-9" aria-hidden="true" tabindex="-1"></a>trdf <span class="ot">&lt;-</span> df[ind_train, ]</span>
+<span id="cb509-10"><a href="classification-example.html#cb509-10" aria-hidden="true" tabindex="-1"></a>tsdf <span class="ot">&lt;-</span> df[ind_test, ]</span>
+<span id="cb509-11"><a href="classification-example.html#cb509-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-12"><a href="classification-example.html#cb509-12" aria-hidden="true" tabindex="-1"></a><span class="do">########## CARET SET-UP ##################</span></span>
+<span id="cb509-13"><a href="classification-example.html#cb509-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we use class probabilities, which is required for ROC training</span></span>
+<span id="cb509-14"><a href="classification-example.html#cb509-14" aria-hidden="true" tabindex="-1"></a><span class="co">#`twoClassSummary` will compute the sensitivity, specificity, AUC, ROC</span></span>
+<span id="cb509-15"><a href="classification-example.html#cb509-15" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>, <span class="at">p =</span> <span class="fl">0.9</span>, <span class="at">classProbs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb509-16"><a href="classification-example.html#cb509-16" aria-hidden="true" tabindex="-1"></a>                   <span class="at">summaryFunction =</span> twoClassSummary)</span>
+<span id="cb509-17"><a href="classification-example.html#cb509-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-18"><a href="classification-example.html#cb509-18" aria-hidden="true" tabindex="-1"></a><span class="co">#The main training process</span></span>
+<span id="cb509-19"><a href="classification-example.html#cb509-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>) <span class="co"># for the same results, no need otherwise</span></span>
+<span id="cb509-20"><a href="classification-example.html#cb509-20" aria-hidden="true" tabindex="-1"></a>model_knn3 <span class="ot">&lt;-</span> <span class="fu">train</span>(IncomeLevel <span class="sc">~</span> ., <span class="at">method =</span> <span class="st">&quot;knn&quot;</span>, <span class="at">data =</span> trdf,</span>
+<span id="cb509-21"><a href="classification-example.html#cb509-21" aria-hidden="true" tabindex="-1"></a>                   <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">k=</span><span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">2</span>)),</span>
+<span id="cb509-22"><a href="classification-example.html#cb509-22" aria-hidden="true" tabindex="-1"></a>                   <span class="at">trControl =</span> cv,</span>
+<span id="cb509-23"><a href="classification-example.html#cb509-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">metric =</span> <span class="st">&quot;ROC&quot;</span>) <span class="co">#Here is the key difference.</span></span>
+<span id="cb509-24"><a href="classification-example.html#cb509-24" aria-hidden="true" tabindex="-1"></a>                                   <span class="co">#we are asking caret to use ROC</span></span>
+<span id="cb509-25"><a href="classification-example.html#cb509-25" aria-hidden="true" tabindex="-1"></a>                                   <span class="co">#as our main performance criteria</span></span>
+<span id="cb509-26"><a href="classification-example.html#cb509-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-27"><a href="classification-example.html#cb509-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Optimal k</span></span>
+<span id="cb509-28"><a href="classification-example.html#cb509-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(model_knn3, <span class="at">highlight =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc29-1.png" width="672" /></p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="classification-example.html#cb510-1" aria-hidden="true" tabindex="-1"></a>model_knn3</span></code></pre></div>
+<pre><code>## k-Nearest Neighbors 
+## 
+## 29304 samples
+##    14 predictor
+##     2 classes: &#39;Less&#39;, &#39;More&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 26374, 26373, 26374, 26374, 26373, 26374, ... 
+## Resampling results across tuning parameters:
+## 
+##   k   ROC        Sens       Spec     
+##    3  0.8262230  0.8941795  0.5961648
+##    5  0.8586528  0.9031179  0.6005682
+##    7  0.8724161  0.9090915  0.6086648
+##    9  0.8800527  0.9111126  0.6088068
+##   11  0.8848148  0.9129091  0.6079545
+##   13  0.8884125  0.9150201  0.6035511
+##   15  0.8904958  0.9174006  0.6041193
+##   17  0.8915694  0.9167720  0.6063920
+##   19  0.8923858  0.9171763  0.6036932
+##   21  0.8936219  0.9179848  0.6035511
+##   23  0.8940702  0.9159186  0.6042614
+##   25  0.8947602  0.9174457  0.6039773
+##   27  0.8952041  0.9176254  0.6026989
+##   29  0.8955018  0.9179398  0.6019886
+##   31  0.8956911  0.9180746  0.6017045
+##   33  0.8959661  0.9187034  0.6029830
+##   35  0.8960988  0.9179398  0.5998580
+##   37  0.8963903  0.9182991  0.5994318
+##   39  0.8968082  0.9191523  0.5977273
+##   41  0.8967777  0.9192421  0.5977273
+##   43  0.8968486  0.9204999  0.5977273
+##   45  0.8970198  0.9202755  0.5944602
+##   47  0.8972242  0.9205450  0.5944602
+##   49  0.8971898  0.9208593  0.5923295
+## 
+## ROC was used to select the optimal model using the largest value.
+## The final value used for the model was k = 47.</code></pre>
+<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb512-1"><a href="classification-example.html#cb512-1" aria-hidden="true" tabindex="-1"></a>model_knn3<span class="sc">$</span>results</span></code></pre></div>
+<pre><code>##     k       ROC      Sens      Spec       ROCSD      SensSD      SpecSD
+## 1   3 0.8262230 0.8941795 0.5961648 0.004815409 0.008727063 0.012670476
+## 2   5 0.8586528 0.9031179 0.6005682 0.005448823 0.007349595 0.011200694
+## 3   7 0.8724161 0.9090915 0.6086648 0.005166892 0.006160801 0.015110770
+## 4   9 0.8800527 0.9111126 0.6088068 0.004782100 0.006779982 0.015820347
+## 5  11 0.8848148 0.9129091 0.6079545 0.005121326 0.006691569 0.009772617
+## 6  13 0.8884125 0.9150201 0.6035511 0.004814653 0.007291597 0.006261826
+## 7  15 0.8904958 0.9174006 0.6041193 0.004443550 0.006821105 0.011003812
+## 8  17 0.8915694 0.9167720 0.6063920 0.004336396 0.006641748 0.009964578
+## 9  19 0.8923858 0.9171763 0.6036932 0.004357410 0.007690924 0.009156761
+## 10 21 0.8936219 0.9179848 0.6035511 0.004689076 0.007526214 0.009644457
+## 11 23 0.8940702 0.9159186 0.6042614 0.004753603 0.007840512 0.008710062
+## 12 25 0.8947602 0.9174457 0.6039773 0.004637773 0.007644920 0.009151863
+## 13 27 0.8952041 0.9176254 0.6026989 0.004438855 0.007110203 0.009279578
+## 14 29 0.8955018 0.9179398 0.6019886 0.004414619 0.006857247 0.007080142
+## 15 31 0.8956911 0.9180746 0.6017045 0.004228545 0.007160469 0.006567629
+## 16 33 0.8959661 0.9187034 0.6029830 0.004194696 0.007855452 0.007342833
+## 17 35 0.8960988 0.9179398 0.5998580 0.004149906 0.007520967 0.008654547
+## 18 37 0.8963903 0.9182991 0.5994318 0.004319967 0.007271261 0.007426320
+## 19 39 0.8968082 0.9191523 0.5977273 0.004422126 0.007898694 0.007080142
+## 20 41 0.8967777 0.9192421 0.5977273 0.004740533 0.007711601 0.007745494
+## 21 43 0.8968486 0.9204999 0.5977273 0.004691945 0.007227390 0.007420280
+## 22 45 0.8970198 0.9202755 0.5944602 0.004919464 0.007125413 0.008207829
+## 23 47 0.8972242 0.9205450 0.5944602 0.004863486 0.007306936 0.008180470
+## 24 49 0.8971898 0.9208593 0.5923295 0.004929357 0.007144172 0.007335196</code></pre>
+<p>Confusion matrix:</p>
+<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="classification-example.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Performance metrics</span></span>
+<span id="cb514-2"><a href="classification-example.html#cb514-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model_knn3, tsdf, <span class="at">type =</span> <span class="st">&quot;raw&quot;</span>),</span>
+<span id="cb514-3"><a href="classification-example.html#cb514-3" aria-hidden="true" tabindex="-1"></a>                tsdf<span class="sc">$</span>IncomeLevel)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction Less More
+##       Less 2303  300
+##       More  179  474
+##                                           
+##                Accuracy : 0.8529          
+##                  95% CI : (0.8403, 0.8649)
+##     No Information Rate : 0.7623          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.571           
+##                                           
+##  Mcnemar&#39;s Test P-Value : 4.183e-08       
+##                                           
+##             Sensitivity : 0.9279          
+##             Specificity : 0.6124          
+##          Pos Pred Value : 0.8847          
+##          Neg Pred Value : 0.7259          
+##              Prevalence : 0.7623          
+##          Detection Rate : 0.7073          
+##    Detection Prevalence : 0.7994          
+##       Balanced Accuracy : 0.7701          
+##                                           
+##        &#39;Positive&#39; Class : Less            
+## </code></pre>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="classification-example.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we don&#39;t specify &quot;More&quot; as our positive results, the first level</span></span>
+<span id="cb516-2"><a href="classification-example.html#cb516-2" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;Less&quot; will be used as the &quot;positive&quot; result.</span></span>
+<span id="cb516-3"><a href="classification-example.html#cb516-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb516-4"><a href="classification-example.html#cb516-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model_knn3, tsdf, <span class="at">type =</span> <span class="st">&quot;raw&quot;</span>),</span>
+<span id="cb516-5"><a href="classification-example.html#cb516-5" aria-hidden="true" tabindex="-1"></a>                tsdf<span class="sc">$</span>IncomeLevel, <span class="at">positive =</span> <span class="st">&quot;More&quot;</span>)</span></code></pre></div>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction Less More
+##       Less 2303  300
+##       More  179  474
+##                                           
+##                Accuracy : 0.8529          
+##                  95% CI : (0.8403, 0.8649)
+##     No Information Rate : 0.7623          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.571           
+##                                           
+##  Mcnemar&#39;s Test P-Value : 4.183e-08       
+##                                           
+##             Sensitivity : 0.6124          
+##             Specificity : 0.9279          
+##          Pos Pred Value : 0.7259          
+##          Neg Pred Value : 0.8847          
+##              Prevalence : 0.2377          
+##          Detection Rate : 0.1456          
+##    Detection Prevalence : 0.2006          
+##       Balanced Accuracy : 0.7701          
+##                                           
+##        &#39;Positive&#39; Class : More            
+## </code></pre>
+<p>We now know two things: (1) how good the prediction is with kNN; (2) how good it is relative to other “base” or “benchmark” models. These two questions must be answered every time to evaluate the prediction performance of a machine learning algorithm. Although we didn’t calculate the test AUC in our own kNN algorithm, we can accept that kNN performance is good with AUC that is close to 90%. However, it is not significantly better than LPM and Logistic</p>
+
+</div>
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tuning-in-classification.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="cart.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/10-TuningClass.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

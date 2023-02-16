@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 CART | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 12 CART | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 12 CART | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 CART | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="classification-example.html"/>
+<link rel="next" href="ensemble-learning.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cart" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chapter 12</span> CART<a href="cart.html#cart" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Tree-based learning algorithms are considered to be one of the best and most used supervised learning methods. Unlike linear models, they handle non-linear relationships quite well. They are adaptable at solving classification or regression problems, which gives its name: <strong>C</strong>lassification <strong>A</strong>nd <strong>R</strong>egression <strong>T</strong>rees.</p>
+<p>Decision tree learning algorithms are based on a decision tree, which is a flowchart where each internal <strong>node</strong> represents a decision point (goes left or right), each <strong>branch</strong> represents those decisions, and each <strong>leaf</strong> at the end of a branch represents the outcome of the decision. Here is a simple decision tree about a gamble:</p>
+<p><img src="png/DT.png" width="130%" height="130%" /></p>
+<p>How can we use a decision tree in a learning algorithm? Let’s start with a classification problem:</p>
+<div id="cart---classification-tree" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> CART - Classification Tree<a href="cart.html#cart---classification-tree" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s start with a very simple example: suppose we have the following data:</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="cart.html#cb518-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb518-2"><a href="cart.html#cb518-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.09</span>, <span class="fl">0.11</span>, <span class="fl">0.17</span>, <span class="fl">0.23</span>, <span class="fl">0.33</span>, <span class="fl">0.5</span>, <span class="fl">0.54</span>, <span class="fl">0.62</span>, <span class="fl">0.83</span>, <span class="fl">0.88</span>) </span>
+<span id="cb518-3"><a href="cart.html#cb518-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.82</span>, <span class="fl">0.2</span>, <span class="fl">0.09</span>, <span class="fl">0.58</span>, <span class="fl">0.5</span>, <span class="fl">0.93</span>, <span class="fl">0.8</span>, <span class="fl">0.3</span>, <span class="fl">0.83</span>)</span>
+<span id="cb518-4"><a href="cart.html#cb518-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb518-5"><a href="cart.html#cb518-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x1 =</span> x1, <span class="at">x2 =</span> x2)</span>
+<span id="cb518-6"><a href="cart.html#cb518-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>x1, data<span class="sc">$</span>x2, <span class="at">col =</span> (data<span class="sc">$</span>y<span class="sc">+</span><span class="dv">1</span>), <span class="at">lwd =</span> <span class="dv">4</span>,</span>
+<span id="cb518-7"><a href="cart.html#cb518-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;x2&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;x1&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr2-1.png" width="672" /></p>
+<p>What’s the best rule on <span class="math inline">\(x_2\)</span> to classify black (<span class="math inline">\(0\)</span>) and red balls (<span class="math inline">\(1\)</span>)? <strong>Find a cutoff point on <span class="math inline">\(x_2\)</span> such that the maximum number of observations is correctly classified</strong></p>
+<p>To minimize the misclassification, we find that the cutoff point should be between <span class="math inline">\((0.6; 0.79)\)</span>. Hence the rule is <span class="math inline">\(x_2 &lt; k\)</span>, where <span class="math inline">\(k \in(0.6,0.79)\)</span></p>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb519-1"><a href="cart.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>x1, data<span class="sc">$</span>x2, <span class="at">col =</span> (data<span class="sc">$</span>y<span class="sc">+</span><span class="dv">1</span>), <span class="at">lwd =</span> <span class="dv">4</span>)</span>
+<span id="cb519-2"><a href="cart.html#cb519-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.62</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lty =</span> <span class="dv">5</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr3-1.png" width="672" /></p>
+<p><img src="png/tree1.png" width="130%" height="130%" /></p>
+<p>From this simple rule, we have two misclassified balls. We can add a new rule in the area below the horizontal blue line:</p>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="cart.html#cb520-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>x1, data<span class="sc">$</span>x2, <span class="at">col =</span> (data<span class="sc">$</span>y<span class="sc">+</span><span class="dv">1</span>), <span class="at">lwd =</span> <span class="dv">4</span>)</span>
+<span id="cb520-2"><a href="cart.html#cb520-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.62</span>, <span class="at">v =</span> <span class="fl">0.2</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;darkgreen&quot;</span>),</span>
+<span id="cb520-3"><a href="cart.html#cb520-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="dv">5</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr4-1.png" width="672" /></p>
+<p><img src="png/tree2.png" width="130%" height="130%" /></p>
+<p>Using these two rules, we correctly classified all balls (<span class="math inline">\(Y\)</span>). We did the classification manually by looking at the graph. How can we do it by an algorithm?</p>
+<p>First, we need to create an index that is going to measure the <strong>impurity</strong> in each node. Instead of counting misclassified <span class="math inline">\(y\)</span>’s, the <strong>impurity</strong> index will give us a continuous metric. The first index is the <strong>Gini Index</strong>, which can be defined at some node <span class="math inline">\(\mathcal{N}\)</span>:</p>
+<p><span class="math display">\[
+G(\mathcal{N}) = \sum_{k=1}^{K} p_{k}\left(1-p_{k}\right) = 1-\sum_{k=1}^{K} p_{k}^{2}
+\]</span>
+where, with <span class="math inline">\(p_k\)</span> is the fraction of items labeled with class <span class="math inline">\(k\)</span> in the node. If we have a binary outcome <span class="math inline">\((k=2)\)</span>, when <span class="math inline">\(p_k = 1\)</span>, <span class="math inline">\(G(\mathcal{N})=0\)</span> and when <span class="math inline">\(p_k = 0.5,\)</span> <span class="math inline">\(G(\mathcal{N})=0.5\)</span>. The former implies the minimal impurity (diversity), the latter shows the maximal impurity. A small <span class="math inline">\(G\)</span> means that a node contains predominantly observations from a single class. As in the previous example, when we have a binary outcome with two classes, <span class="math inline">\(y_i \in (0,1)\)</span>, this index can be written as:</p>
+<p><span class="math display">\[
+G(\mathcal{N})=\sum_{k=1}^{2} p_{k}\left(1-p_{k}\right)=2p\left(1-p\right)
+\]</span></p>
+<p>If we split the node into two leaves, <span class="math inline">\(\mathcal{N}_L\)</span> (left) and <span class="math inline">\(\mathcal{N}_R\)</span> (right), the <span class="math inline">\(G\)</span> will be:</p>
+<p><span class="math display">\[
+G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)=p_{L} G\left(\mathcal{N}_{L}\right)+p_{R} G\left(\mathcal{N}_{R}\right)
+\]</span></p>
+<p>Where <span class="math inline">\(p_L\)</span>, <span class="math inline">\(p_R\)</span> are the proportion of observations in <span class="math inline">\(\mathcal{N}_L\)</span> and <span class="math inline">\(\mathcal{N}_R\)</span>.</p>
+<p>Remember, we are trying to find the rule that gives us the best cutoff point. Now we can write the rule:</p>
+<p><span class="math display">\[
+\Delta=G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)&gt;\epsilon
+\]</span></p>
+<p>When the impurity is reduced substantially, the difference will be some positive number (<span class="math inline">\(\epsilon\)</span>). Hence, we find the cutoff point on a single variable that minimizes the impurity.</p>
+<p>Let’s use a dataset<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>, which reports about heart attacks and fatality (our binary variable).</p>
+<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb521-1"><a href="cart.html#cb521-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb521-2"><a href="cart.html#cb521-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Data</span></span>
+<span id="cb521-3"><a href="cart.html#cb521-3" aria-hidden="true" tabindex="-1"></a><span class="co">#myocarde = read.table(&quot;http://freakonometrics.free.fr/myocarde.csv&quot;,head=TRUE, sep=&quot;;&quot;)</span></span>
+<span id="cb521-4"><a href="cart.html#cb521-4" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">&quot;myocarde.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span> ,</span>
+<span id="cb521-5"><a href="cart.html#cb521-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">escape_double =</span> <span class="cn">FALSE</span>, <span class="at">trim_ws =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb521-6"><a href="cart.html#cb521-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb521-7"><a href="cart.html#cb521-7" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(myocarde)</span>
+<span id="cb521-8"><a href="cart.html#cb521-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(myocarde)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    71 obs. of  8 variables:
+##  $ FRCAR: num  90 90 120 82 80 80 94 80 78 100 ...
+##  $ INCAR: num  1.71 1.68 1.4 1.79 1.58 1.13 2.04 1.19 2.16 2.28 ...
+##  $ INSYS: num  19 18.7 11.7 21.8 19.7 14.1 21.7 14.9 27.7 22.8 ...
+##  $ PRDIA: num  16 24 23 14 21 18 23 16 15 16 ...
+##  $ PAPUL: num  19.5 31 29 17.5 28 23.5 27 21 20.5 23 ...
+##  $ PVENT: num  16 14 8 10 18.5 9 10 16.5 11.5 4 ...
+##  $ REPUL: num  912 1476 1657 782 1418 ...
+##  $ PRONO: chr  &quot;SURVIE&quot; &quot;DECES&quot; &quot;DECES&quot; &quot;SURVIE&quot; ...</code></pre>
+<p>The variable definitions are as follows: <code>FRCAR</code> (heart rate), <code>INCAR</code> (heart index), <code>INSYS</code> (stroke index), <code>PRDIA</code> (diastolic pressure), <code>PAPUL</code> (pulmonary arterial pressure), <code>PVENT</code> (ventricular pressure), <code>REPUL</code> (lung resistance), <code>PRONO</code>, which is our outcome variable (death “DECES”, survival “SURVIE”). We are ready to calculate <span class="math inline">\(G\)</span>-index:</p>
+<div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb523-1"><a href="cart.html#cb523-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recode PRONO</span></span>
+<span id="cb523-2"><a href="cart.html#cb523-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(myocarde<span class="sc">$</span>PRONO<span class="sc">==</span><span class="st">&quot;SURVIE&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb523-3"><a href="cart.html#cb523-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb523-4"><a href="cart.html#cb523-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Find G(N) without L and R</span></span>
+<span id="cb523-5"><a href="cart.html#cb523-5" aria-hidden="true" tabindex="-1"></a>G <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y))</span>
+<span id="cb523-6"><a href="cart.html#cb523-6" aria-hidden="true" tabindex="-1"></a>G</span></code></pre></div>
+<pre><code>## [1] 0.4832375</code></pre>
+<p>This is the level of “impurity” in our data. Now, we need to pick one variable and find a cutoff point in the variable. Then, we will calculate the same <span class="math inline">\(G\)</span> for both left and right of that point. The goal is the find the best cutoff point that reduces the “impurity”. Let’s pick <code>FRCAR</code> arbitrarily for now. Later we will see how to find the variable that the first split (left and right) should start from so that the reduction in “impurity” will be maximized.</p>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb525-1"><a href="cart.html#cb525-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s pick FRCAR to start</span></span>
+<span id="cb525-2"><a href="cart.html#cb525-2" aria-hidden="true" tabindex="-1"></a>x_1 <span class="ot">&lt;-</span> myocarde<span class="sc">$</span>FRCAR</span>
+<span id="cb525-3"><a href="cart.html#cb525-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb525-4"><a href="cart.html#cb525-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Put x and y in table</span></span>
+<span id="cb525-5"><a href="cart.html#cb525-5" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">=</span> <span class="fu">table</span>(y,x_1)</span>
+<span id="cb525-6"><a href="cart.html#cb525-6" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
+<pre><code>##    x_1
+## y   60 61 65 67 70 75 78 79 80 81 82 84 85 86 87 90 92 94 95 96 99 100 102 103
+##   0  1  0  1  0  1  1  0  1  4  0  0  0  1  0  2  2  2  1  3  0  0   1   1   1
+##   1  0  2  1  1  0  3  1  0  7  1  3  1  0  4  0  4  2  1  1  1  1   3   0   0
+##    x_1
+## y   105 108 110 116 118 120 122 125
+##   0   1   0   2   1   1   1   0   0
+##   1   0   1   1   0   1   0   1   1</code></pre>
+<p>Let’s see how we can calculate</p>
+<p><span class="math display">\[
+G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)=p_{L} G\left(\mathcal{N}_{L}\right)+p_{R} G\left(\mathcal{N}_{R}\right),
+\]</span>
+when <span class="math inline">\(x = 60\)</span>, for example.</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="cart.html#cb527-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s pick an arbitrary x value, x = 60 to see if (GL + GR &gt; GN)</span></span>
+<span id="cb527-2"><a href="cart.html#cb527-2" aria-hidden="true" tabindex="-1"></a>GL <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x_1 <span class="sc">&lt;=</span> <span class="dv">60</span>])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x_1 <span class="sc">&lt;=</span> <span class="dv">60</span>]))</span>
+<span id="cb527-3"><a href="cart.html#cb527-3" aria-hidden="true" tabindex="-1"></a>GR <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x_1 <span class="sc">&gt;</span> <span class="dv">60</span>])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x_1 <span class="sc">&gt;</span> <span class="dv">60</span>]))</span>
+<span id="cb527-4"><a href="cart.html#cb527-4" aria-hidden="true" tabindex="-1"></a>pL <span class="ot">&lt;-</span> <span class="fu">length</span>(x_1[x_1 <span class="sc">&lt;=</span> <span class="dv">60</span>])<span class="sc">/</span><span class="fu">length</span>(x_1) <span class="co">#Proportion of obs. on Left </span></span>
+<span id="cb527-5"><a href="cart.html#cb527-5" aria-hidden="true" tabindex="-1"></a>pR <span class="ot">&lt;-</span> <span class="fu">length</span>(x_1[x_1 <span class="sc">&gt;</span> <span class="dv">60</span>])<span class="sc">/</span><span class="fu">length</span>(x_1) <span class="co">#Proportion of obs. on Right</span></span></code></pre></div>
+<p>How much did we improve <span class="math inline">\(G\)</span>?</p>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="cart.html#cb528-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How much did we improve G?</span></span>
+<span id="cb528-2"><a href="cart.html#cb528-2" aria-hidden="true" tabindex="-1"></a>delta  <span class="ot">=</span> G <span class="sc">-</span> pL<span class="sc">*</span>GL <span class="sc">-</span> pR<span class="sc">*</span>GR</span>
+<span id="cb528-3"><a href="cart.html#cb528-3" aria-hidden="true" tabindex="-1"></a>delta</span></code></pre></div>
+<pre><code>## [1] 0.009998016</code></pre>
+<p>We need go trough each number on <span class="math inline">\(x_1\)</span> and identify the point that maximizes delta. A function can do that:</p>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb530-1"><a href="cart.html#cb530-1" aria-hidden="true" tabindex="-1"></a>GI <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb530-2"><a href="cart.html#cb530-2" aria-hidden="true" tabindex="-1"></a>  GL <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x_1 <span class="sc">&lt;=</span> x])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x_1 <span class="sc">&lt;=</span> x])) </span>
+<span id="cb530-3"><a href="cart.html#cb530-3" aria-hidden="true" tabindex="-1"></a>  GR <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x_1 <span class="sc">&gt;</span> x])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x_1 <span class="sc">&gt;</span> x]))</span>
+<span id="cb530-4"><a href="cart.html#cb530-4" aria-hidden="true" tabindex="-1"></a>  pL <span class="ot">&lt;-</span> <span class="fu">length</span>(x_1[x_1 <span class="sc">&lt;=</span> x])<span class="sc">/</span><span class="fu">length</span>(x_1)</span>
+<span id="cb530-5"><a href="cart.html#cb530-5" aria-hidden="true" tabindex="-1"></a>  pR <span class="ot">&lt;-</span> <span class="fu">length</span>(x_1[x_1 <span class="sc">&gt;</span> x])<span class="sc">/</span><span class="fu">length</span>(x_1)</span>
+<span id="cb530-6"><a href="cart.html#cb530-6" aria-hidden="true" tabindex="-1"></a>  del <span class="ot">=</span> G <span class="sc">-</span> pL<span class="sc">*</span>GL <span class="sc">-</span> pR<span class="sc">*</span>GR</span>
+<span id="cb530-7"><a href="cart.html#cb530-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(del)</span>
+<span id="cb530-8"><a href="cart.html#cb530-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb530-9"><a href="cart.html#cb530-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb530-10"><a href="cart.html#cb530-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s test it</span></span>
+<span id="cb530-11"><a href="cart.html#cb530-11" aria-hidden="true" tabindex="-1"></a><span class="fu">GI</span>(<span class="dv">60</span>)</span></code></pre></div>
+<pre><code>## [1] 0.009998016</code></pre>
+<p>It works! Now, we can use this function in a loop that goes over each unique <span class="math inline">\(x\)</span> and calculate their delta.</p>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb532-1"><a href="cart.html#cb532-1" aria-hidden="true" tabindex="-1"></a>xm <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(x_1))</span>
+<span id="cb532-2"><a href="cart.html#cb532-2" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb532-3"><a href="cart.html#cb532-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb532-4"><a href="cart.html#cb532-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Since we don&#39;t split at the last number</span></span>
+<span id="cb532-5"><a href="cart.html#cb532-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(xm)<span class="sc">-</span><span class="dv">1</span>) {</span>
+<span id="cb532-6"><a href="cart.html#cb532-6" aria-hidden="true" tabindex="-1"></a>  delta[i] <span class="ot">&lt;-</span> <span class="fu">GI</span>(xm[i])</span>
+<span id="cb532-7"><a href="cart.html#cb532-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb532-8"><a href="cart.html#cb532-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb532-9"><a href="cart.html#cb532-9" aria-hidden="true" tabindex="-1"></a>delta</span></code></pre></div>
+<pre><code>##  [1] 9.998016e-03 4.978782e-04 1.082036e-05 1.041714e-03 8.855953e-05
+##  [6] 7.363859e-04 2.295303e-03 2.546756e-04 1.142757e-03 2.551599e-03
+## [11] 9.862318e-03 1.329134e-02 8.257492e-03 2.402430e-02 1.160767e-02
+## [16] 1.634414e-02 1.352527e-02 1.229951e-02 3.109723e-03 5.692941e-03
+## [21] 9.212475e-03 1.919591e-02 1.244092e-02 6.882353e-03 2.747959e-03
+## [26] 6.282533e-03 1.547312e-03 1.082036e-05 4.978782e-04 9.671419e-03
+## [31] 4.766628e-03</code></pre>
+<p>Let’s see the cutoff point that gives us the highest delta.</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb534-1"><a href="cart.html#cb534-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(delta)</span></code></pre></div>
+<pre><code>## [1] 0.0240243</code></pre>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb536-1"><a href="cart.html#cb536-1" aria-hidden="true" tabindex="-1"></a>xm[<span class="fu">which.max</span>(delta)]</span></code></pre></div>
+<pre><code>## [1] 86</code></pre>
+<p>Although this is a simple and an imperfect algorithm, it can show us how we can build a learning system based on a decision tree. On one variable, <code>FRCAR</code> and with only one split we improved the Gini index by 2.5%. Obviously this is not good enough. Can we do more splitting?</p>
+<p>Since we now have two nodes (Left and Right at <span class="math inline">\(x_1 = 86\)</span>), we can think of each of them as one node and apply the same formula to both left and right nodes. As you can guess, this may give us a zero-<span class="math inline">\(G\)</span>, as we end up with splitting at every <span class="math inline">\(x_{1i}\)</span>. How can we prevent this overfitting? We will see this mechanism later, which is called <strong>pruning</strong>.</p>
+<p>Let’s continue our example. Wouldn’t it be a good idea if we check all seven variables and start with the one that has a significant improvements in delta when we split? We can do it easily with a loop:</p>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb538-1"><a href="cart.html#cb538-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust our function a little: add &quot;tr&quot;, the cutoff</span></span>
+<span id="cb538-2"><a href="cart.html#cb538-2" aria-hidden="true" tabindex="-1"></a>GI <span class="ot">&lt;-</span> <span class="cf">function</span>(x, tr){</span>
+<span id="cb538-3"><a href="cart.html#cb538-3" aria-hidden="true" tabindex="-1"></a>  G <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y))</span>
+<span id="cb538-4"><a href="cart.html#cb538-4" aria-hidden="true" tabindex="-1"></a>  GL <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x <span class="sc">&lt;=</span> tr])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x <span class="sc">&lt;=</span> tr])) </span>
+<span id="cb538-5"><a href="cart.html#cb538-5" aria-hidden="true" tabindex="-1"></a>  GR <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">mean</span>(y[x <span class="sc">&gt;</span> tr])<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">mean</span>(y[x <span class="sc">&gt;</span> tr]))</span>
+<span id="cb538-6"><a href="cart.html#cb538-6" aria-hidden="true" tabindex="-1"></a>  pL <span class="ot">&lt;-</span> <span class="fu">length</span>(x[x <span class="sc">&lt;=</span> tr])<span class="sc">/</span><span class="fu">length</span>(x)</span>
+<span id="cb538-7"><a href="cart.html#cb538-7" aria-hidden="true" tabindex="-1"></a>  pR <span class="ot">&lt;-</span> <span class="fu">length</span>(x[x <span class="sc">&gt;</span> tr])<span class="sc">/</span><span class="fu">length</span>(x)</span>
+<span id="cb538-8"><a href="cart.html#cb538-8" aria-hidden="true" tabindex="-1"></a>  del <span class="ot">=</span> G <span class="sc">-</span> pL<span class="sc">*</span>GL <span class="sc">-</span> pR<span class="sc">*</span>GR</span>
+<span id="cb538-9"><a href="cart.html#cb538-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(del)</span>
+<span id="cb538-10"><a href="cart.html#cb538-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb538-11"><a href="cart.html#cb538-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb538-12"><a href="cart.html#cb538-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The loop that applies GI on every x</span></span>
+<span id="cb538-13"><a href="cart.html#cb538-13" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> myocarde[, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb538-14"><a href="cart.html#cb538-14" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb538-15"><a href="cart.html#cb538-15" aria-hidden="true" tabindex="-1"></a>maxdelta <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb538-16"><a href="cart.html#cb538-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb538-17"><a href="cart.html#cb538-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(d)) {</span>
+<span id="cb538-18"><a href="cart.html#cb538-18" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(d[,j]))</span>
+<span id="cb538-19"><a href="cart.html#cb538-19" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb538-20"><a href="cart.html#cb538-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(xm)<span class="sc">-</span><span class="dv">1</span>) {</span>
+<span id="cb538-21"><a href="cart.html#cb538-21" aria-hidden="true" tabindex="-1"></a>    delta[i] <span class="ot">&lt;-</span> <span class="fu">GI</span>(d[,j], xm[i])</span>
+<span id="cb538-22"><a href="cart.html#cb538-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb538-23"><a href="cart.html#cb538-23" aria-hidden="true" tabindex="-1"></a>maxdelta[j] <span class="ot">&lt;-</span> <span class="fu">max</span>(delta)</span>
+<span id="cb538-24"><a href="cart.html#cb538-24" aria-hidden="true" tabindex="-1"></a>split[j] <span class="ot">&lt;-</span> xm[<span class="fu">which.max</span>(delta)]</span>
+<span id="cb538-25"><a href="cart.html#cb538-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb538-26"><a href="cart.html#cb538-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb538-27"><a href="cart.html#cb538-27" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">variables =</span> <span class="fu">colnames</span>(d), <span class="at">delta =</span> maxdelta)</span></code></pre></div>
+<pre><code>##   variables      delta
+## 1     FRCAR 0.02402430
+## 2     INCAR 0.26219024
+## 3     INSYS 0.28328013
+## 4     PRDIA 0.13184706
+## 5     PAPUL 0.09890283
+## 6     PVENT 0.04612125
+## 7     REPUL 0.26790701</code></pre>
+<p>This is good. We can identify that <code>INSYS</code> should be our first variable to split, as it has the highest delta.</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="cart.html#cb540-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(split[<span class="fu">which.max</span>(maxdelta)],<span class="dv">0</span>) <span class="co"># round it b/c the cutoff is x=18.7</span></span></code></pre></div>
+<pre><code>## [1] 19</code></pre>
+<p>We now know where to split on <code>INSYS</code>, which is 19. Next, we can split on <code>INSYS</code>, Left and Right and move on to the next variable to split, which would be the second best: <code>REBUL</code>.</p>
+<p>For a better interpretabilty, we can rank the importance of each variable by <strong>their gain in Gini</strong>. Without using <code>rpart()</code>, we can approximately order them by looking at our delta:</p>
+<div class="sourceCode" id="cb542"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb542-1"><a href="cart.html#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable importance</span></span>
+<span id="cb542-2"><a href="cart.html#cb542-2" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> <span class="fu">matrix</span>(maxdelta, <span class="dv">7</span>, <span class="dv">1</span>)</span>
+<span id="cb542-3"><a href="cart.html#cb542-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dm) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">names</span>(myocarde[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]))</span>
+<span id="cb542-4"><a href="cart.html#cb542-4" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> dm[<span class="fu">order</span>(dm[,<span class="dv">1</span>]),]</span>
+<span id="cb542-5"><a href="cart.html#cb542-5" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(dm, <span class="at">horiz =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.3</span>),</span>
+<span id="cb542-6"><a href="cart.html#cb542-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">cex.names =</span> <span class="fl">0.5</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>, <span class="at">main =</span> <span class="st">&quot;Variable Importance at the 1st Split&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr16-1.png" width="672" /></p>
+</div>
+<div id="rpart---recursive-partitioning" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> <code>rpart()</code> - Recursive Partitioning<a href="cart.html#rpart---recursive-partitioning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The R package <code>rpart</code> implements <strong>R</strong>ecursive <strong>PART</strong>itioning. It is easy to use.</p>
+<p>As in our case, when the response variable is categorical, the resulting tree is called <strong>classification tree</strong>. The default criterion, which is maximized in each split is the <strong>Gini coefficient</strong>. The method-argument can be switched according to the type of the response variable. It is <code>class</code> for categorical, <code>anova</code> for numerical, <code>poisson</code> for count data and <code>exp</code> for survival data. If the outcome variable is a factor variable, as in our case, we do not have to specify the method.</p>
+<p>The tree is built by the following process in <code>rpart</code>: first the single variable is found that <strong>best splits</strong> the data into two groups. After the data is separated, this process is applied separately to each sub-group. This goes on recursively until the subgroups either reach a <strong>minimum size</strong> or until no improvement can be made.</p>
+<p>Details can be found in this <a href="https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf">vignette</a> <span class="citation">(<a href="#ref-Atkinson_2022" role="doc-biblioref"><strong>Atkinson_2022?</strong></a>)</span>.</p>
+<p>Here, we apply <code>rpart</code> to our data without any modification to its default arguments:</p>
+<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb543-1"><a href="cart.html#cb543-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb543-2"><a href="cart.html#cb543-2" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">=</span> <span class="fu">rpart</span>(PRONO <span class="sc">~</span>., <span class="at">data =</span> myocarde, <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb543-3"><a href="cart.html#cb543-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb543-4"><a href="cart.html#cb543-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it</span></span>
+<span id="cb543-5"><a href="cart.html#cb543-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot) <span class="co"># You can use plot() but prp() is much better</span></span>
+<span id="cb543-6"><a href="cart.html#cb543-6" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(tree, <span class="at">type =</span> <span class="dv">2</span>, <span class="at">extra =</span> <span class="dv">1</span>, <span class="at">split.col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb543-7"><a href="cart.html#cb543-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">split.border.col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">box.col =</span> <span class="st">&quot;pink&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr17-1.png" width="672" /></p>
+<p>This shows that the left node (<code>DECES</code>) cannot be significantly improved by a further split on <code>REPUL</code>. But the right node (<code>SURVIE</code>) can be improved.</p>
+<p>Note that we haven’t trained our model explicitly. There are two ways to <strong>control</strong> the growth of a tree:</p>
+<ol style="list-style-type: decimal">
+<li>We can limit the growth of our tree by using its control parameters and by checking if the split is worth it, which is, as a default, what <code>rpart()</code> is doing with 10-fold cross-validation;</li>
+<li>We can grow the tree without any limitation and then <code>prune</code> it.</li>
+</ol>
+<p>Since we use the default control parameters with 10-fold CV, our first tree was grown by the first strategy. Before going further, let’s spend some time on the main arguments of <code>rpart()</code>:</p>
+<p><code>rpart(formula, data, weights, subset, na.action = na.rpart, method, model = FALSE, x = FALSE, y = TRUE, parms, control, cost, ...)</code></p>
+<p>We briefly describe some of its arguments based on <a href="https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257">An Introduction to Recursive Partitioning Using the RPART Routines</a> by Atkinson et.al. <span class="citation">(<a href="#ref-Atkinson_2000" role="doc-biblioref"><strong>Atkinson_2000?</strong></a>)</span>:</p>
+<ul>
+<li><code>formula</code>: the model formula, as in <code>lm()</code>. If the outcome <span class="math inline">\(y\)</span> has more than two levels, then categorical predictors must be fit by exhaustive enumeration, which can take a very long time.<br />
+</li>
+<li><code>data, weights, subset</code>: as in other models.<br />
+</li>
+<li><code>parms</code>: There are three parameters: prior (the vector of prior probabilities), loss (the loss matrix - for different weights for misclassification, split (could be “Gini” or “information Entropy”).<br />
+</li>
+<li><code>na.action</code>: default is <code>na.part</code>, which removes only those rows for which either the response or ALL of the predictors are missing. Hence <code>rpart()</code> retains partially missing observations. This is the single most useful feature of rpart models.<br />
+</li>
+<li><code>control</code>: a list of control parameters, usually the result of the <code>rpart.control</code> function:</li>
+</ul>
+<p><code>rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, surrogatestyle = 0, maxdepth = 30, ...)</code></p>
+<ul>
+<li><code>minsplit</code>: The minimum number of observations in a node for which the routine will even try to compute a split. The default is 20. This parameter can save computation time since smaller nodes are almost always pruned away by cross-validation.</li>
+<li><code>minbucket</code>: The minimum number of observations in a terminal node: This defaults to <code>minsplit</code>/3.</li>
+<li><code>maxcompete</code>: This parameter controls the number that will be printed. The default is 5.</li>
+<li><code>xval</code>: The number of cross-validations to be done. Default is 10.</li>
+<li><code>maxsurrogate</code>: The maximum number of surrogate variables to retain at each node. Surrogates give different information than competitor splits. The competitor list asks <strong>which other splits would have as many correct classifications</strong> surrogates ask <strong>which other splits would classify the same subjects in the same way</strong> which is a harsher criteria.</li>
+<li><code>usesurrogate</code>: If the value is 0, then a subject (observation) who is missing the primary split variable does not progress further down the tree.</li>
+<li><code>cp</code>: The threshold complexity parameter. Default is 0.01.</li>
+</ul>
+<p><strong>What are the surrogates?</strong> They have two primary functions: first, to split the data when the primary splitter is missing. Remember, <code>rpart()</code> does not drop the subject if it has a missing observation on a variable. When the observation missing on the primary split on that variable, <code>rpart()</code> find a surrogate for the variable so that it can carry out the split. As in our case, the primary splitter (<span class="math inline">\(x\)</span> variable) may never have been missing in the training data. However, when it comes time to make predictions on future data, we have no idea whether that particular splitter will always be available for each observations. When it is missing, then the surrogates will be able to take over and take on the work that the primary splitter accomplished during the initial building of the tree.</p>
+<p>We can see the the growth of the tree by looking at its CV table:</p>
+<div class="sourceCode" id="cb544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb544-1"><a href="cart.html#cb544-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(tree)</span></code></pre></div>
+<pre><code>## 
+## Classification tree:
+## rpart(formula = PRONO ~ ., data = myocarde, method = &quot;class&quot;)
+## 
+## Variables actually used in tree construction:
+## [1] INSYS REPUL
+## 
+## Root node error: 29/71 = 0.40845
+## 
+## n= 71 
+## 
+##         CP nsplit rel error  xerror    xstd
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.034483      1   0.27586 0.44828 0.11237
+## 3 0.010000      2   0.24138 0.48276 0.11560</code></pre>
+<p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.000000 in the table) in the root node. The <strong>relative</strong> improvement, or gain, due to a split is given by <code>CP</code> (cost complexity pruning), which is 0.724138 in the first split on <code>INSYS</code>. Therefore, the first split on <code>INSYS</code> reduces (improves) this error by 72.4138% to 27.5862% (1.000000 <code>rel error</code> - 0.724138 <code>CP</code>). This relative gain (<code>CP</code>) can be calculated as follows:</p>
+<p><span class="math display">\[
+\frac{\Delta}{G(\mathcal{N})}=\frac{G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)}{G(\mathcal{N})}.
+\]</span></p>
+<p>If this gain exceeds 1% - the default value - <code>rpart()</code> splits in two on a variable. As you can see from the table above, since there is no significant relative gain at the <span class="math inline">\(3^{rd}\)</span> split exceeding the default parameter 0.01, <code>rpart()</code> decides to stop growing the tree after the <span class="math inline">\(2^{nd}\)</span> split.</p>
+<p>Note that, we also calculated both the nominator and the denominator in our own algorithm: <span class="math inline">\(\Delta = 0.2832801\)</span> and <span class="math inline">\(G(\mathcal{N}) = 0.4832375\)</span>. Hence the relative gain was <span class="math inline">\(\frac{\Delta}{G(\mathcal{N})}=0.586213\)</span> in our case. We can replicate the same results if we change our outcome from factor to numeric:</p>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="cart.html#cb546-1" aria-hidden="true" tabindex="-1"></a>myocarde_v2 <span class="ot">&lt;-</span> myocarde</span>
+<span id="cb546-2"><a href="cart.html#cb546-2" aria-hidden="true" tabindex="-1"></a>myocarde_v2<span class="sc">$</span>PRONO <span class="ot">=</span> (myocarde_v2<span class="sc">$</span>PRONO<span class="sc">==</span><span class="st">&quot;SURVIE&quot;</span>)<span class="sc">*</span><span class="dv">1</span></span>
+<span id="cb546-3"><a href="cart.html#cb546-3" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">=</span> <span class="fu">rpart</span>(PRONO<span class="sc">~</span>.,<span class="at">data=</span>myocarde_v2)</span>
+<span id="cb546-4"><a href="cart.html#cb546-4" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(cart)</span></code></pre></div>
+<pre><code>## 
+## Regression tree:
+## rpart(formula = PRONO ~ ., data = myocarde_v2)
+## 
+## Variables actually used in tree construction:
+## [1] INSYS REPUL
+## 
+## Root node error: 17.155/71 = 0.24162
+## 
+## n= 71 
+## 
+##         CP nsplit rel error  xerror     xstd
+## 1 0.586213      0   1.00000 1.01953 0.045723
+## 2 0.101694      1   0.41379 0.80152 0.164666
+## 3 0.028263      2   0.31209 0.84748 0.170679
+## 4 0.010000      3   0.28383 0.78744 0.159418</code></pre>
+<p>It is not so easy to follow the <code>rpart</code> calculations for classification. Although the explanations in the <a href="https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf">vignette</a> <span class="citation">(<a href="#ref-Atkinson_2022" role="doc-biblioref"><strong>Atkinson_2022?</strong></a>)</span> suggests that Gini is used for classification, it seems that cost complexity pruning (<code>cp</code>) is reported based on accuracy (misclassification error) <a href="https://stats.stackexchange.com/q/223211">rather than Gini</a> <span class="citation">(<a href="#ref-Alan_2016" role="doc-biblioref"><strong>Alan_2016?</strong></a>)</span>.</p>
+<p>As you see, when the outcome is not a factor variable, <code>rpart</code> applies a <strong>regression tree</strong> method, which minimizes the sum of squares, <span class="math inline">\(\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2\)</span>. However, when <span class="math inline">\(y_i\)</span> is a binary number with two values 0 and 1, the sum of squares becomes <span class="math inline">\(np(1-p)\)</span>, which gives the same relative gain as Gini. This is clear as both relative gains (our calculation and the calculation by <code>rapart()</code>above) are the same.</p>
+<p>What’s the variable importance of <code>rpart()</code>?</p>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="cart.html#cb548-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
+<span id="cb548-2"><a href="cart.html#cb548-2" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> tree<span class="sc">$</span>variable.importance</span>
+<span id="cb548-3"><a href="cart.html#cb548-3" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> vi[<span class="fu">order</span>(vi)]</span>
+<span id="cb548-4"><a href="cart.html#cb548-4" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(vi<span class="sc">/</span><span class="dv">100</span>, <span class="at">horiz =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>,</span>
+<span id="cb548-5"><a href="cart.html#cb548-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">cex.names =</span> <span class="fl">0.5</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>, <span class="at">main =</span> <span class="st">&quot;Variable Importance - rpart()&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr20-1.png" width="672" /></p>
+<p>It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods. In <code>rpart()</code>, the value is calculated:</p>
+<blockquote>
+<p>(…) as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.</p>
+</blockquote>
+</div>
+<div id="pruning" class="section level2 hasAnchor" number="12.3">
+<h2><span class="header-section-number">12.3</span> Pruning<a href="cart.html#pruning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can now apply the second method to our case by removing the default limits in growing our tree. We can do it by changing the parameters of the <code>rpart</code> fit. Let’s see what happens if we override these parameters:</p>
+<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="cart.html#cb549-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s change the minsplit and minbucket</span></span>
+<span id="cb549-2"><a href="cart.html#cb549-2" aria-hidden="true" tabindex="-1"></a>tree2 <span class="ot">=</span> <span class="fu">rpart</span>(PRONO <span class="sc">~</span>., <span class="at">data =</span> myocarde,</span>
+<span id="cb549-3"><a href="cart.html#cb549-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>, <span class="at">minbucket =</span> <span class="dv">1</span>,</span>
+<span id="cb549-4"><a href="cart.html#cb549-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">cp =</span> <span class="dv">0</span>), <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb549-5"><a href="cart.html#cb549-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-6"><a href="cart.html#cb549-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it with a different package now</span></span>
+<span id="cb549-7"><a href="cart.html#cb549-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span>
+<span id="cb549-8"><a href="cart.html#cb549-8" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use plot() but prp() is much better</span></span>
+<span id="cb549-9"><a href="cart.html#cb549-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(tree2, <span class="at">caption =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr21-1.png" width="672" /></p>
+<p>This is our <strong>fully grown tree</strong> with a “perfect” fit, because it identifies every outcome (<code>DECES</code> and <code>SURVIE</code>) correctly at the terminal nodes (%’s give proportion of observations). Obviously, this is not a good idea as it overfits.</p>
+<p>Let’s summarize what we have seen so far: we can either go with the first strategy and <strong>limit</strong> the growth of the tree or we can have a fully developed tree then we can <code>prune</code> it.</p>
+<p>The general idea in pruning is to reduce the tree’s complexity by keeping only the most important splits. When we grow a tree, <code>rpart()</code> performs 10-fold cross-validation on the data. We can see the cross-validation result by <code>printcp()</code>.</p>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="cart.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(tree2)</span></code></pre></div>
+<pre><code>## 
+## Classification tree:
+## rpart(formula = PRONO ~ ., data = myocarde, method = &quot;class&quot;, 
+##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
+## 
+## Variables actually used in tree construction:
+## [1] FRCAR INCAR INSYS PVENT REPUL
+## 
+## Root node error: 29/71 = 0.40845
+## 
+## n= 71 
+## 
+##         CP nsplit rel error  xerror    xstd
+## 1 0.724138      0  1.000000 1.00000 0.14282
+## 2 0.103448      1  0.275862 0.58621 0.12399
+## 3 0.034483      2  0.172414 0.58621 0.12399
+## 4 0.017241      6  0.034483 0.62069 0.12640
+## 5 0.000000      8  0.000000 0.62069 0.12640</code></pre>
+<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="cart.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr22-1.png" width="672" /></p>
+<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="cart.html#cb553-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
+<span id="cb553-2"><a href="cart.html#cb553-2" aria-hidden="true" tabindex="-1"></a>min_cp</span></code></pre></div>
+<pre><code>## [1] 0.1034483</code></pre>
+<p>Remember <code>rpart</code> has a built-in process for cross-validation. The <code>xerror</code> is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, more levels (each row represents a different height of the tree) in the tree mean that it has a lower classification error on the training. However, you run the risk of overfitting. Often, the cross-validation error will actually grow as the tree gets more levels.</p>
+<p>There are two common ways to prune a tree by <code>rpart</code>:</p>
+<ol style="list-style-type: decimal">
+<li>Use the first level (i.e. least <code>nsplit</code>) with minimum <code>xerror</code>. The first level only kicks in when there are multiple levels having the same, minimum <code>xerror</code>. This is the most common used method.</li>
+<li>Use the first level where <code>xerror</code> &lt; min(<code>xerror</code>) + <code>xstd</code>, the level whose <code>xerror</code> is at or below horizontal line. This method takes into account the variability of <code>xerror</code> resulting from cross-validation.</li>
+</ol>
+<p>Therefore, it seems that we should prune our tree at the <span class="math inline">\(4^{th}\)</span> split. We use <code>cp</code> to prune the tree in <code>rpart</code> as follows:</p>
+<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="cart.html#cb555-1" aria-hidden="true" tabindex="-1"></a>ptree2 <span class="ot">&lt;-</span> <span class="fu">prune</span>(tree2, <span class="at">cp =</span> min_cp)</span>
+<span id="cb555-2"><a href="cart.html#cb555-2" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(ptree2)</span></code></pre></div>
+<pre><code>## 
+## Classification tree:
+## rpart(formula = PRONO ~ ., data = myocarde, method = &quot;class&quot;, 
+##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
+## 
+## Variables actually used in tree construction:
+## [1] INSYS
+## 
+## Root node error: 29/71 = 0.40845
+## 
+## n= 71 
+## 
+##        CP nsplit rel error  xerror    xstd
+## 1 0.72414      0   1.00000 1.00000 0.14282
+## 2 0.10345      1   0.27586 0.58621 0.12399</code></pre>
+<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb557-1"><a href="cart.html#cb557-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr23-1.png" width="672" /></p>
+<p>Now we have applied two approaches, limiting tree growth and pruning a fully grown tree. We also have two different trees: “<strong>tree</strong>” and “<strong>ptree2</strong>”. How can we test their performances? We know that we cannot test it with the training data. When applying this in practice, we should have a test dataset to check their performance.</p>
+</div>
+<div id="classification-with-titanic" class="section level2 hasAnchor" number="12.4">
+<h2><span class="header-section-number">12.4</span> Classification with Titanic<a href="cart.html#classification-with-titanic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s end this sections with a more realistic example: we will predict survival on the Titanic.</p>
+<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb558-1"><a href="cart.html#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data</span></span>
+<span id="cb558-2"><a href="cart.html#cb558-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PASWR)</span>
+<span id="cb558-3"><a href="cart.html#cb558-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(titanic3)</span>
+<span id="cb558-4"><a href="cart.html#cb558-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(titanic3)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    1309 obs. of  14 variables:
+##  $ pclass   : Factor w/ 3 levels &quot;1st&quot;,&quot;2nd&quot;,&quot;3rd&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ survived : int  1 1 0 0 0 1 1 0 1 0 ...
+##  $ name     : Factor w/ 1307 levels &quot;Abbing, Mr. Anthony&quot;,..: 22 24 25 26 27 31 46 47 51 55 ...
+##  $ sex      : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 1 2 1 2 1 2 1 2 1 2 ...
+##  $ age      : num  29 0.917 2 30 25 ...
+##  $ sibsp    : int  0 1 1 1 1 0 1 0 2 0 ...
+##  $ parch    : int  0 2 2 2 2 0 0 0 0 0 ...
+##  $ ticket   : Factor w/ 929 levels &quot;110152&quot;,&quot;110413&quot;,..: 188 50 50 50 50 125 93 16 77 826 ...
+##  $ fare     : num  211 152 152 152 152 ...
+##  $ cabin    : Factor w/ 187 levels &quot;&quot;,&quot;A10&quot;,&quot;A11&quot;,..: 45 81 81 81 81 151 147 17 63 1 ...
+##  $ embarked : Factor w/ 4 levels &quot;&quot;,&quot;Cherbourg&quot;,..: 4 4 4 4 4 4 4 4 4 2 ...
+##  $ boat     : Factor w/ 28 levels &quot;&quot;,&quot;1&quot;,&quot;10&quot;,&quot;11&quot;,..: 13 4 1 1 1 14 3 1 28 1 ...
+##  $ body     : int  NA NA NA 135 NA NA NA NA NA 22 ...
+##  $ home.dest: Factor w/ 369 levels &quot;&quot;,&quot;?Havana, Cuba&quot;,..: 309 231 231 231 231 237 163 25 23 229 ...</code></pre>
+<p>We will use the following variables:</p>
+<p><code>survived</code> - 1 if true, 0 otherwise;<br />
+<code>sex</code> - the gender of the passenger;<br />
+<code>age</code> - age of the passenger in years;<br />
+<code>pclass</code> - the passengers class of passage;<br />
+<code>sibsp</code> - the number of siblings/spouses aboard;<br />
+<code>parch</code> - the number of parents/children aboard.</p>
+<p>What predictors are associated with those who perished compared to those who survived?</p>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="cart.html#cb560-1" aria-hidden="true" tabindex="-1"></a>titan <span class="ot">&lt;-</span> <span class="fu">rpart</span>(survived<span class="sc">~</span>sex<span class="sc">+</span>age<span class="sc">+</span>pclass<span class="sc">+</span>sibsp<span class="sc">+</span>parch, <span class="at">data=</span>titanic3, <span class="at">method=</span><span class="st">&quot;class&quot;</span>)</span>
+<span id="cb560-2"><a href="cart.html#cb560-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb560-3"><a href="cart.html#cb560-3" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(titan, <span class="at">extra=</span><span class="dv">1</span>, <span class="at">faclen=</span><span class="dv">5</span>, <span class="at">box.col=</span><span class="fu">c</span>(<span class="st">&quot;indianred1&quot;</span>,<span class="st">&quot;aquamarine&quot;</span>)[tree<span class="sc">$</span>frame<span class="sc">$</span>yval])</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr25-1.png" width="672" /></p>
+<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb561-1"><a href="cart.html#cb561-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(titan<span class="sc">$</span>variable.importance, <span class="at">horiz=</span><span class="cn">TRUE</span>,</span>
+<span id="cb561-2"><a href="cart.html#cb561-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="st">&quot;yellow3&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>, <span class="at">cex.names =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr25-2.png" width="672" /></p>
+<p>If we want to see the cross-validation error and the <code>cp</code> table:</p>
+<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb562-1"><a href="cart.html#cb562-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(titan)</span></code></pre></div>
+<pre><code>## 
+## Classification tree:
+## rpart(formula = survived ~ sex + age + pclass + sibsp + parch, 
+##     data = titanic3, method = &quot;class&quot;)
+## 
+## Variables actually used in tree construction:
+## [1] age    parch  pclass sex    sibsp 
+## 
+## Root node error: 500/1309 = 0.38197
+## 
+## n= 1309 
+## 
+##         CP nsplit rel error xerror     xstd
+## 1 0.424000      0     1.000  1.000 0.035158
+## 2 0.021000      1     0.576  0.576 0.029976
+## 3 0.015000      3     0.534  0.558 0.029633
+## 4 0.011333      5     0.504  0.532 0.029117
+## 5 0.010000      9     0.458  0.532 0.029117</code></pre>
+<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="cart.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr26-1.png" width="672" /></p>
+<p>Of course, we would like to see the tree’s prediction accuracy by using a test dataset and the confusion table metrics.</p>
+<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb565-1"><a href="cart.html#cb565-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb565-2"><a href="cart.html#cb565-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb565-3"><a href="cart.html#cb565-3" aria-hidden="true" tabindex="-1"></a><span class="co">#test/train split</span></span>
+<span id="cb565-4"><a href="cart.html#cb565-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb565-5"><a href="cart.html#cb565-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(titanic3), <span class="fu">nrow</span>(titanic3)<span class="sc">*</span><span class="fl">0.7</span>)</span>
+<span id="cb565-6"><a href="cart.html#cb565-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> titanic3[ind, ]</span>
+<span id="cb565-7"><a href="cart.html#cb565-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> titanic3[<span class="sc">-</span>ind, ]</span>
+<span id="cb565-8"><a href="cart.html#cb565-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb565-9"><a href="cart.html#cb565-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Tree on train</span></span>
+<span id="cb565-10"><a href="cart.html#cb565-10" aria-hidden="true" tabindex="-1"></a>titan2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(survived<span class="sc">~</span>sex<span class="sc">+</span>age<span class="sc">+</span>pclass<span class="sc">+</span>sibsp<span class="sc">+</span>parch, <span class="at">data=</span>train, <span class="at">method=</span><span class="st">&quot;class&quot;</span>)</span>
+<span id="cb565-11"><a href="cart.html#cb565-11" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(titan2, test, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb565-12"><a href="cart.html#cb565-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb565-13"><a href="cart.html#cb565-13" aria-hidden="true" tabindex="-1"></a><span class="co">#AUC</span></span>
+<span id="cb565-14"><a href="cart.html#cb565-14" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[,<span class="dv">2</span>], test<span class="sc">$</span>survived)</span>
+<span id="cb565-15"><a href="cart.html#cb565-15" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb565-16"><a href="cart.html#cb565-16" aria-hidden="true" tabindex="-1"></a>auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>## [1] 0.814118</code></pre>
+<p>Here, we report only AUC in this simple example. Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in <code>rpart</code>). Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse). This can easily be done in <code>rpart</code> by the loss matrix.</p>
+<p>Before commenting on the strengths and weaknesses of CART, let’s see a regression tree.</p>
+</div>
+<div id="regression-tree" class="section level2 hasAnchor" number="12.5">
+<h2><span class="header-section-number">12.5</span> Regression Tree<a href="cart.html#regression-tree" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The same partitioning procedure can be applied when the outcome variable is not qualitative. A splitting criterion, which is used to decide which variable gives the best split, was either the Gini or log-likelihood function for a classification problem. Now we can can use the anova method as a splitting criteria:</p>
+<p><span class="math display">\[
+S S_{T}-\left(S S_{L}+S S_{R}\right),
+\]</span>
+where</p>
+<p><span class="math display">\[
+SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2},
+\]</span></p>
+<p>which is the sum of squares for the node and <span class="math inline">\(SS_R\)</span> and <span class="math inline">\(SS_L\)</span> are the sums of squares for the right and left splits, respectively. Similar to our delta method, if <span class="math inline">\(SS_{T}-\left(SS_{L}+SS_{R}\right)\)</span> is positive and significant, we make the split on the node (the variable). After the split, the fitted value of the node is the mean of <span class="math inline">\(y\)</span> of that node. The <code>anova</code> method is used for regression trees, which is the default method if <span class="math inline">\(y\)</span> a simple numeric vector. However, when <span class="math inline">\(y_i \in (0,1)\)</span>,</p>
+<p><span class="math display">\[
+SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2}=\sum y_{i}^2 -n\bar{y}^2=\sum y_{i} -n\bar{y}^2=n\bar y -n\bar{y}^2=np(1-p)
+\]</span></p>
+<p>Hence, we can show that the <strong>relative gain</strong> would be the same in regression trees using <span class="math inline">\(SS_T\)</span> or Gini when <span class="math inline">\(y_i \in (0,1)\)</span>.</p>
+<p>It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant. We will use <code>rpart()</code> in an example:</p>
+<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb567-1"><a href="cart.html#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated data</span></span>
+<span id="cb567-2"><a href="cart.html#cb567-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb567-3"><a href="cart.html#cb567-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb567-4"><a href="cart.html#cb567-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">*</span>x <span class="sc">+</span> <span class="dv">4</span><span class="sc">*</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>) <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">6</span>)</span>
+<span id="cb567-5"><a href="cart.html#cb567-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;y&quot;</span> <span class="ot">=</span> y, <span class="st">&quot;x&quot;</span> <span class="ot">=</span> x)</span>
+<span id="cb567-6"><a href="cart.html#cb567-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb568-1"><a href="cart.html#cb568-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
+<span id="cb568-2"><a href="cart.html#cb568-2" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit=</span><span class="dv">83</span>, d) <span class="co"># we want to have 1 split</span></span>
+<span id="cb568-3"><a href="cart.html#cb568-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit1)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr28-2.png" width="672" /></p>
+<p>When we have split at <span class="math inline">\(x=-0.65\)</span>, <code>rpart</code> calculates two constant <span class="math inline">\(\hat{f}(x_i)\)</span>’s both for the “left” and “right” splits:</p>
+<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb569-1"><a href="cart.html#cb569-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
+<pre><code>## [1] 15.33681</code></pre>
+<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb571-1"><a href="cart.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&gt;</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
+<pre><code>## [1] 0.9205211</code></pre>
+<p>Here we see them on the plot:</p>
+<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="cart.html#cb573-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb573-2"><a href="cart.html#cb573-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb573-3"><a href="cart.html#cb573-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit1, <span class="fu">data.frame</span>(<span class="at">x=</span>z)), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb573-4"><a href="cart.html#cb573-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span><span class="fl">0.65</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr30-1.png" width="672" /></p>
+<p>If we reduce the <code>minsplit</code>,</p>
+<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb574-1"><a href="cart.html#cb574-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
+<span id="cb574-2"><a href="cart.html#cb574-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit=</span><span class="dv">6</span>, d)</span>
+<span id="cb574-3"><a href="cart.html#cb574-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit2)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr31-1.png" width="672" /></p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="cart.html#cb575-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the plot</span></span>
+<span id="cb575-2"><a href="cart.html#cb575-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb575-3"><a href="cart.html#cb575-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit2, <span class="fu">data.frame</span>(<span class="at">x=</span>z)), <span class="at">col=</span><span class="st">&quot;green&quot;</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr31-2.png" width="672" /></p>
+<p>We will use an example of predicting Baseball players’ salaries, which is one of the most common example <a href="https://rdrr.io/cran/ISLR/man/Hitters.html">online</a> <span class="citation">(<a href="#ref-ISLR_2021" role="doc-biblioref"><strong>ISLR_2021?</strong></a>)</span>. This data set is deduced from the Baseball fielding data set: fielding performance includes the numbers of <code>Errors</code>, <code>Putouts</code> and <code>Assists</code> made by each player.</p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="cart.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hitters data</span></span>
+<span id="cb576-2"><a href="cart.html#cb576-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb576-3"><a href="cart.html#cb576-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Hitters&quot;</span>)</span>
+<span id="cb576-4"><a href="cart.html#cb576-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Hitters)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    322 obs. of  20 variables:
+##  $ AtBat    : int  293 315 479 496 321 594 185 298 323 401 ...
+##  $ Hits     : int  66 81 130 141 87 169 37 73 81 92 ...
+##  $ HmRun    : int  1 7 18 20 10 4 1 0 6 17 ...
+##  $ Runs     : int  30 24 66 65 39 74 23 24 26 49 ...
+##  $ RBI      : int  29 38 72 78 42 51 8 24 32 66 ...
+##  $ Walks    : int  14 39 76 37 30 35 21 7 8 65 ...
+##  $ Years    : int  1 14 3 11 2 11 2 3 2 13 ...
+##  $ CAtBat   : int  293 3449 1624 5628 396 4408 214 509 341 5206 ...
+##  $ CHits    : int  66 835 457 1575 101 1133 42 108 86 1332 ...
+##  $ CHmRun   : int  1 69 63 225 12 19 1 0 6 253 ...
+##  $ CRuns    : int  30 321 224 828 48 501 30 41 32 784 ...
+##  $ CRBI     : int  29 414 266 838 46 336 9 37 34 890 ...
+##  $ CWalks   : int  14 375 263 354 33 194 24 12 8 866 ...
+##  $ League   : Factor w/ 2 levels &quot;A&quot;,&quot;N&quot;: 1 2 1 2 2 1 2 1 2 1 ...
+##  $ Division : Factor w/ 2 levels &quot;E&quot;,&quot;W&quot;: 1 2 2 1 1 2 1 2 2 1 ...
+##  $ PutOuts  : int  446 632 880 200 805 282 76 121 143 0 ...
+##  $ Assists  : int  33 43 82 11 40 421 127 283 290 0 ...
+##  $ Errors   : int  20 10 14 3 4 25 7 9 19 0 ...
+##  $ Salary   : num  NA 475 480 500 91.5 750 70 100 75 1100 ...
+##  $ NewLeague: Factor w/ 2 levels &quot;A&quot;,&quot;N&quot;: 1 2 1 2 2 1 1 1 2 1 ...</code></pre>
+<p>What predictors are associated with baseball player’s Salary (1987 annual salary on opening day in thousands of dollars)?</p>
+<p>Let’s consider 3 covariates for the sake of simplicity: <code>Years</code> (Number of years in the major leagues); <code>Hits</code> (Number of hits in 1986); <code>Atbat</code> (Number of times at bat in 1986).</p>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="cart.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA&#39;s</span></span>
+<span id="cb578-2"><a href="cart.html#cb578-2" aria-hidden="true" tabindex="-1"></a>df<span class="ot">=</span>Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary),]</span>
+<span id="cb578-3"><a href="cart.html#cb578-3" aria-hidden="true" tabindex="-1"></a>dfshort <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">19</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">1</span>)]</span>
+<span id="cb578-4"><a href="cart.html#cb578-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb578-5"><a href="cart.html#cb578-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Build the tree</span></span>
+<span id="cb578-6"><a href="cart.html#cb578-6" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data=</span>dfshort, <span class="at">cp=</span><span class="dv">0</span>)</span>
+<span id="cb578-7"><a href="cart.html#cb578-7" aria-hidden="true" tabindex="-1"></a><span class="co">#cp=0 so fully grown</span></span>
+<span id="cb578-8"><a href="cart.html#cb578-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb578-9"><a href="cart.html#cb578-9" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(tree, <span class="at">extra=</span><span class="dv">1</span>, <span class="at">faclen=</span><span class="dv">5</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr33-1.png" width="672" /></p>
+<p>It works on the same principle as we described before: find terminal nodes that minimize the sum of squares. This process may give us a good prediction on the training set but not on the test set, as it overfits the data. Hence, we use a pruned tree found by <code>rpart</code> by cross-validation:</p>
+<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb579-1"><a href="cart.html#cb579-1" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data=</span>dfshort)</span>
+<span id="cb579-2"><a href="cart.html#cb579-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(ptree, <span class="at">extra=</span><span class="dv">1</span>, <span class="at">faclen=</span><span class="dv">5</span>)</span></code></pre></div>
+<p><img src="11-CART_files/figure-html/tr34-1.png" width="672" /></p>
+<p>We can see its prediction power similar to what we did in the Titanic data example. Since this is a regression, we can ask which one is better, a tree or a linear model? If the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(X\)</span> is linear, a linear model should perform better. We can test this:</p>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="cart.html#cb580-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test/train split</span></span>
+<span id="cb580-2"><a href="cart.html#cb580-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb580-3"><a href="cart.html#cb580-3" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(dfshort), <span class="fu">nrow</span>(dfshort)<span class="sc">*</span><span class="fl">0.7</span>)</span>
+<span id="cb580-4"><a href="cart.html#cb580-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> dfshort[ind, ]</span>
+<span id="cb580-5"><a href="cart.html#cb580-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> dfshort[<span class="sc">-</span>ind, ]</span>
+<span id="cb580-6"><a href="cart.html#cb580-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb580-7"><a href="cart.html#cb580-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Tree and lm() on train</span></span>
+<span id="cb580-8"><a href="cart.html#cb580-8" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data=</span>dfshort)</span>
+<span id="cb580-9"><a href="cart.html#cb580-9" aria-hidden="true" tabindex="-1"></a>predtree <span class="ot">&lt;-</span> <span class="fu">predict</span>(ptree, test)</span>
+<span id="cb580-10"><a href="cart.html#cb580-10" aria-hidden="true" tabindex="-1"></a>lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> ., <span class="at">data=</span>dfshort)</span>
+<span id="cb580-11"><a href="cart.html#cb580-11" aria-hidden="true" tabindex="-1"></a>predlin <span class="ot">&lt;-</span> <span class="fu">predict</span>(lin, test)</span>
+<span id="cb580-12"><a href="cart.html#cb580-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb580-13"><a href="cart.html#cb580-13" aria-hidden="true" tabindex="-1"></a><span class="co">#RMSPE</span></span>
+<span id="cb580-14"><a href="cart.html#cb580-14" aria-hidden="true" tabindex="-1"></a>rmspe_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predtree)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb580-15"><a href="cart.html#cb580-15" aria-hidden="true" tabindex="-1"></a>rmspe_tree</span></code></pre></div>
+<pre><code>## [1] 0.4601892</code></pre>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="cart.html#cb582-1" aria-hidden="true" tabindex="-1"></a>rmspe_lin <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predlin)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb582-2"><a href="cart.html#cb582-2" aria-hidden="true" tabindex="-1"></a>rmspe_lin</span></code></pre></div>
+<pre><code>## [1] 0.6026888</code></pre>
+<p>In this simple example, our the tree would do a better job.</p>
+<p><strong>Trees tend to work well for problems where there are important nonlinearities and interactions. The results are really intuitive and interpretable. However, trees are known to be quite sensitive to the original sample. Therefore, the models trained in one sample may have poor predictive accuracy on another sample.</strong> These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.</p>
+
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="4">
+<li id="fn4"><p><a href="https://freakonometrics.hypotheses.org/52776">freakonometrics</a> <span class="citation">(<a href="#ref-Charpentier_scratch" role="doc-biblioref"><strong>Charpentier_scratch?</strong></a>)</span><a href="cart.html#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="classification-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ensemble-learning.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/11-CART.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

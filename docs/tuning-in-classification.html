@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Tuning in Classification | Toolbox for Social Scientists and Policy Analysts</title>
+  <meta name="description" content="Chapter 10 Tuning in Classification | Toolbox for Social Scientists and Policy Analysts" />
+  <meta name="generator" content="bookdown 0.32.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Tuning in Classification | Toolbox for Social Scientists and Policy Analysts" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+  
+  <meta name="github-repo" content="yaydede/ToolShed_draft" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Tuning in Classification | Toolbox for Social Scientists and Policy Analysts" />
+  
+  
+  <meta name="twitter:image" content="https://yaydede.github.io/toolbox//png/cover2.png" />
+
+<meta name="author" content="Yigit Aydede" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="hyperparameter-tuning.html"/>
+<link rel="next" href="classification-example.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.26/datatables.js"></script>
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Toolbox</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#who"><i class="fa fa-check"></i>Who</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> How we define Machine Learning</a></li>
+<li class="chapter" data-level="2" data-path="preliminaries.html"><a href="preliminaries.html"><i class="fa fa-check"></i><b>2</b> Preliminaries</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="preliminaries.html"><a href="preliminaries.html#data-and-dataset-types"><i class="fa fa-check"></i><b>2.1</b> Data and dataset types</a></li>
+<li class="chapter" data-level="2.2" data-path="preliminaries.html"><a href="preliminaries.html#plots"><i class="fa fa-check"></i><b>2.2</b> Plots</a></li>
+<li class="chapter" data-level="2.3" data-path="preliminaries.html"><a href="preliminaries.html#probability-distributions-with-r"><i class="fa fa-check"></i><b>2.3</b> Probability Distributions with R</a></li>
+<li class="chapter" data-level="2.4" data-path="preliminaries.html"><a href="preliminaries.html#regressions"><i class="fa fa-check"></i><b>2.4</b> Regressions</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="preliminaries.html"><a href="preliminaries.html#ordinary-least-squares-ols"><i class="fa fa-check"></i><b>2.4.1</b> Ordinary Least Squares (OLS)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="preliminaries.html"><a href="preliminaries.html#maximum-likelihood-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Maximum Likelihood Estimators</a></li>
+<li class="chapter" data-level="2.4.3" data-path="preliminaries.html"><a href="preliminaries.html#estimating-mle-with-r"><i class="fa fa-check"></i><b>2.4.3</b> Estimating MLE with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="preliminaries.html"><a href="preliminaries.html#blue"><i class="fa fa-check"></i><b>2.5</b> BLUE</a></li>
+<li class="chapter" data-level="2.6" data-path="preliminaries.html"><a href="preliminaries.html#modeling-the-data"><i class="fa fa-check"></i><b>2.6</b> Modeling the data</a></li>
+<li class="chapter" data-level="2.7" data-path="preliminaries.html"><a href="preliminaries.html#causal-vs.-predictive-models"><i class="fa fa-check"></i><b>2.7</b> Causal vs. Predictive Models</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="preliminaries.html"><a href="preliminaries.html#causal-models"><i class="fa fa-check"></i><b>2.7.1</b> Causal Models</a></li>
+<li class="chapter" data-level="2.7.2" data-path="preliminaries.html"><a href="preliminaries.html#predictive-models"><i class="fa fa-check"></i><b>2.7.2</b> Predictive Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="preliminaries.html"><a href="preliminaries.html#simulation"><i class="fa fa-check"></i><b>2.8</b> Simulation</a></li>
+</ul></li>
+<li class="part"><span><b>I Formal Look at Prediction</b></span></li>
+<li class="chapter" data-level="" data-path="learning-systems.html"><a href="learning-systems.html"><i class="fa fa-check"></i>Learning Systems</a></li>
+<li class="chapter" data-level="3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html"><i class="fa fa-check"></i><b>3</b> Bias-Variance Tradeoff</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#estimator-and-mse"><i class="fa fa-check"></i><b>3.1</b> Estimator and MSE</a></li>
+<li class="chapter" data-level="3.2" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction---mspe"><i class="fa fa-check"></i><b>3.2</b> Prediction - MSPE</a></li>
+<li class="chapter" data-level="3.3" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#biased-estimator-as-a-predictor"><i class="fa fa-check"></i><b>3.3</b> Biased estimator as a predictor</a></li>
+<li class="chapter" data-level="3.4" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#dropping-a-variable-in-a-regression"><i class="fa fa-check"></i><b>3.4</b> Dropping a variable in a regression</a></li>
+<li class="chapter" data-level="3.5" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#uncertainty-in-estimations-and-predictions"><i class="fa fa-check"></i><b>3.5</b> Uncertainty in estimations and predictions</a></li>
+<li class="chapter" data-level="3.6" data-path="bias-variance-tradeoff.html"><a href="bias-variance-tradeoff.html#prediction-interval-for-unbiased-ols-predictor"><i class="fa fa-check"></i><b>3.6</b> Prediction interval for unbiased OLS predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="overfitting.html"><a href="overfitting.html"><i class="fa fa-check"></i><b>4</b> Overfitting</a></li>
+<li class="part"><span><b>II Nonparametric Estimations</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-vs.-nonparametric-methods.html"><a href="parametric-vs.-nonparametric-methods.html"><i class="fa fa-check"></i>Parametric vs. Nonparametric methods</a></li>
+<li class="chapter" data-level="5" data-path="parametric-estimations.html"><a href="parametric-estimations.html"><i class="fa fa-check"></i><b>5</b> Parametric Estimations</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#linear-probability-models-lpm"><i class="fa fa-check"></i><b>5.1</b> Linear Probability Models (LPM)</a></li>
+<li class="chapter" data-level="5.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="parametric-estimations.html"><a href="parametric-estimations.html#estimating-logistic-regression"><i class="fa fa-check"></i><b>5.2.1</b> Estimating Logistic Regression</a></li>
+<li class="chapter" data-level="5.2.2" data-path="parametric-estimations.html"><a href="parametric-estimations.html#cost-functions"><i class="fa fa-check"></i><b>5.2.2</b> Cost functions</a></li>
+<li class="chapter" data-level="5.2.3" data-path="parametric-estimations.html"><a href="parametric-estimations.html#deviance"><i class="fa fa-check"></i><b>5.2.3</b> Deviance</a></li>
+<li class="chapter" data-level="5.2.4" data-path="parametric-estimations.html"><a href="parametric-estimations.html#predictive-accuracy"><i class="fa fa-check"></i><b>5.2.4</b> Predictive accuracy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html"><i class="fa fa-check"></i><b>6</b> Nonparametric Estimations - Basics</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#density-estimations"><i class="fa fa-check"></i><b>6.1</b> Density Estimations</a></li>
+<li class="chapter" data-level="6.2" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#kernel-regressions"><i class="fa fa-check"></i><b>6.2</b> Kernel regressions</a></li>
+<li class="chapter" data-level="6.3" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#regression-splines"><i class="fa fa-check"></i><b>6.3</b> Regression Splines</a></li>
+<li class="chapter" data-level="6.4" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#mars---multivariate-adaptive-regression-splines"><i class="fa fa-check"></i><b>6.4</b> MARS - Multivariate Adaptive Regression Splines</a></li>
+<li class="chapter" data-level="6.5" data-path="nonparametric-estimations---basics.html"><a href="nonparametric-estimations---basics.html#gam---generalized-additive-model"><i class="fa fa-check"></i><b>6.5</b> GAM - Generalized Additive Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>7</b> Smoothing</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="smoothing.html"><a href="smoothing.html#using-bins"><i class="fa fa-check"></i><b>7.1</b> Using bins</a></li>
+<li class="chapter" data-level="7.2" data-path="smoothing.html"><a href="smoothing.html#kernel-smoothing"><i class="fa fa-check"></i><b>7.2</b> Kernel smoothing</a></li>
+<li class="chapter" data-level="7.3" data-path="smoothing.html"><a href="smoothing.html#locally-weighted-regression-loess"><i class="fa fa-check"></i><b>7.3</b> Locally weighted regression <code>loess()</code></a></li>
+<li class="chapter" data-level="7.4" data-path="smoothing.html"><a href="smoothing.html#smooth-spline-regression"><i class="fa fa-check"></i><b>7.4</b> Smooth Spline Regression</a></li>
+<li class="chapter" data-level="7.5" data-path="smoothing.html"><a href="smoothing.html#multivariate-loess"><i class="fa fa-check"></i><b>7.5</b> Multivariate Loess</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html"><i class="fa fa-check"></i><b>8</b> Nonparametric Classifier - kNN</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist-dataset"><i class="fa fa-check"></i><b>8.1</b> <code>mnist</code> Dataset</a></li>
+<li class="chapter" data-level="8.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#linear-classifiers-again"><i class="fa fa-check"></i><b>8.2</b> Linear classifiers (again)</a></li>
+<li class="chapter" data-level="8.3" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3</b> k-Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.4" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#knn-with-caret"><i class="fa fa-check"></i><b>8.4</b> kNN with caret</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#mnist_27"><i class="fa fa-check"></i><b>8.4.1</b> <code>mnist_27</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="nonparametric-classifier---knn.html"><a href="nonparametric-classifier---knn.html#adult-dataset"><i class="fa fa-check"></i><b>8.4.2</b> Adult dataset</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>III Self-Learning</b></span></li>
+<li class="chapter" data-level="9" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html"><i class="fa fa-check"></i><b>9</b> Hyperparameter Tuning</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#training-validation-and-test-datasets"><i class="fa fa-check"></i><b>9.1</b> Training, validation, and test datasets</a></li>
+<li class="chapter" data-level="9.2" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#splitting-the-data-randomly"><i class="fa fa-check"></i><b>9.2</b> Splitting the data randomly</a></li>
+<li class="chapter" data-level="9.3" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>9.3</b> k-fold cross validation</a></li>
+<li class="chapter" data-level="9.4" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#cross-validated-grid-search"><i class="fa fa-check"></i><b>9.4</b> Cross-validated grid search</a></li>
+<li class="chapter" data-level="9.5" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#bootstrapped-grid-search"><i class="fa fa-check"></i><b>9.5</b> Bootstrapped grid search</a></li>
+<li class="chapter" data-level="9.6" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#when-the-data-is-time-series"><i class="fa fa-check"></i><b>9.6</b> When the data is time-series</a></li>
+<li class="chapter" data-level="9.7" data-path="hyperparameter-tuning.html"><a href="hyperparameter-tuning.html#speed"><i class="fa fa-check"></i><b>9.7</b> Speed</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html"><i class="fa fa-check"></i><b>10</b> Tuning in Classification</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
+<li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="classification-example.html"><a href="classification-example.html#lpm"><i class="fa fa-check"></i><b>11.1</b> LPM</a></li>
+<li class="chapter" data-level="11.2" data-path="classification-example.html"><a href="classification-example.html#logistic-regression-1"><i class="fa fa-check"></i><b>11.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="11.3" data-path="classification-example.html"><a href="classification-example.html#knn"><i class="fa fa-check"></i><b>11.3</b> kNN</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="classification-example.html"><a href="classification-example.html#knn-10-fold-cv"><i class="fa fa-check"></i><b>11.3.1</b> kNN 10-fold CV</a></li>
+<li class="chapter" data-level="11.3.2" data-path="classification-example.html"><a href="classification-example.html#knn-with-caret-1"><i class="fa fa-check"></i><b>11.3.2</b> kNN with <code>caret</code></a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Tree-based Models</b></span></li>
+<li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
+<li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
+<li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
+<li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
+<li class="chapter" data-level="13.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#boosting"><i class="fa fa-check"></i><b>13.3</b> Boosting</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
+<li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
+<li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
+<li class="chapter" data-level="14.4.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#random-search-with-parallel-processing"><i class="fa fa-check"></i><b>14.4.2</b> Random search with parallel processing</a></li>
+<li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
+<li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
+<li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
+<li class="chapter" data-level="15" data-path="support-vector-machines.html"><a href="support-vector-machines.html"><i class="fa fa-check"></i><b>15</b> Support Vector Machines</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#optimal-separating-classifier"><i class="fa fa-check"></i><b>15.1</b> Optimal Separating Classifier</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-margin"><i class="fa fa-check"></i><b>15.1.1</b> The Margin</a></li>
+<li class="chapter" data-level="15.1.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#the-non-separable-case"><i class="fa fa-check"></i><b>15.1.2</b> The Non-Separable Case</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="support-vector-machines.html"><a href="support-vector-machines.html#nonlinear-boundary-with-kernels"><i class="fa fa-check"></i><b>15.2</b> Nonlinear Boundary with Kernels</a></li>
+<li class="chapter" data-level="15.3" data-path="support-vector-machines.html"><a href="support-vector-machines.html#application-with-svm"><i class="fa fa-check"></i><b>15.3</b> Application with SVM</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html"><i class="fa fa-check"></i><b>16</b> Artificial Neural Networks</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---the-idea"><i class="fa fa-check"></i><b>16.1</b> Neural Network - the idea</a></li>
+<li class="chapter" data-level="16.2" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#backpropagation"><i class="fa fa-check"></i><b>16.2</b> Backpropagation</a></li>
+<li class="chapter" data-level="16.3" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#neural-network---more-inputs"><i class="fa fa-check"></i><b>16.3</b> Neural Network - More inputs</a></li>
+<li class="chapter" data-level="16.4" data-path="artificial-neural-networks.html"><a href="artificial-neural-networks.html#deep-learning"><i class="fa fa-check"></i><b>16.4</b> Deep Learning</a></li>
+</ul></li>
+<li class="part"><span><b>VI Penalized Regressions</b></span></li>
+<li class="chapter" data-level="" data-path="parametric-models-in-prediction.html"><a href="parametric-models-in-prediction.html"><i class="fa fa-check"></i>Parametric models in prediction</a></li>
+<li class="chapter" data-level="17" data-path="ridge.html"><a href="ridge.html"><i class="fa fa-check"></i><b>17</b> Ridge</a></li>
+<li class="chapter" data-level="18" data-path="lasso.html"><a href="lasso.html"><i class="fa fa-check"></i><b>18</b> Lasso</a></li>
+<li class="chapter" data-level="19" data-path="adaptive-lasso.html"><a href="adaptive-lasso.html"><i class="fa fa-check"></i><b>19</b> Adaptive Lasso</a></li>
+<li class="chapter" data-level="20" data-path="sparsity.html"><a href="sparsity.html"><i class="fa fa-check"></i><b>20</b> Sparsity</a></li>
+<li class="part"><span><b>VII Time Series</b></span></li>
+<li class="chapter" data-level="" data-path="forecasting.html"><a href="forecasting.html"><i class="fa fa-check"></i>Forecasting</a></li>
+<li class="chapter" data-level="21" data-path="arima-models.html"><a href="arima-models.html"><i class="fa fa-check"></i><b>21</b> ARIMA models</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="arima-models.html"><a href="arima-models.html#hyndman-khandakar-algorithm"><i class="fa fa-check"></i><b>21.1</b> Hyndman-Khandakar algorithm</a></li>
+<li class="chapter" data-level="21.2" data-path="arima-models.html"><a href="arima-models.html#ts-plots"><i class="fa fa-check"></i><b>21.2</b> TS Plots</a></li>
+<li class="chapter" data-level="21.3" data-path="arima-models.html"><a href="arima-models.html#box-cox-transformation"><i class="fa fa-check"></i><b>21.3</b> Box-Cox transformation</a></li>
+<li class="chapter" data-level="21.4" data-path="arima-models.html"><a href="arima-models.html#stationarity"><i class="fa fa-check"></i><b>21.4</b> Stationarity</a></li>
+<li class="chapter" data-level="21.5" data-path="arima-models.html"><a href="arima-models.html#modeling-arima"><i class="fa fa-check"></i><b>21.5</b> Modeling ARIMA</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="grid-search-for-arima.html"><a href="grid-search-for-arima.html"><i class="fa fa-check"></i><b>22</b> Grid search for ARIMA</a></li>
+<li class="chapter" data-level="23" data-path="time-series-embedding.html"><a href="time-series-embedding.html"><i class="fa fa-check"></i><b>23</b> Time Series Embedding</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="time-series-embedding.html"><a href="time-series-embedding.html#var-for-recursive-forecasting"><i class="fa fa-check"></i><b>23.1</b> VAR for Recursive Forecasting</a></li>
+<li class="chapter" data-level="23.2" data-path="time-series-embedding.html"><a href="time-series-embedding.html#embedding-for-direct-forecast"><i class="fa fa-check"></i><b>23.2</b> Embedding for Direct Forecast</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="random-forest-1.html"><a href="random-forest-1.html"><i class="fa fa-check"></i><b>24</b> Random Forest</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="random-forest-1.html"><a href="random-forest-1.html#univariate"><i class="fa fa-check"></i><b>24.1</b> Univariate</a></li>
+<li class="chapter" data-level="24.2" data-path="random-forest-1.html"><a href="random-forest-1.html#multivariate"><i class="fa fa-check"></i><b>24.2</b> Multivariate</a></li>
+<li class="chapter" data-level="24.3" data-path="random-forest-1.html"><a href="random-forest-1.html#rolling-and-expanding-windows"><i class="fa fa-check"></i><b>24.3</b> Rolling and expanding windows</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html"><i class="fa fa-check"></i><b>25</b> Recurrent Neural Networks</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#keras"><i class="fa fa-check"></i><b>25.1</b> Keras</a></li>
+<li class="chapter" data-level="25.2" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#input-tensors"><i class="fa fa-check"></i><b>25.2</b> Input Tensors</a></li>
+<li class="chapter" data-level="25.3" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#plain-rnn"><i class="fa fa-check"></i><b>25.3</b> Plain RNN</a></li>
+<li class="chapter" data-level="25.4" data-path="recurrent-neural-networks.html"><a href="recurrent-neural-networks.html#lstm"><i class="fa fa-check"></i><b>25.4</b> LSTM</a></li>
+</ul></li>
+<li class="part"><span><b>VIII Dimension Reduction Methods</b></span></li>
+<li class="chapter" data-level="" data-path="matrix-decompositions.html"><a href="matrix-decompositions.html"><i class="fa fa-check"></i>Matrix Decompositions</a></li>
+<li class="chapter" data-level="26" data-path="eigenvectors-and-eigenvalues.html"><a href="eigenvectors-and-eigenvalues.html"><i class="fa fa-check"></i><b>26</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="27" data-path="singular-value-decomposition.html"><a href="singular-value-decomposition.html"><i class="fa fa-check"></i><b>27</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="28" data-path="rankr-approximations.html"><a href="rankr-approximations.html"><i class="fa fa-check"></i><b>28</b> Rank(r) Approximations</a></li>
+<li class="chapter" data-level="29" data-path="moore-penrose-inverse.html"><a href="moore-penrose-inverse.html"><i class="fa fa-check"></i><b>29</b> Moore-Penrose inverse</a></li>
+<li class="chapter" data-level="30" data-path="principle-component-analysis.html"><a href="principle-component-analysis.html"><i class="fa fa-check"></i><b>30</b> Principle Component Analysis</a></li>
+<li class="chapter" data-level="31" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>31</b> Factor Analysis</a></li>
+<li class="part"><span><b>IX Network Analysis</b></span></li>
+<li class="chapter" data-level="" data-path="graphical-network-analysis.html"><a href="graphical-network-analysis.html"><i class="fa fa-check"></i>Graphical Network Analysis</a></li>
+<li class="chapter" data-level="32" data-path="fundementals.html"><a href="fundementals.html"><i class="fa fa-check"></i><b>32</b> Fundementals</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
+<li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized covariance matrix</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
+<li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
+<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
+</ul></li>
+<li class="part"><span><b>X Labs</b></span></li>
+<li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>34.1</b> R, RStudio, and R Packages</a></li>
+<li class="chapter" data-level="34.2" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#rstudio"><i class="fa fa-check"></i><b>34.2</b> RStudio</a></li>
+<li class="chapter" data-level="34.3" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#working-directory"><i class="fa fa-check"></i><b>34.3</b> Working directory</a></li>
+<li class="chapter" data-level="34.4" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#data-types-and-stuctures"><i class="fa fa-check"></i><b>34.4</b> Data Types and Stuctures</a></li>
+<li class="chapter" data-level="34.5" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectors"><i class="fa fa-check"></i><b>34.5</b> Vectors</a></li>
+<li class="chapter" data-level="34.6" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-vectors"><i class="fa fa-check"></i><b>34.6</b> Subsetting Vectors</a></li>
+<li class="chapter" data-level="34.7" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#vectorization-or-vector-operations"><i class="fa fa-check"></i><b>34.7</b> Vectorization or vector operations</a></li>
+<li class="chapter" data-level="34.8" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrices"><i class="fa fa-check"></i><b>34.8</b> Matrices</a></li>
+<li class="chapter" data-level="34.9" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#matrix-operations"><i class="fa fa-check"></i><b>34.9</b> Matrix Operations</a></li>
+<li class="chapter" data-level="34.10" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#subsetting-matrix"><i class="fa fa-check"></i><b>34.10</b> Subsetting Matrix</a></li>
+<li class="chapter" data-level="34.11" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html#r-style-guide"><i class="fa fa-check"></i><b>34.11</b> R-Style Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html"><i class="fa fa-check"></i><b>35</b> R Lab 2 - Basics II</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames-and-lists"><i class="fa fa-check"></i><b>35.1</b> Data frames and lists</a>
+<ul>
+<li class="chapter" data-level="35.1.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#lists"><i class="fa fa-check"></i><b>35.1.1</b> Lists</a></li>
+<li class="chapter" data-level="35.1.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#data-frames"><i class="fa fa-check"></i><b>35.1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="35.1.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#reading-importing-and-writting-exporting-data-files"><i class="fa fa-check"></i><b>35.1.3</b> Reading (importing) and writting (exporting) data files</a></li>
+<li class="chapter" data-level="35.1.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#subsetting-data-frames"><i class="fa fa-check"></i><b>35.1.4</b> Subsetting Data Frames</a></li>
+<li class="chapter" data-level="35.1.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#plotting-from-data-frame"><i class="fa fa-check"></i><b>35.1.5</b> Plotting from data frame</a></li>
+<li class="chapter" data-level="35.1.6" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#some-useful-functions"><i class="fa fa-check"></i><b>35.1.6</b> Some useful functions</a></li>
+<li class="chapter" data-level="35.1.7" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames"><i class="fa fa-check"></i><b>35.1.7</b> Categorical Variables in Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="35.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#programming-basics"><i class="fa fa-check"></i><b>35.2</b> Programming Basics</a>
+<ul>
+<li class="chapter" data-level="35.2.1" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#ifelse"><i class="fa fa-check"></i><b>35.2.1</b> if/Else</a></li>
+<li class="chapter" data-level="35.2.2" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#loops"><i class="fa fa-check"></i><b>35.2.2</b> Loops</a></li>
+<li class="chapter" data-level="35.2.3" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#the-apply-family"><i class="fa fa-check"></i><b>35.2.3</b> The <code>apply()</code> family</a></li>
+<li class="chapter" data-level="35.2.4" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#functions"><i class="fa fa-check"></i><b>35.2.4</b> Functions</a></li>
+<li class="chapter" data-level="35.2.5" data-path="r-lab-2---basics-ii.html"><a href="r-lab-2---basics-ii.html#dplyr"><i class="fa fa-check"></i><b>35.2.5</b> <code>dplyr()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html"><i class="fa fa-check"></i><b>36</b> R Lab 3 - Preparing the data</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm"><i class="fa fa-check"></i><b>36.1</b> Preparing the data for a regression analysis with <code>lm()</code></a>
+<ul>
+<li class="chapter" data-level="36.1.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#factor-variables"><i class="fa fa-check"></i><b>36.1.1</b> Factor variables</a></li>
+<li class="chapter" data-level="36.1.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-coding"><i class="fa fa-check"></i><b>36.1.2</b> Dummy Coding</a></li>
+<li class="chapter" data-level="36.1.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#column-variable-names"><i class="fa fa-check"></i><b>36.1.3</b> Column (Variable) names</a></li>
+<li class="chapter" data-level="36.1.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values"><i class="fa fa-check"></i><b>36.1.4</b> Data subsetting and missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="36.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#dummy-variable-models"><i class="fa fa-check"></i><b>36.2</b> “DUMMY” variable models</a>
+<ul>
+<li class="chapter" data-level="36.2.1" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#mtcars-example"><i class="fa fa-check"></i><b>36.2.1</b> <code>mtcars</code> example</a></li>
+<li class="chapter" data-level="36.2.2" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#model.matrix"><i class="fa fa-check"></i><b>36.2.2</b> <code>model.matrix()</code></a></li>
+<li class="chapter" data-level="36.2.3" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg"><i class="fa fa-check"></i><b>36.2.3</b> Example with a bigger data set: <code>Autompg</code></a></li>
+<li class="chapter" data-level="36.2.4" data-path="r-lab-3---preparing-the-data.html"><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within"><i class="fa fa-check"></i><b>36.2.4</b> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html"><i class="fa fa-check"></i><b>37</b> R Lab 4 - Simulation in R</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample"><i class="fa fa-check"></i><b>37.1</b> Sampling in R: <code>sample()</code></a></li>
+<li class="chapter" data-level="37.2" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#random-number-generating-with-probablity-distributions"><i class="fa fa-check"></i><b>37.2</b> Random number generating with probablity distributions</a></li>
+<li class="chapter" data-level="37.3" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#simulation-for-statistical-inference"><i class="fa fa-check"></i><b>37.3</b> Simulation for statistical inference</a></li>
+<li class="chapter" data-level="37.4" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#creataing-data-with-a-data-generating-model-dgm"><i class="fa fa-check"></i><b>37.4</b> Creataing data with a Data Generating Model (DGM)</a></li>
+<li class="chapter" data-level="37.5" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#bootstrapping"><i class="fa fa-check"></i><b>37.5</b> Bootstrapping</a></li>
+<li class="chapter" data-level="37.6" data-path="r-lab-4---simulation-in-r.html"><a href="r-lab-4---simulation-in-r.html#monty-hall---fun-example"><i class="fa fa-check"></i><b>37.6</b> Monty Hall - Fun example</a></li>
+</ul></li>
+<li class="part"><span><b>XI Appendix</b></span></li>
+<li class="chapter" data-level="38" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html"><i class="fa fa-check"></i><b>38</b> Algorithmic Optimization</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#brute-force-optimization"><i class="fa fa-check"></i><b>38.1</b> Brute-force optimization</a></li>
+<li class="chapter" data-level="38.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#derivative-based-methods"><i class="fa fa-check"></i><b>38.2</b> Derivative-based methods</a></li>
+<li class="chapter" data-level="38.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#ml-estimation-with-logistic-regression"><i class="fa fa-check"></i><b>38.3</b> ML Estimation with logistic regression</a></li>
+<li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
+<ul>
+<li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+</ul></li>
+<li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="imbalanced-data.html"><a href="imbalanced-data.html"><i class="fa fa-check"></i><b>39</b> Imbalanced Data</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
+<li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
+<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
+<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Toolbox for Social Scientists and Policy Analysts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tuning-in-classification" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Tuning in Classification<a href="tuning-in-classification.html#tuning-in-classification" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>What metrics are we going to use when we <em>train</em> our classification models? In kNN, for example, our hyperparameter is <span class="math inline">\(k\)</span>, the number of observations in each bin. In our applications with <code>mnist_27</code> and <code>Adult</code> datasets, <span class="math inline">\(k\)</span> was determined by a metric called as <strong>accuracy</strong>. What is it? If the choice of <span class="math inline">\(k\)</span> depends on what metrics we use in tuning, can we improve our prediction performance by using a different metric? Moreover, the accuracy is calculated from the confusion table. Yet, the confusion table will be different for a range of discriminating thresholds used for labeling predicted probabilities. These are important questions in classification problems. We will begin answering them in this chapter.</p>
+<div id="confusion-matrix" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Confusion matrix<a href="tuning-in-classification.html#confusion-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In general, whether it is for training or not, measuring the performance of a classification model is an important issue and has to be well understood before fitting or training a model.</p>
+<p>To evaluate a model’s fit, we can look at its predictive accuracy. In classification problems, this requires predicting <span class="math inline">\(Y\)</span>, as either 0 or 1, from the predicted value of <span class="math inline">\(p(x)\)</span>, such as</p>
+<p><span class="math display">\[
+\hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;\frac{1}{2}} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&lt;\frac{1}{2}}\end{array}\right.
+\]</span></p>
+<p>From this transformation of <span class="math inline">\(\hat{p}(x)\)</span> to <span class="math inline">\(\hat{Y}\)</span>, the overall predictive accuracy can be summarized with a matrix,</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=0} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\]</span></p>
+<p>where, TP, FP, FN, TN are True positives, False Positives, False Negatives, and True Negatives, respectively. This table is also know as <strong>Confusion Table</strong> or confusion matrix. The name, <em>confusion</em>, is very intuitive because it is easy to see how the system is <strong>confusing</strong> two classes.</p>
+<p>There are many metrics that can be calculated from this table. Let’s use an example given in <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Wikipedia</a></p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 5 }_{}} &amp; {\text { 2 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 3 }_{}} &amp; {\text { 3 }_{}}\end{array}
+\]</span></p>
+<p>According to this confusion matrix, there are 8 actual cats and 5 actual dogs (column totals). The learning algorithm, however, predicts only 5 cats and 3 dogs correctly. The model predicts 3 cats as dogs and 2 dogs as cats. All correct predictions are located in the diagonal of the table, so it is easy to visually inspect the table for prediction errors, as they will be represented by values outside the diagonal.</p>
+<p>In predictive analytics, this table (matrix) allows more detailed analysis than mere proportion of correct classifications (accuracy). <strong>Accuracy</strong> (<span class="math inline">\((TP+TN)/n\)</span>) is not a reliable metric for the real performance of a classifier, when the dataset is unbalanced in terms of numbers of observations in each class.</p>
+<p>It can be seen how misleading the use of <span class="math inline">\((TP+TN)/n\)</span> could be, if there were 95 cats and only 5 dogs in our example. If we choose <em>accuracy</em> as the performance measure in our training, our learning algorithm might classify all the observations as cats, because the overall accuracy would be 95%. In that case, however, all the dog would be misclassified as cats.</p>
+</div>
+<div id="performance-measures" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> Performance measures<a href="tuning-in-classification.html#performance-measures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Which metrics should we be using in training our classification models? These questions are more important when the classes are not in balance. Moreover, in some situation, false predictions would be more important then true predictions. In a situation that you try to predict, for example, cancer, minimizing false negatives (the model misses cancer patients) would be more important than minimizing false positives (the model wrongly predicts cancer). When we have an algorithm to predict spam emails, however, false positives would be the target to minimize rather than false negatives.</p>
+<p>Here is the full picture of various metrics using the same confusion table from <a href="https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers">Wikipedia</a>:</p>
+<p><img src="png/confusion.png" width="140%" height="140%" /></p>
+<p>Let’s summarize some of the metrics and their use with examples for detecting cancer:</p>
+<ul>
+<li><strong>Accuracy</strong>: the number of correct predictions (with and without cancer) relative to the number of observations (patients). This can be used when the classes are balanced with not less than a 60-40% split. <span class="math inline">\((TP+TN)/n\)</span>.<br />
+</li>
+<li><strong>Balanced Accuracy</strong>: when the class balance is worse than 60-40% split, <span class="math inline">\((TP/P + TN/N)/2\)</span>.<br />
+</li>
+<li><strong>Precision</strong>: the percentage positive predictions that are correct. That is, the proportion of patients that we predict as having cancer, actually have cancer, <span class="math inline">\(TP/(TP+FP)\)</span>.<br />
+</li>
+<li><strong>Sensitivity</strong>: the percentage of positives that are predicted correctly. That is, the proportion of patients that actually have cancer was correctly predicted by the algorithm as having cancer, <span class="math inline">\(TP/(TP+FN)\)</span>. This measure is also called as <em>True Positive Rate</em> or as <em>Recall</em>.</li>
+<li><strong>Specificity</strong>: the percentage of negatives that are predicted correctly. Proportion of patients that do not have cancer, are predicted by the model as non-cancerous, This measure is also called as <em>True Positive Rate</em> = <span class="math inline">\(TN/(TN+FP)\)</span>.</li>
+</ul>
+<p>Here is the summary:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text {TPR or Sensitivity }_{}} &amp; {\text { FNR or Fall-out }_{}} \\ {\hat{Y}=Dog} &amp; {\text { FNR or Miss Rate }_{}} &amp; {\text { TNR or Specificity }_{}}\end{array}
+\]</span></p>
+<p><strong>Kappa</strong> is also calculated in most cases. It is an interesting measure because it compares the actual performance of prediction with what it would be if a random prediction was carried out. For example, suppose that your model predicts <span class="math inline">\(Y\)</span> with 95% accuracy. How good your prediction power would be if a random choice would also predict 70% of <span class="math inline">\(Y\)</span>s correctly? Let’s use an example:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 22 }_{}} &amp; {\text { 9 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 7 }_{}} &amp; {\text { 13 }_{}}\end{array}
+\]</span></p>
+<p>In this case the accuracy is <span class="math inline">\((22+13)/51 = 0.69\)</span> But how much of it is due the model’s performance itself? In other words, the distribution of cats and dogs can also give a predictive clue such that a certain level of prediction accuracy can be achieved by chance without any learning algorithm. For the TP cell in the table, this can be calculated as the difference between observed accuracy (OA) and expected accuracy (EA),</p>
+<p><span class="math display">\[
+\mathrm{(OA-EA)_{TP}}=\mathrm{Pr}(\hat{Y}=Cat)[\mathrm{Pr}(Y=Cat |\hat{Y}= Cat)-\mathrm{P}(Y=Cat)],
+\]</span></p>
+<p>Remember from your statistics class, if the two variables are independent, the conditional probability of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y\)</span> has to be equal to the marginal probability of <span class="math inline">\(X\)</span>. Therefore, inside the brackets, the difference between the conditional probability, which reflects the probability of predicting cats due to the model, and the marginal probability of observing actual cats reflects the <em>true</em> level of predictive power of the model by removing the randomness in prediction.</p>
+<p><span class="math display">\[
+\mathrm{(OA-EA)_{TN}}=\mathrm{Pr}(\hat{Y}=Dog)[\mathrm{Pr}(Y=Dog |\hat{Y}= Dog)-\mathrm{P}(Y=Dog)],
+\]</span></p>
+<p>If we use the joint and marginal probability definitions, these can be written as:</p>
+<p><span class="math display">\[
+OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
+\]</span></p>
+<p>Here is the calculation of <strong>Kappa</strong> for our example:</p>
+<p>Total, <span class="math inline">\(n = 51\)</span>,<br />
+<span class="math inline">\(OA-EA\)</span> for <span class="math inline">\(TP\)</span> = <span class="math inline">\(22/51-31 \times (29/51^2) = 0.0857\)</span><br />
+<span class="math inline">\(OA-EA\)</span> for <span class="math inline">\(TN\)</span> = <span class="math inline">\(13/51-20 \times (21/51^2) = 0.0934\)</span></p>
+<p>And we normalize it by <span class="math inline">\(1-EA = 1- 31 \times (29/51^2) + 20 \times (21/51^2) = 0.51\)</span>, which is the value if the prediction was 100% successful.</p>
+<p>Hence, <strong>Kappa</strong>: <span class="math inline">\((0.0857+0.0934) / (1 - 0.51) = 0.3655\)</span></p>
+<p>Finally, <strong>Jouden’s J statistics</strong> also as known as <strong>Youden’s index</strong> or <strong>Informedness</strong>, is a single statistics that captures the performance of prediction. It’s simply <span class="math inline">\(J=TPR+TNR-1\)</span> and ranges between 0 and 1 indicating useless and perfect prediction performance, respectively. This metric is also related to <strong>Receiver Operating Curve (ROC)</strong> analysis, which is the subject of next section.</p>
+</div>
+<div id="roc---reciever-operating-curve" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> ROC - Reciever Operating Curve<a href="tuning-in-classification.html#roc---reciever-operating-curve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Our outcome variable is categorical (<span class="math inline">\(Y = 1\)</span> or <span class="math inline">\(0\)</span>). Most classification algorithms calculate the predicted probability of success (<span class="math inline">\(Y = 1\)</span>). If the probability is larger than a fixed cut-off threshold (discriminating threshold), then we assume that the model predicts success (Y = 1); otherwise, we assume that it predicts failure. As a result of such a procedure, the comparison of the observed and predicted values summarized in a confusion table depends on the threshold. The predictive accuracy of a model as a function of threshold can be summarized by Area Under Curve (AUC) of Receiver Operating Characteristics (ROC). The ROC curve, which is is a graphical plot that illustrates the diagnostic ability of a binary classifier, indicates a trade-off between True Positive Rate (TPR) and False Positive Rate (FPR). Hence, the success of a model comes with its predictions that increases TPR without raising FPR. The ROC curve was first used during World War II for the analysis of radar signals before it was employed in signal detection theory.</p>
+<p>Here is a visualization:</p>
+<p><img src="png/ROC1.png" width="140%" height="140%" /></p>
+<p>Let’s start with an example, where we have 100 individuals, 50 with <span class="math inline">\(y_i=1\)</span> and 50 with <span class="math inline">\(y_i=0\)</span>, which is well-balanced. If we use a discriminating threshold (0%) that puts everybody into Category 1 or a threshold (100%) that puts everybody into Category 2, that is,</p>
+<p><span class="math display">\[
+\hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;0 \%} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)\leq0 \%}\end{array}\right.
+\]</span></p>
+<p>and,</p>
+<p><span class="math display">\[
+\hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;100 \%} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)\leq100 \%}\end{array}\right.
+\]</span></p>
+<p>this would have led to the following confusing tables, respectively:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}} \\ {\hat{Y}=0} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}}\end{array}
+\]</span>
+<span class="math display">\[
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}} \\ {\hat{Y}=0} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}}\end{array}
+\]</span></p>
+<p>In the first case, <span class="math inline">\(TPR = 1\)</span> and <span class="math inline">\(FPR = 1\)</span>; and in the second case, <span class="math inline">\(TPR = 0\)</span> and <span class="math inline">\(FPR = 0\)</span>. So when we calculate all possible confusion tables with different values of thresholds ranging from 0% to 100%, we will have the same number of (<span class="math inline">\(TPR, FPR\)</span>) points each corresponding to one threshold. <strong>The ROC curve is the curve that connects these points</strong>.</p>
+<p>Let’s use an example with the <em>Boston Housing Market</em> dataset to illustrate ROC:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="tuning-in-classification.html#cb425-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb425-2"><a href="tuning-in-classification.html#cb425-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Boston)</span>
+<span id="cb425-3"><a href="tuning-in-classification.html#cb425-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb425-4"><a href="tuning-in-classification.html#cb425-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create our binary outcome</span></span>
+<span id="cb425-5"><a href="tuning-in-classification.html#cb425-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> Boston[, <span class="sc">-</span><span class="dv">14</span>] <span class="co">#Dropping &quot;medv&quot;</span></span>
+<span id="cb425-6"><a href="tuning-in-classification.html#cb425-6" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb425-7"><a href="tuning-in-classification.html#cb425-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb425-8"><a href="tuning-in-classification.html#cb425-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use logistic regression for classification</span></span>
+<span id="cb425-9"><a href="tuning-in-classification.html#cb425-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb425-10"><a href="tuning-in-classification.html#cb425-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = dummy ~ ., family = &quot;binomial&quot;, data = data)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.3498  -0.2806  -0.0932  -0.0006   3.3781  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  5.312511   4.876070   1.090 0.275930    
+## crim        -0.011101   0.045322  -0.245 0.806503    
+## zn           0.010917   0.010834   1.008 0.313626    
+## indus       -0.110452   0.058740  -1.880 0.060060 .  
+## chas         0.966337   0.808960   1.195 0.232266    
+## nox         -6.844521   4.483514  -1.527 0.126861    
+## rm           1.886872   0.452692   4.168 3.07e-05 ***
+## age          0.003491   0.011133   0.314 0.753853    
+## dis         -0.589016   0.164013  -3.591 0.000329 ***
+## rad          0.318042   0.082623   3.849 0.000118 ***
+## tax         -0.010826   0.004036  -2.682 0.007314 ** 
+## ptratio     -0.353017   0.122259  -2.887 0.003884 ** 
+## black       -0.002264   0.003826  -0.592 0.554105    
+## lstat       -0.367355   0.073020  -5.031 4.88e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 563.52  on 505  degrees of freedom
+## Residual deviance: 209.11  on 492  degrees of freedom
+## AIC: 237.11
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<p>And our prediction (in-sample):</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="tuning-in-classification.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classified Y&#39;s by TRUE and FALSE</span></span>
+<span id="cb427-2"><a href="tuning-in-classification.html#cb427-2" aria-hidden="true" tabindex="-1"></a>yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
+<span id="cb427-3"><a href="tuning-in-classification.html#cb427-3" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
+<span id="cb427-4"><a href="tuning-in-classification.html#cb427-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb427-5"><a href="tuning-in-classification.html#cb427-5" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s change the order of cells</span></span>
+<span id="cb427-6"><a href="tuning-in-classification.html#cb427-6" aria-hidden="true" tabindex="-1"></a>ctt <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table)</span>
+<span id="cb427-7"><a href="tuning-in-classification.html#cb427-7" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb427-8"><a href="tuning-in-classification.html#cb427-8" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb427-9"><a href="tuning-in-classification.html#cb427-9" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb427-10"><a href="tuning-in-classification.html#cb427-10" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb427-11"><a href="tuning-in-classification.html#cb427-11" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb427-12"><a href="tuning-in-classification.html#cb427-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb427-13"><a href="tuning-in-classification.html#cb427-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
+<span id="cb427-14"><a href="tuning-in-classification.html#cb427-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
+<span id="cb427-15"><a href="tuning-in-classification.html#cb427-15" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
+<pre><code>##          Y = 1 Y = 0
+## Yhat = 1   100    16
+## Yhat = 0    24   366</code></pre>
+<p>It would be much easier if we create our own function to rotate a matrix/table:</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="tuning-in-classification.html#cb429-1" aria-hidden="true" tabindex="-1"></a>rot <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb429-2"><a href="tuning-in-classification.html#cb429-2" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, rev)</span>
+<span id="cb429-3"><a href="tuning-in-classification.html#cb429-3" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">apply</span>(t, <span class="dv">1</span>, rev)</span>
+<span id="cb429-4"><a href="tuning-in-classification.html#cb429-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">t</span>(tt))</span>
+<span id="cb429-5"><a href="tuning-in-classification.html#cb429-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb429-6"><a href="tuning-in-classification.html#cb429-6" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">rot</span>(conf_table)</span>
+<span id="cb429-7"><a href="tuning-in-classification.html#cb429-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
+<span id="cb429-8"><a href="tuning-in-classification.html#cb429-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
+<span id="cb429-9"><a href="tuning-in-classification.html#cb429-9" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
+<pre><code>##           
+## yHat       Y = 1 Y = 0
+##   Yhat = 1   100    16
+##   Yhat = 0    24   366</code></pre>
+<p>Now we calculate our TPR, FPR, and J-Index:</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="tuning-in-classification.html#cb431-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR</span></span>
+<span id="cb431-2"><a href="tuning-in-classification.html#cb431-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
+<span id="cb431-3"><a href="tuning-in-classification.html#cb431-3" aria-hidden="true" tabindex="-1"></a>TPR</span></code></pre></div>
+<pre><code>## [1] 0.8064516</code></pre>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="tuning-in-classification.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="co">#FPR</span></span>
+<span id="cb433-2"><a href="tuning-in-classification.html#cb433-2" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">2</span>])</span>
+<span id="cb433-3"><a href="tuning-in-classification.html#cb433-3" aria-hidden="true" tabindex="-1"></a>FPR</span></code></pre></div>
+<pre><code>## [1] 0.04188482</code></pre>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="tuning-in-classification.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="co">#J-Index</span></span>
+<span id="cb435-2"><a href="tuning-in-classification.html#cb435-2" aria-hidden="true" tabindex="-1"></a>TPR<span class="sc">-</span>FPR</span></code></pre></div>
+<pre><code>## [1] 0.7645668</code></pre>
+<p>These rates are calculated for the threshold of 0.5. We can have all pairs of <span class="math inline">\(TPR\)</span> and <span class="math inline">\(FPR\)</span> for all possible discrimination thresholds. What’s the possible set? We will use our <span class="math inline">\(\hat{P}\)</span> values for this.</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="tuning-in-classification.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We create an ordered grid from our fitted values</span></span>
+<span id="cb437-2"><a href="tuning-in-classification.html#cb437-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model<span class="sc">$</span>fitted.values)</span></code></pre></div>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## 0.000000 0.004205 0.035602 0.245059 0.371758 0.999549</code></pre>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="tuning-in-classification.html#cb439-1" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values[<span class="fu">order</span>(model<span class="sc">$</span>fitted.values)]</span>
+<span id="cb439-2"><a href="tuning-in-classification.html#cb439-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(phat)</span></code></pre></div>
+<pre><code>## [1] 506</code></pre>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="tuning-in-classification.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We need to have containers for the pairs of TPR and FPR</span></span>
+<span id="cb441-2"><a href="tuning-in-classification.html#cb441-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb441-3"><a href="tuning-in-classification.html#cb441-3" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb441-4"><a href="tuning-in-classification.html#cb441-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb441-5"><a href="tuning-in-classification.html#cb441-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Now the loop</span></span>
+<span id="cb441-6"><a href="tuning-in-classification.html#cb441-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(phat)) {</span>
+<span id="cb441-7"><a href="tuning-in-classification.html#cb441-7" aria-hidden="true" tabindex="-1"></a>  yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> phat[i]</span>
+<span id="cb441-8"><a href="tuning-in-classification.html#cb441-8" aria-hidden="true" tabindex="-1"></a>  conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
+<span id="cb441-9"><a href="tuning-in-classification.html#cb441-9" aria-hidden="true" tabindex="-1"></a>  ct <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table) </span>
+<span id="cb441-10"><a href="tuning-in-classification.html#cb441-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">sum</span>(<span class="fu">dim</span>(ct))<span class="sc">&gt;</span><span class="dv">3</span>){ <span class="co">#here we ignore the thresholds 0 and 1</span></span>
+<span id="cb441-11"><a href="tuning-in-classification.html#cb441-11" aria-hidden="true" tabindex="-1"></a>    TPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">1</span>,<span class="dv">2</span>])</span>
+<span id="cb441-12"><a href="tuning-in-classification.html#cb441-12" aria-hidden="true" tabindex="-1"></a>    FPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
+<span id="cb441-13"><a href="tuning-in-classification.html#cb441-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb441-14"><a href="tuning-in-classification.html#cb441-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb441-15"><a href="tuning-in-classification.html#cb441-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FPR, TPR, <span class="at">col=</span> <span class="st">&quot;blue&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">main =</span> <span class="st">&quot;ROC&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb441-16"><a href="tuning-in-classification.html#cb441-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc7-1.png" width="672" /></p>
+<p>Several things we observe on this curve. First, there is a trade-off between TPF and FPR. Approximately, after 70% of TPR, an increase in TPF can be achieved by increasing FPR, which means that if we care more about the possible lowest FPR, we can fix the discriminating rate at that point.</p>
+<p>Second, we can identify the best discriminating threshold that makes the distance between TPR and FPR largest. In other words, we can identify the threshold where the marginal gain on TPR would be equal to the marginal cost of FPR. This can be achieved by the <strong>Jouden’s J statistics</strong>, <span class="math inline">\(J=TPR+TNR-1\)</span>, which identifies the best discriminating threshold. Note that <span class="math inline">\(TNR= 1-FPR\)</span>. Hence <span class="math inline">\(J = TPR-FPR\)</span>.</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="tuning-in-classification.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Youden&#39;s J Statistics</span></span>
+<span id="cb442-2"><a href="tuning-in-classification.html#cb442-2" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> TPR <span class="sc">-</span> FPR</span>
+<span id="cb442-3"><a href="tuning-in-classification.html#cb442-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The best discriminating threshold</span></span>
+<span id="cb442-4"><a href="tuning-in-classification.html#cb442-4" aria-hidden="true" tabindex="-1"></a>phat[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>##       231 
+## 0.1786863</code></pre>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="tuning-in-classification.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR and FPR at this threshold</span></span>
+<span id="cb444-2"><a href="tuning-in-classification.html#cb444-2" aria-hidden="true" tabindex="-1"></a>TPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.9354839</code></pre>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="tuning-in-classification.html#cb446-1" aria-hidden="true" tabindex="-1"></a>FPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.1361257</code></pre>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="tuning-in-classification.html#cb448-1" aria-hidden="true" tabindex="-1"></a>J[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<pre><code>## [1] 0.7993582</code></pre>
+<p>This simple example shows that the best (in-sample) fit can be achieved by</p>
+<p><span class="math display">\[
+\hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;17.86863 \%} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)\leq17.86863 \%}\end{array}\right.
+\]</span>
+## AUC - Area Under the Curve
+Finally, we measure the predictive accuracy by the area under the ROC curve. An area of 1 represents a perfect performance; an area of 0.5 represents a worthless prediction. This is because an area of 0.5 suggests its performance is no better than random chance.</p>
+<p><img src="png/AUC.png" width="130%" height="130%" /></p>
+<p>For example, an accepted rough guide for classifying the accuracy of a diagnostic test in medical procedures is</p>
+<p>0.90-1.00 = Excellent (A)<br />
+0.80-0.90 = Good (B)<br />
+0.70-0.80 = Fair (C)<br />
+0.60-0.70 = Poor (D)<br />
+0.50-0.60 = Fail (F)</p>
+<p>Since the formula and its derivation is beyond the scope of this chapter, we will use the package <code>ROCR</code> to calculate it.</p>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="tuning-in-classification.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb450-2"><a href="tuning-in-classification.html#cb450-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb450-3"><a href="tuning-in-classification.html#cb450-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb450-4"><a href="tuning-in-classification.html#cb450-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb450-5"><a href="tuning-in-classification.html#cb450-5" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values</span>
+<span id="cb450-6"><a href="tuning-in-classification.html#cb450-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb450-7"><a href="tuning-in-classification.html#cb450-7" aria-hidden="true" tabindex="-1"></a>phat_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(phat, <span class="st">&quot;Y&quot;</span> <span class="ot">=</span> data<span class="sc">$</span>dummy)</span>
+<span id="cb450-8"><a href="tuning-in-classification.html#cb450-8" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat_df[,<span class="dv">1</span>], phat_df[,<span class="dv">2</span>])</span>
+<span id="cb450-9"><a href="tuning-in-classification.html#cb450-9" aria-hidden="true" tabindex="-1"></a>perf <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr,<span class="st">&quot;tpr&quot;</span>,<span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb450-10"><a href="tuning-in-classification.html#cb450-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb450-11"><a href="tuning-in-classification.html#cb450-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf, <span class="at">colorize=</span><span class="cn">TRUE</span>)</span>
+<span id="cb450-12"><a href="tuning-in-classification.html#cb450-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="10-TuningClass_files/figure-html/tc10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="tuning-in-classification.html#cb451-1" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb451-2"><a href="tuning-in-classification.html#cb451-2" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb451-3"><a href="tuning-in-classification.html#cb451-3" aria-hidden="true" tabindex="-1"></a>AUC</span></code></pre></div>
+<pre><code>## [1] 0.9600363</code></pre>
+<p>This ROC curve is the same as the one that we developed earlier.</p>
+<p>When we train a model, in each run (different train and test sets) we will obtain a different AUC. Differences in AUC across train and validation sets creates an uncertainty about AUC. Consequently, the asymptotic properties of AUC for comparing alternative models has become a subject of discussions in the literature.</p>
+<p>Another important point is that, while AUC represents the entire area under the curve, our interest would be on a specific location of TPR or FPR. Hence it’s possible that, for any given two competing algorithms, while one prediction algorithm has a higher overall AUC, the other one could have a better AUC in that specific location. This issue can be seen in the following figure taken from <a href="https://arxiv.org/pdf/1812.01388.pdf">Bad practices in evaluation methodology relevant to class-imbalanced problems</a> by Jan Brabec and Lukas Machlica <span class="citation">(<a href="#ref-Brab_2018" role="doc-biblioref"><strong>Brab_2018?</strong></a>)</span>.</p>
+<p><img src="png/AUCs.png" width="140%" height="140%" /></p>
+<blockquote>
+<p>For example, in the domain of network traffic intrusion-detection, the imbalance ratio is often higher than 1:1000, and the cost of a false alarm for an applied system is very high. This is due to increased analysis and remediation costs of infected devices. In such systems, the region of interest on the ROC curve is for false positive rate at most 0.0001. If AUC was computed in the usual way over the complete ROC curve then 99.99% of the area would be irrelevant and would represent only noise in the final outcome. We demonstrate this phenomenon in Figure 1.</p>
+<p>If AUC has to be used, we suggest to discuss the region of interest, and eventually compute the area only at this region. This is even more important if ROC curves are not presented, but only AUCs of the compared algorithms are reported.</p>
+</blockquote>
+<p>Most of the challenges in classification problems are related to class imbalances in the data. We look at this issue in Cahpter 39.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="hyperparameter-tuning.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="classification-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yaydede/toolbox/edit/master/10-TuningClass.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["YA_TextBook.pdf", "YA_TextBook.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

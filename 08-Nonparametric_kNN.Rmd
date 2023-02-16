@@ -1,0 +1,441 @@
+# Nonparametric Classifier - kNN
+
+We complete this section, Nonparametric Estimations, with a nonparametric classifier and compare its performance with parametric classifiers, LPM and Logistic.
+
+## `mnist` Dataset
+
+Reading hand-written letters and numbers is not a big deal nowadays.  For example, In Canada Post, computers read postal codes and robots sorts them for each postal code groups.  This application is mainly achieved by machine learning algorithms.  In order to understand how, let's use a real dataset, Mnist. Here is the description of the dataset by Wikipedia: 
+
+> The MNIST database (Modified National Institute of Standards and Technology database) is a large database of handwritten digits that is commonly used for training various image processing systems. The MNIST database contains 60,000 training images and 10,000 testing images. Half of the training set and half of the test set were taken from NIST's training dataset, while the other half of the training set and the other half of the test set were taken from NIST's testing dataset. There have been a number of scientific papers on attempts to achieve the lowest error rate; one paper, using a hierarchical system of convolutional neural networks, manages to get an error rate on the MNIST database of 0.23\%.
+>
+
+```{r knn1, echo=FALSE, out.width = '130%', out.height='130%'}
+knitr::include_graphics("png/digits.png")
+```  
+
+These images are converted into $28 \times 28 = 784$ pixels and, for each pixel, there is a measure that scales the darkness in that pixel between 0 (white) and 255 (black).  Hence, for each digitized image, we have an indicator variable $Y$ between 0 and 9, and we have 784 variables that identifies each pixel in the digitized image. Let's download the data.  ([More details about the data](http://yann.lecun.com/exdb/mnist/)).     
+
+```{r knn2, message=FALSE, warning=FALSE}
+#loading the data
+library(tidyverse)
+library(dslabs)
+#Download the data to your directory.  It's big!
+#mnist <- read_mnist() 
+#save(mnist, file = "mnist.Rdata")
+load("mnist.Rdata")
+str(mnist)
+```
+
+The data is given as a list and already divided into train and test sets.  We have 60,000 images in the train set and 10,000 images in the test set. For the train set, we have two nested sets: `images`, which contains all 784 features for 60,000 images.  Hence, it's a $60000 \times 784$ matrix. And, `labels` contains the labes (from 0 to 9) for each image. 
+  
+The digitizing can be understood from this image better:
+  
+```{r knn3, echo=FALSE, out.width = '130%', out.height='130%'}
+knitr::include_graphics("png/mnist.png")
+``` 
+
+Each image has $28 \times 28$ = 784 pixels.  For each image, the pixels are features with a label that shows the true number between 0 and 9.  This methods is called as "flattening", which is a technique that is used to convert multi-dimensional image into a one-dimension array (vector).
+  
+For now, we will use a smaller version of this data set given in the `dslabs` package, which is a random sample of 1,000 images (only for 2 and 7 digits), 800 in the training set and 200 in the test set, with only two features: the proportion of dark pixels that are in the upper left quadrant, `x_1`, and the lower right quadrant, `x_2`. 
+
+```{r knn4, message=FALSE, warning=FALSE}
+data("mnist_27")
+str(mnist_27)
+```
+  
+## Linear classifiers (again) 
+
+A linear classifier (like LPM and Logistic) is one where a "hyperplane" is formed by taking a linear combination of the features.  Hyperplane represents a decision boundary chosen by our classifier to separate the data points in different class labels.  let's start with LPM:  
+  
+\begin{equation}
+\operatorname{Pr}\left(Y=1 | X_{1}=x_{1}, X_{2}=x_{2}\right)=\beta_{0}+\beta_{1} x_{1}+\beta_{2} x_{2}
+  (\#eq:8-1)
+\end{equation} 
+  
+```{r knn5, message=FALSE, warning=FALSE}
+# LPM requires numerical 1 and 0
+y10 = ifelse(mnist_27$train$y == 7, 1, 0)
+train <- data.frame(mnist_27$train, y10)
+plot(train$x_1, train$x_2, col = train$y10 + 1, cex = 0.5)
+```
+
+Here, the black dots are 2 and red dots are 7.  Note that if we use 0.5 as a decision rule such that it separates pairs ($x_1$, $x_2$) for which $\operatorname{Pr}\left(Y=1 | X_{1}=x_{1}, X_{2}=x_{2}\right) < 0.5$ then we can have a hyperplane as  
+
+$$
+\hat{\beta}_{0}+\hat{\beta}_{1} x_{1}+\hat{\beta}_{2} x_{2}=0.5 \Longrightarrow x_{2}=\left(0.5-\hat{\beta}_{0}\right) / \hat{\beta}_{2}-\hat{\beta}_{1} / \hat{\beta}_{2} x_{1}.
+$$
+  
+If we incorporate this into our plot for the train data:  
+
+```{r knn6, message=FALSE, warning=FALSE}
+model <- lm(y10 ~ x_1 + x_2, train)
+
+tr <- 0.5
+a <- tr - model$coefficients[1]
+a <- a / model$coefficients[3]
+b <- -model$coefficients[2] / model$coefficients[3]
+plot(train$x_1, train$x_2, col = train$y10 + 1, cex = 0.72)
+abline(a, b, col = "blue", lwd = 2.8)
+```
+
+Play with the (discriminating) threshold and see how the hyperplane moves.  When we change it to different numbers between 0 and 1, the number of correct and wrong predictions, a separation of red and black dots located in different sides, changes as well.  Moreover **the decision boundary is linear**.  That's why LPM is called a linear classifier.  
+
+Would including interactions and polynomials (nonlinear parts) would place the line such a way that separation of these dots (2s and 7s) would be better?  
+
+Let's see if adding a polynomial to our LPM improves this.
+
+```{r knn7, message=FALSE, warning=FALSE}
+model2 <- lm(y10 ~ x_1 + I(x_1 ^ 2) + x_2, train)
+summary(model2)
+tr <- 0.5
+s <- model2$coefficients
+a = tr / s[3]
+b = s[1] / s[3]
+d = s[2] / s[3]
+e = s[4] / s[3]
+x22 = a - b - d * train$x_1 - e * (train$x_1 ^ 2)
+plot(train$x_1, train$x_2, col = train$y10 + 1, cex = 0.72)
+lines(train$x_1[order(x22)], x22[order(x22)], lwd = 2.8)
+```
+
+The coefficient of the polynomial is barely significant and very negligible in magnitude.  And in fact the classification seems worse than the previous one.
+  
+Would a logistic regression give us a better line?  We don't need to estimate it, but we can obtain the decision boundary for the logistic regression.  Remember,
+  
+$$
+P(Y=1 | x)=\frac{\exp \left(w_{0}+\sum_{i} w_{i} x_{i}\right)}{1+\exp \left(w_{0}+\sum_{i} w_{i} x_{i}\right)}
+$$
+  
+And,  
+
+$$
+P(Y=0 | x)=1-P(Y=1 | x)= \frac{1}{1+\exp \left(w_{0}+\sum_{i} w_{i} x_{i}\right)}
+$$
+  
+if we take the ratio of success over failure, $P/1-P$,  
+
+$$
+\frac{P}{1-P}=\exp \left(w_{0}+\sum_{i} w_{i} x_{i}\right)
+$$
+  
+If this ratio is higher than 1, we think that the probability for $Y=1$ is higher than the probability for $Y=0$.  And this only happens when $P>0.5$.  Hence, the condition to classify the observation as $Y=1$ is:
+
+$$
+\frac{P}{1-P}=\exp \left(w_{0}+\sum_{i} w_{i} x_{i}\right) > 1
+$$
+  
+If we take the log of both sides,  
+
+$$
+w_{0}+\sum_{i} w_{i} X_{i}>0
+$$
+
+From here, the hyperplane function in our case becomes,  
+
+$$
+\hat{\beta}_{0}+\hat{\beta}_{1} x_{1}+\hat{\beta}_{2} x_{2}=0 \Longrightarrow x_{2}=-\hat{\beta}_{0} / \hat{\beta}_{2}-\hat{\beta}_{1} / \hat{\beta}_{2} x_{1}.
+$$
+  
+We see that the decision boundary is again linear. Therefore, LPM and logistic regressions are called as **linear classifiers**, which are good **only if the problem on hand is linearly separable**.
+
+Would it be possible to have a nonlinear boundary condition so that we can get a better classification for our predicted probabilities?  
+
+## k-Nearest Neighbors
+
+k-nearest neighbors (kNN) is a nonparametric method used for classification (or regression), which estimate $p(x_1, x_2)$ by using a method similar to *bin smoothing*. In *kNN classification*, the output is a class membership. An object is assigned to the class most common among its k-nearest neighbors. In *kNN regressions*, the output is the average of the values of k-nearest neighbors, which we've seen in bin smoothing applications.  
+  
+```{r knn8, echo=FALSE}
+knitr::include_graphics("png/kNN1.png")
+``` 
+  
+Suppose we have to classify (identify) the red dot as 7 or 2.  Since it's a nonparametric approach, we have to define bins.  If the number of observations in bins set to 1 ($k = 1$), then we need to find one observation that is nearest to the red dot.  How?  Since we know to coordinates ($x_1, x_2$) of that red dot, we can find its nearest neighbors by some distance functions among all points (observations) in the data.  A popular choice is the Euclidean distance given by  
+
+$$
+d\left(x, x^{\prime}\right)=\sqrt{\left(x_{1}-x_{1}^{\prime}\right)^{2}+\ldots+\left(x_{n}-x_{n}^{\prime}\right)^{2}}.
+$$
+
+Other measures are also available and can be more suitable in different settings including the Manhattan, Chebyshev and Hamming distance.  The last one is used if the features are binary.  In our case the features are continuous so we can use the Euclidean distance.  We now have to calculate this measure for every point (observation) in our data.  In our graph we have 10 points, and we have to have 10 distance measures from the red dot.  Usually, in practice, we calculate all distance measures between each point, which becomes a symmetric matrix with $n$x$n$ dimensions.  
+
+For example, for two dimensional space, we can calculate the distances as follows
+
+```{r knn9}
+x1 <- c(2, 2.1, 4, 4.3)
+x2 <- c(3, 3.3, 5, 5.1)
+
+EDistance <- function(x, y){
+  dx <- matrix(0, length(x), length(x))
+  dy <- matrix(0, length(x), length(x))
+  
+  for (i in 1:length(x)) {
+    dx[i,] <- (x[i] - x)^2
+    dy[i,] <- (y[i] - y)^2
+    dd <- sqrt(dx^2 + dy^2)
+  }
+  return(dd)
+}
+  
+EDistance(x1, x2)
+
+plot(x1, x2, col = "red", lwd = 3)
+#segments(x1[1], x2[1], x1[2:4], x2[2:4], col = "blue" )
+#segments(x1[2], x2[2], x1[c(1, 3:4)], x2[c(1, 3:4)], col = "green" )
+#segments(x1[3], x2[3], x1[c(1:2, 4)], x2[c(1:2, 4)], col = "orange" )
+segments(x1[4], x2[4], x1[1:3], x2[1:3], col = "darkgreen" )
+```
+  
+The matrix shows all distances for four points and, as we expect, it is symmetric.  The green lines show the distance from the last point ($x = 4.3,~ y = 5.1$) to all other points.  Using this matrix, we can easily find the k-nearest neighbors for any point.
+  
+When $k=1$, the observation that has the shortest distance is going to be the one to predict what the red dot could be. This is shown in the figure below:
+
+```{r knn10, echo=FALSE}
+knitr::include_graphics("png/kNN2.png")
+``` 
+  
+If we define the bin as $k=3$, we look for the 3 nearest points to the red dot and then take an average of the 1s (7s) and 0s (2s) associated with these points.  Here is an example:  
+
+```{r knn11, echo=FALSE}
+knitr::include_graphics("png/kNN3.png")
+``` 
+  
+Using $k$ neighbors to estimate the probability of $Y=1$ (the dot is 7), that is  
+
+\begin{equation}
+\hat{P}_{k}(Y=1 | X=x)=\frac{1}{k} \sum_{i \in \mathcal{N}_{k}(x, D)} I\left(y_{i}=1\right)
+  (\#eq:8-2)
+\end{equation} 
+  
+With this predicted probability, we classify the red dot to the class with the most observations in the $k$ nearest neighbors (we assign a class at random to one of the classes tied for highest).  Here is the rule in our case:  
+
+$$
+\hat{C}_{k}(x)=\left\{\begin{array}{ll}{1} & {\hat{p}_{k 0}(x)>0.5} \\ {0} & {\hat{p}_{k 1}(x)<0.5}\end{array}\right.
+$$
+  
+Suppose our red dot has $x=(x_1,x_2)=(4,3)$  
+
+$$
+\begin{aligned} \hat{P}\left(Y=\text { Seven } | X_{1}=4, X_{2}=3\right)=\frac{2}{3} \\ \hat{P}\left(Y=\text { Two} | X_{1}=4, X_{2}=3\right)=\frac{1}{3} \end{aligned}
+$$
+  
+Hence,  
+
+$$
+\hat{C}_{k=4}\left(x_{1}=4, x_{2}=3\right)=\text { Seven }
+$$
+  
+As it's clear from this application, $k$ is our hyperparameter and we need to tune it as to have the best predictive kNN algorithm.  The following section will show its application.  But before that, we need to understand how decision boundaries can be found in kNN
+
+```{r knn12, warning=FALSE, message=FALSE}
+set.seed(1)
+x1 <- runif(50)
+x2 <- runif(50)
+
+library(deldir)
+tesselation <- deldir(x1, x2)
+tiles <- tile.list(tesselation)
+
+plot(tiles, pch = 19, close = TRUE,
+     fillcol =  hcl.colors(4, "Sunset"),
+     xlim = c(-0.2:1.1))
+```
+
+These are called Voronoi cells associated with 1-NN, which is the set of polygons whose edges are the perpendicular bisectors of the lines joining the neighboring points.  Thus, the decision boundary is the result of fusing adjacent Voronoi cells that are associated with same class.  In the example above, it's the boundary of unions of each colors.  Finding the boundaries that trace each adjacent Vorono regions can be done with additional several steps. 
+
+To see all in an application, we will use `knn3()` from the *Caret* package.  We will not train a model but only see how the separation between classes will be nonlinear and different for different $k$.  
+
+```{r knn13, message=FALSE, warning=FALSE, cache=TRUE}
+library(tidyverse)
+library(caret)
+library(dslabs)
+
+#With k = 50
+model1 <- knn3(y ~ ., data = mnist_27$train, k = 2)
+
+x_1 <- mnist_27$true_p$x_1
+x_2 <- mnist_27$true_p$x_2
+df <- data.frame(x_1, x_2) #This is whole data 22500 obs.
+
+p_hat <- predict(model1, df, type = "prob") # Predicting probabilities in each bin
+p_7 <- p_hat[,2] #Selecting the p_hat for 7
+
+df <- data.frame(x_1, x_2, p_7)
+
+my_colors <- c("black", "red")
+
+p1 <- ggplot() +
+  geom_point(data = mnist_27$train, aes(x = x_1, y = x_2, colour = factor(y)),
+             shape = 21, size = 1, stroke = 1) +
+  stat_contour(data = df, aes(x = x_1, y = x_2, z = p_7), breaks=c(0.5), color="blue") +
+  scale_color_manual(values = my_colors)
+plot(p1)
+
+#With k = 400
+model2 <- knn3(y ~ ., data = mnist_27$train, k = 400)
+
+p_hat <- predict(model2, df, type = "prob") # Prediciting probabilities in each bin
+p_7 <- p_hat[,2] #Selecting the p_hat for 7
+
+df <- data.frame(x_1, x_2, p_7)
+
+p1 <- ggplot() +
+  geom_point(data = mnist_27$train, aes(x = x_1, y = x_2, colour = factor(y)),
+             shape = 21, size = 1, stroke = 1) +
+  stat_contour(data = df, aes(x = x_1, y = x_2, z = p_7), breaks=c(0.5), color="blue") +
+  scale_color_manual(values = my_colors)
+plot(p1)
+```
+
+One with $k=2$ shows signs for overfitting, the other one with $k=400$ indicates oversmoothing or underfitting.  We need to tune $k$ such a way that it will be best in terms of prediction accuracy.  
+
+## kNN with caret
+
+There are many different learning algorithms developed by different authors and often with different parametric structures.  The `caret`, **Classification And Regression Training** package tries to consolidate these differences and provide consistency. It currently includes 237 (and growing) different methods which are summarized in the caret [package manual](https://topepo.github.io/caret/available-models.html) [@Kuhn_2019]. Here, we will use `mnset_27` to illustrate how we can use `caret` for kNN. For now, we will use the caret's `train()` function to find the optimal `k` in kNN, which is basically an automated version of cross-validation that we will see in the next chapter.  
+
+### `mnist_27`
+
+Since, our dataset, `mnist_27`, is already split into train and test sets, we do not need to do it again. Here is the starting point:
+
+```{r knn14, message=FALSE, warning=FALSE, cache=TRUE}
+library(caret)
+
+#Training/Model building
+model_knn <- train(y ~ ., method = "knn", data = mnist_27$train)
+model_knn
+```
+
+By default, the cross validation is performed by taking 25 bootstrap samples comprised of 25% of the observations.  Moreover, the default is to try $k=5,7,9$. We can to expand it:
+
+```{r knn15, message=FALSE, warning=FALSE, cache=TRUE}
+#Training/Model building with our own grid
+set.seed(2008)
+model_knn1 <- train(
+  y ~ .,
+  method = "knn",
+  data = mnist_27$train,
+  tuneGrid = data.frame(k = seq(9, 71, 2))
+)
+ggplot(model_knn1, highlight = TRUE)
+model_knn1$bestTune
+model_knn1$finalModel
+```
+
+We can change its tuning to cross-validation:
+
+```{r knn16, message=FALSE, warning=FALSE, cache=TRUE}
+#Training/Model building with 10-k cross validation
+cv <- trainControl(method = "cv", number = 10, p = 0.9)
+model_knn2 <- train(y ~ ., method = "knn", data = mnist_27$train,
+                   tuneGrid = data.frame(k=seq(9,71,2)),
+                   trControl = cv)
+ggplot(model_knn2, highlight = TRUE)
+model_knn2$bestTune
+```
+  
+It seems like $k=27$ ($k=29$ with CV) gives us the best performing prediction model. We can see their prediction performance on the test set:
+
+```{r knn17, message=FALSE, warning=FALSE, cache=TRUE}
+caret::confusionMatrix(predict(model_knn1, mnist_27$test, type = "raw"),
+                mnist_27$test$y)
+caret::confusionMatrix(predict(model_knn2, mnist_27$test, type = "raw"),
+                mnist_27$test$y)
+```
+
+What are these measures?  What is a "Confusion Matrix"?  We will see them in the next section.  But for now, let's use another example.  
+
+### Adult dataset
+This dataset provides information on income earning and attributes that may effect it. Information on the dataset is given at its [website](https://archive.ics.uci.edu/ml/datasets/Adult) [@Kohavi_1996]: 
+
+>Extraction from 1994 US. Census database. A set of reasonably clean records was extracted using the following conditions: ((`AAGE`>16) && (`AGI`>100) && (`AFNLWGT`>1)&& (`HRSWK`>0)).
+>
+
+The prediction task is to determine whether a person makes over 50K a year. 
+
+```{r knn18, message=FALSE, warning=FALSE}
+# Download adult income data
+# SET YOUR WORKING DIRECTORY FIRST
+
+# url.train <- "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"
+# url.test <- "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test"
+# url.names <- "http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names"
+# download.file(url.train, destfile = "adult_train.csv")
+# download.file(url.test, destfile = "adult_test.csv")
+# download.file(url.names, destfile = "adult_names.txt")
+
+# Read the training set into memory
+train <- read.csv("adult_train.csv", header = FALSE)
+str(train)
+
+# Read the test set into memory
+test <- read.csv("adult_test.csv", header = FALSE)
+```
+
+The data doesn't have the variable names.  That's bad because we don't know which one is which.  Check the **adult_names.txt** file.  The list of variables is given in that file.  Thanks to [Matthew Baumer](https://rpubs.com/mbaumer/knn) [@Baumer_2015], we can write them manually:
+
+```{r knn19, message=FALSE, warning=FALSE}
+varNames <- c("Age", 
+              "WorkClass",
+              "fnlwgt",
+              "Education",
+              "EducationNum",
+              "MaritalStatus",
+              "Occupation",
+              "Relationship",
+              "Race",
+              "Sex",
+              "CapitalGain",
+              "CapitalLoss",
+              "HoursPerWeek",
+              "NativeCountry",
+              "IncomeLevel")
+names(train) <- varNames
+names(test) <- varNames
+str(train)
+```
+
+Since the dataset is large we are not going to use the test set but split the train set into our own test and train sets. Note that, however, if we had used the original test set, we would have had to make some adjustments/cleaning before using it.  For example, if you look at `Age` variable, it seems as a factor variable.  It is an integer in the training set.  We have to change it first. Moreover, our $Y$ has two levels in the train set, it has 3 levels in the test set.  We have to go over each variable and make sure that the test and train sets have the same features and class types.  This task is left to you if you want to use the original train and test sets.  A final tip: remove the first row in the original test set!  
+  
+```{r knn20, message=FALSE, warning=FALSE, cache=TRUE}
+#Caret needs some preparations!
+table(train$IncomeLevel)
+# This is b/c we will use the same data for LPM
+train$Y <- ifelse(train$IncomeLevel == " <=50K", 0, 1)
+train <- train[,-15]
+
+# kNN needs Y to be a factor variable
+train$Y <- as.factor(train$Y)
+levels(train$Y)[levels(train$Y) == "0"] <- "Less"
+levels(train$Y)[levels(train$Y) == "1"] <- "More"
+levels(train$Y)
+
+#kNN
+set.seed(3033)
+train_df <-
+  caret::createDataPartition(y = train$Y, p = 0.7, list = FALSE)
+training <- train[train_df, ]
+testing <- train[-train_df, ]
+
+#Training/Model building with 10-k cross validation
+cv <- caret::trainControl(method = "cv", number = 10, p = 0.9)
+model_knn3 <- caret::train(
+  Y ~ .,
+  method = "knn",
+  data = training,
+  tuneGrid = data.frame(k = seq(9, 41 , 2)),
+  trControl = cv
+)
+ggplot(model_knn3, highlight = TRUE)
+```
+
+Now we are going to use the test set to see the model's performance. 
+
+```{r knn21, message=FALSE, warning=FALSE, cache=TRUE}
+caret::confusionMatrix(predict(model_knn3, testing, type = "raw"),
+                testing$Y)
+```
+
+Next, as you can guess, we will delve into these performance measures.  
+
+Learning algorithm may not be evaluated only by its predictive capacity. We may want to interpret the results by identifying the important predictors and their importance.  **There is always a trade-off between interpretability and predictive accuracy**.  Here is a an illustration.  We will talk about this later in the book.
+
+```{r knn22, echo=FALSE, out.width = '130%', out.height='130%'}
+knitr::include_graphics("png/tradeoff.png")
+``` 

@@ -1,0 +1,36 @@
+# Singular Value Decomposition
+
+The answer is to work with $\mathbf{A^{\top} A}$ and $\mathbf{A A^{\top}}$, both of which are symmetric (and have $n$ and $m$ orthogonal eigenvectors, respectively). So we have the following decomposition:
+
+$$
+\begin{aligned}
+\mathbf{A^{\top} A =V D V^{\top}} \\
+\mathbf{A A^{\top} =U D^{\prime} U^{\top}}
+\end{aligned}
+$$
+where $\mathbf{V}$ is an $n \times n$ orthogonal matrix consisting of the eigenvectors of $\mathbf{A^{\top} A, D}$ an $n \times n$ diagonal matrix with the eigenvalues of $\mathbf{A^{\top} A}$ on the diagonal, $\mathbf{U}$ an $m \times m$ orthogonal matrix consisting of the eigenvectors of $\mathbf{A A^{\top}}$, and $\mathbf{D^{\prime}}$ an $m \times m$ diagonal matrix with the eigenvalues of $\mathbf{A A^{\top}}$ on the diagonal.
+  
+It turns out that $\mathrm{D}$ and $\mathbf{D^{\prime}}$ have the same non-zero diagonal entries except that the order might be different.
+
+Now comes a highlight of linear algebra. Any real $m \times n$ matrix can be factored as  
+
+$$
+\mathbf{A=U \Sigma V^{\top}}
+$$
+  
+where $\mathbf{U}$ is an $m \times m$ orthogonal matrix whose columns are the eigenvectors of $\mathbf{A A^{\top}}$, $\mathbf{V}$ is an $n \times n$ orthogonal matrix whose columns are the eigenvectors of $\mathbf{A^{\top} A}$, and $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix of the form:
+
+$$
+\Sigma=\left(\begin{array}{cccc}
+\sigma_{1} & & & \\
+& \ddots &  \\
+& & \sigma_{n} & \\
+0 & 0 & 0 \\
+0 & 0 &0 \\
+\end{array}\right)
+$$
+with $\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \sigma_{n}>0$ and $r=\operatorname{rank}(\mathbf{A})$. In the above, $\sigma_{1}, \ldots, \sigma_{n}$ are the square roots of the eigenvalues of $\mathbf{A^{\top} A}$. They are called the **singular values** of $\mathbf{A}$.
+  
+Our basic goal is to "solve" the system $\mathbf{A} x=b$ for all matrices $\mathbf{A}$ and vectors $b$. A second goal is to solve the system using a numerically stable algorithm. A third goal is to solve the system in a reasonably efficient manner. For instance, we do not want to compute $\mathbf{A}^{-1}$ using determinants.
+
+An important point is that although $\mathbf{U}$ in $\mathbf{U \Sigma V^{\top}}$ is $m \times m$ when its multiplied by $\mathbf{\Sigma}$ it reduces to $n \times n$ matrix due to zeros in $\mathbf{\Sigma}$.  Hence, we can actually select only those in $\mathbf{U}$ that are not going to be zero out due to that multiplication and take only $n \times n$ from $\mathbf{U}$ matrix.  This is called "Economy SVD" $\mathbf{\hat{U} \hat{\Sigma} V^{\top}}$ where all matrices will be $n \times n$  
