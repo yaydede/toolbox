@@ -562,7 +562,7 @@ div.csl-indent {
 ##  $ c: chr &quot;Hello!&quot;
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, &quot;srcref&quot;)= &#39;srcref&#39; int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7fa2d9dfa3b0&gt; 
+##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7fb46eaaabb0&gt; 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
 <div class="sourceCode" id="cb1400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1400-1"><a href="r-lab-2---basics-ii.html#cb1400-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(B)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
@@ -791,15 +791,15 @@ div.csl-indent {
 <span id="cb1449-5"><a href="r-lab-2---basics-ii.html#cb1449-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -1.12 3.21 -4.02 6.25 8.19 ...
-##  $ c: Factor w/ 3 levels &quot;(-4.04,0.0479]&quot;,..: 1 2 1 3 3 2 2 1 1 3</code></pre>
+##  $ b: num  2.71 7.33 -9.89 2.67 -0.84 ...
+##  $ c: Factor w/ 3 levels &quot;(-9.9,-4.15]&quot;,..: 3 3 1 3 2 2 3 2 2 2</code></pre>
 <div class="sourceCode" id="cb1451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1451-1"><a href="r-lab-2---basics-ii.html#cb1451-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizes variable (subtracts mean and divides by standard deviation)</span></span>
 <span id="cb1451-2"><a href="r-lab-2---basics-ii.html#cb1451-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>d <span class="ot">&lt;-</span> <span class="fu">scale</span>(my_data<span class="sc">$</span>a)</span>
 <span id="cb1451-3"><a href="r-lab-2---basics-ii.html#cb1451-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -1.12 3.21 -4.02 6.25 8.19 ...
-##  $ c: Factor w/ 3 levels &quot;(-4.04,0.0479]&quot;,..: 1 2 1 3 3 2 2 1 1 3
+##  $ b: num  2.71 7.33 -9.89 2.67 -0.84 ...
+##  $ c: Factor w/ 3 levels &quot;(-9.9,-4.15]&quot;,..: 3 3 1 3 2 2 3 2 2 2
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, &quot;scaled:center&quot;)= num 5.5
 ##   ..- attr(*, &quot;scaled:scale&quot;)= num 3.03</code></pre>
@@ -809,17 +809,17 @@ div.csl-indent {
 <span id="cb1453-4"><a href="r-lab-2---basics-ii.html#cb1453-4" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>g <span class="ot">&lt;-</span> <span class="fu">lead</span>(my_data<span class="sc">$</span>d, <span class="at">n=</span>1L) </span>
 <span id="cb1453-5"><a href="r-lab-2---basics-ii.html#cb1453-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>h <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(my_data<span class="sc">$</span>d) </span>
 <span id="cb1453-6"><a href="r-lab-2---basics-ii.html#cb1453-6" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
-<pre><code>##     a           b              c          d          f          g         h
-## 1   1 -1.11538587 (-4.04,0.0479] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  3.20534928  (0.0479,4.12] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3 -4.02461949 (-4.04,0.0479] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  6.25465467    (4.12,8.21] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  8.19285660    (4.12,8.21] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6  0.81171585  (0.0479,4.12]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  3.61265651  (0.0479,4.12]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8 -3.84176675 (-4.04,0.0479]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9 -0.04830346 (-4.04,0.0479]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  4.45965959    (4.12,8.21]  1.4863011  1.1560120         NA  0.000000</code></pre>
+<pre><code>##     a          b            c          d          f          g         h
+## 1   1  2.7142618  (1.59,7.34] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  7.3263739  (1.59,7.34] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3 -9.8851598 (-9.9,-4.15] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  2.6652593  (1.59,7.34] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5 -0.8401049 (-4.15,1.59] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 -0.6457187 (-4.15,1.59]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  5.3069520  (1.59,7.34]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8 -2.8644769 (-4.15,1.59]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9 -4.0303609 (-4.15,1.59]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -1.5997900 (-4.15,1.59]  1.4863011  1.1560120         NA  0.000000</code></pre>
 </div>
 <div id="categorical-variables-in-data-frames" class="section level3 hasAnchor" number="35.1.7">
 <h3><span class="header-section-number">35.1.7</span> Categorical Variables in Data Frames<a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1045,7 +1045,7 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <span id="cb1505-3"><a href="r-lab-2---basics-ii.html#cb1505-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1505-4"><a href="r-lab-2---basics-ii.html#cb1505-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum the values of each column with `apply()`</span></span>
 <span id="cb1505-5"><a href="r-lab-2---basics-ii.html#cb1505-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, sum)</span></code></pre></div>
-<pre><code>## [1]  0.5778028  2.2358225  0.6275183  0.7270100 -1.1453977  0.6014443</code></pre>
+<pre><code>## [1]  1.7586660 -1.4850467  4.4514957 -1.4981387 -0.2818572  3.3569756</code></pre>
 <div class="sourceCode" id="cb1507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1507-1"><a href="r-lab-2---basics-ii.html#cb1507-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, length)</span></code></pre></div>
 <pre><code>## [1] 5 5 5 5 5 5</code></pre>
 <div class="sourceCode" id="cb1509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1509-1"><a href="r-lab-2---basics-ii.html#cb1509-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">1</span>, length)</span></code></pre></div>
@@ -1062,11 +1062,11 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <span id="cb1515-2"><a href="r-lab-2---basics-ii.html#cb1515-2" aria-hidden="true" tabindex="-1"></a>X_new <span class="ot">&lt;-</span> <span class="fu">apply</span>(X, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">3</span>)</span>
 <span id="cb1515-3"><a href="r-lab-2---basics-ii.html#cb1515-3" aria-hidden="true" tabindex="-1"></a>X_new</span></code></pre></div>
 <pre><code>##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 2.119079 3.063969 1.392270 2.476040 3.258087 3.929613
-## [2,] 3.849422 3.878820 3.115008 2.094065 2.526911 1.582785
-## [3,] 3.679582 3.759961 5.231437 4.536221 3.187218 3.779500
-## [4,] 3.523017 3.646830 2.415123 2.137159 3.547498 2.853847
-## [5,] 2.406704 2.886243 3.473679 4.483526 1.334889 3.455699</code></pre>
+## [1,] 3.515268 3.328473 4.813081 5.235667 2.656545 4.955693
+## [2,] 3.102795 3.259303 2.814599 1.272245 4.180415 4.752014
+## [3,] 2.832308 2.783155 3.012166 2.804885 1.906988 3.093756
+## [4,] 2.586747 2.272478 3.778584 2.427548 3.433320 2.524079
+## [5,] 4.721548 1.871544 5.033066 1.761516 2.540874 3.031434</code></pre>
 <p>Since <code>apply()</code> is used only for matrices, if you apply <code>apply()</code> to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences. For a safer practice in data frames, we can use <code>lappy()</code> and <code>sapply()</code>:</p>
 </div>
 <div id="lapply" class="section level4 hasAnchor" number="35.2.3.2">
