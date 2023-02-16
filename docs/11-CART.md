@@ -397,7 +397,7 @@ printcp(tree)
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
 ## 2 0.034483      1   0.27586 0.51724 0.11861
-## 3 0.010000      2   0.24138 0.51724 0.11861
+## 3 0.010000      2   0.24138 0.55172 0.12140
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.000000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error by 72.4138\% to 27.5862\% (1.000000 `rel error` - 0.724138 `CP`).  This relative gain (`CP`) can be calculated as follows:
@@ -431,10 +431,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.03645 0.046737
-## 2 0.101694      1   0.41379 0.75297 0.160767
-## 3 0.028263      2   0.31209 0.66620 0.138933
-## 4 0.010000      3   0.28383 0.66338 0.137789
+## 1 0.586213      0   1.00000 1.02337 0.045985
+## 2 0.101694      1   0.41379 0.82264 0.162392
+## 3 0.028263      2   0.31209 0.75870 0.161450
+## 4 0.010000      3   0.28383 0.71284 0.149930
 ```
 
 It is not so easy to follow the `rpart` calculations for classification. Although the explanations in the [vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) [@Atkinson_2022] suggests that Gini is used for classification, it seems that cost complexity pruning (`cp`) is reported based on accuracy (misclassification error) [rather than Gini](https://stats.stackexchange.com/q/223211) [@Alan_2016].
@@ -504,10 +504,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.48276 0.11560
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.44828 0.11237
-## 5 0.000000      8  0.000000 0.44828 0.11237
+## 2 0.103448      1  0.275862 0.55172 0.12140
+## 3 0.034483      2  0.172414 0.55172 0.12140
+## 4 0.017241      6  0.034483 0.58621 0.12399
+## 5 0.000000      8  0.000000 0.62069 0.12640
 ```
 
 ```r
@@ -522,7 +522,7 @@ min_cp
 ```
 
 ```
-## [1] 0.03448276
+## [1] 0.1034483
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, more levels (each row represents a different height of the tree) in the tree mean that it has a lower classification error on the training. However, you run the risk of overfitting. Often, the cross-validation error will actually grow as the tree gets more levels.
@@ -547,16 +547,15 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS PVENT
+## [1] INSYS
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
-##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.48276 0.11560
-## 3 0.034483      2   0.17241 0.44828 0.11237
+##        CP nsplit rel error  xerror    xstd
+## 1 0.72414      0   1.00000 1.00000 0.14282
+## 2 0.10345      1   0.27586 0.55172 0.12140
 ```
 
 ```r
@@ -647,9 +646,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.538 0.029238
-## 4 0.011333      5     0.504  0.524 0.028952
-## 5 0.010000      9     0.458  0.514 0.028743
+## 3 0.015000      3     0.534  0.576 0.029976
+## 4 0.011333      5     0.504  0.552 0.029517
+## 5 0.010000      9     0.458  0.540 0.029279
 ```
 
 ```r

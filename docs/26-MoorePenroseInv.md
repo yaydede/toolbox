@@ -83,10 +83,10 @@ betahat_OLS
 ```
 
 ```
-##          [,1]
-## x1 0.09806945
-## x2 1.63047070
-## x3 2.31691230
+##         [,1]
+## x1 0.5094523
+## x2 1.4714533
+## x3 2.2450864
 ```
 
 ```r
@@ -122,10 +122,10 @@ betahat_ginv
 ```
 
 ```
-##            [,1]
-## [1,] 0.09806945
-## [2,] 1.63047070
-## [3,] 2.31691230
+##           [,1]
+## [1,] 0.5094523
+## [2,] 1.4714533
+## [3,] 2.2450864
 ```
 
 ```r
@@ -133,10 +133,10 @@ betahat_OLS
 ```
 
 ```
-##          [,1]
-## x1 0.09806945
-## x2 1.63047070
-## x3 2.31691230
+##         [,1]
+## x1 0.5094523
+## x2 1.4714533
+## x3 2.2450864
 ```
   
 Now the question where and when we can use `ginv`? With a high-dimensional $\mathbf{X}$, where $p > n$, the vector $\beta$ cannot uniquely be determined from the system of equations.the solution to the normal equation is 
