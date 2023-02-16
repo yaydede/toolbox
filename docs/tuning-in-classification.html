@@ -516,7 +516,7 @@ div.csl-indent {
 <p>where, TP, FP, FN, TN are True positives, False Positives, False Negatives, and True Negatives, respectively. This table is also know as <strong>Confusion Table</strong> or confusion matrix. The name, <em>confusion</em>, is very intuitive because it is easy to see how the system is <strong>confusing</strong> two classes.</p>
 <p>There are many metrics that can be calculated from this table. Let’s use an example given in <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Wikipedia</a></p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 5 }_{}} &amp; {\text { 2 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 3 }_{}} &amp; {\text { 3 }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=Cat} &amp; {Y=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 5 }_{}} &amp; {\text { 2 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 3 }_{}} &amp; {\text { 3 }_{}}\end{array}
 \]</span></p>
 <p>According to this confusion matrix, there are 8 actual cats and 5 actual dogs (column totals). The learning algorithm, however, predicts only 5 cats and 3 dogs correctly. The model predicts 3 cats as dogs and 2 dogs as cats. All correct predictions are located in the diagonal of the table, so it is easy to visually inspect the table for prediction errors, as they will be represented by values outside the diagonal.</p>
 <p>In predictive analytics, this table (matrix) allows more detailed analysis than mere proportion of correct classifications (accuracy). <strong>Accuracy</strong> (<span class="math inline">\((TP+TN)/n\)</span>) is not a reliable metric for the real performance of a classifier, when the dataset is unbalanced in terms of numbers of observations in each class.</p>
@@ -540,11 +540,11 @@ div.csl-indent {
 </ul>
 <p>Here is the summary:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text {TPR or Sensitivity }_{}} &amp; {\text { FNR or Fall-out }_{}} \\ {\hat{Y}=Dog} &amp; {\text { FNR or Miss Rate }_{}} &amp; {\text { TNR or Specificity }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=Cat} &amp; {Y=Dog} \\ {\hat{Y}=Cat} &amp; {\text {TPR or Sensitivity }_{}} &amp; {\text { FNR or Fall-out }_{}} \\ {\hat{Y}=Dog} &amp; {\text { FNR or Miss Rate }_{}} &amp; {\text { TNR or Specificity }_{}}\end{array}
 \]</span></p>
 <p><strong>Kappa</strong> is also calculated in most cases. It is an interesting measure because it compares the actual performance of prediction with what it would be if a random prediction was carried out. For example, suppose that your model predicts <span class="math inline">\(Y\)</span> with 95% accuracy. How good your prediction power would be if a random choice would also predict 70% of <span class="math inline">\(Y\)</span>s correctly? Let’s use an example:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=Cat} &amp; {{Y}=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 22 }_{}} &amp; {\text { 9 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 7 }_{}} &amp; {\text { 13 }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=Cat} &amp; {Y=Dog} \\ {\hat{Y}=Cat} &amp; {\text { 22 }_{}} &amp; {\text { 9 }_{}} \\ {\hat{Y}=Dog} &amp; {\text { 7 }_{}} &amp; {\text { 13 }_{}}\end{array}
 \]</span></p>
 <p>In this case the accuracy is <span class="math inline">\((22+13)/51 = 0.69\)</span> But how much of it is due the model’s performance itself? In other words, the distribution of cats and dogs can also give a predictive clue such that a certain level of prediction accuracy can be achieved by chance without any learning algorithm. For the TP cell in the table, this can be calculated as the difference between observed accuracy (OA) and expected accuracy (EA),</p>
 <p><span class="math display">\[
@@ -581,10 +581,10 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 \]</span></p>
 <p>this would have led to the following confusing tables, respectively:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}} \\ {\hat{Y}=0} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=1} &amp; {Y=0} \\ {\hat{Y}=1} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}} \\ {\hat{Y}=0} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}}\end{array}
 \]</span>
 <span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1} &amp; {{Y}=0} \\ {\hat{Y}=1} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}} \\ {\hat{Y}=0} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=1} &amp; {Y=0} \\ {\hat{Y}=1} &amp; {\text { 0 }_{}} &amp; {\text { 0 }_{}} \\ {\hat{Y}=0} &amp; {\text { 50 }_{}} &amp; {\text { 50 }_{}}\end{array}
 \]</span></p>
 <p>In the first case, <span class="math inline">\(TPR = 1\)</span> and <span class="math inline">\(FPR = 1\)</span>; and in the second case, <span class="math inline">\(TPR = 0\)</span> and <span class="math inline">\(FPR = 0\)</span>. So when we calculate all possible confusion tables with different values of thresholds ranging from 0% to 100%, we will have the same number of (<span class="math inline">\(TPR, FPR\)</span>) points each corresponding to one threshold. <strong>The ROC curve is the curve that connects these points</strong>.</p>
 <p>Let’s use an example with the <em>Boston Housing Market</em> dataset to illustrate ROC:</p>

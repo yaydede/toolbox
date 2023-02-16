@@ -504,11 +504,11 @@ div.csl-indent {
 <p>We can conclude this section with a classification example. We will use <code>Adult</code> dataset. The information on the dataset is given at the <a href="https://archive.ics.uci.edu/ml/datasets/Adult">Machine Learning Repository at UCI</a> <span class="citation">(<a href="#ref-Kohavi_1996" role="doc-biblioref"><strong>Kohavi_1996?</strong></a>)</span>:</p>
 <p>The prediction task is to determine whether a person makes over $50K a year. This question would be similar to the question of <em>whether the person makes less than 50K</em>. However, we need to be careful in defining which class will be <strong>positive</strong> or <strong>negative</strong>. Suppose we have <span class="math inline">\(Y\)</span>, 0 and 1, and we define 1 as a <em>positive</em> class:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=1+} &amp; {{Y}=0-} \\ {\hat{Y}=1+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=0-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=1+} &amp; {Y=0-} \\ {\hat{Y}=1+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=0-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
 \]</span>
 Now suppose we define 1 as a negative class:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {{Y}=0+} &amp; {{Y}=1-} \\ {\hat{Y}=0+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=1-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=0+} &amp; {Y=1-} \\ {\hat{Y}=0+} &amp; {\text { TP }_{}} &amp; {\text { FP }_{}} \\ {\hat{Y}=1-} &amp; {\text { FN }_{}} &amp; {\text { TN }_{}}\end{array}
 \]</span>
 Of course this is just a notational difference and nothing changes in calculations. But some performance measures, especially, sensitivity (TPR) and fall-out (FPR) will be different.</p>
 <p>We are going to use the original train set again to avoid some data cleaning jobs that we mentioned in Chapter 5.</p>
