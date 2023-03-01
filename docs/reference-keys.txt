@@ -55,8 +55,6 @@ eq:7-1
 eq:8-1
 eq:8-2
 eq:16-1
-eq:25-1
-eq:25-2
 eq:binom
 thm:tri
 intro
@@ -138,11 +136,11 @@ random-forest
 boosting
 sequential-ensemble-with-gbm
 adaboost
-extreme-gradient-boosting-xgboost
+xgboost
 ensemble-applications
 classification
 regression
-dataset-level-explainers
+exploration
 boosting-applications
 regression-1
 random-search-with-parallel-processing

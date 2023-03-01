@@ -1,6 +1,8 @@
 # Time Series Embedding
 
-In general, forecasting models use either direct or recursive forecasting, or their combinations (See [Taieb and Hyndman](https://robjhyndman.com/papers/rectify.pdf), 2012).  The difference between these two methods is related to discussion on prediction accuracy and forecasting variance. As we see below, recursive forecasting requires a parametric model and would face increasing forecasting error when the underlying model is not linear. Direct forecasting, however, can be achieved by a nonparametric predictive algorithm, while it may have a higher variance as the forecast horizon gets longer.  
+In general, forecasting models use either direct or recursive forecasting, or their combinations (See [Taieb and Hyndman](https://robjhyndman.com/papers/rectify.pdf), 2012).  The difference between these two methods is related to discussion on prediction accuracy and forecasting variance. 
+  
+Recursive forecasting requires a parametric model and would face increasing forecasting error when the underlying model is not linear. Direct forecasting, however, can be achieved by a nonparametric predictive algorithm, while it may have a higher variance as the forecast horizon gets longer.  
 
 Multi-period recursive forecasting use a single time series model, like AR(1).  With iterative substitutions of the estimated model, any forecast period of $h$ can be computed.  Let's start with a simple AR(1) to see recursive forecasting:
 
@@ -70,9 +72,9 @@ $$
 \end{aligned}
 $$
 
-Each model is estimated using the principle of ordinary least squares, given that series are stationary. Forecasts in VAR are calculated with recursive iterations. Therefore, the set of equations generates forecasts for each variable. To decide the number of lags in each equation, the BIC is used  
+Each model is estimated using the principle of ordinary least squares, given that series are stationary. Forecasts in VAR are calculated with recursive iterations. Therefore, the set of equations generates forecasts for each variable. To decide the number of lags in each equation, the BIC is used.  
 
-Let's have our COVID-19 data and include the mobility to forecasting
+Let's have our COVID-19 data and include the mobility to our forecasting model.  
 
 
 ```r
@@ -80,12 +82,19 @@ library(tsibble)
 library(fpp3)
 
 load("~/Dropbox/ToolShed_draft/dftoronto.RData")
-day <- seq.Date(from = as.Date("2020/03/01"),
-                         to = as.Date("2020/11/21"), by = 1)
+day <- seq.Date(
+  from = as.Date("2020/03/01"),
+  to = as.Date("2020/11/21"),
+  by = 1
+)
 
-tdata <- tibble(Day = day, mob = data$mob, cases = data$cases)
+tdata <- tibble(Day = day,
+                mob = data$mob,
+                cases = data$cases)
+
 toronto <- tdata %>%
   as_tsibble(index = Day)
+
 toronto
 ```
 
@@ -112,14 +121,12 @@ We will estimate the recursive forecasts for 1 to 14 days ahead.
 ```r
 # We need make series stationary
 trdf <- toronto %>%
-            mutate(diffcases = difference(cases),
-                   diffmob = difference(mob))
+  mutate(diffcases = difference(cases),
+         diffmob = difference(mob))
 
 # VAR with BIC
-fit <- trdf[-1,] %>%
-  model(
-    VAR(vars(diffcases, diffmob), ic = "bic")
-  )
+fit <- trdf[-1, ] %>%
+  model(VAR(vars(diffcases, diffmob), ic = "bic"))
 glance(fit)
 ```
 
@@ -168,11 +175,12 @@ fit %>% report()
 ## log likelihood = -853.64
 ## AIC = 1755.28	AICc = 1760.38	BIC = 1840.73
 ```
+  
 
 ```r
 fit %>%
-  forecast(h=14) %>%
-  autoplot(trdf[-c(1:200),])
+  forecast(h = 14) %>%
+  autoplot(trdf[-c(1:200), ])
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-3-1.png" width="672" />
@@ -187,7 +195,7 @@ For direct forecasting, we need to rearrange the data in a way that we can estim
 ```r
 Y <- 1:10
 Y <- embed(Y, 3)
-colnames(Y)=c("Y(t)","Y(t-1)","Y(t-2)")
+colnames(Y) = c("Y(t)", "Y(t-1)", "Y(t-2)")
 Y
 ```
 
@@ -203,7 +211,7 @@ Y
 ## [8,]   10      9      8
 ```
 
-Now the key point is there is no a temporal dependence between each row so that shuffling this data after re-structuring it admissible.  Let's have an AR(1) example on this simulated data
+Now, the key point is that there is no a temporal dependence between each row so that shuffling this data after re-structuring it admissible.  Let's have an AR(1) example on this simulated data
 
 
 ```r
@@ -215,17 +223,24 @@ y <- c(0, n)
 set.seed(345)
 eps <- rnorm(n, 0, 1)
 
-for(j in 1:(n-1)) {
-  y[j+1] <- y[j]*rho + eps[j]
-  }
+for (j in 1:(n - 1)) {
+  y[j + 1] <- y[j] * rho + eps[j]
+}
 
 ylagged <- y[2:n]
 
-par(mfrow=c(1,2))
-plot(ylagged, y[1:(n-1)], col = "lightpink",
-     ylab = "y", xlab = "y(t-1)")
-plot(y[1:500], type = "l", col = "red",
-     ylab = "y", xlab = "t")
+par(mfrow = c(1, 2))
+plot(ylagged,
+     y[1:(n - 1)],
+     col = "lightpink",
+     ylab = "y",
+     xlab = "y(t-1)")
+plot(y[1:500],
+     type = "l",
+     col = "red",
+     ylab = "y",
+     xlab = "t"
+)
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -234,7 +249,6 @@ We will use an AR(1) estimation with OLS after embedding:
 
 
 ```r
-y_em <- embed(y, 2)
 head(y)
 ```
 
@@ -243,6 +257,7 @@ head(y)
 ```
 
 ```r
+y_em <- embed(y, 2)
 colnames(y_em) <- c("yt", "yt_1")
 head(y_em)
 ```
@@ -256,6 +271,7 @@ head(y_em)
 ## [5,] -1.0125757 -1.1118166
 ## [6,] -1.4942098 -1.0125757
 ```
+  
 And estimation of AR(1) with OLS:
 
 
@@ -296,7 +312,8 @@ ar1
 ##   yt_1  
 ## 0.8496
 ```
-This proves the temporal independence across the observations in the rearranged data.  This is important because the temporal order in the time series data would not affect the cross-validation process or bootstrapping applications in a grid search anymore.  When we have this freedom, we can use all conventional machine learning applications on time series data, like random forests, which we see in the next chapter.   
+
+This application shows the temporal independence across the observations in the rearranged data give that model (AR) is correctly specified.  This is important because we can use conventional machine learning applications on time series data, like random forests, which we see in the next chapter.   
 
 This re-arrangement can also be applied to multivariate data sets:
 
@@ -357,7 +374,8 @@ Each one of these models requires a different rearrangement in the data.  Here a
 ## [5,]    9     27      6     26      5     25
 ## [6,]   10     28      7     27      6     26
 ```
-We already rearranged the data for the first model. if we remove the first row in `y(t)` and the last row in the remaining set, we can get the the data for the second model:
+ 
+We already rearranged the data for the first model. if we remove the first row in `y(t)` and the last row in the remaining set, we can get the data for the second model:
 
 
 
@@ -382,9 +400,9 @@ We will use our COVID-19 data and a simple linear regression as an example of di
 ```r
 # Preparing data
 df <- data.frame(dcases = trdf$diffcases, dmob = trdf$diffmob)
-df <- df[complete.cases(df), ]
+df <- df[complete.cases(df),]
 rownames(df) <- NULL
-df <-as.matrix(df)
+df <- as.matrix(df)
 head(df)
 ```
 
@@ -398,7 +416,7 @@ head(df)
 ## [6,]     -2  0.03232
 ```
 
-Now we need to decide on two parameters: the window size, that is, how many lags will be included in each row; and how many days we will forecast.  The next section will use more advance functions for re-arranging the data and apply the direct forecasting with random forests. For now, let's use a 3-day window and a 3-day forecast: 
+Now we need to decide on two parameters: the window size, that is, how many lags will be included in each row; and how many days we will forecast.  The next section will use more advance functions for re-arranging the data and apply the direct forecasting with random forests. For now, let's use a 3-day window and a 3-day forecast horizon: 
   
 
 ```r
@@ -408,15 +426,15 @@ fh <- c() # storage for forecast
 
 # Start with first
 dt <- embed(df, w)
-y <- dt[,1]
-X <- dt[,-1]
+y <- dt[, 1]
+X <- dt[, -1]
 
 for (i in 1:h) {
   fit <- lm(y ~ X)
   l <- length(fit$fitted.values)
   fh[i] <- fit$fitted.values[l]
   y <- y[-1]
-  X <- X[-nrow(X),]
+  X <- X[-nrow(X), ]
 }
 
 fh
@@ -429,7 +447,7 @@ fh
 
 ```r
 plot(1:266, trdf$diffcases, col = "red", type = "l")
-lines(267:269, fh, col="blue")
+lines(267:269, fh, col = "blue")
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-15-1.png" width="672" />
@@ -439,8 +457,8 @@ We haven't used training and test sets above.  If we apply a proper splitting, w
 
 ```r
 # We set the last 7 days as our test set
-train <- df[1:258, ]
-test <- df[-c(1:258), ]
+train <- df[1:258,]
+test <- df[-c(1:258),]
 
 h = 7
 w <- 3:14 # a grid for window size
@@ -449,16 +467,16 @@ fh <- matrix(0, length(w), h)
 rownames(fh) <- w
 colnames(fh) <- 1:7
 
-for(s in 1:length(w)){
+for (s in 1:length(w)) {
   dt <- embed(train, w[s])
-  y <- dt[,1]
-  X <- dt[,-1]
-    for (i in 1:h) {
-      fit <- lm(y ~ X)
-      fh[s,i] <- last(fit$fitted.values)
-      y <- y[-1]
-      X <- X[-nrow(X),]
-    }
+  y <- dt[, 1]
+  X <- dt[, -1]
+  for (i in 1:h) {
+    fit <- lm(y ~ X)
+    fh[s, i] <- last(fit$fitted.values)
+    y <- y[-1]
+    X <- X[-nrow(X), ]
+  }
 }
 
 fh
@@ -499,8 +517,8 @@ Rows in `fh` show the 7-day forecast for each window size.  We can see which win
 ```r
 rmspe <- c()
 
-for(i in 1: nrow(fh)){
-  rmspe[i] <- sqrt(mean((fh[i,]-test)^2))
+for (i in 1:nrow(fh)) {
+  rmspe[i] <- sqrt(mean((fh[i, ] - test) ^ 2))
 }
 
 rmspe
@@ -519,7 +537,7 @@ which.min(rmspe)
 ## [1] 9
 ```
 
-We used the last 7 days in our data as our test set and previous days as our training set.  A natural question would be whether we could shuffle the data and use **any** 7 days as our test set?  The answer is yes, because we do not need to follow a temporal order in the data after rearranging it with embedding. This is important because we can add a bootstrapping loop to our grid search above and get better tuning for finding the best window size.
+We used the last 7 days in our data as our test set.  A natural question would be whether we could shuffle the data and use **any** 7 days as our test set?  The answer is yes, because we do not need to follow a temporal order in the data after rearranging it with embedding. This is important because we can add a bootstrapping loop to our grid search above and get better tuning for finding the best window size.
 
 We incorporate all these ideas with our random forest application in the next chapter. 
 

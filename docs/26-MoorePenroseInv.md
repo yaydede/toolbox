@@ -1,6 +1,6 @@
 # Moore-Penrose inverse 
 
-Another example is solving OLS with SVD:
+The Singular Value Decomposition (SVD) can be used for solving Ordinary Least Squares (OLS) problems. In particular, the SVD of the design matrix $\mathbf{X}$ can be used to compute the coefficients of the linear regression model.  Here are the steps:
   
 $$
 \mathbf{y = X \beta}\\
@@ -10,14 +10,24 @@ $$
 \mathbf{\Sigma^{-1}}\mathbf{U'y =  V' \beta}\\
 \mathbf{V\Sigma^{-1}}\mathbf{U'y =  \beta}\\
 $$
-  
-And 
+
+This formula for beta is computationally efficient and numerically stable, even for ill-conditioned or singular $\mathbf{X}$ matrices. Moreover, it allows us to compute the solution to the OLS problem without explicitly computing the inverse of $\mathbf{X}^T \mathbf{X}$. 
+
+Menawhile, the term
 
 $$
 \mathbf{V\Sigma^{-1}U' = M^+}
 $$
+
 is called **"generalized inverse" or The Moore-Penrose Pseudoinverse**.  
-  
+
+If $\mathbf{X}$ has full column rank, then the pseudoinverse is also the unique solution to the OLS problem. However, if $\mathbf{X}$ does not have full column rank, then its pseudoinverse may not exist or may not be unique. In this case, the OLS estimator obtained using the pseudoinverse will be a "best linear unbiased estimator" (BLUE), but it will not be the unique solution to the OLS problem.
+
+To be more specific, the OLS estimator obtained using the pseudoinverse will minimize the sum of squared residuals subject to the constraint that the coefficients are unbiased, i.e., they have zero expected value. However, there may be other linear unbiased estimators that achieve the same minimum sum of squared residuals. These alternative estimators will differ from the OLS estimator obtained using the pseudoinverse in the values they assign to the coefficients.
+
+In practice, the use of the pseudoinverse to estimate the OLS coefficients when $\mathbf{X}$ does not have full column rank can lead to numerical instability, especially if the singular values of $\mathbf{X}$ are very small. In such cases, it may be more appropriate to use regularization techniques such as ridge or Lasso regression to obtain stable and interpretable estimates. These methods penalize the size of the coefficients and can be used to obtain sparse or "shrunken" estimates, which can be particularly useful in high-dimensional settings where there are more predictors than observations.
+
+
 Here are some application of SVD and Pseudoinverse.  
 
 
@@ -25,11 +35,11 @@ Here are some application of SVD and Pseudoinverse.
 library(MASS)
 
 ##Simple SVD and generalized inverse
-a <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+A <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1), 9, 4)
 
-a.svd <- svd(a)
-ds <- diag(1/a.svd$d[1:3])
+a.svd <- svd(A)
+ds <- diag(1 / a.svd$d[1:3])
 u <- a.svd$u
 v <- a.svd$v
 us <- as.matrix(u[, 1:3])
@@ -51,7 +61,7 @@ vs <- as.matrix(v[, 1:3])
 ```
 
 ```r
-ginv(a)
+ginv(A)
 ```
 
 ```
@@ -67,32 +77,35 @@ ginv(a)
 ## [4,]  0.25000000  0.25000000  0.25000000
 ```
 
+We can use SVD for solving a regular OLS on simulated data:  
+
+
 ```r
-##Simulated DGP
+#Simulated DGP
 x1 <- rep(1, 20)
 x2 <- rnorm(20)
 x3 <- rnorm(20)
-u <- matrix(rnorm(20, mean=0, sd=1), nrow=20, ncol=1)
+u <- matrix(rnorm(20, mean = 0, sd = 1), nrow = 20, ncol = 1)
 X <- cbind(x1, x2, x3)
-beta <- matrix(c(0.5, 1.5, 2), nrow=3, ncol=1)
-Y <- X%*%beta + u
+beta <- matrix(c(0.5, 1.5, 2), nrow = 3, ncol = 1)
+Y <- X %*% beta + u
 
-##OLS
-betahat_OLS <- solve(t(X)%*%X)%*%t(X)%*%Y
+#OLS
+betahat_OLS <- solve(t(X) %*% X) %*% t(X) %*% Y
 betahat_OLS
 ```
 
 ```
 ##         [,1]
-## x1 0.4830153
-## x2 1.5749352
-## x3 1.8834666
+## x1 0.4908427
+## x2 1.1761261
+## x3 1.8633406
 ```
 
 ```r
-##SVD
+#SVD
 X.svd <- svd(X)
-ds <- diag(1/X.svd$d)
+ds <- diag(1 / X.svd$d)
 u <- X.svd$u
 v <- X.svd$v
 us <- as.matrix(u)
@@ -101,7 +114,7 @@ X.ginv_mine <- vs %*% ds %*% t(us)
 
 # Compare
 X.ginv <- ginv(X)
-round((X.ginv_mine - X.ginv),4)
+round((X.ginv_mine - X.ginv), 4)
 ```
 
 ```
@@ -117,15 +130,15 @@ round((X.ginv_mine - X.ginv),4)
 
 ```r
 # Now OLS
-betahat_ginv <- X.ginv %*%Y
+betahat_ginv <- X.ginv %*% Y
 betahat_ginv
 ```
 
 ```
 ##           [,1]
-## [1,] 0.4830153
-## [2,] 1.5749352
-## [3,] 1.8834666
+## [1,] 0.4908427
+## [2,] 1.1761261
+## [3,] 1.8633406
 ```
 
 ```r
@@ -134,24 +147,8 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.4830153
-## x2 1.5749352
-## x3 1.8834666
+## x1 0.4908427
+## x2 1.1761261
+## x3 1.8633406
 ```
   
-Now the question where and when we can use `ginv`? With a high-dimensional $\mathbf{X}$, where $p > n$, the vector $\beta$ cannot uniquely be determined from the system of equations.the solution to the normal equation is 
-
-$$
-\hat{\boldsymbol{\beta}}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{+} \mathbf{X}^{\top} \mathbf{Y}+\mathbf{v} \quad \text { for all } \mathbf{v} \in \mathcal{V}
-$$
-
-where $\mathbf{A}^{+}$denotes the Moore-Penrose inverse of the matrix $\mathbf{A}$. Therefore, there is no unique estimator of the regression parameter (See Page 7 for proof in [Lecture notes on ridge regression](https://arxiv.org/pdf/1509.09169.pdf)) [@Wieringen_2021].  To arrive at a unique regression estimator for studies with rank deficient design matrices, the minimum least squares estimator may be employed.
-
-The minimum least squares estimator of regression parameter minimizes the sum-of-squares criterion and is of minimum length. Formally, $\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}=\arg \min _{\boldsymbol{\beta} \in \mathbb{R}^{p}}\|\mathbf{Y}-\mathbf{X} \boldsymbol{\beta}\|_{2}^{2}$ such that $\left\|\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}\right\|_{2}^{2}<\|\boldsymbol{\beta}\|_{2}^{2}$ for all $\boldsymbol{\beta}$ that minimize
-$\|\mathbf{Y}-\mathbf{X} \boldsymbol{\beta}\|_{2}^{2}$.
-
-So $\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{+} \mathbf{X}^{\top} \mathbf{Y}$ is the minimum least squares estimator of regression parameter minimizes the sum-of-squares criterion.  
-  
-As we talked before in Chapter 17, an alternative (and related) estimator of the regression parameter $\beta$ that avoids the use of the Moore-Penrose inverse and is able to deal with (super)-collinearity among the columns of the design matrix is the ridge regression estimator proposed by [Hoerl and Kennard (1970)](https://www.math.arizona.edu/~hzhang/math574m/Read/RidgeRegressionBiasedEstimationForNonorthogonalProblems.pdf). They propose to simply replace $\mathbf{X}^{\top} \mathbf{X}$ by $\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}_{p p}$ with $\lambda \in[0, \infty)$.  The ad-hoc fix solves the singularity as it adds a positive matrix, $\lambda \mathbf{I}_{p p}$, to a positive semi-definite one, $\mathbf{X}^{\top} \mathbf{X}$, making the total a positive definite matrix, which is invertible.
-
-Hence, the ad-hoc fix of the ridge regression estimator resolves the non-evaluation of the estimator in the face of super-collinearity but yields a 'ridge fit' that is not optimal in explaining the observation. Mathematically, this is due to the fact that the fit $\widehat{Y}(\lambda)$ corresponding to the ridge regression estimator is not a projection of $Y$ onto the covariate space.

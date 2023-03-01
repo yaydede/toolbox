@@ -51,18 +51,6 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
-<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.26/datatables.js"></script>
-<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
-<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
-<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
-<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
-<script src="libs/selectize-0.12.0/selectize.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
 
 <style type="text/css">
@@ -279,12 +267,12 @@ div.csl-indent {
 <li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
 <ul>
 <li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
-<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart</code> - Recursive Partitioning</a></li>
 <li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
 <li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
 <li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble Learning</a>
 <ul>
 <li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
 <li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
@@ -292,14 +280,14 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
 <li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
-<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#xgboost"><i class="fa fa-check"></i><b>13.3.3</b> XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
 <ul>
 <li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
 <li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
-<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#exploration"><i class="fa fa-check"></i><b>14.3</b> Exploration</a></li>
 <li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
 <ul>
 <li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
@@ -501,22 +489,59 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="singular-value-decomposition" class="section level1 hasAnchor" number="27">
 <h1><span class="header-section-number">Chapter 27</span> Singular Value Decomposition<a href="singular-value-decomposition.html#singular-value-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>The answer is to work with <span class="math inline">\(\mathbf{A^{\top} A}\)</span> and <span class="math inline">\(\mathbf{A A^{\top}}\)</span>, both of which are symmetric (and have <span class="math inline">\(n\)</span> and <span class="math inline">\(m\)</span> orthogonal eigenvectors, respectively). So we have the following decomposition:</p>
+<p>Singular Value Decomposition (SVD) is another type of decomposition. Different than eigendecomposition, which requires a square matrix, SVD allows us to decompose a rectangular matrix. This is more useful because the rectangular matrix usually represents data in practice.</p>
+<p>For any matrix <span class="math inline">\(\mathbf{A}\)</span>, both <span class="math inline">\(\mathbf{A^{\top} A}\)</span> and <span class="math inline">\(\mathbf{A A^{\top}}\)</span> are symmetric. Therefore, they have <span class="math inline">\(n\)</span> and <span class="math inline">\(m\)</span> **orthogonal* eigenvectors, respectively. The proof is simple:</p>
+<p>Suppose we have a 2 x 2 symmetric matrix, <span class="math inline">\(\mathbf{A}\)</span>, with two distinct eigenvalues (<span class="math inline">\(\lambda_1, \lambda_2\)</span>) and two corresponding eigenvectors (<span class="math inline">\(\mathbf{v}_1\)</span> and <span class="math inline">\(\mathbf{v}_1\)</span>). Following the rule,</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; \mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_1, \\
+&amp; \mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_2. \\
+\end{aligned}
+\]</span>
+Let’s multiply (inner product) the first one with <span class="math inline">\(\mathbf{v}_2^{\top}\)</span>:</p>
+<p><span class="math display">\[
+\mathbf{v}_2^{\top}\mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_2^{\top} \mathbf{v}_1
+\]</span>
+And, the second one with <span class="math inline">\(\mathbf{v}_1^{\top}\)</span></p>
+<p><span class="math display">\[
+\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_1^{\top} \mathbf{v}_2
+\]</span>
+If we take the transpose of both side of <span class="math inline">\(\mathbf{v}_2^{\top}\mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_2^{\top} \mathbf{v}_1\)</span>, it will be</p>
+<p><span class="math display">\[
+\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_1 \mathbf{v}_1^{\top} \mathbf{v}_2
+\]</span>
+And, subtract these last two:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_1^{\top} \mathbf{v}_2 \\
+&amp; \mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_1 \mathbf{v}_1^{\top} \mathbf{v}_2 \\
+&amp; \hline 0=\left(\lambda_2 - \lambda_1\right)  \mathbf{v}_1^{\top} \mathbf{v}_2
+\end{aligned}
+\]</span>
+Since , <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are distinct, <span class="math inline">\(\lambda_2- \lambda_1\)</span> cannot be zero. Therefore, $ _1^{} _2 = 0$. As we saw in Chapter 15, the dot products of two vectors can be expressed geometrically</p>
+<p><span class="math display">\[
+\begin{aligned}
+a \cdot b=\|a\|\|b\| \cos (\theta),\\
+\cos (\theta)=\frac{a \cdot b}{\|a\|\|b\|}
+\end{aligned}
+\]</span>
+Hence, <span class="math inline">\(\cos (\theta)\)</span> has to be zero for $ _1^{} _2 = 0$. Since <span class="math inline">\(\cos (90)=0\)</span>, the two vectors are orthogonal.</p>
+<p>We start with the following eigendecomposition for <span class="math inline">\(\mathbf{A^{\top}A}\)</span> and <span class="math inline">\(\mathbf{A A^{\top}}\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \mathbf{A^{\top} A =V D V^{\top}} \\
 \mathbf{A A^{\top} =U D^{\prime} U^{\top}}
 \end{aligned}
-\]</span>
-where <span class="math inline">\(\mathbf{V}\)</span> is an <span class="math inline">\(n \times n\)</span> orthogonal matrix consisting of the eigenvectors of <span class="math inline">\(\mathbf{A^{\top} A, D}\)</span> an <span class="math inline">\(n \times n\)</span> diagonal matrix with the eigenvalues of <span class="math inline">\(\mathbf{A^{\top} A}\)</span> on the diagonal, <span class="math inline">\(\mathbf{U}\)</span> an <span class="math inline">\(m \times m\)</span> orthogonal matrix consisting of the eigenvectors of <span class="math inline">\(\mathbf{A A^{\top}}\)</span>, and <span class="math inline">\(\mathbf{D^{\prime}}\)</span> an <span class="math inline">\(m \times m\)</span> diagonal matrix with the eigenvalues of <span class="math inline">\(\mathbf{A A^{\top}}\)</span> on the diagonal.</p>
-<p>It turns out that <span class="math inline">\(\mathrm{D}\)</span> and <span class="math inline">\(\mathbf{D^{\prime}}\)</span> have the same non-zero diagonal entries except that the order might be different.</p>
-<p>Now comes a highlight of linear algebra. Any real <span class="math inline">\(m \times n\)</span> matrix can be factored as</p>
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{V}\)</span> is an <span class="math inline">\(n \times n\)</span> <strong>orthogonal</strong> matrix consisting of the eigenvectors of <span class="math inline">\(\mathbf{A^{\top}A),\)</span> and, <span class="math inline">\(\mathbf{D}\)</span> is an <span class="math inline">\(n \times n\)</span> diagonal matrix with the eigenvalues of <span class="math inline">\(\mathbf{A^{\top} A}\)</span> on the diagonal. The same decomposition for <span class="math inline">\(\mathbf{A A^{\top}}\)</span>, now <span class="math inline">\(\mathbf{U}\)</span> is an <span class="math inline">\(m \times m\)</span> <strong>orthogonal</strong> matrix consisting of the eigenvectors of <span class="math inline">\(\mathbf{A A^{\top}}\)</span>, and <span class="math inline">\(\mathbf{D^{\prime}}\)</span> is an <span class="math inline">\(m \times m\)</span> diagonal matrix with the eigenvalues of <span class="math inline">\(\mathbf{A A^{\top}}\)</span> on the diagonal.</p>
+<p>It turns out that <span class="math inline">\(\mathbf{D}\)</span> and <span class="math inline">\(\mathbf{D^{\prime}}\)</span> have the same non-zero diagonal entries except that the order might be different.</p>
+<p>We can write SVD for any real <span class="math inline">\(m \times n\)</span> matrix as</p>
 <p><span class="math display">\[
 \mathbf{A=U \Sigma V^{\top}}
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf{U}\)</span> is an <span class="math inline">\(m \times m\)</span> orthogonal matrix whose columns are the eigenvectors of <span class="math inline">\(\mathbf{A A^{\top}}\)</span>, <span class="math inline">\(\mathbf{V}\)</span> is an <span class="math inline">\(n \times n\)</span> orthogonal matrix whose columns are the eigenvectors of <span class="math inline">\(\mathbf{A^{\top} A}\)</span>, and <span class="math inline">\(\mathbf{\Sigma}\)</span> is an <span class="math inline">\(m \times n\)</span> diagonal matrix of the form:</p>
 <p><span class="math display">\[
-\Sigma=\left(\begin{array}{cccc}
+\mathbf{\Sigma}=\left(\begin{array}{cccc}
 \sigma_{1} &amp; &amp; &amp; \\
 &amp; \ddots &amp;  \\
 &amp; &amp; \sigma_{n} &amp; \\
@@ -524,9 +549,46 @@ where <span class="math inline">\(\mathbf{V}\)</span> is an <span class="math in
 0 &amp; 0 &amp;0 \\
 \end{array}\right)
 \]</span>
-with <span class="math inline">\(\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \sigma_{n}&gt;0\)</span> and <span class="math inline">\(r=\operatorname{rank}(\mathbf{A})\)</span>. In the above, <span class="math inline">\(\sigma_{1}, \ldots, \sigma_{n}\)</span> are the square roots of the eigenvalues of <span class="math inline">\(\mathbf{A^{\top} A}\)</span>. They are called the <strong>singular values</strong> of <span class="math inline">\(\mathbf{A}\)</span>.</p>
-<p>Our basic goal is to “solve” the system <span class="math inline">\(\mathbf{A} x=b\)</span> for all matrices <span class="math inline">\(\mathbf{A}\)</span> and vectors <span class="math inline">\(b\)</span>. A second goal is to solve the system using a numerically stable algorithm. A third goal is to solve the system in a reasonably efficient manner. For instance, we do not want to compute <span class="math inline">\(\mathbf{A}^{-1}\)</span> using determinants.</p>
-<p>An important point is that although <span class="math inline">\(\mathbf{U}\)</span> in <span class="math inline">\(\mathbf{U \Sigma V^{\top}}\)</span> is <span class="math inline">\(m \times m\)</span> when its multiplied by <span class="math inline">\(\mathbf{\Sigma}\)</span> it reduces to <span class="math inline">\(n \times n\)</span> matrix due to zeros in <span class="math inline">\(\mathbf{\Sigma}\)</span>. Hence, we can actually select only those in <span class="math inline">\(\mathbf{U}\)</span> that are not going to be zero out due to that multiplication and take only <span class="math inline">\(n \times n\)</span> from <span class="math inline">\(\mathbf{U}\)</span> matrix. This is called “Economy SVD” <span class="math inline">\(\mathbf{\hat{U} \hat{\Sigma} V^{\top}}\)</span> where all matrices will be <span class="math inline">\(n \times n\)</span></p>
+with <span class="math inline">\(\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \sigma_{n}&gt;0\)</span> . The number of non-zero singular values is equal to the rank of <span class="math inline">\(\operatorname{rank}(\mathbf{A})\)</span>. In <span class="math inline">\(\mathbf{\Sigma}\)</span> above, <span class="math inline">\(\sigma_{1}, \ldots, \sigma_{n}\)</span> are the square roots of the eigenvalues of <span class="math inline">\(\mathbf{A^{\top} A}\)</span>. They are called the <strong>singular values</strong> of <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<p>One important point is that, although <span class="math inline">\(\mathbf{U}\)</span> in <span class="math inline">\(\mathbf{U \Sigma V^{\top}}\)</span> is <span class="math inline">\(m \times m\)</span>, when it is multiplied by <span class="math inline">\(\mathbf{\Sigma}\)</span>, it reduces to <span class="math inline">\(n \times n\)</span> due to zeros in <span class="math inline">\(\mathbf{\Sigma}\)</span>. Hence, we can actually select only those in <span class="math inline">\(\mathbf{U}\)</span> that are not going to be zeroed out due to that multiplication. When we take only <span class="math inline">\(n \times n\)</span> from <span class="math inline">\(\mathbf{U}\)</span> matrix, it is called “Economy SVD”, <span class="math inline">\(\mathbf{\hat{U} \hat{\Sigma} V^{\top}}\)</span>, where all matrices will be <span class="math inline">\(n \times n\)</span>.</p>
+<p>The singular value decomposition is very useful when our basic goal is to “solve” the system <span class="math inline">\(\mathbf{A} x=b\)</span> for all matrices <span class="math inline">\(\mathbf{A}\)</span> and vectors <span class="math inline">\(b\)</span> with a numerically stable algorithm. Some important applications of the SVD include computing the pseudoinverse, matrix approximation, and determining the rank, range, and null space of a matrix. We will see some of them in the following chapters</p>
+<p>Here is an example:</p>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1039-1"><a href="singular-value-decomposition.html#cb1039-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">104</span>)</span>
+<span id="cb1039-2"><a href="singular-value-decomposition.html#cb1039-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">100</span>, <span class="dv">12</span>), <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb1039-3"><a href="singular-value-decomposition.html#cb1039-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   77   24   32   78
+## [2,]   67   61   39   96
+## [3,]   34   94   42   28</code></pre>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1041-1"><a href="singular-value-decomposition.html#cb1041-1" aria-hidden="true" tabindex="-1"></a>svda <span class="ot">&lt;-</span> <span class="fu">svd</span>(A)</span>
+<span id="cb1041-2"><a href="singular-value-decomposition.html#cb1041-2" aria-hidden="true" tabindex="-1"></a>svda</span></code></pre></div>
+<pre><code>## $d
+## [1] 199.83933  70.03623  16.09872
+## 
+## $u
+##            [,1]       [,2]       [,3]
+## [1,] -0.5515235  0.5259321 -0.6474699
+## [2,] -0.6841400  0.1588989  0.7118312
+## [3,] -0.4772571 -0.8355517 -0.2721747
+## 
+## $v
+##            [,1]       [,2]       [,3]
+## [1,] -0.5230774  0.3246068 -0.7091515
+## [2,] -0.4995577 -0.8028224  0.1427447
+## [3,] -0.3221338 -0.1722864 -0.2726277
+## [4,] -0.6107880  0.4694933  0.6343518</code></pre>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1043-1"><a href="singular-value-decomposition.html#cb1043-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Singular values = sqrt(eigenvalues of t(A)%*%A))</span></span>
+<span id="cb1043-2"><a href="singular-value-decomposition.html#cb1043-2" aria-hidden="true" tabindex="-1"></a>ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> A)<span class="sc">$</span>values</span>
+<span id="cb1043-3"><a href="singular-value-decomposition.html#cb1043-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(ev), <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## [1] 199.83933  70.03623  16.09872   0.00000</code></pre>
+<p>Note that this ““Economy SVD” using only the non-zero eigenvalues and their respective eigenvectors.</p>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1045-1"><a href="singular-value-decomposition.html#cb1045-1" aria-hidden="true" tabindex="-1"></a>Ar <span class="ot">&lt;-</span> svda<span class="sc">$</span>u <span class="sc">%*%</span> <span class="fu">diag</span>(svda<span class="sc">$</span>d) <span class="sc">%*%</span> <span class="fu">t</span>(svda<span class="sc">$</span>v)</span>
+<span id="cb1045-2"><a href="singular-value-decomposition.html#cb1045-2" aria-hidden="true" tabindex="-1"></a>Ar</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   77   24   32   78
+## [2,]   67   61   39   96
+## [3,]   34   94   42   28</code></pre>
+<p>As we use SVD in the following chapter, its usefulness will be obvious.</p>
 
 </div>
             </section>

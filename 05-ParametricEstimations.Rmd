@@ -439,7 +439,7 @@ The cost functions represent optimization objectives in estimations and predicti
 If we use a similar cost function in *Logistic Regression* we would have a non-convex function with many local minimum points so that it would be hard to locate the global minimum.  In logistic regression, as we have just seen, the log-likelihood function becomes the cost function. In the machine learning literature notation changes slightly:
 
 \begin{equation}
-J &=\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)),
+J =\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)),
   (\#eq:5-11)
 \end{equation} 
 

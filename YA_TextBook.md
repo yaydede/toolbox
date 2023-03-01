@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-02-16"
+date: "This version: 2023-03-01"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -283,7 +283,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-02-16"
+## [1] "2023-03-01"
 ```
 
 ```r
@@ -292,7 +292,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-02-16 12:35:59 AST"
+## [1] "2023-03-01 11:00:07 AST"
 ```
 
 ```r
@@ -301,7 +301,7 @@ now()
 ```
 
 ```
-## [1] "2023-02-16 12:35:59 AST"
+## [1] "2023-03-01 11:00:07 AST"
 ```
 
 ```r
@@ -553,8 +553,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1] -1.3183447 -5.1925637  7.4253701  1.4897834 -0.7714762  0.4986079
-##  [7]  6.7262430 -0.4452558  8.7200738 -3.0546374
+##  [1]  1.9447633  6.7250336 -5.9959072 -0.4801201  2.6155366  1.6009617
+##  [7] -2.6696091  4.1910062  3.8696815 -6.8499995
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -4066,7 +4066,7 @@ The cost functions represent optimization objectives in estimations and predicti
 If we use a similar cost function in *Logistic Regression* we would have a non-convex function with many local minimum points so that it would be hard to locate the global minimum.  In logistic regression, as we have just seen, the log-likelihood function becomes the cost function. In the machine learning literature notation changes slightly:
 
 \begin{equation}
-J &=\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)),
+J =\sum_{i=1}^{n} y_{i} \log p\left(x_{i}\right)+\left(1-y_{i}\right) \log (1-p\left(x_{i}\right)),
   (\#eq:5-11)
 \end{equation} 
 
@@ -7994,7 +7994,7 @@ abline(a = 0, b = 1)
 <img src="10-TuningClass_files/figure-html/tc19-1.png" width="672" />
 
 ```r
-# And our "own" ROC (we will use ROCR in this book, though)
+# And our "own" ROC
 phator <- phat[order(phat)]
 phator[phator < 0] <- 0
 phator[phator > 1] <- 1
@@ -8073,7 +8073,7 @@ And the confusion table (from the last run):
 yHat <- phat > opt_th
 conf_table <- table(yHat, tsdf$Y)
 
-# Function to rotate the table (we did before)
+# Function to rotate the table
 rot <- function(x){
   t <- apply(x, 2, rev)
   tt <- apply(t, 1, rev)
@@ -8239,7 +8239,7 @@ Now we are ready.  Here is our kNN training:
 library(caret)
 library(ROCR)
 
-set.seed(123) #for the same results, no need otherwise
+set.seed(123) 
 sh <- sample(nrow(df), nrow(df), replace = FALSE)
 h <- 10
 
@@ -8328,51 +8328,49 @@ A more stable, but much longer, suggestion for tuning our kNN application is usi
 
 
 ```r
- #### Test/Train split - as before!########
- # however, this is done only once here.
- # Should be done in a loop multiple times
+#### Test/Train split - as before!########
 
- set.seed(123)
- sh <- sample(nrow(df), nrow(df), replace = FALSE)
- h <- 10
+set.seed(123)
+sh <- sample(nrow(df), nrow(df), replace = FALSE)
+h <- 10 # should be set to 100 or more
 
- ind_test <- sh[1:(nrow(df)/h)]
- ind_train <- sh[-ind_test]
+ind_test <- sh[1:(nrow(df) / h)]
+ind_train <- sh[-ind_test]
 
- # Put 10% a side as a test set
- trdf <- df[ind_train, ]
- tsdf <- df[ind_test, ]
+# Put 10% a side as a test set
+trdf <- df[ind_train,]
+tsdf <- df[ind_test,]
 
- ########## Bootstrapping ############
- # Note that we use `by=2` to reduce the running time
- # With a faster machine, that could be set to 1.
+########## Bootstrapping ############
+# We use `by=2` to reduce the running time
+# With a faster machine, that could be set to 1.
 
- k <- seq(from = 3, to = 50, by = 2)
- m <- 20 # number of bootstrap loops (could be higher to, like 50)
+k <- seq(from = 3, to = 50, by = 2)
+m <- 20 # number of bootstrap loops (could be higher too, like 50)
 
- MAUC <- c()
- k_opt <- c()
+MAUC <- c()
+k_opt <- c()
 
- for(i in 1:length(k)){
-   AUC <- c()
-   for(l in 1:m){
-     #Here is the heart of bootstrapped tuning
-     set.seed(l) 
-     bind <- sample(nrow(trdf), nrow(trdf), replace = TRUE)
-     uind <- unique(bind)
-     df_train <- df[uind, ]
-     df_val <- df[-uind, ]
-
-     model <- knn3(IncomeLevel ~., data = df_train, k = k[i])
-     phat <- predict(model, df_val, type = "prob")
-
-     #AUC
-     pred_rocr <- prediction(phat[,2], df_val$IncomeLevel)
-     auc_ROCR <- performance(pred_rocr, measure = "auc")
-     AUC[l] <- auc_ROCR@y.values[[1]]
-   }
-   MAUC[i] <- mean(AUC)
- }
+for (i in 1:length(k)) {
+  AUC <- c()
+  for (l in 1:m) {
+    #Here is the heart of bootstrapped tuning
+    set.seed(l)
+    bind <- sample(nrow(trdf), nrow(trdf), replace = TRUE)
+    uind <- unique(bind)
+    df_train <- df[uind,]
+    df_val <- df[-uind,]
+    
+    model <- knn3(IncomeLevel ~ ., data = df_train, k = k[i])
+    phat <- predict(model, df_val, type = "prob")
+    
+    #AUC
+    pred_rocr <- prediction(phat[, 2], df_val$IncomeLevel)
+    auc_ROCR <- performance(pred_rocr, measure = "auc")
+    AUC[l] <- auc_ROCR@y.values[[1]]
+  }
+  MAUC[i] <- mean(AUC)
+}
 ```
 
 OK ... now finding the optimal "k"
@@ -8586,8 +8584,8 @@ confusionMatrix(predict(model_knn3, tsdf, type = "raw"),
 ```
 
 ```r
-# If we don't specify "More" as our positive results, the first level
-# "Less" will be used as the "positive" result.
+# If we don't specify "More" as our positive class, the first level
+# "Less" will be "positive".
 
 confusionMatrix(predict(model_knn3, tsdf, type = "raw"),
                 tsdf$IncomeLevel, positive = "More")
@@ -8632,9 +8630,9 @@ We now know two things: (1) how good the prediction is with kNN; (2) how good it
 
 # CART
 
-Tree-based learning algorithms are considered to be one of the best and most used supervised learning methods. Unlike linear models, they handle non-linear relationships quite well. They are adaptable at solving classification or regression problems, which gives its name: **C**lassification **A**nd **R**egression **T**rees.
+Tree-based predictive models are one of the best and most used supervised learning methods. Unlike linear models, they handle non-linear relationships quite well. They can be applied for both classification or regression problems, which aspires its name: **C**lassification **A**nd **R**egression **T**rees.
   
-Decision tree learning algorithms are based on a decision tree, which is a flowchart where each internal **node** represents a decision point (goes left or right), each **branch** represents those decisions, and each **leaf** at the end of a branch represents the outcome of the decision.  Here is a simple decision tree about a gamble:  
+The foundation of their models is based on a decision tree, which is a flowchart where each internal **node** represents a decision point (goes left or right), each **branch** represents those decisions, and each **leaf** at the end of a branch represents the outcome of the decision.  Here is a simple decision tree about a gamble:  
 
 <img src="png/DT.png" width="130%" height="130%" />
 
@@ -8646,25 +8644,33 @@ Let's start with a very simple example: suppose we have the following data:
 
 
 ```r
-y <- c(1,1,1,0,0,0,1,1,0,1)
-x1 <- c(0.09, 0.11, 0.17, 0.23, 0.33, 0.5, 0.54, 0.62, 0.83, 0.88) 
+y <- c(1, 1, 1, 0, 0, 0, 1, 1, 0, 1)
+x1 <- c(0.09, 0.11, 0.17, 0.23, 0.33, 0.5, 0.54, 0.62, 0.83, 0.88)
 x2 <- c(0.5, 0.82, 0.2, 0.09, 0.58, 0.5, 0.93, 0.8, 0.3, 0.83)
 
 data <- data.frame(y = y, x1 = x1, x2 = x2)
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4,
-     ylab = "x2", xlab = "x1")
+plot(
+  data$x1,
+  data$x2,
+  col = (data$y + 1),
+  lwd = 4,
+  ylab = "x2",
+  xlab = "x1"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr2-1.png" width="672" />
   
 What's the best rule on $x_2$ to classify black ($0$) and red balls ($1$)? **Find a cutoff point on $x_2$ such that the maximum number of observations is correctly classified**  
 
-To minimize the misclassification, we find that the cutoff point should be between $(0.6; 0.79)$.  Hence the rule is $x_2 < k$, where $k \in(0.6,0.79)$  
-
+To minimize the misclassification, we find that the cutoff point should be between $\{0.6: 0.79\}$.  Hence the rule is $x_2 < k$, where $k \in\{0.6: 0.79\}.$    
 
 ```r
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4)
-abline(h = 0.62, col = "blue", lty = 5, lwd = 2)
+plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
+abline(h = 0.62,
+       col = "blue",
+       lty = 5,
+       lwd = 2)
 ```
 
 <img src="11-CART_files/figure-html/tr3-1.png" width="672" />
@@ -8675,9 +8681,14 @@ From this simple rule, we have two misclassified balls.  We can add a new rule i
 
 
 ```r
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4)
-abline(h = 0.62, v = 0.2, col = c("blue", "darkgreen"),
-       lty = 5, lwd = 2)
+plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
+abline(
+  h = 0.62,
+  v = 0.2,
+  col = c("blue", "darkgreen"),
+  lty = 5,
+  lwd = 2
+)
 ```
 
 <img src="11-CART_files/figure-html/tr4-1.png" width="672" />
@@ -8691,7 +8702,7 @@ First, we need to create an index that is going to measure the **impurity** in e
 $$
 G(\mathcal{N}) = \sum_{k=1}^{K} p_{k}\left(1-p_{k}\right) = 1-\sum_{k=1}^{K} p_{k}^{2}
 $$
-where, with $p_k$ is the fraction of items labeled with class $k$ in the node. If we have a binary outcome $(k=2)$, when $p_k = 1$, $G(\mathcal{N})=0$ and when $p_k = 0.5,$ $G(\mathcal{N})=0.5$.  The former implies the minimal impurity (diversity), the latter shows the maximal impurity. A small $G$ means that a node contains predominantly observations from a single class.  As in the previous example, when we have a binary outcome with two classes, $y_i \in (0,1)$, this index can be written as:
+where, with $p_k$ is the fraction of items labeled with class $k$ in the node. If we have a binary outcome $(k=2)$, when $p_k \in \{0, 1\}$, $G(\mathcal{N})=0$ and when $p_k = 0.5,$ $G(\mathcal{N})=0.25$.  The former implies the minimal impurity (diversity), the latter shows the maximal impurity. A small $G$ means that a node contains observations predominantly from a single class.  As in the previous example, when we have a binary outcome with two classes, $y_i \in \{0, 1\}$, this index can be written as:
 
 $$
 G(\mathcal{N})=\sum_{k=1}^{2} p_{k}\left(1-p_{k}\right)=2p\left(1-p\right)
@@ -8706,13 +8717,13 @@ $$
 Where $p_L$, $p_R$ are the proportion of observations in $\mathcal{N}_L$ and $\mathcal{N}_R$.
   
   
-Remember, we are trying to find the rule that gives us the best cutoff point. Now we can write the rule:  
+Remember, we are trying to find the rule that gives us the best cutoff point (split). Now we can write the rule:  
 
 $$
 \Delta=G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)>\epsilon
 $$
   
-When the impurity is reduced substantially, the difference will be some positive number ($\epsilon$).  Hence, we find the cutoff point on a single variable that minimizes the impurity.  
+When the impurity is reduced substantially, the difference will be some positive number ($\epsilon$).  Hence, we find the cutoff point on a single variable that minimizes the impurity (maximizes $\Delta$).  
 
 Let's use a dataset^[[freakonometrics](https://freakonometrics.hypotheses.org/52776) [@Charpentier_scratch]], which reports about heart attacks and fatality (our binary variable).
 
@@ -8721,9 +8732,13 @@ Let's use a dataset^[[freakonometrics](https://freakonometrics.hypotheses.org/52
 library(readr)
 #Data
 #myocarde = read.table("http://freakonometrics.free.fr/myocarde.csv",head=TRUE, sep=";")
-myocarde <- read_delim("myocarde.csv", delim = ";" ,
-                       escape_double = FALSE, trim_ws = TRUE,
-                       show_col_types = FALSE)
+myocarde <- read_delim(
+  "myocarde.csv",
+  delim = ";" ,
+  escape_double = FALSE,
+  trim_ws = TRUE,
+  show_col_types = FALSE
+)
 myocarde <- data.frame(myocarde)
 str(myocarde)
 ```
@@ -8745,10 +8760,10 @@ The variable definitions are as follows: `FRCAR` (heart rate), `INCAR` (heart in
 
 ```r
 # Recode PRONO
-y <- ifelse(myocarde$PRONO=="SURVIE", 1, 0)
+y <- ifelse(myocarde$PRONO == "SURVIE", 1, 0)
 
 # Find G(N) without L and R
-G <- 2*mean(y)*(1-mean(y))
+G <- 2 * mean(y) * (1 - mean(y))
 G
 ```
 
@@ -8764,7 +8779,7 @@ This is the level of "impurity" in our data.  Now, we need to pick one variable 
 x_1 <- myocarde$FRCAR
 
 # Put x and y in table
-tab = table(y,x_1)
+tab = table(y, x_1)
 tab
 ```
 
@@ -8779,7 +8794,7 @@ tab
 ##   1   0   1   1   0   1   0   1   1
 ```
   
-Let's see how we can calculate 
+We are ready to calculate 
 
 $$
 G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)=p_{L} G\left(\mathcal{N}_{L}\right)+p_{R} G\left(\mathcal{N}_{R}\right),
@@ -8788,19 +8803,18 @@ when $x = 60$, for example.
 
 
 ```r
-# Let's pick an arbitrary x value, x = 60 to see if (GL + GR > GN)
-GL <- 2*mean(y[x_1 <= 60])*(1-mean(y[x_1 <= 60]))
-GR <- 2*mean(y[x_1 > 60])*(1-mean(y[x_1 > 60]))
-pL <- length(x_1[x_1 <= 60])/length(x_1) #Proportion of obs. on Left 
-pR <- length(x_1[x_1 > 60])/length(x_1) #Proportion of obs. on Right
+# x = 60, for example to see if (GL + GR > GN)
+GL <- 2 * mean(y[x_1 <= 60]) * (1 - mean(y[x_1 <= 60]))
+GR <- 2 * mean(y[x_1 > 60]) * (1 - mean(y[x_1 > 60]))
+pL <- length(x_1[x_1 <= 60]) / length(x_1) #Proportion of obs. on Left
+pR <- length(x_1[x_1 > 60]) / length(x_1) #Proportion of obs. on Right
 ```
 
 How much did we improve $G$?
   
 
 ```r
-# How much did we improve G?
-delta  = G - pL*GL - pR*GR
+delta  = G - pL * GL - pR * GR
 delta
 ```
 
@@ -8808,16 +8822,16 @@ delta
 ## [1] 0.009998016
 ```
 
-We need go trough each number on $x_1$ and identify the point that maximizes delta.  A function can do that:
+We need to go trough each number on $x_1$ and identify the point that maximizes delta.  A function can do that:
   
 
 ```r
-GI <- function(x){
-  GL <- 2*mean(y[x_1 <= x])*(1-mean(y[x_1 <= x])) 
-  GR <- 2*mean(y[x_1 > x])*(1-mean(y[x_1 > x]))
-  pL <- length(x_1[x_1 <= x])/length(x_1)
-  pR <- length(x_1[x_1 > x])/length(x_1)
-  del = G - pL*GL - pR*GR
+GI <- function(x) {
+  GL <- 2 * mean(y[x_1 <= x]) * (1 - mean(y[x_1 <= x]))
+  GR <- 2 * mean(y[x_1 > x]) * (1 - mean(y[x_1 > x]))
+  pL <- length(x_1[x_1 <= x]) / length(x_1)
+  pR <- length(x_1[x_1 > x]) / length(x_1)
+  del = G - pL * GL - pR * GR
   return(del)
 }
 
@@ -8834,10 +8848,10 @@ It works!  Now, we can use this function in a loop that goes over each unique $x
 
 ```r
 xm <- sort(unique(x_1))
-delta <- c() 
+delta <- c()
 
 # Since we don't split at the last number
-for (i in 1:length(xm)-1) {
+for (i in 1:length(xm) - 1) {
   delta[i] <- GI(xm[i])
 }
 
@@ -8873,22 +8887,22 @@ xm[which.max(delta)]
 ## [1] 86
 ```
   
-Although this is a simple and an imperfect algorithm, it can show us how we can build a learning system based on a decision tree.  On one variable, `FRCAR` and with only one split we improved the Gini index by 2.5\%.  Obviously this is not good enough.  Can we do more splitting?
+Although this is a simple and an imperfect algorithm, it shows us how we can build a learning system based on a decision tree.  On one variable, `FRCAR`, and with only one split we improved the Gini index by 2.5\%.  Obviously this is not good enough.  Can we do more splitting?
   
-Since we now have two nodes (Left and Right at $x_1 = 86$), we can think of each of them as one node and apply the same formula to both left and right nodes.  As you can guess, this may give us a zero-$G$, as we end up with splitting at every $x_{1i}$.  How can we prevent this overfitting?  We will see this mechanism later, which is called **pruning**.  
+Since we now have two nodes (Left and Right at $x_1 = 86$), we can consider each of them as one node and apply the same formula to both left and right nodes.  As you can guess, this may give us a zero-$G$, as we end up with splitting at every $x_{1i}$.  We can prevent this overfitting by **pruning**, which we will see later.  
 
-Let's continue our example.  Wouldn't it be a good idea if we check all seven variables and start with the one that has a significant improvements in delta when we split?  We can do it easily with a loop:  
+Wouldn't it be a good idea if we check all seven variables and start with the one that has a significant improvements in delta when we split?  We can do it easily with a loop:  
 
 
 ```r
 # Adjust our function a little: add "tr", the cutoff
-GI <- function(x, tr){
-  G <- 2*mean(y)*(1-mean(y))
-  GL <- 2*mean(y[x <= tr])*(1-mean(y[x <= tr])) 
-  GR <- 2*mean(y[x > tr])*(1-mean(y[x > tr]))
-  pL <- length(x[x <= tr])/length(x)
-  pR <- length(x[x > tr])/length(x)
-  del = G - pL*GL - pR*GR
+GI <- function(x, tr) {
+  G <- 2 * mean(y) * (1 - mean(y))
+  GL <- 2 * mean(y[x <= tr]) * (1 - mean(y[x <= tr]))
+  GR <- 2 * mean(y[x > tr]) * (1 - mean(y[x > tr]))
+  pL <- length(x[x <= tr]) / length(x)
+  pR <- length(x[x > tr]) / length(x)
+  del = G - pL * GL - pR * GR
   return(del)
 }
 
@@ -8898,13 +8912,13 @@ split <- c()
 maxdelta <- c()
 
 for (j in 1:ncol(d)) {
-  xm <- sort(unique(d[,j]))
+  xm <- sort(unique(d[, j]))
   delta <- c()
-  for (i in 1:length(xm)-1) {
-    delta[i] <- GI(d[,j], xm[i])
+  for (i in 1:length(xm) - 1) {
+    delta[i] <- GI(d[, j], xm[i])
   }
-maxdelta[j] <- max(delta)
-split[j] <- xm[which.max(delta)]
+  maxdelta[j] <- max(delta)
+  split[j] <- xm[which.max(delta)]
 }
 
 data.frame(variables = colnames(d), delta = maxdelta)
@@ -8925,33 +8939,40 @@ This is good.  We can identify that `INSYS` should be our first variable to spli
   
 
 ```r
-round(split[which.max(maxdelta)],0) # round it b/c the cutoff is x=18.7
+round(split[which.max(maxdelta)], 0)
 ```
 
 ```
 ## [1] 19
 ```
   
-We now know where to split on `INSYS`, which is 19.  Next, we can split on `INSYS`, Left and Right and move on to the next variable to split, which would be the second best: `REBUL`.
+We now know where to split on `INSYS`, which is 19.  After splitting `INSYS` left and right, we move on to the next variable to split, which would be the second best: `REBUL`.
 
-For a better interpretabilty, we can rank the importance of each variable by **their gain in Gini**.   Without using `rpart()`, we can approximately order them by looking at our delta:   
+For a better interpretability, we can rank the importance of each variable by **their gain in Gini**.   We can approximately order them by looking at our delta:   
 
 
 ```r
-# Variable importance
 dm <- matrix(maxdelta, 7, 1)
 rownames(dm) <- c(names(myocarde[1:7]))
-dm <- dm[order(dm[,1]),]
-barplot(dm, horiz = TRUE, col = "darkgreen", xlim = c(0, 0.3),
-        cex.names = 0.5, cex.axis = 0.8, main = "Variable Importance at the 1st Split")
+dm <- dm[order(dm[, 1]), ]
+
+barplot(
+  dm,
+  horiz = TRUE,
+  col = "darkgreen",
+  xlim = c(0, 0.3),
+  cex.names = 0.5,
+  cex.axis = 0.8,
+  main = "Variable Importance at the 1st Split"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr16-1.png" width="672" />
 
-## `rpart()` - Recursive Partitioning
+The package `rpart` (**R**ecursive **PART**itioning) implements all these steps that we experimented above. 
 
-The R package `rpart` implements **R**ecursive **PART**itioning. It is easy to use.
-  
+## `rpart` - Recursive Partitioning
+
 As in our case, when the response variable is categorical,  the resulting tree is called **classification tree**.  The default criterion, which is maximized in each split is the **Gini coefficient**.  The method-argument can be switched according to the type of the response variable. It is `class` for categorical, `anova` for numerical, `poisson` for count data and `exp` for survival data. If the outcome variable is a factor variable, as in our case, we do not have to specify the method.
   
 The tree is built by the following process in `rpart`: first the single variable is found that **best splits** the data into two groups. After the data is separated, this process is applied separately to each sub-group.  This goes on recursively until the subgroups either reach a **minimum size** or until no improvement can be made.  
@@ -8963,12 +8984,18 @@ Here, we apply `rpart` to our data without any modification to its default argum
 
 ```r
 library(rpart)
-tree = rpart(PRONO ~., data = myocarde, method = "class")
+tree = rpart(PRONO ~ ., data = myocarde, method = "class")
 
 # Plot it
 library(rpart.plot) # You can use plot() but prp() is much better
-prp(tree, type = 2, extra = 1, split.col = "red",
-    split.border.col = "blue", box.col = "pink")
+prp(
+  tree,
+  type = 2,
+  extra = 1,
+  split.col = "red",
+  split.border.col = "blue",
+  box.col = "pink"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr17-1.png" width="672" />
@@ -8977,33 +9004,27 @@ This shows that the left node (`DECES`) cannot be significantly improved by a fu
 
 Note that we haven't trained our model explicitly. There are two ways to **control** the growth of a tree:
   
-1. We can limit the growth of our tree by using its control parameters and by checking if the split is worth it, which is, as a default, what `rpart()` is doing with 10-fold cross-validation;
+1. We can limit the growth of our tree by using its control parameters and by checking if the split is worth it, which is, as a default, what `rpart` is doing with 10-fold cross-validation.
 2. We can grow the tree without any limitation and then `prune` it.  
   
 Since we use the default control parameters with 10-fold CV, our first tree was grown by the first strategy.  Before going further, let's spend some time on the main arguments of `rpart()`:  
 
 `rpart(formula, data, weights, subset, na.action = na.rpart, method, model = FALSE, x = FALSE, y = TRUE, parms, control, cost, ...)`      
   
-We briefly describe some of its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
+The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
   
-- `formula`: the model formula, as in `lm()`. If the outcome $y$ has more than two levels, then categorical predictors must be fit by exhaustive enumeration, which can take a very long time.  
-- `data, weights, subset`: as in other models.  
-- `parms`: There are three parameters: prior (the vector of prior probabilities), loss (the loss matrix - for different weights for misclassification, split (could be "Gini" or "information Entropy").  
-- `na.action`: default is `na.part`, which removes only those rows for which either the response or ALL of the predictors are missing.  Hence `rpart()` retains partially missing observations. This is the single most useful feature of rpart models.  
-- `control`: a list of control parameters, usually the result of the `rpart.control` function:  
-
 `rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, surrogatestyle = 0, maxdepth = 30, ...)`   
   
-- `minsplit`: The minimum number of observations in a node for which the routine will even try to compute a split. The default is 20. This parameter can save computation time since smaller nodes are almost always pruned away by cross-validation. 
+- `minsplit`: The minimum number of observations in a node for which the routine will even try to compute a split. The default is 20. 
 - `minbucket`: The minimum number of observations in a terminal node: This defaults to `minsplit`/3.
-- `maxcompete`: This parameter controls the number that will be printed. The default is 5.
-- `xval`: The number of cross-validations to be done.  Default is 10.
-- `maxsurrogate`: The maximum number of surrogate variables to retain at each node. Surrogates give different information than competitor splits. The competitor list asks **which other splits would have as many correct classifications** surrogates ask **which other splits would classify the same subjects in the same way** which is a harsher criteria.
-- `usesurrogate`: If the value is 0, then a subject (observation) who is missing the primary split variable does not progress further down the tree.
 - `cp`: The threshold complexity parameter. Default is 0.01. 
+- `maxcompete`: The number of alternative splits in addition to the best that will be printed.
+- `maxsurrogate`: The maximum number of surrogate variables to retain at each node. 
+- `usesurrogate`: If the value is 0, then a subject (observation) who is missing the primary split variable does not progress further down the tree.
+- `xval`: The number of cross-validations to be done.  Default is 10.
+- `maxdepth`: The maximum depth of any node of the final tree
 
-
-**What are the surrogates?** They have two primary functions: first, to split the data when the primary splitter is missing. Remember, `rpart()` does not drop the subject if it has a missing observation on a variable.  When the observation missing on the primary split on that variable, `rpart()` find a surrogate for the variable so that it can carry out the split.  As in our case, the primary splitter ($x$ variable) may never have been missing in the training data. However, when it comes time to make predictions on future data, we have no idea whether that particular splitter will always be available for each observations. When it is missing, then the surrogates will be able to take over and take on the work that the primary splitter accomplished during the initial building of the tree.  
+Remember, `rpart` does not drop the subject if it has a missing observation on a predictor.  When the observation missing on the primary split on that variable, `rpart` find a surrogate for the variable so that it can carry out the split.  
 
 We can see the the growth of the tree by looking at its CV table:  
 
@@ -9026,25 +9047,27 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.51724 0.11861
-## 3 0.010000      2   0.24138 0.55172 0.12140
+## 2 0.034483      1   0.27586 0.58621 0.12399
+## 3 0.010000      2   0.24138 0.58621 0.12399
 ```
 
-The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.000000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error by 72.4138\% to 27.5862\% (1.000000 `rel error` - 0.724138 `CP`).  This relative gain (`CP`) can be calculated as follows:
+The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
+  
+This relative gain (`CP`) can be calculated as follows:
 
 $$
 \frac{\Delta}{G(\mathcal{N})}=\frac{G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)}{G(\mathcal{N})}.
 $$
 
-If this gain exceeds 1\% - the default value -  `rpart()` splits in two on a variable.  As you can see from the table above, since there is no significant relative gain at the $3^{rd}$ split exceeding the default parameter 0.01, `rpart()` decides to stop growing the tree after the $2^{nd}$ split.  
+If this gain exceeds 1\%, which is the default value, `rpart()` splits a variable.  As you can see from the table above, since there is no significant relative gain at the $3^{rd}$ split more than the default parameter 0.01, `rpart()` decides to stop growing the tree after the $2^{nd}$ split.  
 
 Note that, we also calculated both the nominator and the denominator in our own algorithm: $\Delta = 0.2832801$ and $G(\mathcal{N}) = 0.4832375$.  Hence the relative gain was $\frac{\Delta}{G(\mathcal{N})}=0.586213$ in our case.  We can replicate the same results if we change our outcome from factor to numeric: 
 
 
 ```r
 myocarde_v2 <- myocarde
-myocarde_v2$PRONO = (myocarde_v2$PRONO=="SURVIE")*1
-cart = rpart(PRONO~.,data=myocarde_v2)
+myocarde_v2$PRONO = ifelse(myocarde$PRONO == "SURVIE", 1, 0)
+cart = rpart(PRONO ~ ., data = myocarde_v2)
 printcp(cart)
 ```
 
@@ -9061,15 +9084,13 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01039 0.045234
-## 2 0.101694      1   0.41379 0.72601 0.154725
-## 3 0.028263      2   0.31209 0.73703 0.158931
-## 4 0.010000      3   0.28383 0.74653 0.155961
+## 1 0.586213      0   1.00000 1.01723 0.045506
+## 2 0.101694      1   0.41379 0.75967 0.162915
+## 3 0.028263      2   0.31209 0.67803 0.151231
+## 4 0.010000      3   0.28383 0.65947 0.150977
 ```
 
-It is not so easy to follow the `rpart` calculations for classification. Although the explanations in the [vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) [@Atkinson_2022] suggests that Gini is used for classification, it seems that cost complexity pruning (`cp`) is reported based on accuracy (misclassification error) [rather than Gini](https://stats.stackexchange.com/q/223211) [@Alan_2016].
-  
-As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rapart() `above) are the same.  
+As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
 
 What's the variable importance of `rpart()`?    
 
@@ -9078,31 +9099,40 @@ What's the variable importance of `rpart()`?
 # Variable Importance
 vi <- tree$variable.importance
 vi <- vi[order(vi)]
-barplot(vi/100, horiz = TRUE, col = "lightgreen",
-        cex.names = 0.5, cex.axis = 0.8, main = "Variable Importance - rpart()")
+barplot(
+  vi / 100,
+  horiz = TRUE,
+  col = "lightgreen",
+  cex.names = 0.5,
+  cex.axis = 0.8,
+  main = "Variable Importance - rpart()"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr20-1.png" width="672" />
 
-It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods.  In `rpart()`, the value is calculated:
+It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods.  In `rpart`, the value is calculated as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.
 
->(...) as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.
->
-  
 ## Pruning 
 
-We can now apply the second method to our case by removing the default limits in growing our tree.  We can do it by changing the parameters of the `rpart` fit.  Let's see what happens if we override these parameters:   
+We can now apply the second method to our case by removing the default limits in growing our tree.  We can do it by changing the parameters of the `rpart` fit.  Let's see what happens if we override these parameters.   
 
 
 ```r
 # let's change the minsplit and minbucket
-tree2 = rpart(PRONO ~., data = myocarde,
-              control = rpart.control(minsplit = 2, minbucket = 1,
-              cp = 0), method = "class")
+tree2 = rpart(
+  PRONO ~ .,
+  data = myocarde,
+  control = rpart.control(
+    minsplit = 2,
+    minbucket = 1,
+    cp = 0
+  ),
+  method = "class"
+)
 
-# Plot it with a different package now
 library(rattle)
-# You can use plot() but prp() is much better
+# You can use plot() but prp() is an alternative
 fancyRpartPlot(tree2, caption = NULL)
 ```
 
@@ -9112,7 +9142,7 @@ This is our **fully grown tree** with a "perfect" fit, because it identifies eve
 
 Let's summarize what we have seen so far: we can either go with the first strategy and **limit** the growth of the tree or we can have a fully developed tree then we can `prune` it.  
 
-The general idea in pruning is to reduce the tree's complexity by keeping only the most important splits.  When we grow a tree, `rpart()` performs 10-fold cross-validation on the data.  We can see the cross-validation result by `printcp()`.  
+The general idea in pruning is to reduce the tree's complexity by keeping only the most important splits.  When we grow a tree, `rpart` performs 10-fold cross-validation on the data.  We can see the cross-validation result by `printcp()`.  
 
 
 ```r
@@ -9134,9 +9164,9 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.55172 0.12140
-## 4 0.017241      6  0.034483 0.51724 0.11861
+## 2 0.103448      1  0.275862 0.48276 0.11560
+## 3 0.034483      2  0.172414 0.37931 0.10513
+## 4 0.017241      6  0.034483 0.55172 0.12140
 ## 5 0.000000      8  0.000000 0.55172 0.12140
 ```
 
@@ -9152,17 +9182,17 @@ min_cp
 ```
 
 ```
-## [1] 0.01724138
+## [1] 0.03448276
 ```
 
-Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, more levels (each row represents a different height of the tree) in the tree mean that it has a lower classification error on the training. However, you run the risk of overfitting. Often, the cross-validation error will actually grow as the tree gets more levels.
+Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
 
 There are two common ways to prune a tree by `rpart`:  
   
 1. Use the first level (i.e. least `nsplit`) with minimum `xerror`. The first level only kicks in when there are multiple levels having the same, minimum `xerror`. This is the most common used method. 
 2. Use the first level where `xerror` < min(`xerror`) + `xstd`, the level whose `xerror` is at or below horizontal line. This method takes into account the variability of `xerror` resulting from cross-validation.  
 
-Therefore, it seems that we should prune our tree at the $4^{th}$ split.  We use `cp` to prune the tree in `rpart` as follows:  
+If we decide to prune our tree at the minimum `cp`:  
 
 
 ```r
@@ -9177,17 +9207,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INCAR INSYS PVENT
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.55172 0.12140
-## 4 0.017241      6  0.034483 0.51724 0.11861
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.48276 0.11560
+## 3 0.034483      2   0.17241 0.37931 0.10513
 ```
 
 ```r
@@ -9196,15 +9225,14 @@ fancyRpartPlot(ptree2)
 
 <img src="11-CART_files/figure-html/tr23-1.png" width="672" />
   
-Now we have applied two approaches, limiting tree growth and pruning a fully grown tree. We also have two different trees: "**tree**" and "**ptree2**".  How can we test their performances?  We know that we cannot test it with the training data.  When applying this in practice, we should have a test dataset to check their performance.
+Now we have applied two approaches: limiting the tree's growth and pruning a fully grown tree. Hence, we have two different trees: `tree` and `ptree2`. In the first case, we can use `cp` or other control parameters in `rpart.control` as hyperparameters and tune them on the test set.  In the second case, we can grow the tree to its maximum capacity and tune its pruning as to maximize the prediction accuracy on the test set.  We will not show the tuning of a tree here. Instead, we will see many improved tree-based models and tuned them in this section.    
 
 ## Classification with Titanic
 
-Let's end this sections with a more realistic example: we will predict survival on the Titanic.  
+We can use `rpart` to predict survival on the Titanic.  
 
 
 ```r
-# load the data
 library(PASWR)
 data(titanic3)
 str(titanic3)
@@ -9241,16 +9269,29 @@ What predictors are associated with those who perished compared to those who sur
 
 
 ```r
-titan <- rpart(survived~sex+age+pclass+sibsp+parch, data=titanic3, method="class")
+titan <-
+  rpart(survived ~ sex + age + pclass + sibsp + parch,
+        data = titanic3,
+        method = "class")
 
-prp(titan, extra=1, faclen=5, box.col=c("indianred1","aquamarine")[tree$frame$yval])
+prp(
+  titan,
+  extra = 1,
+  faclen = 5,
+  box.col = c("indianred1", "aquamarine")[tree$frame$yval]
+)
 ```
 
 <img src="11-CART_files/figure-html/tr25-1.png" width="672" />
 
 ```r
-barplot(titan$variable.importance, horiz=TRUE,
-        col="yellow3", cex.axis = 0.7, cex.names = 0.7)
+barplot(
+  titan$variable.importance,
+  horiz = TRUE,
+  col = "yellow3",
+  cex.axis = 0.7,
+  cex.names = 0.7
+)
 ```
 
 <img src="11-CART_files/figure-html/tr25-2.png" width="672" />
@@ -9278,9 +9319,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.562 0.029710
-## 4 0.011333      5     0.504  0.544 0.029359
-## 5 0.010000      9     0.458  0.544 0.029359
+## 3 0.015000      3     0.534  0.568 0.029825
+## 4 0.011333      5     0.504  0.564 0.029749
+## 5 0.010000      9     0.458  0.548 0.029438
 ```
 
 ```r
@@ -9297,16 +9338,19 @@ library(ROCR)
 
 #test/train split
 set.seed(1)
-ind <- sample(nrow(titanic3), nrow(titanic3)*0.7)
-train <- titanic3[ind, ]
-test <- titanic3[-ind, ]
+ind <- sample(nrow(titanic3), nrow(titanic3) * 0.7)
+train <- titanic3[ind,]
+test <- titanic3[-ind,]
 
 #Tree on train
-titan2 <- rpart(survived~sex+age+pclass+sibsp+parch, data=train, method="class")
+titan2 <-
+  rpart(survived ~ sex + age + pclass + sibsp + parch,
+        data = train,
+        method = "class")
 phat <- predict(titan2, test, type = "prob")
 
 #AUC
-pred_rocr <- prediction(phat[,2], test$survived)
+pred_rocr <- prediction(phat[, 2], test$survived)
 auc_ROCR <- performance(pred_rocr, measure = "auc")
 auc_ROCR@y.values[[1]]
 ```
@@ -9315,13 +9359,13 @@ auc_ROCR@y.values[[1]]
 ## [1] 0.814118
 ```
 
-Here, we report only AUC in this simple example.  Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in `rpart`).  Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse).  This can easily be done in `rpart` by the loss matrix.
+Here, we report only AUC in this simple example.  We can use Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in `rpart`).  Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse).  This can easily be done in `rpart` by the loss matrix.
 
 Before commenting on the strengths and weaknesses of CART, let's see a regression tree.  
 
 ## Regression Tree
 
-The same partitioning procedure can be applied when the outcome variable is not qualitative.  A splitting criterion, which is used to decide which variable gives the best split, was either the Gini or log-likelihood function for a classification problem. Now we can can use the anova method as a splitting criteria:
+The same partitioning procedure can be applied when the outcome variable is not qualitative.  For a classification problem, a splitting criterion was either the Gini or log-likelihood function. When we have numerical outcome variable, we can can use the anova method to decide which variable gives the best split:
 
 $$
 S S_{T}-\left(S S_{L}+S S_{R}\right),
@@ -9329,10 +9373,14 @@ $$
 where
 
 $$
-SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2},
+SS=\sum\left(y_{i}-\bar{y}\right)^{2},
 $$
    
-which is the sum of squares for the node and $SS_R$ and $SS_L$ are the sums of squares for the right and left splits, respectively.  Similar to our delta method, if $SS_{T}-\left(SS_{L}+SS_{R}\right)$ is positive and significant, we make the split on the node (the variable).  After the split, the fitted value of the node is the mean of $y$ of that node.  The `anova` method is used for regression trees, which is the default method if $y$ a simple numeric vector.  However, when $y_i \in (0,1)$,  
+which is the sum of squares for the node (T), the right (R), and the left (L) splits.  
+  
+Similar to our delta method, if $SS_{T}-\left(SS_{L}+SS_{R}\right)$ is positive and significant, we make the split on the node (the variable).  After the split, the fitted value of the node is the mean of $y$ of that node.
+  
+The `anova` method is the default method if $y$ a simple numeric vector.  However, when $y_i \in (0,1)$,  
   
 $$
 SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2}=\sum y_{i}^2 -n\bar{y}^2=\sum y_{i} -n\bar{y}^2=n\bar y -n\bar{y}^2=np(1-p)
@@ -9340,15 +9388,15 @@ $$
   
 Hence, we can show that the **relative gain** would be the same in regression trees using $SS_T$ or Gini when $y_i \in (0,1)$.  
 
-It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant.  We will use `rpart()` in an example:  
+It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant.  We will use `rpart` in an example:  
 
 
 ```r
 # simulated data
 set.seed(1)
-x <- runif(100, -2, 2)
-y <- 1 + 1*x + 4*I(x^2) - 4*I(x^3) + rnorm(100, 0, 6)
-d <- data.frame("y" = y, "x" = x)
+x <- runif(100,-2, 2)
+y <- 1 + 1 * x + 4 * I(x ^ 2) - 4 * I(x ^ 3) + rnorm(100, 0, 6)
+dt <- data.frame("y" = y, "x" = x)
 plot(x, y, col = "gray")
 ```
 
@@ -9356,13 +9404,13 @@ plot(x, y, col = "gray")
 
 ```r
 # Tree
-fit1 <- rpart(y ~ x, minsplit=83, d) # we want to have 1 split
+fit1 <- rpart(y ~ x, minsplit = 83, dt) # we want to have 1 split
 fancyRpartPlot(fit1)
 ```
 
 <img src="11-CART_files/figure-html/tr28-2.png" width="672" />
 
-When we have split at $x=-0.65$, `rpart` calculates two constant $\hat{f}(x_i)$'s both for the "left" and "right" splits:  
+When we have split at $x=-0.65$, `rpart` calculates two constant $\hat{f}(x_i)$'s both for the left and right splits:  
 
 
 ```r
@@ -9381,14 +9429,14 @@ mean(y[x > -0.65])
 ## [1] 0.9205211
 ```
 
-Here we see them on the plot:  
+Here, we see them on the plot:  
 
 
 ```r
-z <- seq(min(x), max(x), length.out=1000)
+z <- seq(min(x), max(x), length.out = 1000)
 plot(x, y, col = "gray")
-lines(z, predict(fit1, data.frame(x=z)), col="blue", lwd=3)
-abline(v = -0.65, col="red")
+lines(z, predict(fit1, data.frame(x = z)), col = "blue", lwd = 3)
+abline(v = -0.65, col = "red")
 ```
 
 <img src="11-CART_files/figure-html/tr30-1.png" width="672" />
@@ -9398,7 +9446,7 @@ If we reduce the `minsplit`,
 
 ```r
 # Tree
-fit2 <- rpart(y ~ x, minsplit=6, d)
+fit2 <- rpart(y ~ x, minsplit = 6, dt)
 fancyRpartPlot(fit2)
 ```
 
@@ -9407,12 +9455,12 @@ fancyRpartPlot(fit2)
 ```r
 # On the plot
 plot(x, y, col = "gray")
-lines(z, predict(fit2, data.frame(x=z)), col="green", lwd=3)
+lines(z, predict(fit2, data.frame(x = z)), col = "green", lwd = 3)
 ```
 
 <img src="11-CART_files/figure-html/tr31-2.png" width="672" />
   
-We will use an example of predicting Baseball players’ salaries, which is one of the most common example [online](https://rdrr.io/cran/ISLR/man/Hitters.html) [@ISLR_2021].  This data set is deduced from the Baseball fielding data set: fielding performance includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
+We will use an example of predicting Baseball players’ salaries from the ISLR package [@ISLR_2021].  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
 
 
 ```r
@@ -9453,14 +9501,13 @@ Let's consider 3 covariates for the sake of simplicity: `Years` (Number of years
 
 ```r
 # Remove NA's
-df=Hitters[complete.cases(Hitters$Salary),]
+df <- Hitters[complete.cases(Hitters$Salary),]
 dfshort <- df[, c(19, 7, 2, 1)]
 
-#Build the tree
-tree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort, cp=0)
-#cp=0 so fully grown
+# cp=0, so it's fully grown
+tree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort, cp = 0)
 
-prp(tree, extra=1, faclen=5)
+prp(tree, extra = 1, faclen = 5)
 ```
 
 <img src="11-CART_files/figure-html/tr33-1.png" width="672" />
@@ -9469,7 +9516,7 @@ It works on the same principle as we described before: find terminal nodes that 
 
 
 ```r
-ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort)
+ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort)
 prp(ptree, extra=1, faclen=5)
 ```
 
@@ -9479,20 +9526,20 @@ We can see its prediction power similar to what we did in the Titanic data examp
   
 
 ```r
-#test/train split
+# Test/train split
 set.seed(123)
-ind <- sample(nrow(dfshort), nrow(dfshort)*0.7)
-train <- dfshort[ind, ]
-test <- dfshort[-ind, ]
+ind <- sample(nrow(dfshort), nrow(dfshort) * 0.7)
+train <- dfshort[ind,]
+test <- dfshort[-ind,]
 
-#Tree and lm() on train
-ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort)
+# Tree and lm() on train
+ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort)
 predtree <- predict(ptree, test)
-lin <- lm(log(Salary) ~ ., data=dfshort)
+lin <- lm(log(Salary) ~ ., data = dfshort)
 predlin <- predict(lin, test)
 
-#RMSPE
-rmspe_tree <- sqrt(mean((log(test$Salary) - predtree)^2))
+# RMSPE
+rmspe_tree <- sqrt(mean((log(test$Salary) - predtree) ^ 2))
 rmspe_tree
 ```
 
@@ -9501,7 +9548,7 @@ rmspe_tree
 ```
 
 ```r
-rmspe_lin <- sqrt(mean((log(test$Salary) - predlin)^2))
+rmspe_lin <- sqrt(mean((log(test$Salary) - predlin) ^ 2))
 rmspe_lin
 ```
 
@@ -9511,26 +9558,24 @@ rmspe_lin
 
 In this simple example, our the tree would do a better job.
 
-**Trees tend to work well for problems where there are important nonlinearities and interactions. The results are really intuitive and interpretable. However, trees are known to be quite sensitive to the original sample.  Therefore, the models trained in one sample may have poor predictive accuracy on another sample.** These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.
+Trees tend to work well for problems where there are important nonlinearities and interactions. Yet, they are known to be quite sensitive to the original sample.  Therefore, the models trained in one sample may have poor predictive accuracy on another sample. These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.
 
 
 <!--chapter:end:11-CART.Rmd-->
 
-# Ensemble learning
+# Ensemble Learning
 
 Bagging, random forests and, boosting methods are the main methods of ensemble learning - a machine learning method where multiple models are trained to solve the same problem.  The main idea is that, instead of using all features (predictors) in one complex base model running on the whole data, we combine multiple models each using selected number of features and subsections of the data. With this, we can have a more robust learning system.
   
-Often, these single models are called a "weak" models.  This is because, individually, they are imperfect due to their lack of complexity and/or their use of only a subsection of the data. The "weakness" can be thought of their insignificant contribution to the prediction problem. A **weak classifier**, for example, is that its error rate is only slightly better than a random guessing.  When we use a single robust model, poor predictors would be eliminated in the training procedure.  However, although each poor predictor has a very small contribution in training, their combination represented in weak models would be huge.  
-
-Ensemble learning systems help these poor predictors have their "voice" in the training process by **keeping them in the system rather than eliminating them**.  That's the main reason why ensemble methods are robust and the main tools of machine learning.  
+What inspires ensemble learning is the idea of the “wisdom of crowds”.  It suggests that "many are smarter than the few" so that collective decision-making of a diverse and larger group of individuals is better than that of a single expert. When we use a single robust model, poor predictors would be eliminated in the training procedure.  Although each poor predictor has a very small contribution in training, their combination would be significant.  Ensemble learning systems help these poor predictors have their "voice" in the training process by **keeping them in the system rather than eliminating them**.  That is the main reason why ensemble methods represent robust learning algorithms in machine learning.  
 
 ## Bagging
 
-Bagging gets its name from **B**ootstrap **agg**regat**ing** of trees.  It works with a few simple arguments:
+Bagging gets its name from **B**ootstrap **agg**regat**ing** of trees.  The idea is simple: we train many trees each of which use a separate bootstrapped sample then aggregate them to one tree for the final decision. It works with few steps:
 
-1. Select number of trees `B`, and the tree depth `D`,
-2. Create a loop `B` times,
-3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth `D` on that sample.  
+1. Select number of trees (B), and the tree depth (D),
+2. Create a loop (B) times,
+3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth D on that sample.  
 
 Let's see an example with the titanic dataset:  
 
@@ -9546,14 +9591,14 @@ clr = c("pink","red","blue","yellow","darkgreen",
         "orange","brown","purple","darkblue")
 
 n = nrow(titanic3)
-par(mfrow=c(3,3)) # this is for putting all plots together
+par(mfrow=c(3,3))
 
 for(i in 1:9){  # Here B = 9
-  set.seed(i)
-  idx = sample(n, n, replace = TRUE) #Bootstrap sampling with replacement TRUE
+  set.seed(i*2)
+  idx = sample(n, n, replace = TRUE) #Bootstrap sampling with replacement
   tr <- titanic3[idx,]
-  cart =  rpart(survived~sex+age+pclass+sibsp+parch, data = tr,
-                cp=0, method="class") # Unpruned
+  cart =  rpart(survived~sex+age+pclass+sibsp+parch,
+                cp = 0, data = tr, method = "class") #unpruned
   prp(cart, type=1, extra=1, box.col=clr[i])
 }
 ```
@@ -9574,13 +9619,13 @@ library(ROCR)
 
 #test/train split
 set.seed(1)
-ind <- sample(nrow(titanic3), nrow(titanic3)*0.8)
+ind <- sample(nrow(titanic3), nrow(titanic3) * 0.8)
 train <- titanic3[ind, ]
 test <- titanic3[-ind, ]
 
 #Single tree
 cart <-  rpart(survived ~ sex + age + pclass + sibsp + parch,
-                data = train, method="class") #Pruned
+                data = train, method = "class") #Pruned
 phat1 <- predict(cart, test, type = "prob") 
 
 #AUC
@@ -9593,21 +9638,22 @@ auc_ROCR@y.values[[1]]
 ## [1] 0.8352739
 ```
 
-Let's do the bagging:
+Now, we apply bagging:
 
 
 ```r
 B = 100 # number of trees
-phat2 <- matrix(0, B, nrow(test)) #Container
 
-# Loop
+phat2 <- matrix(0, B, nrow(test))
+
+# Loops
 for(i in 1:B){  
   set.seed(i) # to make it reproducible
-  idx <- sample(nrow(train), nrow(train), replace=TRUE)
-  dt <- train[idx,]
-  
+  idx <- sample(nrow(train), nrow(train), replace = TRUE)
+  dt <- train[idx, ]
+ 
   cart_B <- rpart(survived ~ sex + age + pclass + sibsp + parch,
-                data = dt, method="class") #Pruned
+                cp = 0, data = dt, method = "class") # unpruned
   phat2[i,] <- predict(cart_B, test, type = "prob")[, 2]
 }
 
@@ -9618,7 +9664,7 @@ dim(phat2)
 ## [1] 100 262
 ```
 
-You can see in that `phat2` matrix is $100 \times 262$.  Each column is representing the predicted probability that `survived` = 1. We have 100 trees (rows in `phat2`) and 100 predicted probabilities for each the observation in the test data.  The only job we will have now to take the average of 100 predicted probabilities for each column.
+You can see in that `phat2` is a $100 \times 262$ matrix.  Each column is representing the predicted probability that `survived` = 1. We have 100 trees (rows in `phat2`) and 100 predicted probabilities for each the observation in the test data.  The only job we will have now to take the average of 100 predicted probabilities for each column.
   
 
 ```r
@@ -9632,33 +9678,75 @@ auc_ROCR@y.values[[1]]
 ```
 
 ```
-## [1] 0.8577337
+## [1] 0.8765668
 ```
 
-Hence, we have a slight improvement over a single tree.  But the main idea behind bagging is to reduce the variance in prediction.  The reason for this reduction is simple: we take the mean prediction of all bootstrapped samples.  Remember, when we use a simple tree and make 500 bootstrapping validations, each one of them gives a different MSPE (in regressions) or AUC (in classification).  We did that many times before.  The difference now is that we average `yhat` in regressions or `phat` in classifications (or `yhat` with majority voting).  This reduces the prediction uncertainty drastically.  To test this, we have to run the same script multiple times and see how AUC with bagging would vary in each run relative to a single tree.  Final point is that, `B` the number of trees could be a hyperparameter.  That is, if we set less or more trees, what would happen to AUC?
+Hence, we have a slight improvement over a single tree. We can see how the number of trees (B) would cumulatively increases AUC (reduces MSPE in regressions).   
 
-All these issues bring us to another model, random forest:  
+```r
+B = 300 
+
+phat3 <- matrix(0, B, nrow(test))
+AUC <- c()
+
+for (i in 1:B) {
+  set.seed(i) 
+  idx <- sample(nrow(train), nrow(train), replace = TRUE)
+  dt <- train[idx,]
+  
+  fit <- rpart(
+    survived ~ sex + age + pclass + sibsp + parch,
+    cp = 0,
+    data = dt,
+    method = "class"
+  )
+  
+  phat3[i, ] <- predict(fit, test, type = "prob")[, 2]
+  
+  phat_f <- colMeans(phat3)
+  
+  #AUC
+  pred_rocr <- prediction(phat_f, test$survived)
+  auc_ROCR <- performance(pred_rocr, measure = "auc")
+  AUC[i] <- auc_ROCR@y.values[[1]]
+}
+
+plot(AUC, type = "l", col = "red",
+     xlab = "B - Number of trees",
+     lwd = 2)
+```
+
+<img src="12-Ensemble_files/figure-html/en5-1.png" width="672" />
+
+As it is clear from the plot that, when we use a large value of B, the AUC (or error in regression) becomes stable.  Therefore, we do not need to tune the number of trees with bagging. Using a value of B sufficiently large would suffice.
+
+The main idea behind bagging is to reduce the variance in prediction.  The reason for this reduction is simple: we take the mean prediction of all bootstrapped samples.  Remember, when we use a simple tree and make 500 bootstrapping validations, each one of them gives a different MSPE (in regressions) or AUC (in classification).  The difference now is that we average `yhat` in regressions or `phat` in classifications (or `yhat` with majority voting).  This reduces the prediction uncertainty drastically. 
+
+Bagging works very well for high-variance base learners, such as decision trees or kNN.  If the learner is stable, bagging adds little to the model's performance. This brings us to another and improved ensemble method, random forests.   
 
 ## Random Forest
 
-**Random Forest = Bagging + subsample of covariates at each node**.  We have done the first part above, and to some degree, it's understandable.  But, **"subsampling covariates at each node"** is new.  
+**Random Forest = Bagging + subsample of covariates at each node**.  We have done the first part before.   Random forests algorithm produces many single trees based on randomly selected a subset of observations and features. Since the algorithm leads to many single trees (like a forest) with a sufficient variation, the averaging them provides relatively a smooth and, more importantly, better predictive power than a single tree. Random forests and regression trees are particularly effective in settings with a large number of features that are correlated each other. The splits will generally ignore those covariates, and as a result, the performance will remain strong even in settings with many features.
 
 We will use the Breiman and Cutler's [Random Forests for Classification and Regression](https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm): `randomForest()`[@Brei_2004].
 
 Here are the steps and the loop structure:  
 
-1. Select number of trees `ntree`, subsampling parameter `mtry`, and the tree depth `maxnodes`,
+1. Select number of trees (`ntree`), subsampling parameter (`mtry`), and the tree depth `maxnodes`,
 2. Create a loop `ntree` times,
 3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth `maxnodes` on that sample,
-4. But, for split in the tree (this is our second loop), randomly select `mtry` original covariates and do the split among those.  
+4. But, for each split in the tree (this is our second loop), randomly select `mtry` original covariates and do the split among those.  
 
 Hence, bagging is a special case of random forest, with `mtry` = number of features ($P$).
   
-Let's talk about this "subsampling covariates at each node".  When we think on this idea little bit more, we can see the rationale: suppose there is one very strong covariate in the sample.  Almost all trees will use this covariate in the top split.  All of the trees will look quite similar to each other.  Hence the predictions will be highly correlated.  **Averaging many highly correlated quantities does not lead to a large reduction in variance**.  Random forests **decorrelate** the trees.  Hence Random Forest further reduces the sensitivity of trees to the data points that are not in the original dataset.
+As we think on the idea of "subsampling covariates at each node" little bit more, we can see the rationale: suppose there is one very strong covariate in the sample.  Almost all trees will use this covariate in the top split.  All of the trees will look quite similar to each other.  Hence the predictions will be highly correlated.  **Averaging many highly correlated quantities does not lead to a large reduction in variance**.  Random forests **decorrelate** the trees and, thus, further reduces the sensitivity of trees to the data points that are not in the original dataset.
 
 How are we going to pick `mtry`?  In practice, default values are `mtry` = $P/3$ in regression and `mtry` = $\sqrt{P}$ classification. (See `mtry` in `?randomForest`). Note that, with this parameter (`mtry`), we can run a pure bagging model with `randomForest()`, instead of `rpart()`, if we set `mtry` = $P$.  
 
-You can think of a random forest model as a robust version of CART models.  There are some default parameters that can be tuned in `randomForest()`, which lead to the same (two ways) way to grow a tree as in CART.  Hastie et al. argues that (Elements of Statistical Learning, 2009, p.596) the problem of overfitting is not that large in random forests.  As the depth of a tree increases (`maxnodes`, see below), overfitting is argued to be minor.
+With the bootstrap resampling process for each tree, random forests have an efficient and reasonable approximation of the test error calculated from out-of-bag (OOB) sets. When bootstrap aggregating is performed, two independent sets are created. One set, the bootstrap sample, is the data chosen to be “in-the-bag” by sampling with replacement. The out-of-bag set is all data not chosen in the sampling process. Hence, there is no need for cross-validation or a separate test set to obtain an unbiased estimate of the prediction error. It is estimated internally as each tree is constructed using a different bootstrap sample from the original data. About one-third of the cases (observations) are left out of the bootstrap sample and not used in the construction of the $k^{th}$ tree. In this way, a test set classification is obtained for each case in about one-third of the trees. In each run, the class is selected when it
+gets most of the votes among the OOB cases. The proportion of times that the selected class for the observation is not equal to the true class over all observations in OOB set is called the OOB error estimate. This has proven to be unbiased in many tests.  Note that the forest’s variance decreases as the number of trees grows. Thus, more accurate predictions are likely to be obtained by choosing a large number of trees.
+
+You can think of a random forest model as a robust version of CART models.  There are some default parameters that can be tuned in `randomForest()`.  It is  argued that, however, the problem of overfitting is minor in random forests.
 
 >Segal (2004) demonstrates small gains in performance by controlling the depths of the individual trees grown in random forests. Our experience is that using full-grown trees seldom costs much, and results in one less tuning parameter. Figure 15.8 shows the modest effect of depth control in a simple regression example. (Hastie et al., 2009, p.596)  
 >
@@ -9674,144 +9762,129 @@ library(randomForest)
 set.seed(1)
 n = 500
 x <- runif(n)
-y <- sin(12*(x+.2))/(x+.2) + rnorm(n)/2
+y <- sin(12 * (x + .2)) / (x + .2) + rnorm(n) / 2
 
 # Fitting the models
-fit.tree <- rpart(y~x) #CART
-fit.rf1 <- randomForest(y~x) #No depth control
-fit.rf2 <- randomForest(y~x, maxnodes=20) # Control it
+fit.tree <- rpart(y ~ x) #CART
+fit.rf1 <- randomForest(y ~ x) #No depth control
+fit.rf2 <- randomForest(y ~ x, maxnodes = 20) # Control it
 
 # Plot observations and predicted values
-z <- seq(min(x), max(x), length.out=1000)
-par(mfrow=c(1,1))
-plot(x, y, col="gray", ylim=c(-4,4))
-lines(z, predict(fit.rf1, data.frame(x=z)), col="green", lwd=2)
-lines(z, predict(fit.rf2, data.frame(x=z)), col="red", lwd=2)
-lines(z, predict(fit.tree, data.frame(x=z)), col="blue", lwd=1.5)
-legend("bottomright", c("Random Forest: maxnodes=max","Random Forest: maxnodes=20",
-                        "CART: single regression tree"),
-       col=c("green","red", "blue"),
-       lty=c(1,1,1), bty = "n" )
+z <- seq(min(x), max(x), length.out = 1000)
+par(mfrow = c(1, 1))
+plot(x, y, col = "gray", ylim = c(-4, 4))
+lines(z,
+      predict(fit.rf1, data.frame(x = z)),
+      col = "green",
+      lwd = 2)
+lines(z,
+      predict(fit.rf2, data.frame(x = z)),
+      col = "red",
+      lwd = 2)
+lines(z,
+      predict(fit.tree, data.frame(x = z)),
+      col = "blue",
+      lwd = 1.5)
+legend("bottomright",
+  c("Random Forest: maxnodes=max",
+    "Random Forest: maxnodes=20",
+    "CART: single regression tree"),
+  col = c("green", "red", "blue"),
+  lty = c(1, 1, 1),
+  bty = "n"
+)
 ```
 
-<img src="12-Ensemble_files/figure-html/en5-1.png" width="672" />
+<img src="12-Ensemble_files/figure-html/en6-1.png" width="672" />
 
-The random forest models are definitely improvements over CART, but which one is better?  Although random forest models should not overfit when increasing the number of trees (`ntree`) in the forest, it seems that there is no consensus on the depth of tree, `maxnodes` in the field. Hence, the question for practitioners becomes whether it would be possible to improve the model's performance if we tune Random Forest parameters?  
+The random forest models are definitely improvements over CART, but which one is better?  Although random forest models should not overfit when increasing the number of trees (`ntree`) in the forest, in practice `maxnodes` and `mtry` are used as hyperparameters in the field. 
 
 Let's use out-of-bag (OOB) MSE to tune Random Forest parameters in our case to see if there is any improvement.  
 
 
 ```r
-# OOB-MSE
-a <- randomForest(y~x)
-a
-```
-
-```
-## 
-## Call:
-##  randomForest(formula = y ~ x) 
-##                Type of random forest: regression
-##                      Number of trees: 500
-## No. of variables tried at each split: 1
-## 
-##           Mean of squared residuals: 0.3891797
-##                     % Var explained: 80.43
-```
-
-```r
-a$mse[500]
-```
-
-```
-## [1] 0.3891797
-```
-
-Let's control our tree depth:
-
-
-```r
-maxnode <- c(10,50,100,500)
+maxnode <- c(10, 50, 100, 500)
 for (i in 1:length(maxnode)) {
-  a <- randomForest(y~x, maxnodes = maxnode[i])
+  a <- randomForest(y ~ x, maxnodes = maxnode[i])
   print(c(maxnode[i], a$mse[500]))
 }
 ```
 
 ```
-## [1] 10.0000000  0.3894515
-## [1] 50.0000000  0.3353509
-## [1] 100.0000000   0.3592304
-## [1] 500.000000   0.392889
+## [1] 10.0000000  0.3878058
+## [1] 50.000000  0.335875
+## [1] 100.0000000   0.3592119
+## [1] 500.0000000   0.3905135
 ```
 
-We can see that OOB-MSE is smaller with `maxnodes` = 50. Of course we can have a more refined sequence of `maxnodes` series to test.  Similarly, we can select parameter `mtry` with a grid search.  
+```r
+# Increase ntree = 1500
+maxnode <- c(10, 50, 100, 500)
+for (i in 1:length(maxnode)) {
+  a <- randomForest(y ~ x, maxnodes = maxnode[i], ntree = 2500)
+  print(c(maxnode[i], a$mse[500]))
+}
+```
 
-**We need to understand that there is no need to perform cross-validation in Random Forest**. By bootstrapping, each tree uses around 2/3 of the observations. The remaining 1/3 of observations are referred to as the **out-of-bag (OOB)** observations, which are used for out-sample predictions.  All performance measures for the model are based on these OOB predictions including MSE in case of regressions.  
+```
+## [1] 10.000000  0.391755
+## [1] 50.0000000  0.3353198
+## [1] 100.0000000   0.3616621
+## [1] 500.0000000   0.3900982
+```
 
-We can manually calculate `mse_oob[500]`  
+We can see that OOB-MSE is smaller with `maxnodes` = 50 even when we increase `ntree` = 1500 . Of course we can have a finer sequence of `maxnodes` series to test.  Similarly, we can select parameter `mtry` with a grid search.  In a bagged model we set `mtry` = $P$.  If we don't set it, the default values for `mtry` are square-root of $p$ for classification and $p/3$ in regression, where $p$ is number of features.  If we want, we can tune both parameters with cross-validation.  The effectiveness of tuning random forest models in improving their prediction accuracy is an open question in practice.  
+
+Bagging and random forest models tend to work well for problems where there are important nonlinearities and interactions.  More importantly, **they are robust to the original sample** and more efficient than single trees.  However, **the results would be less intuitive and difficult to interpret**. Nevertheless, we can obtain an overall summary of the importance of each covariates using SSR (for regression) or Gini index (for classification).  The index records the total amount that the SSR or Gini is decreased due to splits over a given covariate, averaged over all `ntree` trees.  
 
 
 ```r
-# OOB-MSE
-a <- randomForest(y~x)
-a
+rf <-
+  randomForest(
+    as.factor(survived) ~ sex + age + pclass + sibsp + parch,
+    data = titanic3,
+    na.action = na.omit,
+    localImp = TRUE,
+  )
+
+plot(rf, main = "Learning curve of the forest")
+legend(
+  "topright",
+  c(
+    "Error for 'Survived'",
+    "Misclassification error",
+    "Error for 'Dead'"
+  ),
+  lty = c(1, 1, 1),
+  col = c("green", "black", "red")
+)
+```
+
+<img src="12-Ensemble_files/figure-html/en8-1.png" width="672" />
+
+The plot shows the evolution of out-of-bag errors when the number of trees increases. The learning curves reach to a stable section right after a couple of trees.  With 500 trees, which is the default number, the OOB estimate of our error rate is around 0.2, which can be seen in the basic information concerning our model below
+
+
+```r
+rf
 ```
 
 ```
 ## 
 ## Call:
-##  randomForest(formula = y ~ x) 
-##                Type of random forest: regression
+##  randomForest(formula = as.factor(survived) ~ sex + age + pclass +      sibsp + parch, data = titanic3, localImp = TRUE, , na.action = na.omit) 
+##                Type of random forest: classification
 ##                      Number of trees: 500
-## No. of variables tried at each split: 1
+## No. of variables tried at each split: 2
 ## 
-##           Mean of squared residuals: 0.3945894
-##                     % Var explained: 80.16
+##         OOB estimate of  error rate: 19.69%
+## Confusion matrix:
+##     0   1 class.error
+## 0 562  57  0.09208401
+## 1 149 278  0.34894614
 ```
 
-```r
-a$mse[500]
-```
-
-```
-## [1] 0.3945894
-```
-
-```r
-# Manually
-mean((a$predicted - y)^2)
-```
-
-```
-## [1] 0.3945894
-```
-
-In a bagged model we set `mtry` = $P$.  If we want, we can tune the maximum number of terminal nodes that trees in the forest can have, `maxnodes`.  If it is not specified, trees are grown to the maximum possible value, **which is the number of observations**.  In practice, although there is no 100\% consensus, the general approach is to grow the trees with the maximum number of terminal nodes.  We have shown that, however, with a cross-validation, this parameter can be set so that OOB-MSE would be smaller than the one with the maximum `maxnodes`.  
-
-In a random forest model, in addition to `maxnodes` (which is again set to $n$),  we can tune the number of variables randomly sampled as candidates at each split, `mtry`.  If we don't set it, the default values for `mtry` are square-root of $p$ for classification and $p/3$ in regression, where $p$ is number of variables/features.  If we want, we can tune both parameters with cross-validation.  The effectiveness of tuning random forest models in improving their prediction accuracy is an open question in practice.  
-
-Bagging and random forest models tend to work well for problems where there are important nonlinearities and interactions.  More importantly, **they are robust to the original sample** and more efficient than single trees. There are several tables in the Breiman's original [paper](https://link.springer.com/article/10.1023%2FA%3A1010933404324) [@Breiman_2001] comparing the performance of random forest and single tree (CART) models.
-
-However, **the results would be less intuitive and difficult to interpret**. Nevertheless, we can obtain an overall summary of the importance of each covariates using SSR (for regression) or Gini index (for classification).  The index records the total amount that the SSR or Gini is decreased due to splits over a given covariate, averaged over all `ntree` trees.  
-
-
-```r
-rf <- randomForest(as.factor(survived) ~ sex + age + pclass + sibsp + parch,
-                   data=titanic3, na.action = na.omit)
-importance(rf)
-```
-
-```
-##        MeanDecreaseGini
-## sex           129.76641
-## age            63.36484
-## pclass         53.64906
-## sibsp          19.17399
-## parch          17.53605
-```
-
-We will see a several applications on CART, bagging and Random Forest in the lab section covering this chapter.
+We will see a several applications on CART, bagging and Random Forest later in Chapter 14.
 
 ## Boosting
 
@@ -9875,17 +9948,20 @@ Now, we will have a loop that will "boost" the model.  What we mean by boosting 
 ```r
 h <- 0.1 # shrinkage parameter
 
-# Add this adjusted prediction error, `yr` to our main data frame
+# Calculate the prediction error adjusted by h
+yr <- df$y - h * yp 
+
+# Add this adjusted prediction error, `yr` to our main data frame,
 # which will be our target variable to predict later
-df$yr <- df$y - h * yp 
+df$yr <- yr
 
 # Store the "first" predictions in YP
 YP <- h * yp 
 ```
 
-Note that if `h`=1, it would give us usual "residuals".  Hence, `h` controls for "how much error" we would like to reduce.  
+Note that if `h`= 1, it would give us usual "residuals".  Hence, `h` controls for "how much error" we would like to reduce.  
 
-**Step 3**: Now, predict the "error" in a loop that repeats itself many times.
+**Step 3**: Now, we will predict the "error" in a loop that repeats itself many times.
 
 
 ```r
@@ -9964,40 +10040,40 @@ viz(101)
 
 <img src="12-Ensemble_files/figure-html/en15-1.png" width="672" />
 
-It overfits. Unlike random forests, boosting can overfit if the number of trees (B) and depth of each tree (D) are too large.
+It overfits. Unlike random forests, boosting can overfit if the number of trees (B) and depth of each tree (D) are too large.  By averaging over a large number of trees, bagging and random forests reduces variability. Boosting does not average over the trees.  
   
-By averaging over a large number of trees, bagging and random forests reduces variability. Boosting does not average over the trees.  This shows that $h$ should be tuned by a cross-validation process.  The generalized [boosted regression modeling (GBM)](https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf) [@Ridgeway_2020] can be used for boosted regressions.  Note that there are many arguments with their specific default values in the function.  For example, `n.tree` ($B$) is 100 and `shrinkage` ($h$) is 0.1. `interaction.depth`, $D$, specifying the maximum depth of each tree, is 1, which implies an additive model (2 implies a model with up to 2-way interactions).  A smaller $h$ typically requires more trees $B$. It allows more and different shaped trees to attack the residuals.  
+This shows that $h$ should be tuned by a proper process.  The generalized [boosted regression modeling (GBM)](https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf) [@Ridgeway_2020] can also be used for boosting regressions.  Note that there are many arguments with their specific default values in the function.  For example, `n.tree` (B) is 100 and `shrinkage` ($h$) is 0.1. The `gbm()` function also has `interaction.depth` (D) specifying the maximum depth of each tree. When it is 1, the model is just an additive model, while 2 implies a model with up to 2-way interactions.  A smaller $h$ typically requires more trees $B$. It allows more and different shaped trees to attack the residuals.  
 
-Here is the application of `gbm()` to our simulated data:  
+Here is the application of `gbm` to our simulated data:  
 
 
 ```r
 library(gbm)
 
 # Note bag.fraction = 1 (no CV).  The default is 0.5
-bo1 <- gbm(y ~ x, distribution="gaussian", n.tree = 100, data = df,
+bo1 <- gbm(y ~ x, distribution = "gaussian", n.tree = 100, data = df,
               shrinkage = 0.1, bag.fraction = 1)
 
-bo2 <- gbm(y ~ x, distribution="gaussian", data = df) # All default
+bo2 <- gbm(y ~ x, distribution = "gaussian", data = df) # All default
 
-plot(df$x, df$y, ylab="", xlab="") #Data points
-lines(df$x, predict(bo1, data=df, n.trees=t), type="s",
-      col="red", lwd=3) #line for without CV
-lines(df$x, predict(bo2, n.trees=t, data=df), type="s",
-      col="green", lwd=3) #line with default parameters with CV
+plot(df$x, df$y, ylab = "", xlab = "") #Data points
+lines(df$x, predict(bo1, data = df, n.trees = t), type = "s",
+      col = "red", lwd = 3) #line for without CV
+lines(df$x, predict(bo2, n.trees = t, data = df), type = "s",
+      col = "green", lwd = 3) #line with default parameters with CV
 ```
 
 <img src="12-Ensemble_files/figure-html/en16-1.png" width="672" />
 
-Let's see boosting for classification
+We can also use a boosting application for classification problems, which is what we will loomk at next.
 
 ### AdaBoost
 
-One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a qualitative variable.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree `b` among `B` trees, produces a prediction taking the two values $\{-1,1\}$.  
+One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
 
 To understand how AdaBoost works, let's look at the algorithm step by step:    
 
-1. Select the number of trees `B`, and the tree depth `D`;
+1. Select the number of trees B, and the tree depth D;
 2. Set initial weights, $w_i=1/n$, for each observation.
 3. Fit a classification tree $\hat{m}_{b}(x)$ at $b=1$, the first tree.
 3. Calculate the following misclassification error for $b=1$:  
@@ -10012,9 +10088,9 @@ $$
 \alpha_{b}=0.5\log \left(\frac{1-e r r_{b}}{e r r_{b}}\right)
 $$
   
-This gives us log odds.  For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or `log(success/failure)`.   
+For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
 
-5. If the observation `i` is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
+5. If the observation $i$ is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
 
 $$
 w_{i} \leftarrow w_{i} e^{\alpha_b}
@@ -10027,7 +10103,7 @@ Let's try some numbers:
 #Suppose err = 0.2, n=100
 n = 100
 err = 0.2
-alpha <- 0.5*log((1-err)/err)
+alpha <- 0.5 * log((1 - err) / err)
 alpha
 ```
 
@@ -10048,7 +10124,7 @@ So, the new weight for the misclassified $i$ in the second tree (i.e., $b=2$ stu
 
 ```r
 # For misclassified obervations
-weight_miss <- (1/n)*(exp(alpha))
+weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 ```
 
@@ -10058,7 +10134,7 @@ weight_miss
 
 ```r
 # For correctly classified observation
-weight_corr <- (1/n)*(exp(-alpha))
+weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
 
@@ -10066,17 +10142,17 @@ weight_corr
 ## [1] 0.005
 ```
 
-This shows that as the misclassification error goes up, it increases the weights (0.04) of each misclassified observation relative to correctly classified observations and reduces the weights for correctly classified observations (0.0025).  
+This shows that as the misclassification error goes up, it increases the weights for each misclassified observation and reduces the weights for correctly classified observations.  
 
-6. With this procedure, in each loop from `b` to `B`, it reapply $\hat{m}_{b}(x)$  to the data using updated weights $w_i$ in each `b` by updating in weights by:  
+6. With this procedure, in each loop from $b$ to B, it applies $\hat{m}_{b}(x)$  to the data using updated weights $w_i$ in each $b$:  
 
 $$
 \mathbf{err}_{b}=\frac{\sum_{i=1}^{n} w_{i} \mathbf{I}\left(y_{i} \neq \hat{m}_{b}\left(x_{i}\right)\right)}{\sum_{i=1}^{n} w_{i}}
 $$
 
-We know that the sum of the weights are supposed to be 1.  So a normalization for all weights between 0 and 1 would handle this issue in each iteration.  The algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until $B$.  We can use `rpart()` in each tree with `weights` option as we will shown momentarily.  
+We normalize all weights between 0 and 1 so that sum of the weights would be one in each iteration.  Hence, the algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until B.  We can use `rpart` in each tree with `weights` option as we will shown momentarily.  
 
-Here is an example with the `myocarde` data that we used in CARD:
+Here is an example with the `myocarde` data that we only use the first 6 observation:
 
 
 ```r
@@ -10087,12 +10163,12 @@ myocarde <- read_delim("myocarde.csv", delim = ";" ,
                        show_col_types = FALSE)
 myocarde <- data.frame(myocarde)
 df <- head(myocarde)
-df$W = 1/nrow(df)
+df$Weights = 1 / nrow(df)
 df
 ```
 
 ```
-##   FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO         W
+##   FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO   Weights
 ## 1    90  1.71  19.0    16  19.5  16.0   912 SURVIE 0.1666667
 ## 2    90  1.68  18.7    24  31.0  14.0  1476  DECES 0.1666667
 ## 3   120  1.40  11.7    23  29.0   8.0  1657  DECES 0.1666667
@@ -10107,8 +10183,8 @@ Suppose that our first stump misclassifies the first observation.  So the error 
 ```r
 # Alpha
 n = nrow(df)
-err = 1/n
-alpha <- 0.5*log((1-err)/err)
+err = 1 / n
+alpha <- 0.5 * log((1 - err) / err)
 alpha
 ```
 
@@ -10125,9 +10201,8 @@ exp(alpha)
 ```
 
 ```r
-# ****** Weights *******
-# For misclassified obervations
-weight_miss <- (1/n)*(exp(alpha))
+# Weights for misclassified observations
+weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 ```
 
@@ -10136,8 +10211,8 @@ weight_miss
 ```
 
 ```r
-# For correctly classified observation
-weight_corr <- (1/n)*(exp(-alpha))
+# Weights for correctly classified observations
+weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
 
@@ -10149,77 +10224,48 @@ Hence, our new sample weights
 
 
 ```r
-df$NW <- c(weight_miss, rep(weight_corr, 5))
-df$Norm <- df$NW/sum(df$NW) # nromalizing
-#Ignoring X's
-df[,8:11]
+df$New_weights <- c(weight_miss, rep(weight_corr, 5))
+df$Norm_weights <- df$New_weight / sum(df$New_weight) # normalizing
+# Not reporting X's for now
+df[, 8:11]
 ```
 
 ```
-##    PRONO         W        NW Norm
-## 1 SURVIE 0.1666667 0.3726780  0.5
-## 2  DECES 0.1666667 0.0745356  0.1
-## 3  DECES 0.1666667 0.0745356  0.1
-## 4 SURVIE 0.1666667 0.0745356  0.1
-## 5  DECES 0.1666667 0.0745356  0.1
-## 6  DECES 0.1666667 0.0745356  0.1
+##    PRONO   Weights New_weights Norm_weights
+## 1 SURVIE 0.1666667   0.3726780          0.5
+## 2  DECES 0.1666667   0.0745356          0.1
+## 3  DECES 0.1666667   0.0745356          0.1
+## 4 SURVIE 0.1666667   0.0745356          0.1
+## 5  DECES 0.1666667   0.0745356          0.1
+## 6  DECES 0.1666667   0.0745356          0.1
 ```
 
-Now, the new dataset:
-  
+We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  We now need to incorporate these weights and resample these six observations. Since incorrectly classified records have higher sample weights, the probability to select those records is very high.
 
-```r
-df$bins <- cumsum(df$Norm)
-df[,8:12]
-```
-
-```
-##    PRONO         W        NW Norm bins
-## 1 SURVIE 0.1666667 0.3726780  0.5  0.5
-## 2  DECES 0.1666667 0.0745356  0.1  0.6
-## 3  DECES 0.1666667 0.0745356  0.1  0.7
-## 4 SURVIE 0.1666667 0.0745356  0.1  0.8
-## 5  DECES 0.1666667 0.0745356  0.1  0.9
-## 6  DECES 0.1666667 0.0745356  0.1  1.0
-```
-
-Now supposed we run `runif(n=6, min = 0, max = 1)` and get $0.2201686, 0.9465279, 0.5118751, 0.8167266, 0.2208179, 0.1183170.$ Since incorrectly classified records have higher sample weights, the probability to select those records is very high.  We select the observation that these random numbers in their bin:
+If we use a simple tree as our base classifier, we can directly incorporate these weights into `rpart`.  We can use other base classifier. In that case, we can do resampling with these probability weights: 
 
 
 ```r
-df[c(1,6,2,4,1,1), -c(9:12)] # after
+set.seed(123)
+ind <- sample(6, 6, replace = TRUE, prob = df$Norm_weights)
+df[ind, -c(9:12)] # After
 ```
 
 ```
 ##     FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO
-## 1      90  1.71  19.0    16  19.5    16   912 SURVIE
-## 6      80  1.13  14.1    18  23.5     9  1664  DECES
-## 2      90  1.68  18.7    24  31.0    14  1476  DECES
-## 4      82  1.79  21.8    14  17.5    10   782 SURVIE
-## 1.1    90  1.71  19.0    16  19.5    16   912 SURVIE
-## 1.2    90  1.71  19.0    16  19.5    16   912 SURVIE
+## 1      90  1.71  19.0    16  19.5  16.0   912 SURVIE
+## 5      80  1.58  19.7    21  28.0  18.5  1418  DECES
+## 1.1    90  1.71  19.0    16  19.5  16.0   912 SURVIE
+## 6      80  1.13  14.1    18  23.5   9.0  1664  DECES
+## 2      90  1.68  18.7    24  31.0  14.0  1476  DECES
+## 1.2    90  1.71  19.0    16  19.5  16.0   912 SURVIE
 ```
 
-```r
-df[,1:8] # before
-```
-
-```
-##   FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO
-## 1    90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 2    90  1.68  18.7    24  31.0  14.0  1476  DECES
-## 3   120  1.40  11.7    23  29.0   8.0  1657  DECES
-## 4    82  1.79  21.8    14  17.5  10.0   782 SURVIE
-## 5    80  1.58  19.7    21  28.0  18.5  1418  DECES
-## 6    80  1.13  14.1    18  23.5   9.0  1664  DECES
-```
-
-  
-Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+As we can see, the misclassified observation is repeated three times in the new sample.  Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
 
 7. Finally, in the output, the contributions from classifiers that fit the data better are given more weight (a larger $\alpha_b$ means a better fit).  Unlike a random forest algorithm where each tree gets an equal weight in final decision, here some stumps get more say in final classification.  Moreover, "forest of stumps" the order of trees is important.
 
-Hence, the final prediction on $y_i$ will be combined from all trees, `b` to `B`, through a weighted majority vote:      
+Hence, the final prediction on $y_i$ will be combined from all trees, $b$ to B, through a weighted majority vote:      
 
 $$
 \hat{y}_{i}=\operatorname{sign}\left(\sum_{b=1}^{B} \alpha_{b} \hat{m}_{b}(x)\right),
@@ -10235,17 +10281,24 @@ $$
 \end{array}\right.
 $$
   
-Here is a simple simulation to show how `alpha` will make the importance of each tree ($\hat{m}_{b}(x)$) different:  
+Here is a simple simulation to show how $\alpha_b$ will make the importance of each tree ($\hat{m}_{b}(x)$) different:  
 
 
 ```r
 n = 1000
 set.seed(1)
 err <- sample(seq(0, 1, 0.01), n, replace = TRUE)
-alpha = 0.5*log((1-err)/err)
+alpha = 0.5 * log((1 - err) / err)
 ind = order(err)
-plot(err[ind], alpha[ind], xlab = "error (err)", ylab = "alpha",
-     type = "o", col = "red", lwd = 2)
+plot(
+  err[ind],
+  alpha[ind],
+  xlab = "error (err)",
+  ylab = "alpha",
+  type = "o",
+  col = "red",
+  lwd = 2
+)
 ```
 
 <img src="12-Ensemble_files/figure-html/en24-1.png" width="672" />
@@ -10254,7 +10307,7 @@ We can see that when there is no misclassification error (`err` = 0), "alpha” 
 
 The AdaBoost.M1 is known as a "discrete classifier" because it directly calculates discrete class labels $\hat{y}_i$, rather than predicted probabilities, $\hat{p}_i$.    
 
-What type of classifier, $\hat{m}_{b}(x)$, would we choose?  Usually a "weak classifier" like a "stump" (a two terminal-node classification tree, i.e 1 split) would be enough.  The $\hat{m}_{b}(x)$ choose one variable to form a stump that gives the lowest Gini index. 
+What type of classifier, $\hat{m}_{b}(x)$, would we choose?  Usually a "weak classifier" like a "stump" (a two terminal-node classification tree, i.e one split) would be enough.  The $\hat{m}_{b}(x)$ choose one variable to form a stump that gives the lowest Gini index. 
 
 Here is our simple example with the `myocarde` data to show how we can boost a simple weak learner (stump) by using AdaBoost algorithm:
   
@@ -10266,6 +10319,7 @@ library(rpart)
 myocarde <- read_delim("myocarde.csv", delim = ";" ,
                        escape_double = FALSE, trim_ws = TRUE,
                        show_col_types = FALSE)
+
 myocarde <- data.frame(myocarde)
 y <- (myocarde[ , "PRONO"] == "SURVIE") * 2 - 1
 x <- myocarde[ , 1:7]
@@ -10274,28 +10328,28 @@ df <- data.frame(x, y)
 # Setting
 rnd = 100 # number of rounds
 m = nrow(x)
-W <- rep(1/m, m) # initial weights
-S <- list() # container to save all stumps
+whts <- rep(1 / m, m) # initial weights
+st <- list() # container to save all stumps
 alpha <- vector(mode = "numeric", rnd) # container for alpha
 y_hat <- vector(mode = "numeric", m) # container for final predictions
 
 set.seed(123)
 for(i in 1:rnd) {
-  S[[i]] <- rpart(y ~., data = df, weights = W, maxdepth = 1, method = "class")
-  yhat <- predict(S[[i]], x, type = "class")
+  st[[i]] <- rpart(y ~., data = df, weights = whts, maxdepth = 1, method = "class")
+  yhat <- predict(st[[i]], x, type = "class")
   yhat <- as.numeric(as.character(yhat))
-  e <- sum((yhat!=y) * W)
+  e <- sum((yhat != y) * whts)
   # alpha
-  alpha[i] <- 0.5 * log((1-e) / e)
+  alpha[i] <- 0.5 * log((1 - e) / e)
   # Updating weights 
-  W <- W * exp(-alpha[i] * y * yhat)
+  whts <- whts * exp(-alpha[i] * y * yhat)
   # Normalizing weights
-  W <- W / sum(W)
+  whts <- whts / sum(whts)
 }
  
-# Using each stump for  S[i] for final predictions
+# Using each stump for final predictions
 for (i in 1:rnd) {
-  pred = predict(S[[i]], df, type = "class")
+  pred = predict(st[[i]], df, type = "class")
   pred = as.numeric(as.character(pred))
   y_hat = y_hat + (alpha[i] * pred)
 }
@@ -10320,7 +10374,7 @@ y_hat
 ```
 
 ```r
-# Now use sign() function
+# sign() function
 pred <- sign(y_hat)
 
 # Confusion matrix
@@ -10344,7 +10398,7 @@ plt <- c(1,5,10,30, 60, 90)
 
 p = par(mfrow=c(2,3))
 for(i in 1:length(plt)){
-prp(S[[i]], type = 2, extra = 1, split.col = "red",
+prp(st[[i]], type = 2, extra = 1, split.col = "red",
     split.border.col = "blue", box.col = "pink")
 }
 ```
@@ -10384,17 +10438,18 @@ table(pred, y)
 ##   -1 29  0
 ##   1   0 42
 ```
-These results provide in-sample predictions.  When we use it in a real example, we can train AdaBoost.M1 by the tree depths (1 in our example) and the number of iterations (100 trees in our example).  Although, there are simulations that AdaBoost is stubbornly resistant to overfitting, you can try with different tree depth and number of trees.   
+  
+These results provide in-sample predictions.  When we use it in a real example, we can train AdaBoost.M1 by the tree depths (1 in our example) and the number of iterations (100 trees in our example).  
 
 An application is provided in the next chapter.  
   
-### Extreme Gradient Boosting (XGBoost)
+### XGBoost
 
-Extreme Gradient Boosting (XGBoost) the most efficient version of the gradient boosting framework by its capacity to implement parallel computation on a single machine.  It can be used for regression and classification problems with two modes: linear models and tree learning algorithm.  This is important because, as we will see in the next section (and Section 6), XGBoost can be used for regularization in linear models.  As always, however, decision trees are much better to catch a nonlinear link between predictors and outcome. Thus, comparison between two methods can provide quick information to the practitioner, specially in causal analyses, about the structure of alternative models. 
+Extreme Gradient Boosting (XGBoost) the most efficient version of the gradient boosting framework by its capacity to implement parallel computation on a single machine.  It can be used for regression and classification problems with two modes: linear models and tree learning algorithm.  That means XGBoost can also be used for regularization in linear models (Section VIII).  As decision trees are much better to catch a nonlinear link between predictors and outcome, comparison between two modes can provide quick information to the practitioner, specially in causal analyses, about the structure of alternative models. 
 
-The XGBoost has several unique advantages: its speed is measured as "10 times faster than the `gbm`" (see its [vignette](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html)) and it accepts very efficient input data structures, such as a *sparse* matrix^[In a sparse matrix, cells containing 0 are not stored in memory. Therefore, in a dataset mainly made of 0, the memory size is reduced.].  This special input structure in `xgboost` requires some additional data preparation: a matrix input for the features and a vector for the response. Therefore, a matrix input of the features requires to encode our categorical variables, as we showed before.  The matrix can also be selected 3 possible choices: a regular R matrix, a sparse matrix from the `Matrix` package, 
+The XGBoost has several unique advantages: its speed is measured as "10 times faster than the `gbm`" (see its [vignette](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html)) and it accepts very efficient input data structures, such as a *sparse* matrix^[In a sparse matrix, cells containing 0 are not stored in memory. Therefore, in a dataset mainly made of 0, the memory size is reduced.].  This special input structure in `xgboost` requires some additional data preparation: a matrix input for the features and a vector for the response. Therefore, a matrix input of the features requires to encode our categorical variables.  The matrix can also be selected several possible choices: a regular R matrix, a sparse matrix from the `Matrix` package, and its own class, `xgb.Matrix`. 
 
-We will use a regression example here and leave the classification example to the next chapter in boosting applications.  We will use the [Ames housing data](https://www.tmwr.org/ames.html)  to see the best "predictors" of the sale price.
+We start with a regression example here and leave the classification example to the next chapter in boosting applications.  We will use the [Ames housing data](https://www.tmwr.org/ames.html)  to see the best "predictors" of the sale price.
 
 
 ```r
@@ -10403,7 +10458,6 @@ library(mltools)
 library(data.table)
 library(modeldata) # This can also be loaded by the tidymodels package
 data(ames)
-#str(ames)
 dim(ames)
 ```
 
@@ -10411,7 +10465,7 @@ dim(ames)
 ## [1] 2930   74
 ```
 
-The `xgboost` algorithm accepts its input data as a matrix.  Therefore all the categorical variables have be one-hot coded, which creates a large matrix with even with a small size data.  That's why using more memory efficient matrix types (sparse matrix etc.) speeds up the process.  We ignore it here and use a regular R matrix, for now.     
+Since, the `xgboost` algorithm accepts its input data as a matrix, all categorical variables have be one-hot coded, which creates a large matrix even with a small size data.  That's why using more memory efficient matrix types (sparse matrix etc.) speeds up the process.  We ignore it here and use a regular R matrix, for now.     
   
 
 ```r
@@ -10419,32 +10473,39 @@ ames_new <- one_hot(as.data.table(ames))
 df <- as.data.frame(ames_new)
 
 ind <- sample(nrow(df), nrow(df), replace = TRUE)
-train <- df[ind, ]
-test <- df[-ind, ]
+train <- df[ind,]
+test <- df[-ind,]
 
-X <- as.matrix(train[, -which(names(train) == "Sale_Price")])
+X <- as.matrix(train[,-which(names(train) == "Sale_Price")])
 Y <- train$Sale_Price
 ```
   
-Now we are ready for finding the optimal tuning parameters.  One strategy in tuning is to see if there is a substantial difference between train and CV errors.  As we have seen in `gbm`, we first start with the number trees and the learning rate.  If the difference still persists, we introduce regularization parameters.  There are three regularization parameters: `gamma`, `lambda`, and `alpha`.  The last two are similar to what we will see in a linear regularization next chapter.  Let's start with the data preparation as `xgboost` requires a matrix input for the features and a vector for the response. We will do it without a grid search. This should be done with sweeping a grid of hyperparamaters (including `gamma`, `lambda`, and `alpha`):
+Now we are ready for finding the optimal tuning parameters.  One strategy in tuning is to see if there is a substantial difference between train and CV errors.  We first start with the number of trees and the learning rate.  If the difference still persists, we introduce regularization parameters.  There are three regularization parameters: `gamma`, `lambda`, and `alpha`.  The last two are similar to what we will see in regularization in Section VIII.
+  
+Here is our first run without a grid search.  We will have a regression tree.  The default booster is `gbtree` for tree-based models.  For linear models it should be set to `gblinear`.  The number of parameters and their combinations are very extensive in XGBoost.  Please see them here: <https://xgboost.readthedocs.io/en/latest/parameter.html#global-configuration>.  The combination of parameters we picked below is just an example.  
 
 
 ```r
+#
+params = list(
+  eta = 0.1, # Step size in boosting (default is 0.3)
+  max_depth = 3, # maximum depth of the tree (default is 6)
+  min_child_weight = 3, # minimum number of instances in each node
+  subsample = 0.8, # Subsample ratio of the training instances
+  colsample_bytree = 1.0 # the fraction of columns to be subsampled
+)
+
 set.seed(123)
 boost <- xgb.cv(
   data = X,
   label = Y,
-  nrounds = 3000,
-  objective = "reg:squarederror",
-  early_stopping_rounds = 50, 
-  nfold = 10,
-  params = list(
-    eta = 0.1,
-    max_depth = 3,
-    min_child_weight = 3,
-    subsample = 0.8,
-    colsample_bytree = 1.0),
-  verbose = 0
+  nrounds = 3000, # the max number of iterations
+  nthread = 4, # the number of CPU cores
+  objective = "reg:squarederror", # regression tree
+  early_stopping_rounds = 50, # Stop if doesn't improve after 50 rounds 
+  nfold = 10, # 10-fold-CV
+  params = params,
+  verbose = 0 #silent
 )  
 ```
 
@@ -10452,7 +10513,8 @@ Let's see the RMSE and the best iteration:
 
 
 ```r
-boost$best_iteration
+best_it <- boost$best_iteration
+best_it
 ```
 
 ```
@@ -10468,12 +10530,12 @@ min(boost$evaluation_log$test_rmse_mean)
 ```
 
 ```r
-# One possible grid would be: 
+# One possible grid would be:
 # param_grid <- expand.grid(
 #   eta = 0.01,
-#   max_depth = 3, 
+#   max_depth = 3,
 #   min_child_weight = 3,
-#   subsample = 0.5, 
+#   subsample = 0.5,
 #   colsample_bytree = 0.5,
 #   gamma = c(0, 1, 10, 100, 1000),
 #   lambda = seq(0, 0.01, 0.1, 1, 100, 1000),
@@ -10485,35 +10547,27 @@ min(boost$evaluation_log$test_rmse_mean)
 # and find the parameters that gives the minimum rmse
 ```
 
-Now after identifying the best model, we can use it on the test data:
+Now after identifying the tuning parameters, we build the best model:
 
 
 ```r
-params <- list(
-  eta = 0.01,
-  max_depth = 3,
-  min_child_weight = 3,
-  subsample = 0.8,
-  colsample_bytree = 1.0
-)
-
 tr_model <- xgboost(
   params = params,
   data = X,
   label = Y,
-  nrounds = 2515,
+  nrounds = best_it,
   objective = "reg:squarederror",
   verbose = 0
 )
 ```
 
-This trained (best fitting model) is enough to obtain the top 10 influential features in our final model using the impurity (gain) metric:
+We can obtain the top 10 influential features in our final model using the impurity (gain) metric:
 
 
 ```r
 library(vip)
 vip(tr_model,
-    aesthetics = list(color = "green", fill = "darkgreen")) 
+    aesthetics = list(color = "green", fill = "orange")) 
 ```
 
 <img src="12-Ensemble_files/figure-html/en33-1.png" width="672" />
@@ -10523,25 +10577,24 @@ Now, we can use our trained model for predictions using our test set.  Note that
 
 ```r
 yhat <- predict(tr_model,
-               as.matrix(test[,-which(names(test) == "Sale_Price")]))
-rmse_test <- sqrt(mean((test[,which(names(train) == "Sale_Price")]-yhat)^2))
+                as.matrix(test[, -which(names(test) == "Sale_Price")]))
+rmse_test <-
+  sqrt(mean((test[, which(names(train) == "Sale_Price")] - yhat) ^ 2))
 rmse_test
 ```
 
 ```
-## [1] 22895.51
+## [1] 23364.86
 ```
   
-Note the big difference between training and test RMSPE's.  This is an indication that our "example" grid is not doing a good job.  We should include regularization tuning parameters and run a full scale grid search.  
-
-We will look at a classification example in the next chapter (Ch.13).  But, a curious reader would ask: would it be better had we run random forest?  Or, could it have been better with a full scale grid search?    
+Note the big difference between training and test RMSPE's.  This is an indication that our "example grid" is not doing a good job.  We should include regularization tuning parameters and run a full scale grid search.  We will look at a classification example in the next chapter (Chapter 13).  
   
 
 <!--chapter:end:12-Ensemble.Rmd-->
 
 # Ensemble Applications
 
-To conclude this section we will cover classification and regression applications using bagging, random forest, boosting and SVM. First we will start with a classification problem.  In comparing different ensemble methods, we must look not only at their accuracy, but evaluate their stability as well.
+To conclude this section we will cover classification and regression applications using bagging, random forest and, boosting. First we will start with a classification problem.  In comparing different ensemble methods, we must look not only at their accuracy, but evaluate their stability as well.
 
 
 ## Classification
@@ -10588,7 +10641,7 @@ for (i in 1:n) {
   model2 <- randomForest(survived~sex+age+pclass+sibsp+parch,
                          ntree = B, mtry = p, data = train) #Bagged
   model3 <- randomForest(survived~sex+age+pclass+sibsp+parch,
-                         ntree = B, data = train) # RF    
+                         ntree = B, data = train, localImp = TRUE) # RF    
   
   phat1 <- predict(model1, test, type = "prob")
   phat2 <- predict(model2, test, type = "prob")
@@ -10620,12 +10673,10 @@ data.frame(model, AUCs, sd)
 ##         model      AUCs         sd
 ## 1 Single-Tree 0.8129740 0.02585391
 ## 2     Bagging 0.8128962 0.01709652
-## 3          RF 0.8409750 0.01659263
+## 3          RF 0.8411901 0.01698504
 ```
 
-There is a consensus that we can determine a bagged model’s test error without using cross-validation.  The reason for this is usually stated that each bootstrapped sample contains about two-thirds of the original dataset’s observations. Out-of-Bag (OOB) observations are the remaining 1/3 of the observations that were not used to fit the bagged tree.
-
-We did the bagging by using `randomForest` in the previous application.  Let's see if we can obtain a similar result with our manual bagging using `rpart()` pruned and unpruned:
+There is a consensus that we can determine a bagged model’s test error without using cross-validation.  We used `randomForest` for bagging in the previous application.  By default, bagging grows classification trees to their maximal size. If we want to prune each tree, however, it is not clear whether or not this may decrease prediction error.  Let's see if we can obtain a similar result with our manual bagging using `rpart` pruned and unpruned:
 
 
 ```r
@@ -10655,7 +10706,7 @@ for (i in 1:n) {
                   data = tr,
                   control = rpart.control(minsplit = 2, minbucket = 1
                                           , cp = 0),
-                  method = "class") # unpruned
+                  method = "class") # Unpruned
     phatp[j, ] <- predict(modelp, test, type = "prob")[, 2]
     phatup[j, ] <- predict(modelup, test, type = "prob")[, 2]
   }
@@ -10674,44 +10725,25 @@ for (i in 1:n) {
   AUCup[i] <- auc_ROCR@y.values[[1]]
 }
 
-mean(AUCp)
+model <- c("Pruned", "Unpruned")
+AUCs <- c(mean(AUCp), mean(AUCup))
+sd <- c(sqrt(var(AUCp)), sqrt(var(AUCup)))
+data.frame(model, AUCs, sd) 
 ```
 
 ```
-## [1] 0.8523158
-```
-
-```r
-sqrt(var(AUCp))
-```
-
-```
-## [1] 0.01626892
-```
-
-```r
-mean(AUCup)
-```
-
-```
-## [1] 0.8180802
-```
-
-```r
-sqrt(var(AUCup))
-```
-
-```
-## [1] 0.01693003
+##      model      AUCs         sd
+## 1   Pruned 0.8523158 0.01626892
+## 2 Unpruned 0.8180802 0.01693003
 ```
   
-We can see a significant reduction in uncertainty and improvement in accuracy relative to a single tree.  Moreover, our manual bagging with the cross-validated (pruned) single tree using `rpart()` doing a better job than the bagging using `randomForest()`.  When we use "unpruned" single-tree using `rpart()` for bagging, the result becomes very similar to one that we obtain with random forest. Further, the number of bootstrapped trees (B) would be a hyperparameter to tune in bagging.  You can try the same script multiple times with different B vales such as 50, 100, 150.  In our experiment (not shown here), it seems that results are not sensitive to B as long as B is large enough like 50 and more.
+We can see a significant reduction in uncertainty and improvement in accuracy relative to a single tree.  When we use "unpruned" single-tree using `rpart()` for bagging, the result becomes very similar to one that we obtain with random forest.  Using pruned trees for bagging improves the accuracy in our case. 
 
 This would also be the case in regression trees, where we would be averaging `yhat`'s and calculating RMSPE and its standard deviations instead of AUC.
 
 ## Regression
 
-Consider the same data set we used earlier chapters to predict baseball player's salary:  
+Consider the data we used earlier chapters to predict baseball player's salary:  
 
 
 ```r
@@ -10767,36 +10799,17 @@ for (i in 1:n) {
   RMSPEp[i] <- sqrt(mean((test$logsal - yhatpr)^2))
   RMSPEup[i] <- sqrt(mean((test$logsal - yhatupr)^2))
 }
-  
-mean(RMSPEp)
+
+model <- c("Pruned", "Unpruned")
+RMSPEs <- c(mean(RMSPEp), mean(RMSPEup))
+sd <- c(sqrt(var(RMSPEp)), sqrt(var(RMSPEup)))
+data.frame(model, RMSPEs, sd) 
 ```
 
 ```
-## [1] 0.501984
-```
-
-```r
-sqrt(var(RMSPEp))
-```
-
-```
-## [1] 0.05817388
-```
-
-```r
-mean(RMSPEup)
-```
-
-```
-## [1] 0.4808079
-```
-
-```r
-sqrt(var(RMSPEup))
-```
-
-```
-## [1] 0.06223845
+##      model    RMSPEs         sd
+## 1   Pruned 0.5019840 0.05817388
+## 2 Unpruned 0.4808079 0.06223845
 ```
 
 With and without pruning, the results are very similar.  Let's put all these together and do it with Random Forest:  
@@ -10853,10 +10866,26 @@ data.frame(model, RMSPEs, sd)
 ## 3          RF 0.4631194 0.06045187
 ```
 
-As you can see, random forest has the lowest RMSPE and thus performs the best, whereas the CART model has the highest RMSPE.
+Random forest has the lowest RMSPE.
 
 
-## Dataset-level explainers
+## Exploration
+
+While the task in machine learning is to achieve the best predictive capacity, for many applications identifying the major predictors could be the major objective. Of course, finding the most important predictors is contingent on the model’s predictive performance.  As we discussed earlier, however, there is a trade-off between prediction accuracy and interpretability.  Although there are many different aspects of interpretability, it refer to understanding the relationship between the predicted outcome and the predictors.
+
+The interpretability in predictive modeling is an active research area.  Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar and [Explanatory Model Analysis](https://ema.drwhy.ai) by Biecek and Burzykowski (2020). 
+
+Explorations of predictive models are classified in two major groups.  The first one is the instance-level exploration, or example-based explanation methods, which present methods for exploration of a model’s predictions for a single observation.  For example, for a particular subject (person, firm, patient), we may want to know contribution of the different features to the predicted outcome for the subject.  The main idea is to understand marginal effect of a predictor on the prediction for a specific subject. There are two important methods in this level: Shapley Additive Explanations (SHAP) and Local Interpretable Model-agnostic Explanations (LIME). We will not explain and apply them here in this book.  These two methods are easily accessible with multiple examples in both books we cited ealrier.  
+
+The second group of explanation methods focuses on dataset-level explainers, which help understand the average behavior of a machine learning model for an entire set of observations. Here, we will focus on several variable-importance measures.  They are permutation-based variable importance metrics offering a model-agnostic approach to the assessment of the influence of an explanatory variable on a model’s performance.  
+
+There are several options to evaluate how important is the variable $x$ in predictions. One major method is the permutation-based variable-importance in which the effect of a variable is removed through a random reshuffling of the data in $x$. This method takes the original data under $x$, permutates (mixes) its values, and gets “new” data, on which computes the weighted decrease of impurity corresponding to splits along the variable $x$ and averages this quantity over all trees. If a variable is an important predictor in the model, after its permutation, the mean decrease impurity (MDI - `MeanDecreaseGini`) rises. It is shown that building a tree with additional irrelevant variables does not alter the importance of relevant variables in an infinite sample setting. 
+
+Another measure of significance, Mean Decrease Accuracy (MDA), stems from the idea that if the variable is not important, rearranging its values should not degrade prediction accuracy. The MDA relies on a different principle and uses the out-of-bag error estimate.  Every tree in the forest has its own out-of-bag sample, on which the prediction accuracy is measured. To calculate MDA, the values of the variable in the out-of-bag-sample are randomly shuffled and the decrease in prediction accuracy on the shuffled data is measured.  This process is repeated for all variables and trees.  The MDA averaged over all trees is  ranked. If a variable has insignificant predictive power, shuffling may not lead to substantial decrease in accuracy.
+
+For a numeric outcome (regression problem) there are two similar measures. The percentage increase in mean square error (`%IncMSE`), which is calculated by shuffling the values of the out-of-bag samples, is analogous to MDA.  Increase in node purity (`IncNodePurity`), which is calculated based on the reduction in sum of squared errors whenever a variable is chosen to split is,  analogous to MDI.
+
+Here are the variable importance measures for our random forest application (`model3`):
 
 
 ```r
@@ -10866,40 +10895,8 @@ varImpPlot(model3)
 
 <img src="13-EnsembleApplication_files/figure-html/ea6-1.png" width="672" />
 
-We will now dig deeper with `randomForestExplainer` (see its [vignette](https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html)) [@Palu_2012] and `DALEX` packages. Assuming that the observations form a representative sample from a general population, dataset-level explainers can provide information about the quality of predictions for the population.
-
-
-```r
-library(randomForestExplainer)
-library(DT)
-
-min_depth_frame <- min_depth_distribution(model3)
-importance_frame <- measure_importance(model3)
-tabl <- cbind(importance_frame[,1], round(importance_frame[,2:7],4))
-datatable(tabl, rownames = FALSE, filter="top", options = list(pageLength = 10, scrollX=T) )
-```
-
-```{=html}
-<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-da20c4f9345e4dcd3dad" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-da20c4f9345e4dcd3dad">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Assists&quot;,&quot;AtBat&quot;,&quot;CAtBat&quot;,&quot;CHits&quot;,&quot;CHmRun&quot;,&quot;CRBI&quot;,&quot;CRuns&quot;,&quot;CWalks&quot;,&quot;Division&quot;,&quot;Errors&quot;,&quot;Hits&quot;,&quot;HmRun&quot;,&quot;League&quot;,&quot;NewLeague&quot;,&quot;PutOuts&quot;,&quot;RBI&quot;,&quot;Runs&quot;,&quot;Walks&quot;,&quot;Years&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"2.0762\" data-max=\"7.7239\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"442\" data-max=\"2752\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"7e-04\" data-max=\"0.2415\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0.1574\" data-max=\"38.3175\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"285\" data-max=\"500\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"133\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Assists","AtBat","CAtBat","CHits","CHmRun","CRBI","CRuns","CWalks","Division","Errors","Hits","HmRun","League","NewLeague","PutOuts","RBI","Runs","Walks","Years"],[4.3853,2.8806,2.3783,2.2543,3.4449,2.826,2.0763,3.0903,7.0259,4.6268,3.0863,4.0196,7.7239,7.0973,3.6546,3.4869,3.5189,3.5323,4.5977],[2351,2691,2598,2711,2556,2752,2731,2579,691,2080,2582,2229,442,627,2593,2620,2543,2576,1716],[0.0112,0.0823,0.2181,0.222,0.0465,0.1037,0.2415,0.0843,0.0009,0.0092,0.0891,0.0229,0.0007,0.0012,0.0174,0.0407,0.0516,0.0398,0.0247],[2.0354,9.8977,38.3175,34.6914,6.5335,19.5414,35.0894,18.0455,0.261,1.275,9.389,3.5544,0.1574,0.243,3.9026,6.9162,5.8962,5.9405,5.5647],[496,498,499,499,497,500,499,499,380,491,499,495,285,363,498,497,497,499,482],[0,5,133,110,7,55,101,52,0,0,7,0,0,0,0,7,1,0,22]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>importance_frame[, 1]<\/th>\n      <th>mean_min_depth<\/th>\n      <th>no_of_nodes<\/th>\n      <th>mse_increase<\/th>\n      <th>node_purity_increase<\/th>\n      <th>no_of_trees<\/th>\n      <th>times_a_root<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
-```
+And, the partial dependence plot gives a graphical representation of the marginal effect of a variable on the class probability (classification) or response (regression).  The intuition behind it is simple: change the value of a predictor and see how much the prediction will change (log wage in our example).
   
-
-```r
-plot_multi_way_importance(importance_frame, x_measure = "mean_min_depth",
-                          y_measure = "mse_increase",
-                          size_measure = "p_value", no_of_labels = 6)
-```
-
-<img src="13-EnsembleApplication_files/figure-html/ea8-1.png" width="672" />
-
-```r
-plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
-                            main = "Distribution of minimal depth and its mean")
-```
-
-<img src="13-EnsembleApplication_files/figure-html/unnamed-chunk-1-1.png" width="672" />
-
 
 ```r
 partialPlot(model3, test, CRuns, xlab="CRuns",
@@ -10909,7 +10906,82 @@ partialPlot(model3, test, CRuns, xlab="CRuns",
 
 <img src="13-EnsembleApplication_files/figure-html/ea9-1.png" width="672" />
 
+There are several libraries that we can use to improve presentation of permutation-based variable importance metrics: the `randomForestExplainer` package (see its [vignette](https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html)) [@Palu_2012] and.the `DALEX` packages. 
 
+
+
+```r
+library(randomForestExplainer)
+
+importance_frame <- measure_importance(model3)
+importance_frame
+```
+
+```
+##     variable mean_min_depth no_of_nodes mse_increase node_purity_increase
+## 1    Assists       4.385264        2351 0.0111643040            2.0354183
+## 2      AtBat       2.880632        2691 0.0823060539            9.8976694
+## 3     CAtBat       2.378316        2598 0.2180919045           38.3175006
+## 4      CHits       2.254316        2711 0.2219603757           34.6913645
+## 5     CHmRun       3.444948        2556 0.0465389503            6.5334618
+## 6       CRBI       2.826000        2752 0.1037441042           19.5413640
+## 7      CRuns       2.076316        2731 0.2415297175           35.0893626
+## 8     CWalks       3.090316        2579 0.0842675407           18.0455320
+## 9   Division       7.025920         691 0.0009003443            0.2610306
+## 10    Errors       4.626844        2080 0.0091803849            1.2750433
+## 11      Hits       3.086316        2582 0.0891232078            9.3889994
+## 12     HmRun       4.019580        2229 0.0229235515            3.5544146
+## 13    League       7.723940         442 0.0007442309            0.1574101
+## 14 NewLeague       7.097292         627 0.0012483369            0.2430058
+## 15   PutOuts       3.654632        2593 0.0174281111            3.9026093
+## 16       RBI       3.486948        2620 0.0406771125            6.9162313
+## 17      Runs       3.518948        2543 0.0515670394            5.8962241
+## 18     Walks       3.532316        2576 0.0397964535            5.9405180
+## 19     Years       4.597688        1716 0.0246697278            5.5647402
+##    no_of_trees times_a_root      p_value
+## 1          496            0 3.136068e-04
+## 2          498            5 2.277643e-26
+## 3          499          133 2.885642e-18
+## 4          499          110 2.632589e-28
+## 5          497            7 4.203385e-15
+## 6          500           55 1.727502e-32
+## 7          499          101 2.602255e-30
+## 8          499           52 8.510193e-17
+## 9          380            0 1.000000e+00
+## 10         491            0 9.939409e-01
+## 11         499            7 5.036363e-17
+## 12         495            0 2.179972e-01
+## 13         285            0 1.000000e+00
+## 14         363            0 1.000000e+00
+## 15         498            0 7.131388e-18
+## 16         497            7 4.777556e-20
+## 17         497            1 3.461522e-14
+## 18         499            0 1.432750e-16
+## 19         482           22 1.000000e+00
+```
+
+This table shows few more metrics in addition to `mse_increase` and `node_purity_increase`.  The first column, `mean_min_depth`, the average of the first time this variable is used to split the tree. Therefore, more important variables have lower minimum depth values. The metric `no_of_nodes` shows the total number of nodes that use for splitting.  Finally, `times_a_root` shows how many times the split occurs at the root. The last column, `p_value` for the one-sided binomial test, which tells us whether the observed number of of nodes in which the variable was used for splitting exceeds the theoretical number of successes if they were random. 
+
+We can take advantage of several multidimensional plots from the `randomForestExplainer` package:
+  
+
+```r
+plot_multi_way_importance(importance_frame, x_measure = "mean_min_depth",
+                          y_measure = "mse_increase",
+                          size_measure = "p_value", no_of_labels = 6)
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea8-1.png" width="672" />
+  
+
+```r
+min_depth_frame <- min_depth_distribution(model3)
+plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
+                            main = "Distribution of minimal depth and its mean")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+  
 ## Boosting Applications
 
 We need to tune the boosting applications with `gbm()`.  There are three tuning parameters: `h`, `B`, and `D`.  We will do the tuning with grid search and apply parallel processing.  We will have both regression and classification problems.  Finally we will compare OLS, CART, Bagging, RF and boosting.
@@ -10942,12 +11014,12 @@ test_mse <- c()
 
 # D = 1 and B = 1000
 for(i in 1:length(h)){
-    boos <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+    boos <- gbm(Salary~., distribution = "gaussian", n.trees = 1000,
             interaction.depth = 1, shrinkage = h[i], data = train)
     prboos <- predict(boos, test, n.trees = 100)
-    test_mse[i] <- mean((test$Salary - prboos)^2)
+    test_mse[i] <- mean((test$Salary - prboos) ^ 2)
 }
-plot(h, test_mse, type = "l", col="blue", main = "MSE - Prediction")
+plot(h, test_mse, type = "l", col = "blue", main = "MSE - Prediction")
 ```
 
 <img src="13-EnsembleApplication_files/figure-html/ea11-1.png" width="672" />
@@ -10966,14 +11038,6 @@ min(test_mse)
 
 ```
 ## [1] 0.181286
-```
-
-```r
-test_mse[10]
-```
-
-```
-## [1] 0.1895487
 ```
 
 A complete but limited grid search is here:  
@@ -10998,10 +11062,10 @@ for(i in 1:nrow(grid)){
       ind <- sample(nrow(df), nrow(df), replace = TRUE)
       train <- df[ind, ]
       test <- df[-ind, ]
-      boos <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+      boos <- gbm(Salary~., distribution ="gaussian", n.trees = 1000,
               interaction.depth = grid[i,1], shrinkage = grid[i,3], data = train)
       prboos <- predict(boos, test, n.trees = grid[i,2])
-      test_mse[j] <- mean((test$Salary - prboos)^2)
+      test_mse[j] <- mean((test$Salary - prboos) ^ 2)
       },
     silent = TRUE)
   }
@@ -11027,7 +11091,25 @@ grid[as.numeric(which.min(mse)), ]
 
 ### Random search with parallel processing
   
-Now, we will apply a random grid search (see [Random Search for Hyper-Parameter Optimization](https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf)) [@Bergs_2012].  We also apply a parallel multicore processing using `doParallel` and `foreach()` to accelerate the grid search.   
+Now, we will apply a random grid search introduced by Bergstra and Bengio in [Random Search for Hyper-Parameter Optimization](https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf)) [@Bergs_2012].  This paper shows that randomly chosen trials are more efficient for hyperparameter optimization than trials on a grid.  Random search is a slight variation on grid search. Instead of searching over the entire grid, random search evaluates randomly selected parts on the grid. 
+
+To characterize the performance of random search, the authors use the analytic form of the expectation. The expected probability of finding the target is $1.0$ minus the probability of missing the target with every single one of $T$ trials in the experiment. If the volume of the target relative to the unit hypercube is $(v / V=0.01)$ and there are $T$ trials, then this probability of finding the target is
+
+$$
+1-\left(1-\frac{v}{V}\right)^T=1-0.99^T .
+$$
+In more practical terms, for any distribution over a sample space with a maximum, we can find the number of randomly selected points from the grid.  First, we define the confidence level, say 95\%.  Then we decide how many points we wish to have around the maximum.  We can decide as a number or directly as a percentage.  Let's say we decide 0.01\% interval around the maximum.  Then the formula will be
+
+$$
+1-(1-0.01)^T>0.95,
+$$
+which can be solved as
+
+$$
+\text{T} = \log (1-0.95)/\log (1-0.01)
+$$
+
+We also apply a parallel multicore processing using `doParallel` and `foreach()` to accelerate the grid search. More details can be found at [Getting Started with doParallel and foreach](https://cran.r-project.org/web/packages/doParallel/vignettes/gettingstartedParallel.pdf).
 
 
 ```r
@@ -11042,7 +11124,7 @@ grid <- as.matrix(expand.grid(D, B, h))
 
 #Random grid-search
 conf_lev <- 0.95
-num_max <- 5
+num_max <- 5 # we define it by numbers
 n <- log(1-conf_lev)/log(1-num_max/nrow(grid))
 set.seed(123)
 ind <- sample(nrow(grid), nrow(grid)*(n/nrow(grid)), replace = FALSE)
@@ -11173,7 +11255,7 @@ b
 ## mse_ols   0.06907506
 ```
 
-Interesting!  The random forest is the winner.  However, boosting is not tuned in the algorithm.  With the full grid search in the previous algorithm, boosting and RF are close contenders.  
+The random forest and boosting have similar performances.  However, boosting and is not tuned in the algorithm.  With the full grid search in the previous algorithm, boosting would be a better choice.  
 
 Let's have a classification example.
 
@@ -11205,7 +11287,7 @@ str(df)
 
 ```r
 #Change SALES to a factor variable
-df$Sales <- ifelse(Carseats$Sales<=8, 0, 1)
+df$Sales <- ifelse(Carseats$Sales <= 8, 0, 1)
 str(df$Sales)
 ```
 
@@ -11221,7 +11303,7 @@ library(ROCR)
 library(rpart)
 library(randomForest)
 
-df <- df[complete.cases(df),]
+df <- df[complete.cases(df), ]
 df$d <- as.factor(df$Sales)
 
 n <- 50
@@ -11324,7 +11406,7 @@ sqrt(var(AUC5))
 ## [1] 0.0117673
 ```
   
-I choose this example, not because I want to give you a pessimistic impressions about machine learning applications.  But, when we do predictions, we cannot assume that our complex algorithms will always be better than a simple OLS.  We judge the success of prediction not only its own AUC and stability, but also how much it improves over a benchmark.
+I choose this example to show that we cannot assume that our complex algorithms will always be better than a simple OLS.  We judge the success of prediction not only its own AUC and stability, but also how much it improves over a benchmark.
   
 ### AdaBoost.M1
 
@@ -11337,7 +11419,7 @@ library(ISLR)
 df <- Carseats
 
 #Change SALES to a factor variable
-df$Sales <- ifelse(Carseats$Sales<=8, -1, 1) #JOUSBoost requires -1,1 coding
+df$Sales <- ifelse(Carseats$Sales <= 8, -1, 1) #adaboost requires -1,1 coding
 str(df$Sales)
 ```
 
@@ -11346,7 +11428,7 @@ str(df$Sales)
 ```
 
 ```r
-# JOUSBoost requires X as a matrix
+# adaboost requires X as a matrix
 # so factor variables must be coded as numerical
 
 # With `one-hot()`
@@ -11415,7 +11497,7 @@ We will classify them in three groups:
   - `objective` = "reg:squarederror" for linear regression, "binary:logistic"  binary classification (it returns class probabilities).  See the official guide for more options.
   - `eval_metric` = no default. Depending on objective selected, it could be one of those: `mae`, `Logloss`, `AUC`, `RMSE`, `error` - (#wrong cases/#all cases), `mlogloss` - multiclass.
   
-Before executing a full-scale grid search, see what default parameters provide you.  That's your "base" model's prediction accuracy, which can improve from.  If the result is not giving you a desired accuracy, as we did in Chapter 12, set `eta` = 0.1 and the other parameters at their default values. Using `xgb.cv` function get best `n_rounds` and build a model with these parameters.  See how much improvement you will get in its accuracy.  Then apply the full-scale grid search.  
+Before executing a full-scale grid search, see what default parameters provide you.  That's your "base" model's prediction accuracy, which can improve from.  If the result is not giving you a desired accuracy, as we did in Chapter 13.3.3, set `eta` = 0.1 and the other parameters at their default values. Using `xgb.cv` function get best `n_rounds` and build a model with these parameters.  See how much improvement you will get in its accuracy.  Then apply the full-scale grid search.  
 
 We will use the same data ("Adult") as we used in Chapter 11.
 
@@ -11558,12 +11640,11 @@ cvb <- xgb.cv( params = params,
 ## Stopping. Best iteration:
 ## [59]	train-logloss:0.231852+0.000732	test-logloss:0.278273+0.004699
 ```
-
-We have the best iteration at 55.  
-
+  
 
 ```r
-cvb$best_iteration
+theb <- cvb$best_iteration
+theb
 ```
 
 ```
@@ -11574,7 +11655,7 @@ cvb$best_iteration
 ```r
 model_default <- xgb.train (params = params,
                             data = ttrain,
-                            nrounds = 79,
+                            nrounds = theb,
                             watchlist = list(val=ttest,train=ttrain),
                             print_every_n = 10,
                             maximize = F ,
@@ -11588,12 +11669,10 @@ model_default <- xgb.train (params = params,
 ## [31]	val-auc:0.928464	train-auc:0.942277 
 ## [41]	val-auc:0.929252	train-auc:0.946379 
 ## [51]	val-auc:0.928459	train-auc:0.949633 
-## [61]	val-auc:0.928208	train-auc:0.952297 
-## [71]	val-auc:0.927833	train-auc:0.954337 
-## [79]	val-auc:0.927487	train-auc:0.956330
+## [59]	val-auc:0.928224	train-auc:0.951403
 ```
   
-Which is the same, if we had used `xgboost()` instead of `xgb.train()`:
+And the prediction:
 
 
 ```r
@@ -11607,7 +11686,7 @@ auc_ROCR@y.values[[1]]
 ```
 
 ```
-## [1] 0.9274875
+## [1] 0.9282243
 ```
 
 ```r
@@ -11619,7 +11698,7 @@ abline(a = 0, b = 1)
 
 <img src="13-EnsembleApplication_files/figure-html/ea25-1.png" width="672" />
 
-You can go back to 11.3.2 and see that XGBoost is better than kNN in this example without even a proper grid search.  To get the confusion matrix, we need to find the optimal discriminating threshold, where the J-index at the ROC curve (with the maximum AUC is achived) is maximized (See Chapter 10).  
+You can go back to Chapter 11.3.2 and see that XGBoost is better than kNN in this example without even a proper grid search.  
 
 
 
@@ -11644,9 +11723,9 @@ Up to this point we have seen "probabilistic" binary classifiers, such as kNN, C
 > In machine learning, support-vector machines are supervised learning models with associated learning algorithms that analyze data for classification and regression analysis. Developed at AT&T Bell Laboratories by Vladimir Vapnik with colleagues (Boser et al., 1992, Guyon et al., 1993, Cortes and Vapnik, 1995, Vapnik et al., 1997) SVMs are one of the most robust prediction methods, being based on statistical learning frameworks or VC theory proposed by Vapnik (1982, 1995) and Chervonenkis (1974). Given a set of training examples, each marked as belonging to one of two categories, an SVM training algorithm builds a model that assigns new examples to one category or the other, making it a non-probabilistic binary linear classifier (although methods such as Platt scaling exist to use SVM in a probabilistic classification setting). SVM maps training examples to points in space so as to maximise the width of the gap between the two categories. New examples are then mapped into that same space and predicted to belong to a category based on which side of the gap they fall.
 >
   
-We will develop our discussion in this chapter on two cases: Separable by a linear class boundary (Optimal Separating Classifier) and separable by a non-linear class boundary (Support-Vector Machines).  First section has no practical importance as (when) we usually face non-linear class boundary problems in real life.  However, it will help us build SVM step by step.
+We will develop our discussion in this chapter on two cases: a linear class boundary (Optimal Separating Classifier) and a non-linear class boundary (Support-Vector Machines).  First section has no practical importance as (when) we usually face non-linear class boundary problems in real life.  However, it will help us build SVM step by step.
 
-We will use a simplifying assumption here to start with: the classes are perfectly linearly separable at the data points by using a single straight line. Thus we have two predictors: $X_1$ and $X_2$.  Let's look at an example:
+We will use a simplifying assumption here to start with: the classes are perfectly linearly separable at the data points by using a single straight line. Thus we have two predictors: $x_1$ and $x_2$.  Let's look at an example:
 
 
 ```r
@@ -11672,13 +11751,13 @@ abline(a = 0.29, b = 0.6, col = "orange",lwd = 2)
 
 <img src="14-SVM_files/figure-html/sv2-1.png" width="672" />
 
-We call this line a hyperplane (in 2-dimensional case it's a line) that separates blacks from reds.  Let's mathematically define it:
+We call this line a hyperplane (well, in a 2-dimensional case it's a line) that separates blacks from reds.  Let's mathematically define it:
   
 $$
 \beta_{0}+X_{1} \beta_{1}+X_{2} \beta_{2} = 0
 $$
   
-hence the "line":
+Hence, the "line":
 
 $$
 X_{2}=-\hat{\beta}_{0} / \hat{\beta}_{2}-\hat{\beta}_{1} / \hat{\beta}_{2} X_{1} .
@@ -11689,7 +11768,7 @@ $$
 \beta_{0}+X_{1} \beta_{1}+X_{2} \beta_{2}>0 \text { (red) } \text { or }<0 \text { (black) }
 $$
 
-As soon as we come up with the line, the classification is simple.  But, we have two questions to answer: (1) how are we going to get the line from the data? (2) How can we decide which line among many alternatives giving the same classification score on the training data is the best in terms of generalization (a better prediction accuracy on different observations).  There are many possible hyperplanes with the same classification score:
+As soon as we come up with the line, the classification is simple.  But, we have two questions to answer: (1) How are we going to derive the line from the data? (2) How can we decide which line among many alternatives, which give the same classification score on the training data, is the best in terms of generalization (a better prediction accuracy on different observations).  There are many possible hyperplanes with the same classification score:
 
 
 ```r
@@ -11712,20 +11791,20 @@ $$
   
 ## Optimal Separating Classifier
 
-Given a decision boundary separating the dataset and satisfying:
+We start with a decision boundary separating the dataset and satisfying:
 
 $$
 \mathbf{w} \cdot \mathbf{x}+b=0,
 $$
   
-where $\mathbf{w}$ is the vector of weights (coefficients) and $b$ is the intercept.  We use $\mathbf{w} \cdot \mathbf{x}$ with a dot product, instead of $\mathbf{w}^{T} \mathbf{x}$. We can select two others hyperplanes $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$$ which also separate the data and have the following equations :
+where $\mathbf{w}$ is the vector of weights (coefficients) and $b$ is the intercept.  We use $\mathbf{w} \cdot \mathbf{x}$ with a dot product, instead of $\mathbf{w}^{T} \mathbf{x}$. We can select two others hyperplanes $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$ which also separate the data and have the following equations :
   
 $$
 \mathbf{w} \cdot \mathbf{x}+b=\delta \\
 \mathbf{w} \cdot \mathbf{x}+b=-\delta
 $$
   
-so that decision boundary is equidistant from $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$.  For now, we can arbitrarily set $\delta=1$ to simplify the problem.
+We define the the decision boundary, which is equidistant from $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$.  For now, we can arbitrarily set $\delta=1$ to simplify the problem.
   
 $$
 \mathbf{w} \cdot \mathbf{x}+b=1 \\
@@ -11746,32 +11825,32 @@ Moreover, the distance of an observation from the hyperplane can be seen as a me
 
 ### The Margin
 
-We will use a little vector algebra and start with the vector normal
+In order to understand how we can find the margin, we will use a bit vector algebra.  Let's start defining the vector normal
 
 Let $\mathbf{u}=\left\langle u_{1}, u_{2}, u_{3}\right\rangle$ and $\mathbf{v}=\left\langle v_{1}, v_{2}, v_{3}\right\rangle$ be two vectors with a common initial point.  Then $\mathbf{u}, \mathbf{v}$ and $\mathbf{u}-\mathbf{v}$ form a triangle, as shown.
 
-<img src="png/triangle.png" width="146" />
+<img src="png/triangle.png" width="115%" height="115%" />
 
 By the Law of Cosines,
   
 $$
-|\mathbf{u}-\mathbf{v}|^{2}=|\mathbf{u}|^{2}+|\mathbf{v}|^{2}-2|\mathbf{u}||\mathbf{v}| \cos \theta
+\|\mathbf{u}-\mathbf{v}\|^{2}=\|\mathbf{u}\|^{2}+\|\mathbf{v}\|^{2}-2\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta
 $$
-where $\theta$ is the angle between $\mathbf{u}$ and $\mathbf{v}$. Note that $|\mathbf{u}|$ is representing the vector norm not the absolute value. Using the formula for the magnitude of a vector, we obtain
+where $\theta$ is the angle between $\mathbf{u}$ and $\mathbf{v}$. Note that $\|\mathbf{u}\|$ is representing the vector norm. Using the formula for the magnitude of a vector, we obtain
 
 $$
-\left(u_{1}-v_{1}\right)^{2}+\left(u_{2}-v_{2}\right)^{2}+\left(u_{3}-v_{3}\right)^{2}=\left(u_{1}^{2}+u_{2}^{2}+u_{3}^{2}\right)+\left(v_{1}^{2}+v_{2}^{2}+v_{3}^{2}\right)-2|\mathbf{u}||\mathbf{v}| \cos \theta \\
-u_{1} v_{1}+u_{2} v_{2}+u_{3} v_{3}=|\mathbf{u}||\mathbf{v}| \cos \theta \\
-\mathbf{u} \cdot \mathbf{v}=|\mathbf{u}||\mathbf{v}| \cos \theta\text {. }
+\left(u_{1}-v_{1}\right)^{2}+\left(u_{2}-v_{2}\right)^{2}+\left(u_{3}-v_{3}\right)^{2}=\left(u_{1}^{2}+u_{2}^{2}+u_{3}^{2}\right)+\left(v_{1}^{2}+v_{2}^{2}+v_{3}^{2}\right)-2\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta \\
+u_{1} v_{1}+u_{2} v_{2}+u_{3} v_{3}=\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta \\
+\mathbf{u} \cdot \mathbf{v}=\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta\text {. }
 $$
 
-Suppose that two nonzero vectors $\mathbf{u}$ and $\mathbf{v}$ have an angle between them that is $\theta=\pi / 2$. That is, $\mathbf{u}$ and $\mathbf{v}$ are perpendicular, or orthogonal. Then, we have
+Suppose that two nonzero vectors $\mathbf{u}$ and $\mathbf{v}$ have an angle between them, $\theta=\pi / 2$. That is, $\mathbf{u}$ and $\mathbf{v}$ are perpendicular, or orthogonal. Then, we have
 
 $$
 \mathbf{u} \cdot \mathbf{v}=|\mathbf{u}||\mathbf{v}| \cos \frac{\pi}{2}=0
 $$
 
-In other words, if $\mathbf{u} \cdot \mathbf{v}=0$, then we must have $\cos \theta=0$, where $\theta$ is the angle between them, which implies that $\theta=\pi / 2$, and therefore $\mathbf{u}$ and $\mathbf{v}$ are orthogonal. In summary, $\mathbf{u} \cdot \mathbf{v}=0$ if and only if $\mathbf{u}$ and $\mathbf{v}$ are orthogonal.
+In other words, if $\mathbf{u} \cdot \mathbf{v}=0$, then we must have $\cos \theta=0$, where $\theta$ is the angle between them, which implies that $\theta=\pi / 2$ (remember $\operatorname{Cos} 90^{\circ}=0$). In summary, $\mathbf{u} \cdot \mathbf{v}=0$ if and only if $\mathbf{u}$ and $\mathbf{v}$ are orthogonal.
 
 Using this fact, we can see that the vector $\mathbf{w}$ is perpendicular (a.k.a "normal") to $\mathcal{H}_{1}$, $\mathbf{w} \cdot \mathbf{x}+b=0.$  Consider the points $x_{a}$ and $x_{b}$, which lie on $\mathcal{H}_{1}$. This gives us two equations:
 
@@ -11782,7 +11861,7 @@ $$
 \end{aligned}
 $$
   
-Subtracting these two equations results in $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)=0$. Note that the vector $\mathbf{x}_{a}-\mathbf{x}_{b}$ lies on $\mathcal{H}_{1}$. Since the dot product $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)$ is zero, $\mathbf{w}$ must be orthogonal to $\mathbf{x}_{a}-\mathbf{x}_{b}$, and in turn, to $\mathcal{H}_{1}$.  Note that this can be repeated for the decision boundary or $\mathcal{H}_{0}$ too.
+Subtracting these two equations results in $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)=0$. Note that the vector $\mathbf{x}_{a}-\mathbf{x}_{b}$ lies on $\mathcal{H}_{1}$. Since the dot product $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)$ is zero, $\mathbf{w}$ must be orthogonal to $\mathbf{x}_{a}-\mathbf{x}_{b},$ thus, to $\mathcal{H}_{1}$ as well.  This can be repeated for the decision boundary or $\mathcal{H}_{0}$ too.
 
 <img src="14-SVM_files/figure-html/sv6-1.png" width="672" />
   
@@ -11792,13 +11871,13 @@ $$
 \mathbf{u}=\frac{\mathbf{w}}{\|\mathbf{w}\|},
 $$
 
-where $\|\mathbf{w}\| = \sqrt{w_{1}^{2}+w_{2}^{2}} \dots=\sqrt{w_{1} w_{1}+w_{2} w_{2} \dots} = \mathbf{w}.\mathbf{w}$, which is called the magnitude (or length) of the vector^[Note that we switch the norm notation from a single bar to double bars]. As it is a unit vector $\|\mathbf{u}\|=1$ and it has the same direction as $\mathbf{w}$ it is also perpendicular to the hyperplane.  If we multiply $\mathbf{u}$ by $m$, which is the distance from either hyperplanes to the boundary, we get the vector $\mathbf{k}=m \mathbf{u}$. We observed that $\|\mathbf{k}\|=m$ and $\mathbf{k}$ is perpendicular to $\mathcal{H}_{1}$ (since it has the same direction as $\mathbf{u}$).  Hence, $\mathbf{k}$ is the vector with same magnitude and direction of $m$ we were looking for.  The rest will be relatively a simple algebra:
+where $\|\mathbf{w}\| = \sqrt{w_{1}^{2}+w_{2}^{2}} \dots=\sqrt{w_{1} w_{1}+w_{2} w_{2} \dots} = \mathbf{w}.\mathbf{w}$, which is called the magnitude (or length) of the vector. Since it is a unit vector ($\|\mathbf{u}\|=1$) and it has the same direction as $\mathbf{w}$ it is also perpendicular to the hyperplane.  If we multiply $\mathbf{u}$ by $m$, which is the distance from either hyperplanes to the boundary, we get the vector $\mathbf{k}=m \mathbf{u}$. We observed that $\|\mathbf{k}\|=m$ and $\mathbf{k}$ is perpendicular to $\mathcal{H}_{1}$ (since it has the same direction as $\mathbf{u}$).  Hence, $\mathbf{k}$ is the vector with the same magnitude and direction of $m$ we were looking for.  The rest will be relatively a simple algebra:
 
 $$
 \mathbf{k}=m \mathbf{u}=m \frac{\mathbf{w}}{\|\mathbf{w}\|}
 $$
 
-We start from a point, $\mathbf{x}_{0}$ on $\mathcal{H}_{0}$ and add $k$ to find the point $\mathbf{x^\prime}=\mathbf{x}_{0}+\mathbf{k}$ is on the decision boundary, which means that $\mathbf{w} \cdot \mathbf{x^\prime}+b=0$.
+We start from a point, $\mathbf{x}_{0}$ on $\mathcal{H}_{0}$ and add $k$ to find the point $\mathbf{x^\prime}=\mathbf{x}_{0}+\mathbf{k}$ on the decision boundary, which means that $\mathbf{w} \cdot \mathbf{x^\prime}+b=0$.
 
 $$
 \begin{gathered}
@@ -11848,7 +11927,7 @@ $$
 y_{i}\left(\mathbf{w} \cdot \mathbf{x}_{i}+b\right) \geq 1 ~~~~~\text { for all} ~~~ i
 $$
   
-Usually, it is confusing to have a fixed threshold, "1", in the constraint.  To see the origin of this, we define our optimization problem as
+Usually, it is confusing to have a fixed threshold, 1, in the constraint.  To see the origin of this, we define our optimization problem as
 
 $$
 \operatorname{argmax}\left(\mathbf{w}^{*}, b^{*}\right)~~ m ~~~~~\text {such that } ~~~~~ y_{i}(\mathbf{w} \cdot \mathbf{x}_{i}+b) \geq m.
@@ -11907,13 +11986,16 @@ library(e1071)
 
 # Sample data - Perfectly separated
 set.seed(1)
-x <- matrix(rnorm(20*2), ncol = 2)
-y <- c(rep(-1,10), rep(1,10))
-x[y==1,] <- x[y==1,] + 2
-dat <- data.frame(x=x, y=as.factor(y))
+x <- matrix(rnorm(20 * 2), ncol = 2)
+y <- c(rep(-1, 10), rep(1, 10))
+x[y == 1, ] <- x[y == 1, ] + 2
+dat <- data.frame(x = x, y = as.factor(y))
 
 # Support Vector Machine model
-mfit <- svm(y~., data = dat, kernel = "linear", scale = FALSE)
+mfit <- svm(y ~ .,
+            data = dat,
+            kernel = "linear",
+            scale = FALSE)
 summary(mfit)
 ```
 
@@ -11940,7 +12022,10 @@ summary(mfit)
 ```
 
 ```r
-plot(mfit, dat, grid = 200, col = c("lightgray", "lightpink"))
+plot(mfit,
+     dat,
+     grid = 200,
+     col = c("lightgray", "lightpink"))
 ```
 
 <img src="14-SVM_files/figure-html/sv7-1.png" width="672" />
@@ -11953,7 +12038,7 @@ What if we have cases like,
 
 <img src="14-SVM_files/figure-html/sv8-1.png" width="672" />
 
-In the first plot, although the orange boundary would perfectly separates the classes, it would be less "generalizable" (i.e., more specific to the train data means more prediction errors) than the blue boundary.  In the second plot, there doesn't exist a linear boundary without an error.  **If we can tolerate a mistake**, however, the blue line can be used as a separating boundary.  In both cases the blue lines could be the solution with some kind of "tolerance" level.  It turn out that, if we are able to introduce this "error tolerance" to our optimization problem described in the perfectly separable case, we can make the "Optimal Separating Classifier" as a trainable model by tuning the "error tolerance", which can be our hyperparameter.   This is exactly what we will do:
+In the first plot, although the orange boundary would perfectly separates the classes, it would be less "generalizable" (i.e., more specific to the train data means more prediction errors) than the blue boundary.  In the second plot, there doesn't exist a linear boundary without an error.  **If we can tolerate a mistake**, however, the blue line can be used as a separating boundary.  In both cases the blue lines could be the solution with some kind of "tolerance" level.  It turns out that, if we are able to introduce this "error tolerance" to our optimization problem described in the perfectly separable case, we can make the "Optimal Separating Classifier" as a trainable model by tuning the "error tolerance", which can be our hyperparameter.   This is exactly what we will do:
 
 $$
 \operatorname{argmin}\left(\mathbf{w}^{*}, b^{*}\right) \|\mathbf{w}\| ~~~~~~~\text {such that } ~~~~~~~ y_{i}(\mathbf{w} \cdot \mathbf{x}_{i}+b) \geq 1
@@ -11987,25 +12072,38 @@ This approach is also called *soft margin classification* or *support vector cla
 
 ```r
 set.seed(1)
-x <- matrix(rnorm(20*2), ncol = 2)
-y <- c(rep(-1,10), rep(1,10))
-x[y==1,] <- x[y==1,] + 1
-dt <- data.frame(x=x, y=as.factor(y))
+x <- matrix(rnorm(20 * 2), ncol = 2)
+y <- c(rep(-1, 10), rep(1, 10))
+x[y == 1, ] <- x[y == 1, ] + 1
+dt <- data.frame(x = x, y = as.factor(y))
 
 # C = 10
-mfit10 <- svm(y~., data = dt, kernel = "linear",
-              scale = FALSE, cost = 10)
-plot(mfit10, dat, grid = 200,
-     col = c("lightgray", "lightpink"), 
-     main = "C = 10")
+mfit10 <- svm(
+  y ~ .,
+  data = dt,
+  kernel = "linear",
+  scale = FALSE,
+  cost = 10
+)
+
+plot(
+  mfit10,
+  dat,
+  grid = 200,
+  col = c("lightgray", "lightpink"),
+  main = "C = 10"
+)
 ```
 
 <img src="14-SVM_files/figure-html/sv9-1.png" width="672" />
 
 ```r
 # Tuning C
-tuned <- tune(svm, y~., data = dat, kernel = "linear",
-                 ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+tuned <- tune(svm,
+              y ~ .,
+              data = dat,
+              kernel = "linear",
+              ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
 (best <- tuned$best.model)
 ```
 
@@ -12074,10 +12172,12 @@ $$
 Which can be set in Lagrangian:
 
 $$
-\min L=1 / 2\|\mathbf{w}\|^{2}-\sum \alpha_i \left[y_i \left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right],\\
-\min L=1 / 2\|\mathbf{w}\|^{2}-\sum \alpha_i y_i \left(\mathbf{w} \cdot \mathbf{x}_i\right) + b\sum \alpha_i y_i+\sum \alpha_i, 
+\min L=0.5\|\mathbf{w}\|^{2}-\sum \alpha_i \left[y_i \left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right],\\
+\min L=0.5\|\mathbf{w}\|^{2}-\sum \alpha_i y_i \left(\mathbf{w} \cdot \mathbf{x}_i\right) + b\sum \alpha_i y_i+\sum \alpha_i, 
 $$
-with respect to $\mathbf{w},b$.  These are also called as "primal form". Hence the first order conditions are
+with respect to $\mathbf{w},b$.  These are also called as "primal forms".
+  
+Hence the first order conditions are
 
 $$
 \begin{aligned}
@@ -12092,13 +12192,13 @@ $$
 \max L\left(\alpha_{i}\right)=\sum_{i=1}^{n}\alpha_{i}-\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n}\alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)
 $$
 
-The solution to this involves computing the just the inner products of $x_{i}, x_{j}$, which the key point SVM problems.  
+The solution to this involves computing the just the inner products of $x_{i}, x_{j}$, which is the key point in SVM problems.  
 
 $$
 \alpha_{i}\left[y_{i}\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right]=0 ~~~~~\forall i
 $$
   
-From these we can see that, if $\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)>1$ (since $x_{i}$ is not on the boundary of the slab), $\alpha_{i}$ will be $0$.  Therefore, the most of the $\alpha_{i}$ 's will be zero as we have a few support vectors (on the gutters or margin). This reduces the dimensionality of the solution!
+From these we can see that, if $\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)>1$ (since $x_{i}$ is not on the boundary of the slab), $\alpha_{i}$ will be $0.$  Therefore, the most of the $\alpha_{i}$ 's will be zero as we have a few support vectors (on the gutters or margin). This reduces the dimensionality of the solution!
 
 Notice that inner products provide some measure of "similarity". The inner product between 2 vectors of unit length returns the cosine of the angle between them, which reveals how "far apart" they are.  We have seen that if they are perpendicular (completely unlike) their inner product is 0; or, if they are parallel their inner product is 1 (completely similar).
 
@@ -12110,7 +12210,9 @@ $$
   
 If two features $\mathbf{x}_{i}, \mathbf{x}_{j}$ are completely dissimilar (their dot product will be 0), they don't contribute to $L$.  Or, if they are completely alike, their dot product will be 1. In this case, suppose that both $\mathbf{x}_{i}$ and $\mathbf{x}_{j}$ predict the same output value $y_{i}$ (either $+1$ or $-1$ ). Then $y_{i} y_{j}$ is always 1, and the value of $\alpha_{i} \alpha_{j} y_{i} y_{j} \mathbf{x}_{i} \mathbf{x}_{j}$ will be positive. But this would decrease the value of $L$ (since it would subtract from the first term sum). So, the algorithm downgrades similar feature vectors that make the same prediction. On the other hand, when $x_{i}$, and $x_{j}$ make opposite predictions (i.e., predicting different classes, one is $+1$, the other $-1$) about the output value $y_{i}$, but are otherwise very closely similar (i.e., their dot product is $1$), then the product $a_{i} a_{j} y_{i} y_{j} x_{i} x$ will be negative.  Since we are subtracting it, it adds to the sum maximizing $L$. This is precisely the examples that algorithm is looking for: the critical ones that tell the two classes apart.
   
-What if the decision function is not linear as we have in the figure above? What transform would separate these?  The idea in SVM is to obtain a nonlinear separation by mapping the data to a higher dimensional space. Remember the function we want to optimize: $L=\sum \alpha_{i}-1 / 2 \sum \alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ where $\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ is the dot product of the two feature vectors. We can transform them, for example, by $\phi$ that is a quadratic polynomial.  As we discussed earlier, however, we don't know the function explicitly.  And worse, as the we increase the degree of polynomial, the optimization becomes computational impossible.
+What if the decision function is not linear as we have in the figure above? What transform would separate these?  The idea in SVM is to obtain a nonlinear separation by mapping the data to a higher dimensional space.
+  
+Remember the function we want to optimize: $L=\sum \alpha_{i}-1 / 2 \sum \alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ where $\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ is the dot product of the two feature vectors. We can transform them, for example, by $\phi$ that is a quadratic polynomial.  As we discussed earlier, however, we don't know the function explicitly.  And worse, as we increase the degree of polynomial, the optimization becomes computational impossible.
 
 If there is a "kernel function" $K$ such that $K\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)=\phi\left(\mathbf{x}_{i}\right) \cdot \phi\left(\mathbf{x}_{j}\right)$, then we do not need to know or compute $\phi$ at all.  That is, the kernel function defines inner products in the transformed space. Or, it defines similarity in the transformed space.
 
@@ -12131,9 +12233,7 @@ K(\mathbf{x}, \mathbf{y})=\tanh (\kappa \mathbf{x} \cdot \mathbf{y}-\delta)
 \end{gathered}
 $$
   
-$1^{\text {st }}$ is polynomial (includes $\mathrm{x} \cdot \mathrm{x}$ as special case)
-$2^{\text {nd }}$ is radial basis function (Gaussian)
-$3^{\text {rd }}$ is sigmoid (Neural Net activation function)
+The first one is polynomial (includes $\mathrm{x} \cdot \mathrm{x}$ as special case); the second one is radial basis function (Gaussian), the last one is sigmoid function.  
 
 Here is the SVM application to our data:
 
@@ -12215,6 +12315,8 @@ abline(a = 0, b = 1)
   
 ## Application with SVM
 
+Let's finsh this chapter with an example:
+
 
 ```r
 train <- read.csv("adult_train.csv", header = FALSE)
@@ -12253,52 +12355,38 @@ tbl
 ind <- which(data$NativeCountry==" Holand-Netherlands")
 data <- data[-ind, ]
 
-#Converting chr to factor with `apply()` family
+#Converting chr to factor
 df <- data
 df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)],
                                        as.factor)
-
-str(df)
 ```
 
-```
-## 'data.frame':	32560 obs. of  15 variables:
-##  $ Age          : int  39 50 38 53 28 37 49 52 31 42 ...
-##  $ WorkClass    : Factor w/ 9 levels " ?"," Federal-gov",..: 8 7 5 5 5 5 5 7 5 5 ...
-##  $ fnlwgt       : int  77516 83311 215646 234721 338409 284582 160187 209642 45781 159449 ...
-##  $ Education    : Factor w/ 16 levels " 10th"," 11th",..: 10 10 12 2 10 13 7 12 13 10 ...
-##  $ EducationNum : int  13 13 9 7 13 14 5 9 14 13 ...
-##  $ MaritalStatus: Factor w/ 7 levels " Divorced"," Married-AF-spouse",..: 5 3 1 3 3 3 4 3 5 3 ...
-##  $ Occupation   : Factor w/ 15 levels " ?"," Adm-clerical",..: 2 5 7 7 11 5 9 5 11 5 ...
-##  $ Relationship : Factor w/ 6 levels " Husband"," Not-in-family",..: 2 1 2 1 6 6 2 1 2 1 ...
-##  $ Race         : Factor w/ 5 levels " Amer-Indian-Eskimo",..: 5 5 5 3 3 5 3 5 5 5 ...
-##  $ Sex          : Factor w/ 2 levels " Female"," Male": 2 2 2 2 1 1 1 2 1 2 ...
-##  $ CapitalGain  : int  2174 0 0 0 0 0 0 0 14084 5178 ...
-##  $ CapitalLoss  : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ HoursPerWeek : int  40 13 40 40 40 40 16 45 50 40 ...
-##  $ NativeCountry: Factor w/ 41 levels " ?"," Cambodia",..: 39 39 39 39 6 39 23 39 39 39 ...
-##  $ IncomeLevel  : Factor w/ 2 levels " <=50K"," >50K": 1 1 1 1 1 1 1 2 2 2 ...
-```
-
-When we use the whole data it takes very long time and memory.  A much better way to deal with this issue is to not use all of the data.  This is because, most data pints will be redundant from the SVM's perspective.  Remember,  SVM only benefits from having more data near the decision boundaries. Therefore, we can randomly select, say, 10% of the training data (it should be done multiple times to see its consistency), and understand what its performance looks like:
+When we use the whole data it takes very long time and memory.  A much better way to deal with this issue is to not use all of the data.  This is because, most data points will be redundant from the SVM's perspective.  Remember,  SVM only benefits from having more data near the decision boundaries. Therefore, we can randomly select, say, 10% of the training data (it should be done multiple times to see its consistency), and understand what its performance looks like:
 
 
 ```r
 # Initial Split 90-10% split
 set.seed(123)
-ind <- sample(nrow(df), nrow(df)*0.90, replace = FALSE)
-train <- df[ind, ]
-test <- df[-ind, ]
+ind <- sample(nrow(df), nrow(df) * 0.90, replace = FALSE)
+train <- df[ind,]
+test <- df[-ind,]
 
 # Using 10% of the train
 set.seed(321)
-ind <- sample(nrow(train), nrow(train)*0.10, replace = FALSE)
-dft <- train[ind, ]
+ind <- sample(nrow(train), nrow(train) * 0.10, replace = FALSE)
+dft <- train[ind,]
 
 # You should check different kernels with a finer grid
-tuning <- tune(svm, IncomeLevel~., data=dft, kernel="radial",
-                 ranges = list(cost = c(0.1, 1, 10, 100),
-                               gamma = c(0.05, 0.5, 1, 2, 3, 4)))
+tuning <- tune(
+  svm,
+  IncomeLevel ~ .,
+  data = dft,
+  kernel = "radial",
+  ranges = list(
+    cost = c(0.1, 1, 10, 100),
+    gamma = c(0.05, 0.5, 1, 2, 3, 4)
+  )
+)
 tuning$best.model
 ```
 
@@ -12404,23 +12492,20 @@ Unfortunately, there is no direct way to get information on predictors with SVM,
 
 # Artificial Neural Networks
 
-Artificial neural networks (ANNs) are a type of machine learning model that are inspired by the structure and function of the human brain. They consist of interconnected units called artificial neurons or nodes, which are organized into layers. The concept of artificial neural networks dates back to the 1940s, when Warren McCulloch and Walter Pitts ([1944](https://link.springer.com/article/10.1007/BF02478259)) proposed a model of the neuron as a simple threshold logic unit. In the 1950s and 1960s, researchers began developing more complex models of the neuron and exploring the use of neural networks for tasks such as pattern recognition and machine translation. However, these early efforts were largely unsuccessful due to the limited computational power of the time.
+Artificial neural networks (ANNs) are a type of machine learning model that are inspired by the structure and function of the human brain. They consist of interconnected units called artificial neurons or nodes, which are organized into layers. The concept of artificial neural networks dates back to the 1940s, when Warren McCulloch and Walter Pitts ([1943](https://link.springer.com/article/10.1007/BF02478259)) proposed a model of the neuron as a simple threshold logic unit. In the 1950s and 1960s, researchers began developing more complex models of neurons and exploring the use of neural networks for tasks such as pattern recognition and machine translation. However, these early efforts were largely unsuccessful due to the limited computational power of the time.
 
 It wasn't until the 1980s and 1990s that significant progress was made in the development of artificial neural networks, thanks to advances in computer technology and the availability of larger and more diverse datasets. In [1986](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf), Geoffrey Hinton and his team developed the backpropagation algorithm, which revolutionized the field by allowing neural networks to be trained more efficiently and accurately.  Since then, artificial neural networks have been applied to a wide range of tasks, including image and speech recognition, natural language processing, and even playing games like chess and Go. They have also been used in a variety of fields, including finance, healthcare, and transportation.  Today, artificial neural networks are an important tool in the field of machine learning, and continue to be an active area of research and development.
 
-There have been many influential works published in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential papers in the history of ANNs:
+There have been many influential works accomplished in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential works in the history of ANNs:
   
-- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt (1957): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
+- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt (1958): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
 - [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams (1986): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
 - [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. (1998): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
 - [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton (2015): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
-- [Deep Learning](https://www.deeplearningbook.org) by Ian Goodfellow et al. (2016): This book provided a comprehensive overview of the state of the art in deep learning, which is a type of ANN with multiple layers of interconnected nodes. The book helped to popularize deep learning and contributed to its widespread adoption in a variety of fields.  
-  
-These are just a few examples of the many influential papers that have been published in the field of ANNs. There have been many other important contributions to the field as well, and the field continues to evolve and grow as new technologies and techniques are developed.
-  
-Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks. Are Neural Networks is better than Support Vector Machines?  The post by [Igor F.](https://stats.stackexchange.com/questions/510052/are-neural-networks-better-than-svms) gives a nice starting example.
-  
+
 ## Neural Network - the idea
+Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks.  
+
 Let's start with a predictive model with a single input (covariate).  The simplest model could be a linear model: 
 
 $$
@@ -12433,7 +12518,7 @@ $$
 y \approx \alpha+\beta_1 x+\beta_2 x^2+\beta_3 x^3+\ldots = \alpha+\sum_{m=1}^M \beta_m x^m
 $$
 
-We can see the first simple ANN as nonlinear functions of linear combinations:
+The polynomial regression is based on fixed components, or bases: $x, x^2, x^3, \ldots, x^M.$  The artificial neural net replaces these fixed components with adjustable ones or bases: $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $\ldots, f\left(\alpha_M+\delta_M x\right).$  We can see the first simple ANN as nonlinear functions of linear combinations:
 
 $$
 y \approx \alpha+\beta_1 f\left(\alpha_1+\delta_1 x\right)+\beta_2 f\left(\alpha_2+\delta_2 x\right)+\beta_3 f\left(\alpha_3+\delta_3 x\right)+\ldots\\
@@ -12488,8 +12573,8 @@ par(mfrow=c(1,4), oma = c(0,0,2,0))
 plot(x, first, ylab = "y", col = "pink", main = "x")
 plot(x, second, ylab = "y", col = "orange", main = expression(x^2))
 plot(x, third, ylab = "y", col = "green", main = expression(x^3))
-plot(x, y, ylab="y", col = "grey", 
-     main = expression(alpha + bx + bx^2 + bx^3))
+plot(x, y, ylab="y", col = "grey",
+     main = expression(y == alpha + beta[1]*x + beta[2]*x^2 + beta[3]*x^3))
 lines(x, yhat, col = "red", lwd = 3)
 mtext("Fixed Components",
       outer=TRUE, cex = 1.5, col="olivedrab")
@@ -12497,9 +12582,7 @@ mtext("Fixed Components",
 
 <img src="15-NN_files/figure-html/nn3-1.png" width="672" />
 
-The polynomial regression is based on fixed components, or bases: $x, x^2, x^3, \ldots, x^M.$  The artificial neural net replaces these fixed components with adjustable ones or bases: $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $\ldots, f\left(\alpha_M+\delta_M x\right).$  
-  
-Each component is more flexible than a fixed component.  They are adjustable with tunable internal parameters. They can express several shapes, not just one (fixed) shape. Hence, adjustable components enable to capture complex models with fewer components (smaller M).  
+The artificial neural net replaces the fixed components in the polynomial regression with adjustable ones, $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $\ldots, f\left(\alpha_M+\delta_M x\right)$ that are more flexible.  They are adjustable with tunable internal parameters. They can express several shapes, not just one (fixed) shape. Hence, adjustable components enable to capture complex models with fewer components (smaller M).  
 
 Let's replace those fixed components $x, x^2, x^3$ in our polynomial regression with $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $f\left(\alpha_3+\delta_3 x\right).$  
 
@@ -12509,7 +12592,7 @@ library(neuralnet)
 set.seed(2)
 nn <- neuralnet(y ~ x, data = df, hidden = 3, threshold = 0.05) 
 yhat <- compute(nn, data.frame(x))$net.result
-plot(x, y, main="Neural Networks: M=3")
+plot(x, y, main="Neural Networks: M = 3")
 lines(x, yhat, col="red", lwd = 3)
 ```
 
@@ -12575,9 +12658,9 @@ n3 <- nn$weights[[1]][[1]][,3]
 f3 <- nn$act.fct(X%*%n3)
 
 par(mfrow=c(1,3), oma = c(0,0,2,0))
-plot(x, f1, col = "pink", main = expression(f(a1 + b1x)))
-plot(x, f2, col = "orange", main = expression(f(a2 + b2x)))
-plot(x, f3, col = "green", main = expression(f(a3 + b3x)))
+plot(x, f1, col = "pink", main = expression(f(alpha[1] + beta[1]*x)))
+plot(x, f2, col = "orange", main = expression(f(alpha[2] + beta[2]*x)))
+plot(x, f3, col = "green", main = expression(f(alpha[3] + beta[3]*x)))
 mtext("Flexible Components",
       outer=TRUE, cex = 1.5, col="olivedrab")
 ```
@@ -12592,7 +12675,7 @@ $$
 \frac{1}{1+e^{-(2.504890-5.700564x)}}\times -32.173264
 $$
 
-Fianlly we will add these with a "bias", the intercept:
+Finally, we will add these with a "bias", the intercept:
 
 $$
 2.407654 + \\
@@ -12605,7 +12688,7 @@ Here are the results:
 
 
 ```r
-# From Nodes to sink (Y) ##
+# From Nodes to sink (Y)
 f12 <- f1*nn$weights[[1]][[2]][2]
 f22 <- f2*nn$weights[[1]][[2]][3]
 f23 <- f3*nn$weights[[1]][[2]][4]
@@ -12620,20 +12703,20 @@ lines(x, yhat, col="red", lwd = 3)
 
 ## Backpropagation
 
-In 1986, [Rumelhart et al.](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) found a way to train neural networks, with the backpropagation algorithm. Today, we would call it a Gradient Descent using reverse-mode autodiff.  Backpropagation is an algorithm used to train neural networks by adjusting the weights and biases of the network to minimize the cost function.  Suppose we have a simple neural network as follows:
+In 1986, [Rumelhart et al.](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) found a way to train neural networks with the backpropagation algorithm. Today, we would call it a Gradient Descent using reverse-mode autodiff.  Backpropagation is an algorithm used to train neural networks by adjusting the weights and biases of the network to minimize the cost function.  Suppose we have a simple neural network as follows:
 
 <img src="png/ANN1.png" width="65%" height="60%" />
 
 The first layer is the source layer (with $X$). The second layer is called as hidden layer with three "neurons" each of which has an activation function ($A$).  The last layer is the "sink" or output layer. First, let's define a loss function, MSPE:  
 
 $$
-\text{MSPE}=\frac{1}{n} \sum_{i=1}^n\left(y_i-p\left(\mathbf{x}_i\right)\right)^2
+\text{MSPE}=\frac{1}{n} \sum_{i=1}^n\left(y_i-\hat{y}\right)^2
 $$
   
 And we want to solve: 
   
 $$
-\omega^{\star}=\operatorname{argmin}\left\{\frac{1}{n} \sum_{i=1}^n\left(y_i-p\left(\mathbf{x}_i\right)\right)^2\right\}
+\omega^{\star}=\operatorname{argmin}\left\{\frac{1}{n} \sum_{i=1}^n\left(y_i-\hat{y}\right)^2\right\}
 $$
   
 To compute the gradient of the error with respect to a weight $w$ or a bias $b$, we use the chain rule:  
@@ -12641,9 +12724,17 @@ To compute the gradient of the error with respect to a weight $w$ or a bias $b$,
 $$
 \frac{\partial \text{MSPE}}{\partial w} =\frac{\partial \text{MSPE}}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial z}\frac{\partial z}{\partial w}
 $$
-Remember, $\hat{y} = f(x)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-(\alpha+wx)}}$, where $w$ is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network.  This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it.  However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  
+Remember, 
 
-In a regular network, the number of parameters is very large and it gets larger even in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the artificial intelligence engineering.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.       
+$$
+\hat{y} = f(x)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-(\alpha+wx)}},
+$$
+  
+where $w$ is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network.  This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it.  
+  
+However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  
+
+In a regular network, the number of parameters is usually very large and it gets larger even in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.       
 
 ## Neural Network - More inputs
 
@@ -12659,9 +12750,9 @@ By adding nonlinear functions of linear combinations with $M>1$, we have seen th
 
 <img src="png/ANN2.png" width="65%" height="60%" />
 
-Let's have an application using a Mincer equation and the data (SPS 1985 - cross-section data originating from the May 1985 Current Population Survey by the US Census Bureau) from `AER` package.  
+Let's have an application using a Mincer equation and the data (SPS 1985 - cross-section data originating from the May 1985 Current Population Survey by the US Census Bureau) from the `AER` package.  
 
-Before we start, there are few important pre-processing steps to complete.  First, ANN are inefficient when the data are not scaled.  The reason is backpropagation.  Since ANN use gradient descent, the different scales in features will cause different step sizes. Scaling the data before feeding it to the model enables the steps in gradient descent updated at the same rate for all the features. Second, indicator predictors should be included in the input matrix by dummy-coding. Note that, the standardization should avoid those indicator variables.  Finally, the formula for the model needs to be constructed to initialize the algorithm.  Let's see all of these pre-processing steps below:  
+Before we start, there are few important pre-processing steps to complete.  First, ANN are inefficient when the data are not scaled.  The reason is backpropagation.  Since ANN use gradient descent, the different scales in features will cause different step sizes. Scaling the data before feeding it to the model enables the steps in gradient descent updated at the same rate for all the features. Second, indicator predictors should be included in the input matrix by dummy-coding. Finally, the formula for the model needs to be constructed to initialize the algorithm.  Let's see all of these pre-processing steps below:  
 
 
 ```r
@@ -12708,7 +12799,6 @@ for(i in 1:10){
   mse.test[i,3] <- mean((test$wage - predict(fit.nn2, test))^2)
   mse.test[i,4] <- mean((test$wage - predict(fit.nn3, test))^2)
   mse.test[i,5] <- mean((test$wage - predict(fit.nn4, test))^2)
-  
 }
 
 colMeans(mse.test)
@@ -12720,7 +12810,7 @@ colMeans(mse.test)
 
 This experiment alone shows that a **linear** Mincer equation (with `I(expreince^2)`) is a much better predictor than ANN.  As the complexity of ANN rises with more neurons, the likelihood that ANN overfits goes up, which is the case in our experiment.  In general, linear regression may be a good choice for simple, low-dimensional datasets with a strong linear relationship between the variables, while ANNs may be better suited for more complex, high-dimensional datasets with nonlinear relationships between variables.  
 
-Overfitting can be a concern when using ANNs for prediction tasks. Overfitting occurs when a model is overly complex and has too many parameters relative to the size of the training data, leading it to fit the noise in the training data rather than the underlying pattern. As a result, the model may perform well on the training data but poorly on new, unseen data.  One way to mitigate overfitting in ANNs is to use techniques such as regularization, which imposes constraints on the model to prevent it from becoming too complex. Another approach is to use techniques such as early stopping, which involves interrupting the training process when the model starts to overfit the training data.  
+Overfitting can be a concern when using ANNs for prediction tasks. Overfitting occurs when a model is overly complex and has too many parameters relative to the size of the training data, which results in fitting the noise in the training data rather than the underlying pattern. As a result, the model may perform well on the training data but poorly on new, unseen data.  One way to mitigate overfitting in ANNs is to use techniques such as regularization, which imposes constraints on the model to prevent it from becoming too complex. Another approach is to use techniques such as early stopping, which involves interrupting the training process when the model starts to overfit the training data.  
 
 ## Deep Learning
 
@@ -12730,7 +12820,7 @@ $$
 y \approx \alpha+\sum_{m=1}^M \beta_m f\left(\alpha_m^{(1)}+\underbrace{\sum_{p=1}^P f\left(\alpha_p^{(2)}+\textbf{X} \delta_p^{(2)}\right)}_{\text {it replaces } \textbf{X}} \delta_m^{(1)}\right)
 $$
    
-Before having an application, note that there are many packages that offer ANN implementations in R and even more with Python. For example, CRAN hosts more than 80 packages related to neural network modeling. Above, we just saw one example with `neuralnet`.  The work by [Mahdi et al, 2021](https://www.inmodelia.com/exemples/2021-0103-RJournal-SM-AV-CD-PK-JN.pdf) surveys and ranks these packages for their accuracy, reliability, and ease-of-use.  
+Before having an application, we should note the number of available packages that offer ANN implementations in R and with Python. For example, CRAN hosts more than 80 packages related to neural network modeling. Above, we just saw one example with `neuralnet`.  The work by [Mahdi et al, 2021](https://www.inmodelia.com/exemples/2021-0103-RJournal-SM-AV-CD-PK-JN.pdf) surveys and ranks these packages for their accuracy, reliability, and ease-of-use.  
   
 
 ```r
@@ -12744,7 +12834,6 @@ for(i in 1:10){
   
   # Models
   fit.nn22 <- neuralnet(frmnn, data = train, hidden = c(3,3), threshold = 0.05)
- 
   mse.test[i] <- mean((test$wage - predict(fit.nn22, test))^2)
  }
 
@@ -12755,7 +12844,7 @@ mean(mse.test)
 ## [1] 1.211114
 ```
 
-Increasing overfitting!  Here is the plot for our DNN:  
+The overfitting gets worse with an increased complexity!  Here is the plot for our DNN:  
 
 
 ```r
@@ -12774,10 +12863,10 @@ plotnet(fit.nn22)
 
 <img src="15-NN_files/figure-html/nn13-1.png" width="672" />
   
-Training DNN is an important concept and we leave it to the end. As we see, deep neural networks can model complex non-linear relationships.
-With very complex problems, such as detecting hundreds of types of objects in high-resolution images, we need to train deeper NN, perhaps with 10 layers or more each with hundreds of neurons.  Therefore, training a fully-connected DNN is a very slow process facing a severe risk of overfitting with millions of parameters.  Moreover, gradients problems make lower layers very hard to train.  Solutions: Convolutional Neural Networks (CNN or ConvNets) and Recurrent Neural Networks (RNN).  
+Training DNN is an important concept and we leave it to Chapter 25. As we see, deep neural networks can model complex non-linear relationships.
+With very complex problems, such as detecting hundreds of types of objects in high-resolution images, we need to train deeper NNs, perhaps with 10 layers or more each with hundreds of neurons.  Therefore, training a fully-connected DNN is a very slow process facing a severe risk of overfitting with millions of parameters.  Moreover, gradients problems make lower layers very hard to train.  A solution to these problems came with a different NN architect such as convolutional Neural Networks (CNN or ConvNets) and Recurrent Neural Networks (RNN), which we will see in Chapter 25.  
 
-Before moving on with these new DNN solutions, we should ask if we can obtain any information about the relationship between the prediction and predictors.   The interpretability of an artificial neural network (ANN), which is known to be a "blackbox" method, can be an issue regardless of the complexity of the network. However, it is generally easier to understand the decisions made by a simple ANN than by a more complex one.  
+Moreover, the interpretability of an artificial neural network (ANN), which is known to be a "blackbox" method, can be an issue regardless of the complexity of the network. However, it is generally easier to understand the decisions made by a simple ANN than by a more complex one.  
 
 A simple ANN might have only a few layers and a relatively small number of neurons, making it easier to understand how the input data is processed and how the final output is produced. However, even a simple ANN can still be a black box in the sense that the specific calculations and decisions made by the individual neurons within the network are not fully visible or understood.  On the other hand, a more complex ANN with many layers and a large number of neurons can be more difficult to interpret, as the internal workings of the network are more complex and harder to understand. In these cases, it can be more challenging to understand how the ANN is making its decisions or to identify any biases or errors in its output. Overall, the interpretability of an ANN depends on the complexity of the network and the specific task it is being used for. Simple ANNs may be more interpretable, but even they can be considered black boxes to some extent.  
 
@@ -12786,7 +12875,7 @@ Here are a few resources that provide information about the interpretability of 
 - [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar is a online book that provides an overview of interpretability in machine learning, including techniques for interpreting ANNs. 
 - [Interpretability of Deep Neural Networks](https://ieeexplore.ieee.org/document/8397411) by Chakraborty is a survey paper that discusses the interpretability of deep neural networks and presents an overview of the various techniques and approaches that have been developed to improve their interpretability.  
 
-Before concluding this section we apply DNN to a classification problem using the same data that we have in Section 14.4.4:  
+Before concluding this section we apply DNN to a classification problem using the same data that we have in Chapter 14.4.4.  
 
 
 ```r
@@ -12824,8 +12913,9 @@ ddf <- model.matrix(~.-1, data= dff, contrasts.arg =
 ddf <- data.frame(Sales = df$Sales, ddf)
 
 # Formula
-w.ind <- which(colnames(ddf)=="Sales")
-frm <- as.formula(paste("Sales~", paste(colnames(ddf[-w.ind]), collapse='+')))
+w.ind <- which(colnames(ddf) == "Sales")
+frm <- as.formula(paste("Sales~", paste(colnames(ddf[-w.ind]),
+                                        collapse = '+')))
 ```
 
 
@@ -12859,7 +12949,6 @@ for (i in 1:n) {
   pred_rocr2 <- ROCR::prediction(phat.dnn, test$Sales)
   auc_ROCR2 <- ROCR::performance(pred_rocr2, measure = "auc")
   AUC2[i] <- auc_ROCR2@y.values[[1]]
-  
 }
 
 (c(mean(AUC1), mean(AUC2)))
@@ -12869,12 +12958,14 @@ for (i in 1:n) {
 ## [1] 0.9471081 0.9186785
 ```
 
-Again the results are not very convincing to use DNN in this example.  Let's have a more complex task with [Red Wine](https://www.kaggle.com/datasets/piyushgoyal443/red-wine-dataset?resource=download) dataset from Kaggle ([Cortez et.al, 2009](https://www.sciencedirect.com/science/article/abs/pii/S0167923609001377)).  Our job us to use 11 attributes to classify each wine 
+Again the results are not very convincing to use DNN in this example.
+   
+Let's have a more complex task with the [Red Wine](https://www.kaggle.com/datasets/piyushgoyal443/red-wine-dataset?resource=download) dataset from Kaggle ([Cortez et.al, 2009](https://www.sciencedirect.com/science/article/abs/pii/S0167923609001377)).  Our job us to use 11 attributes to classify each wine. 
   
 
 ```r
 dfr <- read.csv("wineQualityReds.csv", header = TRUE)
-dfr <- dfr[,-1] # removing the index
+dfr <- dfr[, -1] # removing the index
 table(dfr$quality)
 ```
 
@@ -12886,7 +12977,7 @@ table(dfr$quality)
 
 ```r
 # Let's remove the outlier qualities:
-indo <- which(dfr$quality=="3"|dfr$quality=="8")
+indo <- which(dfr$quality == "3" | dfr$quality == "8")
 dfr <- dfr[-indo, ]
 dfr$quality <- as.factor(dfr$quality)
 table(dfr$quality)
@@ -12898,18 +12989,24 @@ table(dfr$quality)
 ##  53 681 638 199
 ```
 
-Let's scale it and get the formula
+Then scale the data and get the formula,
 
 
 ```r
 # Scaling and Dummy coding
-dfr[,sapply(dfr, is.numeric)] <- scale((dfr[, sapply(dfr, is.numeric)]))
-ddf <- model.matrix(~quality -1, data = dfr)
-w.ind <- which(colnames(dfr)=="quality")
-dfr <- dfr[,-w.ind] # removing 'quality`
+dfr[, sapply(dfr, is.numeric)] <-
+  scale((dfr[, sapply(dfr, is.numeric)]))
+
+ddf <- model.matrix( ~ quality - 1, data = dfr)
+w.ind <- which(colnames(dfr) == "quality")
+dfr <- dfr[, -w.ind] # removing 'quality`
 df <- cbind(ddf, dfr)
-frm <- as.formula(paste(paste(colnames(ddf), collapse='+'), "~", 
-                        paste(colnames(dfr), collapse='+')))
+
+frm <- as.formula(paste(
+  paste(colnames(ddf), collapse = '+'),
+  "~",
+  paste(colnames(dfr), collapse = '+')
+))
 frm
 ```
 
@@ -12923,12 +13020,19 @@ And, our simple DNN application
 
 
 ```r
-ind <- sample(nrow(df), nrow(df)*.7)
-train <- df[ind,]
-test <- df[-ind,]
+ind <- sample(nrow(df), nrow(df) * .7)
+train <- df[ind, ]
+test <- df[-ind, ]
 
-fit.nn <- neuralnet(frm, data = train, hidden = c(3,2), threshold = 0.05,
-                       linear.output = FALSE, err.fct = "ce")
+fit.nn <-
+  neuralnet(
+    frm,
+    data = train,
+    hidden = c(3, 2),
+    threshold = 0.05,
+    linear.output = FALSE,
+    err.fct = "ce"
+  )
 
 plot(fit.nn, rep = "best")
 ```
@@ -12956,6 +13060,7 @@ head(phat)
 ```
 
 ```r
+# Assigning label by selecting the highest phat
 label.hat <- t(apply(phat, 1, function(x) as.numeric(x == max(x))))
 head(label.hat)
 ```
@@ -12990,17 +13095,11 @@ table(predicted, actual)
 ##   quality7        1        0       11       18
 ```
 
-This is just an example and the results are not reflecting a trained model.  Advance DNN applications with a proper training requires a longer time and more capable machines.  We can do a grid search on different number of hidden layers and neurons.  However, a large datasets and more complex DNNs need better applications, like, `Keras` that uses GPU on Linux systems allowing a much better efficiency in training. So far, we have used the `neuralnet` package.  There are several packages in R that are capable of implementing and training artificial neural networks (ANNs), and the most suitable one for your needs will depend on your specific requirements and preferences. Some popular packages for implementing ANNs in R include:
-  
-- `nnet`: This package is specifically designed for training and using feedforward neural networks, which are a type of ANN that consists of layers of interconnected "neurons" that process and transmit information. It provides functions for building and training feedforward networks, and for making predictions with them. 
-- `caret`: As we've seen before, this is a general-purpose package for building and evaluating machine learning models, including ANNs. It provides functions for building and training ANNs, and for tuning their hyperparameters using techniques like cross-validation. It also offers a wide range of functions for preprocessing and analyzing data, and for evaluating the performance of trained models. 
-- `deepnet`: This package is designed for building and training deep learning models, which are a type of ANN with many layers that are capable of learning complex patterns in data. It provides functions for building and training deep learning models using a variety of techniques, including backpropagation, autoencoders, and convolutional neural networks (CNNs). 
+This is just an example and the results are not reflecting a trained model.
 
-Ultimately, the best package for ANNs in R will depend on your specific needs and requirements. If you are looking for a powerful and flexible package for building and training ANNs, `neuralnet` or `deepnet` may be good options. If you just need a simple and easy-to-use package for training feedforward networks and making predictions, `nnet` may be a good choice. If you want a general-purpose package that can handle a wide range of machine learning tasks, including ANNs, `caret` may be a good option.
+Advance DNN applications with a proper training requires a longer time and more capable machines.  We can do a grid search on different number of hidden layers and neurons.  However, a large datasets and more complex DNNs need better applications, like, `Keras` that uses GPU with capable operating systems allowing a much better efficiency in training. So far, we have used the `neuralnet` package.  There are several packages in R that are also capable of implementing and training artificial neural networks. The most suitable one for our needs will depend on our specific requirements and preferences.  For a powerful and flexible package for building and training ANNs, `neuralnet` or `deepnet` may be good options. When we just need a simple and easy-to-use package for training feedforward networks and making predictions, `nnet` may be another good choice. If we want a general-purpose package that can handle a wide range of machine learning tasks, including ANNs, `caret` would be a good option.  
 
-Deep neural networks (DNNs) are neural networks with many layers, which can be difficult to train because of the large number of parameters that need to be optimized. This can make the training process computationally intensive and prone to overfitting.  Convolutional neural networks (CNNs), on the other hand, are specifically designed to process data that has a grid-like structure, such as an image. One key aspect of CNNs is that they use convolutional layers, which apply a set of filters to the input data and produce a set of transformed feature maps. These filters are able to detect specific features in the input data, such as edges, corners, or textures, and are able to share these features across the input data. This means that the number of parameters in a CNN is typically much smaller than in a DNN, which makes the model easier to train and less prone to overfitting.
-
-Overall, CNNs are well-suited for tasks such as image classification, object detection and, speech recognition. We will not cover the details of CNN here.  There are several packages available in R for working with CNNs. `Keras` running on `TensowFlow` is one of the most efficient engines in building artificial neural networks.
+Deep neural networks (DNNs) are neural networks with many layers, which can be difficult to train because of the large number of parameters that need to be optimized. This can make the training process computationally intensive and prone to overfitting.  Convolutional neural networks (CNNs), on the other hand, are specifically designed to process data that has a grid-like structure, such as an image. One key aspect of CNNs is that they use convolutional layers, which apply a set of filters to the input data and produce a set of transformed feature maps. These filters are able to detect specific features in the input data, such as edges, corners, or textures, and are able to share these features across the input data. This means that the number of parameters in a CNN is typically much smaller than in a DNN, which makes the model easier to train and less prone to overfitting.  Overall, CNNs are well-suited for tasks such as image classification, object detection and, speech recognition. We will not cover the details of CNN here.  There are several packages available in R for working with CNNs. 
 
 Finally, in a deep neural network, "dropout" and "regularization" are techniques used to prevent overfitting.  Dropout is a regularization technique that randomly drops out, or removes, a certain percentage of neurons from the network during training. This has the effect of reducing the complexity of the model, as it can't rely on any one neuron or group of neurons to make predictions. Regularization is a general term that refers to any method used to prevent overfitting in a machine learning model. There are many types of regularization techniques, which add a penalty term to the parameters of the the activation functions.
 
@@ -13015,7 +13114,7 @@ We will be back to ANN later in Section VII - Time Series.
 
 In simple regression or classification problems, we cannot train a parametric model in a way that the fitted model minimizes the out-of-sample prediction error.  We could (and did) fit the parametric models **manually** by adding or removing predictors and their interactions and polynomials.  As we have seen in earlier chapters, by dropping a variable in a regression, for example, it is possible to reduce the variance at the cost of a negligible increase in bias.  
   
-In fitting the predictive model, some of the variables used in a multiple regression model may not be well associated with the response. Keeping those "irrelevant" variables often leads to unnecessary complexity in the resulting model. Regularization or penalization is an alternative and automated fitting procedure that refers to a process that removes irrelevant variables or shrinks the magnitude of their parameters, which can yield better prediction accuracy and model interpretability by preventing overfitting.
+In fitting the predictive model, some of the variables used in a regression may not be well associated with the response. Keeping those "irrelevant" variables often leads to unnecessary complexity in the resulting model. Regularization or penalization is an alternative and automated fitting procedure that refers to a process that removes irrelevant variables or shrinks the magnitude of their parameters, which can yield better prediction accuracy and model interpretability by preventing overfitting.
 
 There are several types of regularization techniques that can be used in parametric models.  Each of these techniques adds a different type of penalty term to the objective function and can be used in different situations depending on the characteristics of the data and the desired properties of the model.  Two methods, Ridge and Lasso, are two of well-known benchmark techniques that reduce the model complexity and prevent overfitting resulting from simple linear regression. 
 
@@ -13036,7 +13135,7 @@ Although there are many sources on the subject, perhaps the most fundamental one
 
 # Ridge
 
-We know that the least squares fitting procedure is that one estimates $\beta_{0}, \beta_{1}, \ldots, \beta_{p}$ that minimize the residual sum of squares:
+The least squares fitting procedure is that one estimates $\beta_{0}, \beta_{1}, \ldots, \beta_{p}$ that minimize the residual sum of squares:
 
 $$
 \mathrm{RSS}=\sum_{i=1}^{n}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p} \beta_{j} x_{i j}\right)^{2}
@@ -13047,15 +13146,15 @@ $$
 \sum_{i=1}^{n}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p} \beta_{j} x_{i j}\right)^{2}+\lambda \sum_{j=1}^{p} \beta_{j}^{2} =\mathrm{RSS}+\lambda \sum_{j=1}^{p} \beta_{j}^{2},
 $$
 
-where $\lambda$ is the hyperparameter that can be tuned by cross-validation and grid search.  The last term, $\lambda \sum_{j} \beta_{j}^{2}$, is a constraint, which is also called shrinkage penalty.  This type of penalty is called as $\ell_{2}$.  As with Ordinary Least Squares (OLS), this cost function tries to minimize RSS but also penalizes the size of the coefficients.
+where $\lambda$ is the hyperparameter that can be tuned by cross-validation and grid search.  The last term, $\lambda \sum_{j} \beta_{j}^{2}$, is a constraint, which is also called shrinkage penalty.  This type of penalty is called as $\ell_{2}$ (L-2 penalty).  As with Ordinary Least Squares (OLS), this cost function tries to minimize RSS but also penalizes the size of the coefficients.
 
 More specifically,
   
 $$
-\hat{\beta}_\lambda^{\text {ridge }}=\operatorname{argmin}\left\{\left\|\mathbf{y}-\left(\beta_0+\mathbf{X} \beta\right)\right\|_{\ell_2}^2+\lambda\|\beta\|_{\ell_2}^2\right\}
+\hat{\beta}_\lambda^{\text {ridge }}=\operatorname{argmin}\left\{\left\|\mathbf{y}-\left(\beta_0+\mathbf{X} \beta\right)\right\|_{\ell_2}^2+\lambda\|\beta\|_{\ell_2}^2\right\},
 $$
   
-Explicit solution:
+which has the solution:
   
 $$
 \hat{\beta}_\lambda=\left(\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}\right)^{-1} \mathbf{X}^{\top} \mathbf{y}
@@ -13067,9 +13166,9 @@ where,
 - If $\lambda \rightarrow \infty, \quad \hat{\beta}_{\infty}^{\text {ridge }}=\mathbf{0}$.  
 
 
-The hyperparameter $\lambda$ controls the relative impact of the penalization on the regression coefficient estimates. When $\lambda = 0$, the cost function becomes RSS, that is the cost function of OLS and the estimations produce the least squares estimates. However, as $\lambda$ gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply a measure of the mean value of the response, when all features are zero.
+The hyperparameter $\lambda$ controls the relative impact of the penalization on the regression coefficient estimates. When $\lambda = 0$, the cost function becomes RSS (residual sum of squares), that is the cost function of OLS and the estimations, produce the least squares estimates. However, as $\lambda$ gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply the mean of the response, when all features are zero.
 
-Lets apply this to the same data we used earlier, `Hitters` from the [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/) [@ISLR_2021] package:
+Let's apply this to the same data we used earlier, `Hitters` from the [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/) [@ISLR_2021] package:
 
 
 ```r
@@ -13081,18 +13180,18 @@ data(Hitters)
 df <- Hitters[complete.cases(Hitters$Salary), ]
 ```
 
-We will use `glmnet` to fit a ridge regression. The generic function in `glmnet` is defined by 
+We will use the `glmnet` package to fit a ridge regression. The generic function in `glmnet` is defined by 
 
 $$
 \min _{\beta_0, \beta} \frac{1}{N} \sum_{i=1}^N w_i l\left(y_i, \beta_0+\beta^T x_i\right)+\lambda\left[(1-\alpha)\|\beta\|_2^2 / 2+\alpha\|\beta\|_1\right] \text {, }
 $$
-where $l\left(y_i, \eta_i\right)$ is the negative log-likelihood contribution for observation $i$ and $\alpha$ is the elastic net penalty: lasso regression ( $\alpha=1$, the default) and ridge regression $(\alpha=0)$. As before, the tuning parameter $\lambda$ controls the overall strength of the penalty.  Since the penalty shrinks (ridge) the coefficients of correlated variables or pick one of them and discard the others (lasso), the variables are supposed to be standardized, which is done by `glmnet`.
+where $l\left(y_i, \eta_i\right)$ is the negative log-likelihood contribution for observation $i$ and $\alpha$ is the elastic net penalty.   When $\alpha=1$ ( the default), the penalty term becomes $\ell_{1}$ and the resulting model is called lasso regression (least absolute shrinkage and selection operator).  When $\alpha=1$, the penalty term becomes $\ell_{2}$ and the resulting model is called ridge regression (some authors use the term Tikhonov–Phillips regularization). As before, the tuning parameter $\lambda$ controls the overall strength of the penalty.  Since the penalty shrinks the coefficients of correlated variables (in Ridge) or pick one of them and discard the others (in Lasso), the variables are supposed to be standardized, which is done by `glmnet`.
 
-This function has slightly different syntax from other model-fitting functions that we have used so far in this book, such as the `y ~ X` syntax. Therefore, before we execute the syntax, we have the prepare the model so that `X` will be a matrix and `y` will be vector.  The matrix `X` has to be prepared before we proceed, which must be free of `NA`s.
+The `glmnet` function has a slightly different syntax from other model-fitting functions that we have used so far in this book (`y ~ X`). Therefore, before we execute the syntax, we have the prepare the model so that `X` will be a matrix and `y` will be a vector.  The matrix `X` has to be prepared before we proceed, which must be free of `NA`s.
 
 
 ```r
-X  <- model.matrix(Salary~., df)[,-1]
+X  <- model.matrix(Salary ~ ., df)[, -1]
 y <- df$Salary
 ```
 
@@ -13106,11 +13205,13 @@ Here is the example for a ridge regression:
 
 ```r
 library(glmnet)
-grid = 10^seq(10, -2, length = 100)
+grid = 10 ^ seq(10,-2, length = 100)
 model <- glmnet(X, y, alpha = 0, lambda = grid)
 ```
 
-Although we defined the grid, we did not do a grid search explicitly by cross validation.  By default, the `glmnet()` function performs ridge regression for an automatically selected range of $\lambda$ values.  It ranges from the null model - only intercept when $\lambda$ is at the upper bound and the least squares fit when the $\lambda$ is at lower bound.  The application above is to show that we can also choose to implement the function over a grid of values.  Moreover, the `glmnet()` function standardizes the variables so that they are on the same scale. To turn off this default setting, use the argument `standardize=FALSE`.  
+Although we defined the grid, we did not do a grid search explicitly by cross validation. Moreover, we do not need to select a grid.  By default, the `glmnet()` function performs ridge regression for an automatically selected range of $\lambda$ values.  It ranges from the null model - only intercept when $\lambda$ is at the upper bound and the least squares fit when the $\lambda$ is at lower bound.
+  
+The application above is to show that we can also choose to implement the function over a grid of values.  Further, the `glmnet()` function standardizes the variables so that they are on the same scale. To turn off this default setting, we use the argument `standardize=FALSE`.  
 
 The methods here, ridge and lasso, are parametric models.  Unlike non-parametric methods, each model is defined by a set of parameters or, as in our case, coefficients.  Therefore, when we do a grid search, each value of the hyperparameter ($\lambda$) is associated with one model defined by a set of coefficients.  In order to see the coefficients we need to apply another function, `coef()`.  Remember, we have 100 $\lambda's$.  Hence, `coef()` produces a 20 x 100 matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of $\lambda$).  
 
@@ -13124,7 +13225,7 @@ dim(coef(model))
 ```
 
 ```r
-model$lambda[c(20,80)]
+model$lambda[c(20, 80)]
 ```
 
 ```
@@ -13132,7 +13233,7 @@ model$lambda[c(20,80)]
 ```
 
 ```r
-coef(model)[, c(20,80)]
+coef(model)[, c(20, 80)]
 ```
 
 ```
@@ -13160,7 +13261,7 @@ coef(model)[, c(20,80)]
 ## NewLeagueN  -2.312257e-05  -27.9849755
 ```
 
-Due to the penalty, we see that the coefficient estimates are much smaller, when a large value of $\lambda$ is used.
+As we see, the coefficient estimates are much smaller when a large value of $\lambda$ is used.
   
 We generally use the `predict()` function as before.  But, here we can also use it to estimate the ridge regression coefficients for a new value of $\lambda$.  Hence, if we don't want to rely on the internal grid search provided by `glmnet()`, we can do our own grid search by `predict()`.  This is an example when $\lambda = 50$, which wasn't in the grid.    
 
@@ -13196,10 +13297,10 @@ predict(model, s = 50, type = "coefficients")
   
 There are two ways that we can train ridge (and Lasso):
   
-- Use our own training algorithm; 
-- Rely on `'glmnet` internal cross-validation process. 
+- We use our own training algorithm; 
+- Or, we rely on `'glmnet` internal cross-validation process. 
 
-Here is an example for our own training algorithm for training ridge regression:   
+Here is an example for our own algorithm for training ridge regression:   
   
 
 ```r
@@ -13244,12 +13345,12 @@ grid[which.min(MMSPE)]
 ```
 
 ```r
-plot(log(grid), MMSPE, type="o", col = "red", lwd = 3)
+plot(log(grid), MMSPE, type = "o", col = "red", lwd = 3)
 ```
 
 <img src="16-Ridge_files/figure-html/ridge6-1.png" width="672" />
 
-What is the tuned model using the last training test with this $\lambda$?  
+What is the tuned model using the last training set with this $\lambda$?  
 
 
 ```r
@@ -13289,15 +13390,15 @@ We may want to compare the ridge with a simple OLS:
 ```r
 MSPE <- c()
 
-for(j in 1:100){
+for (j in 1:100) {
   set.seed(j)
   ind <- unique(sample(nrow(df), nrow(df), replace = TRUE))
-  train <- df[ind, ]
-  test <- df[-ind,]
+  train <- df[ind,]
+  test <- df[-ind, ]
   
-  model <- lm(Salary~., data = train)
+  model <- lm(Salary ~ ., data = train)
   yhat <- predict(model, newdata = test)
-  MSPE[j] <- mean((yhat - test$Salary)^2)
+  MSPE[j] <- mean((yhat - test$Salary) ^ 2)
 }
 mean(MSPE)
 ```
@@ -13349,18 +13450,18 @@ summary(model)
 ## F-statistic: 5.856 on 19 and 140 DF,  p-value: 1.346e-10
 ```
   
-The second way is to rely on the `glmnet` internal training process, `cv.glmnet`, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction.  A part of the following scripts follows the same algorithm as the one in the book ([Introduction to Statistical Learning](https://www.statlearning.com) - ISLR p.254).  This approach uses a specific grid on $\lambda$.    
+The second way is to rely on the `glmnet` internal training process, `cv.glmnet`, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction.  A part of the following scripts follows the same algorithm as the one in the book ([Introduction to Statistical Learning](https://www.statlearning.com) - ISLR p.254).  This approach uses a specific grid on $\lambda$.  We also run the same grid search 100 times to see the associated uncertainty.     
 
 
 ```r
 # With a defined grid on lambda
 bestlam <- c()
 mse <- c()
-grid = 10^seq(10, -2, length = 100)
+grid = 10 ^ seq(10, -2, length = 100)
 
 for(i in 1:100){
   set.seed(i)
-  train <- sample(1:nrow(X), nrow(X)*0.5) # 50% split
+  train <- sample(1:nrow(X), nrow(X) * 0.5) # 50% split
   test <- c(-train)
   ytest <- y[test]
 
@@ -13412,13 +13513,13 @@ mse <- c()
 # Without a pre-defined grid on lambda
 for(i in 1:100){
   set.seed(i)
-  train <- sample(1:nrow(X), nrow(X)*0.5) # arbitrary split
+  train <- sample(1:nrow(X), nrow(X) * 0.5) # arbitrary split
   test <- c(-train)
   ytest <- y[test]
   
   cv.out <- cv.glmnet(X[train,], y[train], alpha = 0)
   yhat <- predict(cv.out, s = "lambda.min", newx = X[test,])
-  mse[i] <- mean((yhat - ytest)^2)
+  mse[i] <- mean((yhat - ytest) ^ 2)
 }
 
 mean(mse)
@@ -13434,17 +13535,19 @@ plot(mse, col = "pink")
 
 <img src="16-Ridge_files/figure-html/ridge10-1.png" width="672" />
 
-Ridge regression adds a penalty term that is the sum of the squares of the coefficients of the features in the model. This results in a penalty that is continuous and differentiable, which makes Ridge regression easy to optimize using gradient descent. Ridge regression can be useful when you have a large number of features, and you want to shrink the coefficients of all of the features towards zero, but you still want to keep all of the features in the model. Ridge regression works best in situations where the least squares estimates have high variance.
+Ridge regression adds a penalty term that is the sum of the squares of the coefficients of the features in the model. This results in a penalty that is continuous and differentiable, which makes Ridge regression easy to optimize using gradient descent. Ridge regression can be useful when we have a large number of features but we still want to keep all of the features in the model. Ridge regression works best in situations where the least squares estimates have high variance.
 
-On the other hand, Lasso (Least Absolute Shrinkage and Selection Operator) adds a penalty term that is the sum of the absolute values of the coefficients of the features in the model. This results in a penalty that is non-differentiable, which makes it more difficult to optimize using gradient descent. However, Lasso has the advantage of being able to set the coefficients of some features to exactly zero, effectively eliminating those features from the model. This can be useful when you have a large number of features, and you want to select a subset of the most important features to include in the model.
+On the other hand, Lasso (Least Absolute Shrinkage and Selection Operator) adds a penalty term that is the sum of the absolute values of the coefficients in the model. This results in a penalty that is non-differentiable, which makes it more difficult to optimize using gradient descent. However, Lasso has the advantage of being able to set the coefficients of some features to exactly zero, effectively eliminating those features from the model. This can be useful when we have a large number of features, and we want to select a subset of the most important features to include in the model.
 
 <!--chapter:end:16-Ridge.Rmd-->
 
 # Lasso
 
-The penalty in ridge regression, $\lambda \sum_{j} \beta_{j}^{2}$, will shrink all of the coefficients towards zero, but it will not set any of them exactly to zero.  This may present a problem in model interpretation when the number of variables is quite large.  One of the key advantages of Lasso is that it can set the coefficients of some features to exactly zero, effectively eliminating those features from the model. By eliminating unnecessary or redundant features from the model, Lasso can help to improve the interpretability and simplicity of the model. This can be particularly useful when you have a large number of features and you want to identify the most important ones for predicting the target variable.
+The penalty in ridge regression, $\lambda \sum_{j} \beta_{j}^{2}$, will shrink all of the coefficients towards zero, but it will not set any of them exactly to zero.  This may present a problem in model interpretation when the number of variables is quite large.  One of the key advantages of Lasso is that it can set the coefficients of some features to exactly zero, effectively eliminating those features from the model.
+  
+By eliminating unnecessary or redundant features from the model, Lasso can help to improve the interpretability and simplicity of the model. This can be particularly useful when you have a large number of features and you want to identify the most important ones for predicting the target variable.
 
-The lasso (least absolute shrinkage and selection operator) is a relatively recent alternative to ridge regression that overcomes this disadvantage. The lasso coefficients minimize the following quantity:
+The lasso, a relatively recent alternative to ridge regression, minimizes the following quantity:
 
 \begin{equation}
 \sum_{i=1}^{n}\left(y_{i}-\beta_{0}-\sum_{j=1}^{p} \beta_{j} x_{i j}\right)^{2}+\lambda \sum_{j=1}^{p}\left|\beta_{j}\right|=\operatorname{RSS}+\lambda \sum_{j=1}^{p}\left|\beta_{j}\right|
@@ -13453,9 +13556,9 @@ The lasso (least absolute shrinkage and selection operator) is a relatively rece
 
 The lasso also shrinks the coefficient estimates towards zero. However, the $\ell_{1}$ penalty, the second term of equation 18.1, has the effect of forcing some of the coefficient estimates to be exactly equal to zero when the tuning parameter $\lambda$ is sufficiently large.  Hence, the lasso performs variable selection. As a result, models generated from the lasso are generally much easier to interpret than those produced by ridge regression.  
 
-In general, one might expect lasso to perform better in a setting where a relatively small number of predictors have substantial coefficients and the remaining predictors have no significant effect on the outcome. This property is known as "sparsity", because it results in a model with a relatively small number of non-zero coefficients.  In some cases, Lasso can find a true sparsity pattern in the data, which means that it can identify a small subset of the most important features that are sufficient to accurately predict the target variable. This can be particularly useful when you have a large number of features, and you want to identify the most important ones for predicting the target variable.
+In general, one might expect lasso to perform better in a setting where a relatively small number of predictors have substantial coefficients and the remaining predictors have no significant effect on the outcome. This property is known as "sparsity", because it results in a model with a relatively small number of non-zero coefficients.  In some cases, Lasso can find a true sparsity pattern in the data by identifying a small subset of the most important features that are sufficient to accurately predict the target variable.
 
-Now, we will apply lasso to the same data in the last chapter, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in ISLR :  
+Now, we apply lasso to the same data, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in [Introduction to Statistical Learning](https://www.statlearning.com) (ISLR).    
 
 
 ```r
@@ -13465,12 +13568,12 @@ remove(list = ls())
 
 data(Hitters)
 df <- Hitters[complete.cases(Hitters$Salary), ]
-X  <- model.matrix(Salary~., df)[,-1]
+X  <- model.matrix(Salary ~ ., df)[,-1]
 y <- df$Salary
 
 # Without a specific grid on lambda
 set.seed(1)
-train <- sample(1:nrow(X), nrow(X)*0.5)
+train <- sample(1:nrow(X), nrow(X) * 0.5)
 test <- c(-train)
 ytest <- y[test]
 
@@ -13484,7 +13587,7 @@ mse_r <- mean((yhatR - ytest)^2)
 set.seed(1)
 lasso.out <- cv.glmnet(X[train,], y[train], alpha = 1)
 yhatL <- predict(lasso.out, s = "lambda.min", newx = X[test,])
-mse_l <- mean((yhatL - ytest)^2)
+mse_l <- mean((yhatL - ytest) ^ 2)
 
 mse_r
 ```
@@ -13506,7 +13609,7 @@ Now, we will define our own grid search:
 
 ```r
 # With a specific grid on lambda + lm()
-grid = 10^seq(10, -2, length = 100)
+grid = 10 ^ seq(10, -2, length = 100)
 
 set.seed(1)
 train <- sample(1:nrow(X), nrow(X)*0.5)
@@ -13520,7 +13623,7 @@ set.seed(1)
 cv.outR <- cv.glmnet(X[train,], y[train], alpha = 0)
 bestlamR <- cv.outR$lambda.min
 yhatR <- predict(ridge.mod, s = bestlamR, newx = X[test,])
-mse_R <- mean((yhatR - ytest)^2)
+mse_R <- mean((yhatR - ytest) ^ 2)
 
 # Lasso
 lasso.mod <- glmnet(X[train,], y[train], alpha = 1,
@@ -13529,7 +13632,7 @@ set.seed(1)
 cv.outL <- cv.glmnet(X[train,], y[train], alpha = 1)
 bestlamL <- cv.outL$lambda.min
 yhatL <- predict(lasso.mod, s = bestlamL, newx = X[test,])
-mse_L <- mean((yhatL - ytest)^2)
+mse_L <- mean((yhatL - ytest) ^ 2)
 
 mse_R
 ```
@@ -13546,11 +13649,11 @@ mse_L
 ## [1] 143572.1
 ```
 
-Now we will apply our own algorithm
+Now, we apply our own algorithm:  
 
 
 ```r
-grid = 10^seq(10, -2, length = 100)
+grid = 10 ^ seq(10, -2, length = 100)
 MSPE <- c()
 MMSPE <- c()
 
@@ -13560,7 +13663,7 @@ for(i in 1:length(grid)){
     ind <- unique(sample(nrow(df), nrow(df), replace = TRUE))
     
     train <- df[ind, ]
-    xtrain <- model.matrix(Salary~., train)[,-1]
+    xtrain <- model.matrix(Salary ~ ., train)[,-1]
     ytrain <- df[ind, 19]
     
     test <- df[-ind, ]
@@ -13570,7 +13673,7 @@ for(i in 1:length(grid)){
     model <- glmnet(xtrain, ytrain, alpha = 1,
                     lambda = grid[i], thresh = 1e-12)
     yhat <- predict(model, s = grid[i], newx = xtest)
-    MSPE[j] <- mean((yhat - ytest)^2)
+    MSPE[j] <- mean((yhat - ytest) ^ 2)
     }
   MMSPE[i] <- mean(MSPE)
 }
@@ -13612,16 +13715,16 @@ We can also try a classification problem with LPM or Logistic regression when th
 
 # Adaptive Lasso
 
-Unlike lasso, which uses a simple $\ell_{1}$ penalty, adaptive lasso uses a weighted $\ell_{1}$ penalty. The weights are chosen to adapt to the correlation structure of the data, which can result in a more stable model with fewer coefficients being exactly zero. Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou (2006) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf) by Zou (2006). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. The adaptive lasso enjoys the oracle properties; namely, it performs as well as if the true underlying model were given in advance. 
+Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou (2006) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. 
 
-Since its introduction, adaptive lasso has been widely used in a variety of applications in statistical modeling and machine learning. It has been applied to problems such as feature selection in genomic data, high-dimensional regression, and model selection in generalized linear models.  Adaptive lasso is useful in situations where the predictors are correlated and there is a need to select a small subset of important variables to include in the model. It is also useful in situations where the goal is to identify a representative model from the set of all possible models, rather than just selecting a single model. 
-
+Since its introduction, adaptive lasso has been widely used in a variety of applications in statistical modeling and machine learning. It has been applied to problems such as feature selections in genomic data, high-dimensional regressions, and model selections with generalized linear models.  Adaptive lasso is useful in situations where the predictors are correlated and there is a need to select a small subset of important variables to include in the model. It has been shown that adaptive lasso is an oracle efficient estimator (consistency in variable selection and asymptotic normality in coefficient estimation), while the plain lasso is not.
+  
 Consider the linear regression model:
 
 $$
-y_i=x_i^{\prime} \beta^0+\epsilon_i, ~~~~i=1, \ldots, n ~~~~\text{and} ~~~~\beta^0 \text { is } (p \times 1)
+y_i=x_i^{\prime} \beta+\epsilon_i, ~~~~i=1, \ldots, n ~~~~\text{and} ~~~~\beta \text { is } (p \times 1)
 $$
-The adaptive Lasso estimates $\beta^0$ by minimizing
+The adaptive Lasso estimates $\beta$ by minimizing
   
 $$
 L(\beta)=\sum_{i=1}^n\left(y_i-x_i^{\prime} \beta\right)^2+\lambda_n \sum_{j=1}^p \frac{1}{w_j}\left|\beta_j\right|
@@ -13629,9 +13732,9 @@ $$
   
 where, typically $w_j=(\left|\hat{\beta}_{O L S_j}\right|)^{\gamma}$ or $w_j=(\left|\hat{\beta}_{Ridge_j}\right|)^{\gamma}$, where $\gamma$ is a positive constant for adjustment of the Adaptive Weights vector, and suggested to be the possible values of 0.5, 1, and 2.
 
-The weights in Adaptive lasso (AL) are more "intelligent" than those for the plain Lasso. The plain Lasso penalizes all parameters equally, while the adaptive Lasso is likely to penalize non-zero coefficients less than the zero ones. This is due to the fact, that the weights are based on the consistent least squares estimator. If $\beta_{AL, j}=0$, then $\hat{\beta}_{O L S, j}$ is likely to be close to zero and so $w_j$ is small. Hence, truly zero coefficients are penalized a lot.  However, it might require a two-step procedure as opposed to the one-step plain Lasso. Some studies (Zou, 2006) state that the plain lasso is not oracle efficient (consistency in variable selection and asymptotic normality in coefficient estimation) while adaptive lasso is.
+The weights in adaptive lasso (AL) provides a prior "intelligence" about variables such that,while the plain Lasso penalizes all parameters equally, the adaptive Lasso is likely to penalize non-zero coefficients less than the zero ones. This is because the weights can be obtained from the consistent least squares estimator. If $\beta_{AL, j}=0$, then $\hat{\beta}_{O L S, j}$ is likely to be close to zero leading to a very small $w_j$. Hence, truly zero coefficients are penalized a lot.  Calculating the weights in adaptive lasso requires a two-step procedure
 
-Here is an example:  
+Here is an example where we use the ridge weight in adaptive lasso:  
 
 
 ```r
@@ -13696,37 +13799,37 @@ We can see the difference between lasso and adaptive lasso in this example: `Put
 
 This is a simulation to illustrate some of the properties of Lasso-type estimations. There are two objectives in using these penalized regressions: model selection (identifying "correct" sparsity) and prediction accuracy.  These two objectives require different optimization approaches and usually are not compatible. In model selection, the objective is to shrink the dimension of the model to the “true” sparsity. This is usually evaluated by checking whether the Oracle properties are satisfied.  These asymptotic properties look at (1) if the model identified by the penalized regression converges to the “true” sparsity, (2) if the coefficients are consistent.
 
-The literature suggests that Lasso is not an “Oracle” estimator. Adaptive Lasso was developed (Zou 2006) to fill this gap.
+The literature suggests that Lasso is not an oracle estimator. Adaptive Lasso was developed (Zou 2006) to fill this gap.
 
 Let's specify a data generating process with a linear regression model:
 
 $$
-y_i=x_i^{\prime} \beta_0+u_i, ~~~~~i=1, \ldots, n
+y_i=x_i^{\prime} \beta+u_i, ~~~~~i=1, \ldots, n
 $$
 
-where $\beta_0$ is $p \times 1$. First, we consider the case where $p<n$ then move to the case where $p \geq n$.  We define $\beta_0=(1,1,0,0)^{\prime}$ and $n=100$.
+where $\beta$ is $p \times 1$. First, we consider the case where $p<n$ then move to the case where $p \geq n$.  We define $\beta=(1,1,0,0)^{\prime}$ and $n=100$.
 
 
 ```r
 #This function generates the data
-dgp <- function(N, Beta){
+dgp <- function(N, Beta) {
   p = length(Beta)
   
-  X <- matrix(rnorm(N*p), ncol = p)
+  X <- matrix(rnorm(N * p), ncol = p)
   u <- matrix(rnorm(N), ncol = 1)
-  dgm <- X%*%Beta
-  y <- X%*%Beta + u
-
+  dgm <- X %*% Beta
+  y <- X %*% Beta + u
+  
   return <- list(y, X)
 }
 
 N = 100
-Beta = c(1,1,0,0)
+Beta = c(1, 1, 0, 0)
 
 set.seed(148)
 Output <- dgp(N, Beta)
-y <-Output[[1]]
-X <-Output[[2]]
+y <- Output[[1]]
+X <- Output[[2]]
 ```
 
 First, we apply lasso
@@ -13768,13 +13871,15 @@ S_matrix[c(1:8, 25:30, 55:60), ] # selected rows
 ## s59 0.98650007 0.9310977 -0.09569241 0.05551515 0.004475881
 ```
   
-Which beta_hat? To answer this question we need to find the lambda.  We need $\lambda_n \rightarrow \infty$ in order to shrink the truly zero coefficients to zero. This requires $\lambda_n$ to be sufficiently large.  On the other hand, $\lambda_n / \sqrt{n} \rightarrow 0$ is needed in order not to shrink too much. This would introduce asymptotic bias to the non-zero coefficients. Information-criterion based model selection is very fast, but it relies on a proper estimation of degrees of freedom, are derived for large samples (asymptotic results) and assume the model is correct, i.e. that the data are actually generated by this model. In practice, choosing $\lambda_n$ by $\mathrm{BIC}$ results in consistent model selection in the fixed $p$ setting, i.e., Let $\mathcal{A}=\left\{j: \beta_{0, j} \neq 0\right\}$,  active set or relevant variables
+Which set of beta_hat should we select?  To answer this question we need to find the lambda.  We need $\lambda_n \rightarrow \infty$ in order to shrink the truly zero coefficients to zero. This requires $\lambda_n$ to be sufficiently large. This would introduce asymptotic bias to the non-zero coefficients. 
+  
+In practice, choosing $\lambda_n$ by $\mathrm{BIC}$ (Bayesian Information Criterion) results in a consistent model selection in the fixed $p$ setting. That is, let $\mathcal{A}=\left\{j: \beta_{0, j} \neq 0\right\}$,  active set or relevant variables,
   
 $$
 P\left(\hat{\mathcal{A}}_{\lambda_{BIC}}=\mathcal{A}\right) \rightarrow 1
 $$
 
-We find lambda by minimum Bayesian Information Criterion (BIC). Let $S S E_\lambda$ be the sum of squared error terms for a given value of $\lambda$ and $n z_\lambda$ be the number of non-zero coefficients. Then,
+Thus, let $S S E_\lambda$ be the sum of squared error terms for a given value of $\lambda$ and $n z_\lambda$ be the number of non-zero coefficients. Then, it can be shown that
   
 $$
 B I C_\lambda=\log \left(S S E_\lambda\right)+\frac{\log (n)}{n} n z_\lambda
@@ -13795,13 +13900,13 @@ dim(y_hat)
 # SSE for each lambda (s)
 SSE <- c()
 for (i in 1:ncol(y_hat)) {
-  SSE_each <- sum((y_hat[,i]-y[,1])^(2))
+  SSE_each <- sum((y_hat[, i] - y[, 1]) ^ (2))
   SSE <- c(SSE, SSE_each)
 }
 
 # BIC
-nz <- colSums(beta_hat!=0) # Number of non-zero coefficients for each lambda
-BIC <- log(SSE) + (log(N)/N)*nz #Now BIC
+nz <- colSums(beta_hat != 0) # Number of non-zero coefficients for each lambda
+BIC <- log(SSE) + (log(N) / N) * nz # BIC
 BIC
 ```
 
@@ -13824,11 +13929,11 @@ BIC
 ## 4.457650 4.457614 4.457584 4.457559
 ```
   
-Let's select $\lambda$ that has the minimum BIC
+And, the selected model that has the minimum BIC
 
 
 ```r
-beta_lasso <- beta_hat[ ,which(BIC==min(BIC))]
+beta_lasso <- beta_hat[, which(BIC == min(BIC))]
 beta_lasso
 ```
 
@@ -13841,7 +13946,7 @@ This is the `beta_hat` that identifies the true sparsity. And, the second Oracle
 
 
 ```r
-l_2 <- sqrt(sum((beta_lasso - Beta)^2))
+l_2 <- sqrt(sum((beta_lasso - Beta) ^ 2))
 l_2
 ```
 
@@ -13849,7 +13954,7 @@ l_2
 ## [1] 0.189884
 ```
 
-Here we will create a simulation that will report two Oracle Properties Lasso and Adaptive Lasso:
+Here we will create a simulation that will report two Oracle Properties for Lasso and Adaptive Lasso:
 
 - True sparsity,  
 - $\ell_2$  error.  
@@ -13860,7 +13965,7 @@ We first have a function, `msc()`, that executes a simulation with all the steps
 
 
 ```r
-mcs <- function(mc, N, Beta){
+mcs <- function(mc, N, Beta) {
   mcmat <- matrix(0, nrow = mc, ncol = 3)
   beta_lasso_mat <- matrix(0, nr = mc, nc = length(Beta))
   
@@ -13872,27 +13977,27 @@ mcs <- function(mc, N, Beta){
     
     set.seed(i)
     lasso <- glmnet(x = X, y = y, family = "gaussian")
-    beta_hat <- lasso$beta; # beta_hat is a matrix
+    beta_hat <- lasso$beta    # beta_hat is a matrix
     y_hat = predict(lasso, newx = X)
     
     SSE <- c()
     for (j in 1:ncol(y_hat)) {
-      SSE_each <- sum((y_hat[,j]-y[,1])^(2))
+      SSE_each <- sum((y_hat[, j] - y[, 1]) ^ (2))
       SSE <- c(SSE, SSE_each)
     }
     
-    nz <- colSums(beta_hat!=0) 
-    BIC <- log(SSE) + (log(N)/N)*nz
-    beta_lasso <- beta_hat[ ,which(BIC==min(BIC))]
-    nonz_beta = length(Beta[Beta==0])
-    nonz_beta_hat = length(beta_lasso[beta_lasso==0])
+    nz <- colSums(beta_hat != 0)
+    BIC <- log(SSE) + (log(N) / N) * nz
+    beta_lasso <- beta_hat[, which(BIC == min(BIC))]
+    nonz_beta = length(Beta[Beta == 0])
+    nonz_beta_hat = length(beta_lasso[beta_lasso == 0])
     
-    mcmat[i,1] <- sqrt(sum((beta_lasso - Beta)^2))
-    mcmat[i,2] <- ifelse(nonz_beta!= nonz_beta_hat, 0, 1)
-    mcmat[i,3] <- sum(beta_lasso!=0)
-    beta_lasso_mat[i,] <- beta_lasso
+    mcmat[i, 1] <- sqrt(sum((beta_lasso - Beta) ^ 2))
+    mcmat[i, 2] <- ifelse(nonz_beta != nonz_beta_hat, 0, 1)
+    mcmat[i, 3] <- sum(beta_lasso != 0)
+    beta_lasso_mat[i, ] <- beta_lasso
   }
-  return(list(mcmat,beta_lasso_mat))
+  return(list(mcmat, beta_lasso_mat))
 }
 ```
 
@@ -13902,12 +14007,13 @@ We are ready for simulation:
 ```r
 mc <- 500
 N <- 1000
-Beta <- matrix(c(1,1,0,0), nc = 1)
+Beta <- matrix(c(1, 1, 0, 0), nc = 1)
 output <- mcs(mc, N, Beta) #see the function
 
 MC_betas = output[[2]]
-MC_performance = output[[1]];
-sum(MC_performance[,2]) #how many times lasso finds true sparsity
+MC_performance = output[[1]]
+
+sum(MC_performance[, 2]) #how many times lasso finds true sparsity
 ```
 
 ```
@@ -13918,7 +14024,7 @@ This is the first property: lasso identifies the true sparsity $400/500 = 80\%$ 
 
 
 ```r
-sum(MC_performance[,1])
+sum(MC_performance[, 1])
 ```
 
 ```
@@ -13932,8 +14038,7 @@ This time we let our adaptive lasso use lasso coefficients as penalty weights in
 
 ```r
 # Adaptive LASSO
-mcsA <- function(mc, N, Beta){
-  
+mcsA <- function(mc, N, Beta) {
   mcmat <- matrix(0, nr = mc, nc = 3)
   beta_lasso_mat <- matrix(0, nr = mc, nc = length(Beta))
   
@@ -13943,60 +14048,69 @@ mcsA <- function(mc, N, Beta){
     X <- data[[2]]
     
     lasso <- glmnet(x = X, y = y, family = "gaussian")
-    beta_hat <- lasso$beta;
+    beta_hat <- lasso$beta
+    
     y_hat = predict(lasso, newx = X)
     
     SSE <- c()
     for (j in 1:ncol(y_hat)) {
-      SSE_each <- sum((y_hat[,j]-y[,1])^(2))
+      SSE_each <- sum((y_hat[, j] - y[, 1]) ^ (2))
       SSE <- c(SSE, SSE_each)
     }
     
-    nz <- colSums(beta_hat!=0)
-    BIC <- log(SSE) + (log(N)/N)*nz
-    beta_lasso <- beta_hat[ ,which(BIC==min(BIC))]
+    nz <- colSums(beta_hat != 0)
+    BIC <- log(SSE) + (log(N) / N) * nz
+    beta_lasso <- beta_hat[, which(BIC == min(BIC))]
     
-    weights = abs(beta_lasso)^(-1)
-    weights[beta_lasso==0] = 10^10 # to handle inf's
+    weights = abs(beta_lasso) ^ (-1)
+    weights[beta_lasso == 0] = 10 ^ 10 # to handle inf's
     
     #Now Adaptive Lasso
-    lasso <- glmnet(x = X, y = y, family = "gaussian", penalty.factor = weights)
-    beta_hat <- lasso$beta;
+    lasso <-
+      glmnet(
+        x = X,
+        y = y,
+        family = "gaussian",
+        penalty.factor = weights
+      )
+    beta_hat <- lasso$beta
+    
     y_hat = predict(lasso, newx = X)
     
     SSE <- c()
     for (j in 1:ncol(y_hat)) {
-      SSE_each <- sum((y_hat[,j]-y[,1])^(2))
+      SSE_each <- sum((y_hat[, j] - y[, 1]) ^ (2))
       SSE <- c(SSE, SSE_each)
     }
     
-    nz <- colSums(beta_hat!=0)
-    BIC <- log(SSE) + (log(N)/N)*nz
-    beta_lasso <- beta_hat[ ,which(BIC==min(BIC))]
-    nonz_beta = length(Beta[Beta==0])
-    nonz_beta_hat = length(beta_lasso[beta_lasso==0])
+    nz <- colSums(beta_hat != 0)
+    BIC <- log(SSE) + (log(N) / N) * nz
+    beta_lasso <- beta_hat[, which(BIC == min(BIC))]
+    nonz_beta = length(Beta[Beta == 0])
+    nonz_beta_hat = length(beta_lasso[beta_lasso == 0])
     
-    mcmat[i,1] <- sqrt(sum((beta_lasso - Beta)^2))
-    mcmat[i,2] <- ifelse(nonz_beta!= nonz_beta_hat, 0, 1)
-    mcmat[i,3] <- sum(beta_lasso!=0)
-    beta_lasso_mat[i,] <- beta_lasso
+    mcmat[i, 1] <- sqrt(sum((beta_lasso - Beta) ^ 2))
+    mcmat[i, 2] <- ifelse(nonz_beta != nonz_beta_hat, 0, 1)
+    mcmat[i, 3] <- sum(beta_lasso != 0)
+    beta_lasso_mat[i, ] <- beta_lasso
   }
-  return(list(mcmat,beta_lasso_mat))
+  return(list(mcmat, beta_lasso_mat))
 }
 ```
 
-Here are the results for adaptive lasso
+Here are the results for adaptive lasso:  
 
 
 ```r
 mc <- 500
 N <- 1000
-beta <- matrix(c(1,1,0,0), nc = 1)
+beta <- matrix(c(1, 1, 0, 0), nc = 1)
 output <- mcsA(mc, N, beta) #see the function
 
 MC_betas = output[[2]]
-MC_performance = output[[1]];
-sum(MC_performance[,2])
+MC_performance = output[[1]]
+
+sum(MC_performance[, 2])
 ```
 
 ```
@@ -14014,35 +14128,37 @@ sum(MC_performance[,1])
 ## [1] 20.21311
 ```
 
-The simulation results clearly show that Adaptive Lasso is an Oracle estimator while the regular Lasso is not. Therefore, in model selection, Adaptive Lasso is a better choice.  We saw here a basic application of a plain adaptive lasso. It has many different variations in practice such as Thresholded Lasso and Rigorous Lasso.  Application of lasso on model selection has been an active research area.  One of the well-known applications is the double lasso method introduced by Victor Chernozhukov that can be used for variable selections.  Moreover, lasso type applications are also used in time-series forecasting and graphical network analysis for dimension reductions. 
+The simulation results clearly show that Adaptive Lasso is an Oracle estimator and a better choice for sparsity applications.
+  
+We saw here a basic application of adaptive lasso, which has several different variations in practice, such as Thresholded Lasso and Rigorous Lasso.  Model selections with lasso has been an active research area.  One of the well-known applications is the double-selection lasso linear regression method that can be used for variable selections.  Moreover, lasso type applications are also used in time-series forecasting and graphical network analysis for dimension reductions. 
 
 
 
 <!--chapter:end:17-Lasso.Rmd-->
 
-# (PART) Time Series {-}
+# (PART) Time Series {.unnumbered}
 
-# Forecasting {-}
+# Forecasting {.unnumbered}
 
 Time series forecasting is a task that involves using a model to predict future values of a time series based on its past values. The data consists of sequences of values that are recorded at regular intervals over a period of time, such as daily stock prices or monthly weather data. Time series forecasting can be approached using a variety of machine learning techniques, including linear regression, decision trees, and neural networks.
 
 One key difference between time series forecasting and other types of machine learning tasks is the presence of temporal dependencies in the data. In time series data, the value at a particular time point is often influenced by the values that came before it, which means that the order in which the data points are presented is important. This can make time series forecasting more challenging, as the model must take into account the relationships between past and future values in order to make accurate predictions.
 
-One of the most accessible and comprehensive source on forecasting using R is [Forecasting: Principles and Practice](https://otexts.com/fpp3/) by Rob J Hyndman and George Athanasopoulos.  The book now has the $3^{rd}$ edition that uses the `tsibble` and `fable` packages rather than the `forecast` package. This brings a better integration to the tidyverse collection of packages. We will not summarize the book (FPP3) here nor use the same examples.  However, we will use the `tsibble` and `fable` packages along with the `fpp3` package. There is a [paper](https://robjhyndman.com/publications/tsibble/) by Wang et al. (2020) describing `tsibble` and the package in more details.  A move from FPP2 to FPP3 brings a move from `forecast` to `fable`.  The main difference is that `fable` is designed for `tsibble` objects and `forecast` is designed for `ts` objects.  
+One of the most accessible and comprehensive source on forecasting using R is [Forecasting: Principles and Practice](https://otexts.com/fpp3/) (FPP3) by Rob J Hyndman and George Athanasopoulos. The book now has the $3^{rd}$ edition that uses the `tsibble` and `fable` packages rather than the `forecast` package. This brings a better integration to the tidyverse collection of packages. A move from FPP2 to FPP3 brings a move from `forecast` to `fable`. The main difference is that `fable` is designed for `tsibble` objects and `forecast` is designed for `ts` objects [^18-timeseriesarima-1].
 
-We cover five main topics:  applications with ARIMA models, grid search for ARIMA, timr series embedding, random forest applications with time series data, and artificial neural network applications, RNN and LSTM.  The time-series analysis and forecasting is a very deep and complex subject, which is beyond the scope of this book to cover in detail.  FPP3 is free and very accessible even for those without any background on time-series forecasting.  Therefore, this section assumes that some major concepts, like stationarity, time series decomposition, and exponential smoothing, are already checked and understood by further readings of FPP3.     
+[^18-timeseriesarima-1]: There is a paper, \<<https://robjhyndman.com/publications/tsibble/>), by Wang et al. (2020) describing `tsibble` and the package in more details
+
+In this section, we will use the `tsibble` and `fable` packages along with the `fpp3` package and cover five main topics: applications with ARIMA models, grid search for ARIMA, time series embedding, forecasting with random forests, and artificial neural network applications, RNN and LSTM. The time-series analysis and forecasting is a very deep and complex subject, which is beyond the scope of this book to cover in detail. FPP3 is free and very accessible even for those without a strong background on time-series forecasting. Therefore, this section assumes that some major concepts, like stationarity, time series decomposition, and exponential smoothing, are already understood by further readings of FPP3.
 
 # ARIMA models
 
-ARIMA (Autoregressive Integrated Moving Average) is a statistical model for time series forecasting. It is a type of linear model that can be used to analyze and forecast data that exhibits temporal dependencies, such as seasonality and autocorrelation.  The model is comprised of three components:
-  
-- Autoregressive (AR) component: This component models the dependencies between the current value of the time series and the past values. 
-- Integrated (I) component: This component component refers to the degree of differencing that is applied to the time series data. The degree of differencing is the number of times that the data is differenced in order to make it stationary meaning that the mean, variance, and covariance are constant over time. 
-- Moving average (MA) component: This component models the dependencies between the current value of the time series and the past forecast errors. The moving average component of an ARIMA model is used to capture the short-term fluctuations in the time series data that are not captured by the autoregressive component. For example, if the time series data exhibits random noise or sudden spikes, the moving average component can help to smooth out these fluctuations and improve the forecast accuracy.
+ARIMA (Autoregressive Integrated Moving Average) is a main statistical model for time series forecasting. It is a linear parametric model that can be used to analyze and forecast data that exhibit temporal dependencies, such as seasonality and autocorrelation. The model is comprised of three components:
 
-The ARIMA model can be written as ARIMA(p,d,q), where p is the order of the autoregressive component, d is the degree of differencing, and q is the order of the moving average component. The values of p, d, and q are chosen based on the characteristics of the time series data and the desired level of forecasting accuracy.
+-   Autoregressive (AR) component, which models the dependencies between the current value and the past values in the data.
+-   Integrated (I) component, which refers to the degree of differencing that is applied to the time series data. The degree of differencing is the number of times that the data is differenced in order to make it stationary. The stationarity means that the mean, variance, and covariance are constant over time.
+-   Moving average (MA) component, which models the dependencies between the current and the past forecast errors. The MA component of an ARIMA model is used to capture the short-term fluctuations in data that are not captured by the AR component. For example, if the time series data exhibits random noise or sudden spikes, the MA component can help to smooth out these fluctuations and improve the forecast accuracy.
 
-To use the ARIMA model, the time series data must first be preprocessed to remove any trend and seasonality, and to ensure that the data is stationary (meaning that the mean and variance are constant over time). The model is then fit to the preprocessed data, and forecasts are generated based on the fitted model. ARIMA models can be used to make point forecasts (predictions for a specific time point) or interval forecasts (predictions with a range of possible values).
+The ARIMA model can be written as ARIMA(p,d,q), where p is the order of the autoregressive component, d is the degree of differencing, and q is the order of the moving average component. The values of p, d, and q are chosen based on the characteristics of the time series data to achieve maximum forecasting accuracy. To use the ARIMA model, the time series data must first be preprocessed to remove any trend and seasonality, and to ensure that the data is stationary. The model is then fit to the preprocessed data, and forecasts are generated based on the fitted model.
 
 The mathematical foundation of the ARIMA model is based on the concept of autoregressive (AR) and moving average (MA) processes. An autoregressive process is a type of stochastic process in which the current value of a time series depends on a linear combination of past values of the series. An autoregressive process can be represented mathematically as:
 
@@ -14058,15 +14174,15 @@ $$
 X_{t} = c + \sum_{i=1}^{q}(\theta_{i}  \epsilon_{t-i}) + \epsilon_{t},
 $$
 
-where $\theta_{i}$ is the moving average coefficient for lag $i$, and $ \epsilon_{t}$ is again white noise.
+where $\theta_{i}$ is the moving average coefficient for lag $i$, and $\epsilon_{t}$ is again white noise.
 
-The ARIMA model is a combination of an autoregressive process and a moving average process. It can be represented mathematically as:
+The ARIMA model, which is a combination of autoregressive and moving average processes, can be represented mathematically as:
 
 $$
 X_{t} = c + \sum_{i=1}^{p}(\phi_{i}  X_{t-i}) + \sum_{i=1}^{q}(\theta_{i}  \epsilon_{t-i}) + \epsilon_{t}
 $$
 
-It is possible to write any stationary $\operatorname{AR}(p)$ model as an MA($\infty$) model by using repeated substitution.  Here is the example for an $\mathrm{AR}(1)$ model without a constant:
+It is possible to write any stationary $\operatorname{AR}(p)$ model as an MA($\infty$) model by using repeated substitution. Here is the example for an $\mathrm{AR}(1)$ model without a constant:
 
 $$
 X_{t} = \phi_{1} X_{t-1} + \epsilon_{t} ~~~ \text{and} ~~~ X_{t-1} = \phi_{1} X_{t-2} + \epsilon_{t-1}\\
@@ -14079,35 +14195,34 @@ $$
 With $-1<\phi_1<1$, the value of $\phi_1^k$ will get smaller as $k$ gets bigger. Therefore, $\mathrm{AR}(1)$ becomes an MA $(\infty)$ process:
 
 $$
-X_t=\epsilon_t+\phi_1 \epsilon_{t-1}+\phi_1^2 \epsilon_{t-2}+\phi_1^3 \epsilon_{t-3}+\cdots,
-$$
-The parameters of the ARIMA model ($c$, $\phi_{i}$, $\theta_{i}$) are estimated using maximum likelihood estimation (MLE), which involves finding the values of the parameters that maximize the likelihood of the observed data given the model. Once the model has been fit to the data, it can be used to make point forecasts (predictions for a specific time point) or interval forecasts (predictions with a range of possible values).
+X_t=\epsilon_t+\phi_1 \epsilon_{t-1}+\phi_1^2 \epsilon_{t-2}+\phi_1^3 \epsilon_{t-3}+\cdots
+$$ The parameters of the ARIMA model ($c$, $\phi_{i}$, $\theta_{i}$) are estimated using maximum likelihood estimation (MLE), which involves finding the values of the parameters that maximize the likelihood of the observed data given the model. Once the model has been fit to the data, it can be used to make point forecasts (predictions for a specific time point) or interval forecasts (predictions with a range of possible values).
 
-In the ARIMA(p,d,q), the order of the autoregressive component (p) is the number of past values that are used to predict the current value of the time series, and the order of the moving average component (q) is the number of past errors or residuals that are used to predict the current value of the time series.  Some common methods for selecting p and q include:
-  
-- Autocorrelation function (ACF) plot: This plot shows the correlations between the time series data and lagged versions of itself. A high positive autocorrelation at a lag of p suggests that p may be a good value for p.
-- Partial autocorrelation function (PACF) plot: This plot shows the correlations between the time series data and lagged versions of itself, after accounting for the correlations at all lower lags. A high positive autocorrelation at a lag of q suggests that q may be a good value for q.
-- Information criteria: There are several statistical measures that can be used to compare the goodness of fit of different ARIMA models, such as Akaike's Information Criterion (AIC) and the Bayesian Information Criterion (BIC). These measures can be used to select the model with the lowest value, which is generally considered to be the best model.
+Some common methods for selecting p and q include in the ARIMA(p,d,q):
 
-It's important to note that determining the values of p and q is an iterative process, and you may need to try different values and evaluate the results in order to find the best fit for your data. 
+-   Autocorrelation function (ACF) plot, which shows the correlations between the time series data and lagged versions of itself. A high positive autocorrelation at a lag of p suggests that p may be a good value for p in ARIMA(p,d,q).
+-   Partial autocorrelation function (PACF) plot, which shows the correlations between the time series data and lagged versions of itself, after accounting for the correlations at all lower lags. A high positive autocorrelation at a lag of q suggests the value for q in ARIMA(p,d,q).
+-   There are several statistical measures that can be used to compare the goodness of fit of different ARIMA models, such as Akaike's Information Criterion (AIC) and the Bayesian Information Criterion (BIC). These measures can be used to select the model with the lowest value, which is generally considered to be the best model.
+
+It is important to note that determining the values of p and q is an iterative process, and we may need to try different values and evaluate the results in order to find the best fit for our data.
 
 ## Hyndman-Khandakar algorithm
 
 The Hyndman-Khandakar algorithm ([Hyndman & Khandakar](https://www.jstatsoft.org/article/view/v027i03), 2008) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
-  
-1. Plot the data to identify any outliers.
-2. If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.
-3. Check if the data are non-stationary. And, make them stationary, if they are not.
-4. Start with an ARIMA $(p, d, 0)$ or ARIMA $(0, d, q)$ depending of what ACF/PACF indicates. 
-5. Try your chosen model(s), and use the AICc to search for a better model.
 
-However, after step 5, the residuals from the chosen model are supposed to be white noise.  Otherwise, the model has to be modified. Once the residuals look like white noise, the ARIMA model is ready for forecasting.
+1.  Plot the data to identify any outliers.
+2.  If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.
+3.  Check if the data are non-stationary. And, make them stationary, if they are not.
+4.  Start with an ARIMA $(p, d, 0)$ or ARIMA $(0, d, q)$ depending of what ACF/PACF indicates.
+5.  Try your chosen model(s), and use the AICc to search for a better model.
 
-We will show all these steps by using the epidemic curve of COVID-19 in Toronto covering 266 days between the March $1^{st}$ and the November $21^{st}$ of 2020.  An epidemic curve (or epi curve) is a visual display of the onset of illness among cases associated with an outbreak. The data contain the first wave and the first part of the second wave. It is from [Ontario Data Catalogue](https://data.ontario.ca/en/dataset?groups=2019-novel-coronavirus#byPHU) sorted by `Episode Date`, which is the date when the first symptoms were started. Our data set also contains the mobility data is from Facebook, `all_day_bing_tiles_visited_relative_change`, which is reflects positive or negative change in movement relative to baseline.
+However, after step 5, the residuals from the chosen model are supposed to be white noise. Otherwise, the model has to be modified. Once the residuals look like white noise, the ARIMA model is ready for forecasting.
+
+We will show all these steps by using the epidemic curve of COVID-19 in Toronto covering 266 days between the March $1^{st}$ and the November $21^{st}$ of 2020. An epidemic curve (or epi curve) is a visual display of the onset of illness among cases associated with an outbreak. The data contain the first wave and the first part of the second wave. It is from [Ontario Data Catalogue](https://data.ontario.ca/en/dataset?groups=2019-novel-coronavirus#byPHU) sorted by `Episode Date`, which is the date when the first symptoms were started. Our data set also contains the mobility data is from Facebook, `all_day_bing_tiles_visited_relative_change`, which reflects positive or negative changes in movement relative to baseline.
 
 ## TS Plots
 
-Let's first load the data and convert it to `tsibble`, which can be:
+Let's first load the data and convert it to `tsibble`.
 
 
 ```r
@@ -14115,12 +14230,19 @@ library(tsibble)
 library(fpp3)
 
 load("~/Dropbox/ToolShed_draft/dftoronto.RData")
-day <- seq.Date(from = as.Date("2020/03/01"),
-                         to = as.Date("2020/11/21"), by = 1)
+day <- seq.Date(
+  from = as.Date("2020/03/01"),
+  to = as.Date("2020/11/21"),
+  by = 1
+)
 
-tdata <- tibble(Day = day, mob = data$mob, cases = data$cases)
+tdata <- tibble(Day = day,
+                mob = data$mob,
+                cases = data$cases)
+
 toronto <- tdata %>%
   as_tsibble(index = Day)
+
 toronto
 ```
 
@@ -14140,9 +14262,11 @@ toronto
 ## 10 2020-03-10 -0.0521     29
 ## # … with 256 more rows
 ```
-  
-Note the `[1D]` in the header indicating this is daily data. Dealing with daily and sub-daily data with `ts` class is not an easy process. The `tsibble` class handles such data with no problem. More details on `tsibbles` can be found at [Tidy time series data using tsibbles](https://robjhyndman.com/hyndsight/tsibbles/). Although there are better plotting option cosmetically, we will stick to applications in what `fpp3` simply offers:
-  
+
+Note the `[1D]` in the header indicating daily data. Dealing with daily and sub-daily data with `ts` class is not an easy process. The `tsibble` class handles such data with no problem. More details on `tsibbles` can be found at [Tidy time series data using tsibbles](https://robjhyndman.com/hyndsight/tsibbles/).
+
+Although there are better plotting option cosmetically, we will stick to what `fpp3` simply offers:
+
 
 ```r
 a <- toronto %>% autoplot(mob, col = 'blue') +
@@ -14161,37 +14285,41 @@ b <- toronto %>% autoplot(cases, col = 'red') +
   )
 
 require(gridExtra)
-grid.arrange(b, a, ncol=2)
+grid.arrange(b, a, ncol = 2)
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar2-1.png" width="672" />
 
 ## Box-Cox transformation
 
-There are different ways to transform the data, which make the size of the variation about the same across the whole series.  A proper variance-stabilizing transformation makes the forecasting model simpler and better.  For example, Proietti and Lutkepohl (2012) find that the Box–Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See [Does the Box–Cox transformation help in forecasting macroeconomic time series?](https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830)).  
+We would like to make the size of the variation about the same across the whole series. A proper variance-stabilizing transformation makes the forecasting model simpler and better. For example, Proietti and Lutkepohl (2012) find that the Box--Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See [Does the Box--Cox transformation help in forecasting macroeconomic time series?](https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830)).
 
 
 ```r
 lmbd <- toronto %>%
   features(cases, features = guerrero) %>%
   pull(lambda_guerrero)
+
 toronto %>%
   autoplot(box_cox(cases, lambda = lmbd), col = "red") +
   labs(y = "",
        title = latex2exp::TeX(paste0(
          "Cases - Transformed with $\\lambda$ = ",
-         round(lmbd,2))))
+         round(lmbd, 2)
+       )))
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar3-1.png" width="672" />
 
-The option `guerrero` computes the optimal $\lambda$ value for a Box-Cox transformation using the [Guerrero](https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104) method. We should also have a transformation that converts the case numbers to a "positivity rate", which is the percentage of positive results in all COVID-19 tests applied on a given day.  We ignore this transformation for now, but the number of tests performed in a given day changes the numbers of cases.
+The option `guerrero` computes the optimal $\lambda$ value for a Box-Cox transformation using the [Guerrero](https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104) method.
+
+Note that, since the number of tests performed in a given day changes the numbers of cases, we should use "positivity rates", which is the percentage of positive results in all COVID-19 tests given any day, instead of case numbers. We ignore this problem for now.
 
 ## Stationarity
 
-A time series is stationary if a shift in time does not cause a change in the shape of the distribution, like the mean, variance, and covariance.  Stationarity is an important assumption in many time series forecasting methods, because the patterns and trends in the data can be modeled effectively. If a time series is not stationary, it can lead to inaccurate or unreliable forecasts. This is because non-stationary data has statistical properties that change over time making the current patterns and trends ungeneralizable for the future. 
+A time series is called stationary if a shift in time does not cause a change in the shape of the distribution: the mean, variance, and covariance. Stationarity is an important assumption in many time series forecasting methods, because non-stationary data have statistical properties that change over time making the current patterns and trends ungeneralizable for the future.
 
-There are several tests that can be used to determine whether a time series is stationary or not, including the Dickey-Fuller test and the KPSS ([Kwiatkowski-Phillips-Schmidt-Shin](https://www.sciencedirect.com/science/article/abs/pii/030440769290104Y?via%3Dihub)) test. If a time series is found to be non-stationary, it may be necessary to transform the data in some way before applying a forecasting method in order to obtain reliable forecasts.  The main method is differencing, which involves taking the difference between consecutive values in the series. 
+There are several tests that can be used to determine whether a time series is stationary or not, including the Dickey-Fuller and KPSS (Kwiatkowski-Phillips-Schmidt-Shin) tests. If a time series is found to be non-stationary, it may be necessary to transform the data in some way before applying a forecasting method in order to obtain reliable forecasts. The main method is differencing, which involves taking the difference between consecutive values in the series.
 
 Let's first formally test all these series and see what we get:
 
@@ -14236,29 +14364,33 @@ toronto %>%
 ## 1    0.0970         0.1
 ```
 
-It seems that the first difference can make the `cases` series stationary.  The null in this test is taht the series are stationary.  So, the p-value indicates that the null is rejected.  So, it seems that the test after first differencing gives us a green light!  However, ACF's are telling us that seasonal differencing would be needed:
-   
+It seems that the first difference can make the `cases` series stationary. The null in this test suggests that the series are stationary, and the p-value indicates that the null is rejected. So, it seems that the test after first differencing gives us a green light! However, ACF's are telling us that seasonal differencing would be needed:
+
 
 ```r
 level <- toronto %>% ACF(cases) %>%
   autoplot() + labs(subtitle = "Covid-19 Cases")
+
 fdiff <- toronto %>% ACF(difference(cases)) %>%
   autoplot() + labs(subtitle = "First-difference")
+
 diffbc <- toronto %>% ACF(difference(box_cox(cases, lmbd))) %>%
   autoplot() + labs(subtitle = "First-difference Box-Cox")
-ddiff <- toronto %>% ACF(difference(difference(box_cox(cases, lmbd)))) %>%
+
+ddiff <-
+  toronto %>% ACF(difference(difference(box_cox(cases, lmbd)))) %>%
   autoplot() + labs(subtitle = "Double-difference Box-Cox")
 
 require(gridExtra)
-grid.arrange(level, fdiff, diffbc, ddiff, ncol = 2, nrow =2)
+grid.arrange(level, fdiff, diffbc, ddiff, ncol = 2, nrow = 2)
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar5-1.png" width="672" />
-  
-From ACF's, there seems to be a weekly seasonal pattern at 7, 14, and 21, which are Sundays: reported Covid-19 cases on Sundays tend to be lower than the rest of the week at least for during the first wave.
 
-We can also test if we need seasonal differencing:  
-  
+From ACF's, there seems to be a weekly seasonal pattern at 7, 14, and 21, which are Sundays. We know that reported Covid-19 cases on Sundays tend to be lower than the rest of the week at least during the first wave.
+
+We can also test if we need seasonal differencing:
+
 
 ```r
 toronto %>%
@@ -14284,15 +14416,18 @@ toronto %>%
 ##     <int>
 ## 1       0
 ```
-  
-The feature `unitroot_nsdiffs` returns 0 for both original and transformed series indicating no seasonal difference is required.  We will stick to this "advice" because of two reasons: first, an unnecessary differencing would create more problems than a solution;, second, we can also modify ARIMA to incorporate seasonalllty in the data, which we will see shortly .  However, out of curiosity, let's remove the "seemingly" weekly seasonality and see what happens to ACF's.  Since, the order of differencing is not important, we first applied the seasonal differencing then applied the first difference:
+
+The feature `unitroot_nsdiffs` returns 0 for both original and transformed series indicating no seasonal difference is required. We will stick to this "advice" because of two reasons. First, an unnecessary differencing would create more problems than a solution. Second, we can also modify ARIMA to incorporate seasonalllty in the data, which we will see shortly.
+
+Yet, out of curiosity, let's remove the "seemingly" weekly seasonality and see what happens to ACF's. Since, the order of differencing is not important, we first applied the seasonal differencing then applied the first difference:
 
 
 ```r
 toronto %>%
   gg_tsdisplay(difference(box_cox(cases, lmbd), 7) %>% difference(),
-               plot_type='partial', lag=36) +
-  labs(title = "Seasonal & first differenced", y="")
+               plot_type = 'partial',
+               lag = 36) +
+  labs(title = "Seasonal & first differenced", y = "")
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar7-1.png" width="672" />
@@ -14318,7 +14453,7 @@ t(t[1:2])
 ## seasonal_strength_week 0.5142436
 ```
 
-Relative to $F_{Trend}$, the seasonality is not robust in the data.  So, our decision is to go with a simple first-differencing with Box-Cox transformation.  However, we will look at the final predictive performance if the transformation provides any benefit.
+Relative to $F_{Trend}$, the seasonality is not robust in the data. So, our decision is to go with a simple first-differencing with Box-Cox transformation. However, we will look at the final predictive performance if the transformation provides any benefit.
 
 ## Modeling ARIMA
 
@@ -14326,17 +14461,17 @@ In his post, [Forecasting COVID-19](https://robjhyndman.com/hyndsight/forecastin
 
 > (...) the COVID-19 pandemic, it is easy to see why forecasting its effect is difficult. While we have a good understanding of how it works in terms of person-to-person infections, we have limited and misleading data. The current numbers of confirmed cases are known to be vastly underestimated due to the limited testing available. There are almost certainly many more cases of COVID-19 that have not been diagnosed than those that have. Also, the level of under-estimation varies enormously between countries. In a country like South Korea with a lot of testing, the numbers of confirmed cases are going to be closer to the numbers of actual cases than in the US where there has been much less testing. So we simply cannot easily model the spread of the pandemic using the data that is available.
 
->The second problem is that the forecasts of COVID-19 can affect the thing we are trying to forecast because governments are reacting, some better than others. A simple model using the available data will be misleading unless it can incorporate the various steps being taken to slow transmission.
+> The second problem is that the forecasts of COVID-19 can affect the thing we are trying to forecast because governments are reacting, some better than others. A simple model using the available data will be misleading unless it can incorporate the various steps being taken to slow transmission.
 
 > In summary, fitting simple models to the available data is pointless, misleading and dangerous.
 
-With our selection of the data, we do not intent to create another debate on forecasting COVID-19. There are hundreds of different forecasting models currently operational in a hub, [The COVID-19 Forecast Hub](https://covid19forecasthub.org), that can be used live.  We will start with an automated algorithm `ARIMA()` that will allow a seasonal parameters:
+With our selection of the data, we do not intent to create another debate on forecasting COVID-19. There are hundreds of different forecasting models currently operational in a hub, [The COVID-19 Forecast Hub](https://covid19forecasthub.org), that can be used live. We will start with an automated algorithm `ARIMA()` that will allow a seasonal parameters:
 
 $$
 \text { ARIMA }(p, d, q) \times(P, D, Q) S
 $$
 
-The first term is the non-seasonal part of ARIMA with $p=$ AR order, $d=$ non-seasonal differencing, $q=$ MA order.  The secon term is seasonal part of the model with $P=$ seasonal AR order, $D=$ seasonal differencing, $Q$ = seasonal MA order, and $S=$ seasonal pattern, which defines the number of time periods until the pattern repeats again. 
+The first term is the non-seasonal part of ARIMA with $p=$ AR order, $d=$ non-seasonal differencing, $q=$ MA order. The secon term is seasonal part of the model with $P=$ seasonal AR order, $D=$ seasonal differencing, $Q$ = seasonal MA order, and $S=$ seasonal pattern, which defines the number of time periods until the pattern repeats again.
 
 In our case, low values tend always to occur in some particular days, Sundays. Therefore, we may think that $\mathrm{S}=7$ is the span of the periodic seasonal behavior in our data. We can think of a seasonal first order autoregressive model, AR(1), would use $X_{t-7}$ to predict $X_t$. Likewise, a seasonal second order autoregressive model would use $X_{t-7}$ and $X_{t-14}$ to predict $X_t$. A seasonal first order MA(1) model would use $\epsilon_{t-7}$ as a predictor. A seasonal second order MA(2) model would use $\epsilon_{t-7}$ and $\epsilon_{t-14}$.
 
@@ -14353,23 +14488,27 @@ toronto %>%
 
 <img src="18-TimeSeriesArima_files/figure-html/ar9-1.png" width="672" />
 
-We look at the spikes and decays in ACF and PACF:  a exponential decay in ACF is observed at seasonal spikes of 7, 14, and 21 as well as two spikes at 7 and 14 in PACF indicate seasonal AR(2)  We will also add non-seasonal AR(2) due to 2 spikes in PACF at days 1 and 2.  Here are our initial models:
+We look at the spikes and decays in ACF and PACF: a exponential decay in ACF is observed at seasonal spikes of 7, 14, and 21 as well as two spikes at 7 and 14 in PACF indicate seasonal AR(2). We will also add non-seasonal AR(2) due to 2 spikes in PACF at days 1 and 2. Here are our initial models:
 
 $$
 \operatorname{ARIMA}(2,1,0)(2,1,0)_{7}\\
 \operatorname{ARIMA}(0,1,2)(0,1,3)_{7}
-$$ 
-  
+$$
+
 
 ```r
 covfit <- toronto %>%
-  model(AR2 = ARIMA(boxcases ~ pdq(2,1,0) + PDQ(3,1,0)),
-        MA3 = ARIMA(boxcases ~ pdq(0,1,2) + PDQ(0,1,3)),
-        auto = ARIMA(boxcases, stepwise=FALSE, approx=FALSE))
+  model(
+    AR2 = ARIMA(boxcases ~ pdq(2, 1, 0) + PDQ(3, 1, 0)),
+    MA3 = ARIMA(boxcases ~ pdq(0, 1, 2) + PDQ(0, 1, 3)),
+    auto = ARIMA(boxcases, stepwise = FALSE, approx = FALSE)
+  )
 
-t(cbind("AR2" = covfit$AR2,
-        "MA3" = covfit$MA3,
-        "auto" = covfit$auto)) 
+t(cbind(
+  "AR2" = covfit$AR2,
+  "MA3" = covfit$MA3,
+  "auto" = covfit$auto
+))
 ```
 
 ```
@@ -14408,26 +14547,28 @@ covfit %>% dplyr::select(MA3) %>% report()
 ## sigma^2 estimated as 0.4684:  log likelihood=-277.29
 ## AIC=566.58   AICc=566.92   BIC=587.9
 ```
-  
-The `ARIMA()` function uses `unitroot_nsdiffs()` to determine $D$ when it is not specified. Earlier, we run this function that suggested no seasonal differencing.   All other parameters are determined by minimizing the AICc.  
 
-AICc (Akaike's Information Criterion with a correction for finite sample sizes) is similar to Akaike's Information Criterion (AIC), but it includes a correction factor to account for the fact that the sample size may be small relative to the number of parameters in the model. This correction helps to reduce the bias in the AIC estimate and make it more accurate for small sample sizes.  When the sample size is large, AIC and AICc are nearly equivalent and either one can be used.
+The `ARIMA()` function uses `unitroot_nsdiffs()` to determine $D$ when it is not specified. Earlier, we run this function that suggested no seasonal differencing.
 
-Although AICc values across the models are not comparable (for "auto", as it has no seasonal differencing), it seems that our manually constructed ARIMA, $\operatorname{ARIMA}(0,1,2)(0,1,3)_{7}$ could also be an option.  This brings the possibility of a grid search to our attention.  
+All other parameters are determined by minimizing the AICc (Akaike's Information Criterion with a correction for finite sample sizes), which is similar to Akaike's Information Criterion (AIC), but it includes a correction factor to account for the fact that the sample size may be small relative to the number of parameters in the model. This correction helps to reduce the bias in the AIC estimate and make it more accurate for small sample sizes. When the sample size is large, AIC and AICc are nearly equivalent and either one can be used.
 
-Let's check their residuals:
-  
+Although AICc values across the models are not comparable (for "auto", as it has no seasonal differencing), it seems that our manually constructed ARIMA, $\operatorname{ARIMA}(0,1,2)(0,1,3)_{7}$ could also be an option. This brings the possibility of a grid search to our attention.
+
+Before that, however, let's check their residuals:
+
 
 ```r
-rbind(augment(covfit) %>%
-        filter(.model == "auto") %>%
-        features(.innov, ljung_box, lag=24, dof=5),
-      augment(covfit) %>%
-        filter(.model == "MA3") %>%
-        features(.innov, ljung_box, lag=24, dof=5),
-      augment(covfit) %>%
-        filter(.model == "AR2") %>%
-        features(.innov, ljung_box, lag=24, dof=5))
+rbind(
+  augment(covfit) %>%
+    filter(.model == "auto") %>%
+    features(.innov, ljung_box, lag = 24, dof = 5),
+  augment(covfit) %>%
+    filter(.model == "MA3") %>%
+    features(.innov, ljung_box, lag = 24, dof = 5),
+  augment(covfit) %>%
+    filter(.model == "AR2") %>%
+    features(.innov, ljung_box, lag = 24, dof = 5)
+)
 ```
 
 ```
@@ -14446,7 +14587,9 @@ covfit %>%dplyr::select(MA3) %>% gg_tsresiduals(lag=36)
 
 <img src="18-TimeSeriesArima_files/figure-html/ar12-1.png" width="672" />
 
-There are several significant spikes in the ACF. But, the model passes the Ljung-Box test at the 5 percent significance level. Meanwhile, a model can still be used for forecasting, but the prediction intervals may not be accurate due to the correlated residuals. Sometimes it is possible that we cannot find a model that passes this test.  In practice, we may have to look at the tradeoff between prediction accuracy and and reliable confidence intervals.  If the difference is too high, we may chose the best model with the highest prediction accuracy.   
+There are several significant spikes in the ACF. But, the model passes the Ljung-Box test at the 5 percent significance level.
+
+Meanwhile, a model without white noise errors can still be used for forecasting, but the prediction intervals may not be accurate due to the correlated residuals. Sometimes, we cannot find a model that passes this test. In practice, we may have to look at the tradeoff between prediction accuracy and reliable confidence intervals. If the difference is too high, we may chose the best model with the highest prediction accuracy.
 
 Before looking at a cross-validation approach for model selection in ARIMA modeling, let use our model to predict a week ahead (2020-11-22 to 2020-11-28):
 
@@ -14474,52 +14617,53 @@ fc
 ## 10 MA3    2020-11-24 N(13, 0.87)  13.1
 ## # … with 11 more rows
 ```
-  
 
 
 ```r
 fc %>%
- autoplot(toronto, level = NULL) +
- xlab("Days") + ylab("Transformed Cases with Box-Cox")
+  autoplot(toronto, level = NULL) +
+  xlab("Days") + ylab("Transformed Cases with Box-Cox")
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar14-1.png" width="672" />
 
 ```r
-a <- forecast(covfit, h=7) %>%
-  filter(.model=='auto') %>%
+a <- forecast(covfit, h = 7) %>%
+  filter(.model == 'auto') %>%
   autoplot(toronto) +
   labs(title = "COVID-19 Forecasting - Auto",
-       y="Box-Cox Tranformed Cases")
-b <- forecast(covfit, h=7) %>%
-  filter(.model=='MA3') %>%
+       y = "Box-Cox Tranformed Cases")
+b <- forecast(covfit, h = 7) %>%
+  filter(.model == 'MA3') %>%
   autoplot(toronto) +
   labs(title = "COVID-19 Forecasting - MA3",
-       y="Box-Cox Transformed Cases")
+       y = "Box-Cox Transformed Cases")
 
 require(gridExtra)
-grid.arrange(a, b, ncol=2)
+grid.arrange(a, b, ncol = 2)
 ```
 
 <img src="18-TimeSeriesArima_files/figure-html/ar14-2.png" width="672" />
 
-We have predicted values for coming 7 days but we do not have realized values.  Hence, we cannot compare these models in terms of their accuracy.  We now look at the forecast accuracy of these models by using a training set containing all data up to 2020-11-14. We then forecast the remaining seven days in the data set and compare the results with the actual values.
+We have predicted values for coming 7 days but we do not have realized values. Hence, we cannot compare these models in terms of their accuracy. We can look at the forecast accuracy of these models by using a training set containing all data up to 2020-11-14. When we forecast the remaining seven days in the data, we can calculate the prediction accuracy.
 
 
 ```r
 train <- toronto %>%
-  filter_index(~ "2020-11-14")
-  
+  filter_index( ~ "2020-11-14")
+
 fit <- train %>%
   model(
-    AR2 = ARIMA(boxcases ~ pdq(2,1,0) + PDQ(3,1,0)),
-    MA3 = ARIMA(boxcases ~ pdq(0,1,2) + PDQ(0,1,3)),
-    auto = ARIMA(boxcases, stepwise=FALSE, approx=FALSE)
+    AR2 = ARIMA(boxcases ~ pdq(2, 1, 0) + PDQ(3, 1, 0)),
+    MA3 = ARIMA(boxcases ~ pdq(0, 1, 2) + PDQ(0, 1, 3)),
+    auto = ARIMA(boxcases, stepwise = FALSE, approx = FALSE)
   ) %>%
   mutate(mixed = (auto + AR2 + MA3) / 3)
 ```
 
-And, now the accuracy measures:  
+Although mixing several different ARIMA models does not make sense, we can have an ensemble forecast mixing several different time series models in addition ARIMA modeling. A nice discussion can be found in this [post](https://stackoverflow.com/questions/70183054/time-series-forecasting-using-fable-in-r-determining-most-optimum-combination-o) at Stackoverflow.
+
+And, now the accuracy measures:
 
 
 ```r
@@ -14543,19 +14687,19 @@ accuracy(fc, toronto)
 ## 3 MA3    Test  -1.61  1.91  1.61 -11.9  11.9  1.38  1.32 0.501
 ## 4 mixed  Test  -1.54  1.86  1.54 -11.4  11.4  1.32  1.28 0.436
 ```
-  
-In all measures, the model "auto" (ARIMA with the Hyndman-Khandakar algorithm) is better than others. Although mixing several different ARIMA models does not make sense, we can have an ensemble forecast mixing several different time series models in addition ARIMA modeling. A nice discussion can be found in this [post](https://stackoverflow.com/questions/70183054/time-series-forecasting-using-fable-in-r-determining-most-optimum-combination-o) at  Stackoverflow.  
+
+In all measures, the model "auto" (ARIMA with the Hyndman-Khandakar algorithm) is better than others.
 
 Finally, it is always good to check ARIMA (or any time series forecasting) against the base benchmark.
 
 
 ```r
 bfit <- train %>%
-  model(
-    ave = MEAN(boxcases),
-    lm = TSLM(boxcases ~ trend()+season())
-  ) 
+  model(ave = MEAN(boxcases),
+        lm = TSLM(boxcases ~ trend() + season()))
+
 bfc <- bfit %>% forecast(h = 7)
+
 bfc %>%
   autoplot(toronto, level = NULL)
 ```
@@ -14563,7 +14707,7 @@ bfc %>%
 <img src="18-TimeSeriesArima_files/figure-html/ar17-1.png" width="672" />
 
 ```r
-  accuracy(bfc, toronto)
+accuracy(bfc, toronto)
 ```
 
 ```
@@ -14573,13 +14717,12 @@ bfc %>%
 ## 1 ave    Test   4.59  4.72  4.59  31.8  31.8  3.94  3.26 0.507
 ## 2 lm     Test   2.07  2.32  2.07  14.1  14.1  1.77  1.60 0.516
 ```
-The results shows our ARIMA model is doing much better job relative to a time-series linear model or a simple average 
 
-As we discussed earlier in this book, there are basically two ways to select a best fitting predictive model: **ex-post** and **ex-ante** tools to penalize the overfitting.  With AIC (Akaike Information Criterion) and BIC (Bayesian Information Criteria) measures, we can indirectly estimate the test (out-of-sample) error by making an adjustment to the training (in-sample) error to account for the bias due to overfitting. Therefore, these methods are ex-post tools to penalize the overfitting.  The Hyndman-Khandakar algorithm uses this ex-post approach by selecting the best predictive  ARIMA model with minimum AICc among alternatives.   
+The results shows our ARIMA model is doing much better job relative to a time-series linear model or a simple average.
 
-We can directly estimate the test error (out-sample) and choose the model that minimizes it. Instead of selecting a model with AICc, we can do it by tuning the parameters of ARIMA with a cross-validation approach so that the tuned model achieves the highest predictive accuracy. 
+As we discussed earlier in this book, there are basically two ways to select a best fitting predictive model: **ex-post** and **ex-ante** tools to penalize the overfitting. With AIC (Akaike Information Criterion) and BIC (Bayesian Information Criteria) measures, we can indirectly estimate the test (out-of-sample) error by making an adjustment to the training (in-sample) error to account for the bias due to overfitting. Therefore, these methods are ex-post tools to penalize the overfitting. The Hyndman-Khandakar algorithm uses this ex-post approach by selecting the best predictive ARIMA model with minimum AICc among alternatives.
 
-
+We can directly estimate the test error (out-sample) and choose the model that minimizes it. Instead of selecting a model with AICc, we can do it by tuning the parameters of ARIMA with a cross-validation approach so that the tuned model achieves the highest predictive accuracy.
 
 <!--chapter:end:18-TimeSeriesArima.Rmd-->
 
@@ -14597,31 +14740,32 @@ q <- 0:3
 P <- 0:3
 Q <- 0:2
 
-comb <- as.matrix(expand.grid(p,q,P,Q))
+comb <- as.matrix(expand.grid(p, q, P, Q))
 
 # We remove the unstable grids
-comb <- as.data.frame(comb[-1, ])
-ind <- which(comb$Var1==0 & comb$Var2==0, arr.ind = TRUE)
-comb <- comb[-ind, ]
+comb <- as.data.frame(comb[-1,])
+ind <- which(comb$Var1 == 0 & comb$Var2 == 0, arr.ind = TRUE)
+comb <- comb[-ind,]
 row.names(comb) <- NULL
 colnames(comb) <- c("p", "q", "P", "Q")
 
 aicc <- c()
 RMSE <- c()
 
-for(k in 1:nrow(comb)){
+for (k in 1:nrow(comb)) {
   tryCatch({
-  fit <- toronto %>% 
-    model(ARIMA(boxcases ~ 0 + pdq(comb[k,1],1,comb[k,2])
-                + PDQ(comb[k,3],1,comb[k,4])))
-  wtf <- fit %>% glance   
-  res <- fit %>% residuals()
-  aicc[k] <- wtf$AICc
-  RMSE[k] <- sqrt(mean((res$.resid)^2))
-  }, error=function(e){})
+    fit <- toronto %>%
+      model(ARIMA(boxcases ~ 0 + pdq(comb[k, 1], 1, comb[k, 2])
+                  + PDQ(comb[k, 3], 1, comb[k, 4])))
+    wtf <- fit %>% glance
+    res <- fit %>% residuals()
+    aicc[k] <- wtf$AICc
+    RMSE[k] <- sqrt(mean((res$.resid) ^ 2))
+  }, error = function(e) {
+  })
 }
 
-cbind(comb[which.min(aicc),], "AICc" = min(aicc, na.rm = TRUE))
+cbind(comb[which.min(aicc), ], "AICc" = min(aicc, na.rm = TRUE))
 ```
 
 ```
@@ -14630,7 +14774,7 @@ cbind(comb[which.min(aicc),], "AICc" = min(aicc, na.rm = TRUE))
 ```
 
 ```r
-cbind(comb[which.min(RMSE),], "RMSE" = min(RMSE, na.rm = TRUE))
+cbind(comb[which.min(RMSE), ], "RMSE" = min(RMSE, na.rm = TRUE))
 ```
 
 ```
@@ -14638,9 +14782,9 @@ cbind(comb[which.min(RMSE),], "RMSE" = min(RMSE, na.rm = TRUE))
 ## 165 3 3 2 2 0.6482865
 ```
 
-Although we set the ARIMA without a constant, we could extend the grid with a constant. We can also add a line (`ljung_box`) that extracts and reports the Ljung-Box test for each model.  We can then select the one that has a minimum AICc and passes the test.  We do not need this grid search as the Hyndman-Khandakar algorithm for automatic ARIMA modelling (`ARIMA()`) in `fable` is able to do it for us very effectively (except for the Ljung-Box test for each model).  The Hyndman-Khandakar algorithm, selecting an ARIMA model with the minimum AICc for forecasting, is an ex-post process.
- 
-In practice, we can apply a similar grid search with cross validation for selecting the best model that has the minimum out-of-sample prediction error without checking if it passes the Ljung-Box test or not.  Here is a simple example:
+Although we set the ARIMA without a constant, we could extend the grid with a constant. We can also add a line (`ljung_box`) that extracts and reports the Ljung-Box test for each model.  We can then select the one that has a minimum AICc and passes the test.
+  
+We may not need this grid search as the Hyndman-Khandakar algorithm for automatic ARIMA modelling is able to do it for us very effectively (except for the Ljung-Box test for each model).  We should note that the Hyndman-Khandakar algorithm selects the best ARIMA model for forecasting with the minimum AICc. In practice, we can apply a similar grid search with cross validation for selecting the best model that has the minimum out-of-sample prediction error without checking if it passes the Ljung-Box test or not.  Here is a simple example:
 
 
 ```r
@@ -14650,32 +14794,33 @@ q <- 0:3
 P <- 0:3
 Q <- 0:2
 
-comb <- as.matrix(expand.grid(p,q,P,Q))
+comb <- as.matrix(expand.grid(p, q, P, Q))
 
 # We remove the unstable grids
-comb <- as.data.frame(comb[-1, ])
-ind <- which(comb$Var1==0&comb$Var2==0, arr.ind = TRUE)
-comb <- comb[-ind,]
+comb <- as.data.frame(comb[-1,])
+ind <- which(comb$Var1 == 0 & comb$Var2 == 0, arr.ind = TRUE)
+comb <- comb[-ind, ]
 row.names(comb) <- NULL
 colnames(comb) <- c("p", "q", "P", "Q")
 
 train <- toronto %>%
-  filter_index(~ "2020-11-14")
+  filter_index( ~ "2020-11-14")
 
 RMSE <- c()
 
-for(k in 1:nrow(comb)){
+for (k in 1:nrow(comb)) {
   tryCatch({
     amk <- train %>%
-      model(ARIMA(boxcases ~ 0 + pdq(comb[k,1],1,comb[k,2])
-                  + PDQ(comb[k,3],1,comb[k,4]))) %>%
+      model(ARIMA(boxcases ~ 0 + pdq(comb[k, 1], 1, comb[k, 2])
+                  + PDQ(comb[k, 3], 1, comb[k, 4]))) %>%
       forecast(h = 7) %>%
       accuracy(toronto)
     RMSE[k] <- amk$RMSE
-  }, error=function(e){})
+  }, error = function(e) {
+  })
 }
 
-cbind(comb[which.min(RMSE),], "RMSE" = min(RMSE, na.rm = TRUE))
+cbind(comb[which.min(RMSE), ], "RMSE" = min(RMSE, na.rm = TRUE))
 ```
 
 ```
@@ -14685,18 +14830,16 @@ cbind(comb[which.min(RMSE),], "RMSE" = min(RMSE, na.rm = TRUE))
 
 ```r
 g <- which.min(RMSE)
-
-
 toronto %>%
-  model(ARIMA(boxcases ~ 0 + pdq(comb[g,1],1,comb[g,2])
-              + PDQ(comb[g,3],1,comb[g,4]))) %>%
+  model(ARIMA(boxcases ~ 0 + pdq(comb[g, 1], 1, comb[g, 2])
+              + PDQ(comb[g, 3], 1, comb[g, 4]))) %>%
   forecast(h = 7) %>%
   autoplot(toronto, level = NULL)
 ```
 
 <img src="19-TSGrid_files/figure-html/ag3-1.png" width="672" />
   
-We will not apply h-step-ahead rolling-window cross-validations, which can be found in the post, [Time series cross-validation using fable](https://robjhyndman.com/hyndsight/tscv-fable/), by Hyndman (2021).  However, when we have multiple competing models, we may not want to compare their predictive accuracy by looking at their error rates using only few out-of-sample observations.  If we use, however, rolling windows or continuously expanding windows, we can effectively create a large number of days tested within the data.       
+We will not apply h-step-ahead rolling-window cross-validations for ARIMA, which can be found in the post, [Time series cross-validation using fable](https://robjhyndman.com/hyndsight/tscv-fable/), by Hyndman (2021).  However, when we have multiple competing models, we may not want to compare their predictive accuracy by looking at their error rates using only few out-of-sample observations.  If we use rolling windows or continuously expanding windows, we can effectively create a large number of days tested within the data.       
 
 
 
@@ -14704,7 +14847,9 @@ We will not apply h-step-ahead rolling-window cross-validations, which can be fo
 
 # Time Series Embedding
 
-In general, forecasting models use either direct or recursive forecasting, or their combinations (See [Taieb and Hyndman](https://robjhyndman.com/papers/rectify.pdf), 2012).  The difference between these two methods is related to discussion on prediction accuracy and forecasting variance. As we see below, recursive forecasting requires a parametric model and would face increasing forecasting error when the underlying model is not linear. Direct forecasting, however, can be achieved by a nonparametric predictive algorithm, while it may have a higher variance as the forecast horizon gets longer.  
+In general, forecasting models use either direct or recursive forecasting, or their combinations (See [Taieb and Hyndman](https://robjhyndman.com/papers/rectify.pdf), 2012).  The difference between these two methods is related to discussion on prediction accuracy and forecasting variance. 
+  
+Recursive forecasting requires a parametric model and would face increasing forecasting error when the underlying model is not linear. Direct forecasting, however, can be achieved by a nonparametric predictive algorithm, while it may have a higher variance as the forecast horizon gets longer.  
 
 Multi-period recursive forecasting use a single time series model, like AR(1).  With iterative substitutions of the estimated model, any forecast period of $h$ can be computed.  Let's start with a simple AR(1) to see recursive forecasting:
 
@@ -14774,9 +14919,9 @@ $$
 \end{aligned}
 $$
 
-Each model is estimated using the principle of ordinary least squares, given that series are stationary. Forecasts in VAR are calculated with recursive iterations. Therefore, the set of equations generates forecasts for each variable. To decide the number of lags in each equation, the BIC is used  
+Each model is estimated using the principle of ordinary least squares, given that series are stationary. Forecasts in VAR are calculated with recursive iterations. Therefore, the set of equations generates forecasts for each variable. To decide the number of lags in each equation, the BIC is used.  
 
-Let's have our COVID-19 data and include the mobility to forecasting
+Let's have our COVID-19 data and include the mobility to our forecasting model.  
 
 
 ```r
@@ -14784,12 +14929,19 @@ library(tsibble)
 library(fpp3)
 
 load("~/Dropbox/ToolShed_draft/dftoronto.RData")
-day <- seq.Date(from = as.Date("2020/03/01"),
-                         to = as.Date("2020/11/21"), by = 1)
+day <- seq.Date(
+  from = as.Date("2020/03/01"),
+  to = as.Date("2020/11/21"),
+  by = 1
+)
 
-tdata <- tibble(Day = day, mob = data$mob, cases = data$cases)
+tdata <- tibble(Day = day,
+                mob = data$mob,
+                cases = data$cases)
+
 toronto <- tdata %>%
   as_tsibble(index = Day)
+
 toronto
 ```
 
@@ -14816,14 +14968,12 @@ We will estimate the recursive forecasts for 1 to 14 days ahead.
 ```r
 # We need make series stationary
 trdf <- toronto %>%
-            mutate(diffcases = difference(cases),
-                   diffmob = difference(mob))
+  mutate(diffcases = difference(cases),
+         diffmob = difference(mob))
 
 # VAR with BIC
-fit <- trdf[-1,] %>%
-  model(
-    VAR(vars(diffcases, diffmob), ic = "bic")
-  )
+fit <- trdf[-1, ] %>%
+  model(VAR(vars(diffcases, diffmob), ic = "bic"))
 glance(fit)
 ```
 
@@ -14872,11 +15022,12 @@ fit %>% report()
 ## log likelihood = -853.64
 ## AIC = 1755.28	AICc = 1760.38	BIC = 1840.73
 ```
+  
 
 ```r
 fit %>%
-  forecast(h=14) %>%
-  autoplot(trdf[-c(1:200),])
+  forecast(h = 14) %>%
+  autoplot(trdf[-c(1:200), ])
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-3-1.png" width="672" />
@@ -14891,7 +15042,7 @@ For direct forecasting, we need to rearrange the data in a way that we can estim
 ```r
 Y <- 1:10
 Y <- embed(Y, 3)
-colnames(Y)=c("Y(t)","Y(t-1)","Y(t-2)")
+colnames(Y) = c("Y(t)", "Y(t-1)", "Y(t-2)")
 Y
 ```
 
@@ -14907,7 +15058,7 @@ Y
 ## [8,]   10      9      8
 ```
 
-Now the key point is there is no a temporal dependence between each row so that shuffling this data after re-structuring it admissible.  Let's have an AR(1) example on this simulated data
+Now, the key point is that there is no a temporal dependence between each row so that shuffling this data after re-structuring it admissible.  Let's have an AR(1) example on this simulated data
 
 
 ```r
@@ -14919,17 +15070,24 @@ y <- c(0, n)
 set.seed(345)
 eps <- rnorm(n, 0, 1)
 
-for(j in 1:(n-1)) {
-  y[j+1] <- y[j]*rho + eps[j]
-  }
+for (j in 1:(n - 1)) {
+  y[j + 1] <- y[j] * rho + eps[j]
+}
 
 ylagged <- y[2:n]
 
-par(mfrow=c(1,2))
-plot(ylagged, y[1:(n-1)], col = "lightpink",
-     ylab = "y", xlab = "y(t-1)")
-plot(y[1:500], type = "l", col = "red",
-     ylab = "y", xlab = "t")
+par(mfrow = c(1, 2))
+plot(ylagged,
+     y[1:(n - 1)],
+     col = "lightpink",
+     ylab = "y",
+     xlab = "y(t-1)")
+plot(y[1:500],
+     type = "l",
+     col = "red",
+     ylab = "y",
+     xlab = "t"
+)
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -14938,7 +15096,6 @@ We will use an AR(1) estimation with OLS after embedding:
 
 
 ```r
-y_em <- embed(y, 2)
 head(y)
 ```
 
@@ -14947,6 +15104,7 @@ head(y)
 ```
 
 ```r
+y_em <- embed(y, 2)
 colnames(y_em) <- c("yt", "yt_1")
 head(y_em)
 ```
@@ -14960,6 +15118,7 @@ head(y_em)
 ## [5,] -1.0125757 -1.1118166
 ## [6,] -1.4942098 -1.0125757
 ```
+  
 And estimation of AR(1) with OLS:
 
 
@@ -15000,7 +15159,8 @@ ar1
 ##   yt_1  
 ## 0.8496
 ```
-This proves the temporal independence across the observations in the rearranged data.  This is important because the temporal order in the time series data would not affect the cross-validation process or bootstrapping applications in a grid search anymore.  When we have this freedom, we can use all conventional machine learning applications on time series data, like random forests, which we see in the next chapter.   
+
+This application shows the temporal independence across the observations in the rearranged data give that model (AR) is correctly specified.  This is important because we can use conventional machine learning applications on time series data, like random forests, which we see in the next chapter.   
 
 This re-arrangement can also be applied to multivariate data sets:
 
@@ -15061,7 +15221,8 @@ Each one of these models requires a different rearrangement in the data.  Here a
 ## [5,]    9     27      6     26      5     25
 ## [6,]   10     28      7     27      6     26
 ```
-We already rearranged the data for the first model. if we remove the first row in `y(t)` and the last row in the remaining set, we can get the the data for the second model:
+ 
+We already rearranged the data for the first model. if we remove the first row in `y(t)` and the last row in the remaining set, we can get the data for the second model:
 
 
 
@@ -15086,9 +15247,9 @@ We will use our COVID-19 data and a simple linear regression as an example of di
 ```r
 # Preparing data
 df <- data.frame(dcases = trdf$diffcases, dmob = trdf$diffmob)
-df <- df[complete.cases(df), ]
+df <- df[complete.cases(df),]
 rownames(df) <- NULL
-df <-as.matrix(df)
+df <- as.matrix(df)
 head(df)
 ```
 
@@ -15102,7 +15263,7 @@ head(df)
 ## [6,]     -2  0.03232
 ```
 
-Now we need to decide on two parameters: the window size, that is, how many lags will be included in each row; and how many days we will forecast.  The next section will use more advance functions for re-arranging the data and apply the direct forecasting with random forests. For now, let's use a 3-day window and a 3-day forecast: 
+Now we need to decide on two parameters: the window size, that is, how many lags will be included in each row; and how many days we will forecast.  The next section will use more advance functions for re-arranging the data and apply the direct forecasting with random forests. For now, let's use a 3-day window and a 3-day forecast horizon: 
   
 
 ```r
@@ -15112,15 +15273,15 @@ fh <- c() # storage for forecast
 
 # Start with first
 dt <- embed(df, w)
-y <- dt[,1]
-X <- dt[,-1]
+y <- dt[, 1]
+X <- dt[, -1]
 
 for (i in 1:h) {
   fit <- lm(y ~ X)
   l <- length(fit$fitted.values)
   fh[i] <- fit$fitted.values[l]
   y <- y[-1]
-  X <- X[-nrow(X),]
+  X <- X[-nrow(X), ]
 }
 
 fh
@@ -15133,7 +15294,7 @@ fh
 
 ```r
 plot(1:266, trdf$diffcases, col = "red", type = "l")
-lines(267:269, fh, col="blue")
+lines(267:269, fh, col = "blue")
 ```
 
 <img src="20-TSEmbedding_files/figure-html/unnamed-chunk-15-1.png" width="672" />
@@ -15143,8 +15304,8 @@ We haven't used training and test sets above.  If we apply a proper splitting, w
 
 ```r
 # We set the last 7 days as our test set
-train <- df[1:258, ]
-test <- df[-c(1:258), ]
+train <- df[1:258,]
+test <- df[-c(1:258),]
 
 h = 7
 w <- 3:14 # a grid for window size
@@ -15153,16 +15314,16 @@ fh <- matrix(0, length(w), h)
 rownames(fh) <- w
 colnames(fh) <- 1:7
 
-for(s in 1:length(w)){
+for (s in 1:length(w)) {
   dt <- embed(train, w[s])
-  y <- dt[,1]
-  X <- dt[,-1]
-    for (i in 1:h) {
-      fit <- lm(y ~ X)
-      fh[s,i] <- last(fit$fitted.values)
-      y <- y[-1]
-      X <- X[-nrow(X),]
-    }
+  y <- dt[, 1]
+  X <- dt[, -1]
+  for (i in 1:h) {
+    fit <- lm(y ~ X)
+    fh[s, i] <- last(fit$fitted.values)
+    y <- y[-1]
+    X <- X[-nrow(X), ]
+  }
 }
 
 fh
@@ -15203,8 +15364,8 @@ Rows in `fh` show the 7-day forecast for each window size.  We can see which win
 ```r
 rmspe <- c()
 
-for(i in 1: nrow(fh)){
-  rmspe[i] <- sqrt(mean((fh[i,]-test)^2))
+for (i in 1:nrow(fh)) {
+  rmspe[i] <- sqrt(mean((fh[i, ] - test) ^ 2))
 }
 
 rmspe
@@ -15223,7 +15384,7 @@ which.min(rmspe)
 ## [1] 9
 ```
 
-We used the last 7 days in our data as our test set and previous days as our training set.  A natural question would be whether we could shuffle the data and use **any** 7 days as our test set?  The answer is yes, because we do not need to follow a temporal order in the data after rearranging it with embedding. This is important because we can add a bootstrapping loop to our grid search above and get better tuning for finding the best window size.
+We used the last 7 days in our data as our test set.  A natural question would be whether we could shuffle the data and use **any** 7 days as our test set?  The answer is yes, because we do not need to follow a temporal order in the data after rearranging it with embedding. This is important because we can add a bootstrapping loop to our grid search above and get better tuning for finding the best window size.
 
 We incorporate all these ideas with our random forest application in the next chapter. 
 
@@ -15232,7 +15393,7 @@ We incorporate all these ideas with our random forest application in the next ch
 
 # Random Forest
 
-We will utilize embedding for direct forecasting with Random Forests.  We choose the random forests algorithm because it does not need an explicit tuning by a grid search.  In the practice, however, we can still search for the number of trees and the number of variables randomly sampled as candidates at each split.   
+We will utilize embedding methods for direct forecasting with Random Forests.  We choose the random forests algorithm because it does not need an explicit tuning by a grid search.  In the practice, however, we can still search for the number of trees and the number of variables randomly sampled as candidates at each split.   
 
 Let's get our COVID-19 data:
 
@@ -15242,10 +15403,13 @@ library(tsibble)
 library(fpp3)
 
 load("~/Dropbox/ToolShed_draft/toronto2.rds")
-day <- seq.Date(from = as.Date("2020/03/01"),
-                         to = as.Date("2020/11/21"), by = 1)
+day <- seq.Date(
+  from = as.Date("2020/03/01"),
+  to = as.Date("2020/11/21"),
+  by = 1
+)
 
-tdata <- tibble(Day = day, data[,-1])
+tdata <- tibble(Day = day, data[, -1])
 toronto2 <- tdata %>%
   as_tsibble(index = Day)
 toronto2
@@ -15267,6 +15431,7 @@ toronto2
 ## 10 2020-03-10    29 -0.0521   9.69 0.448  41.7  5.15  79  
 ## # … with 256 more rows
 ```
+
 As before, the data contain the first wave and the initial part of the second wave in Toronto for 2020. It is from [Ontario Data Catalogue](https://data.ontario.ca/en/dataset?groups=2019-novel-coronavirus#byPHU) sorted by episode dates (`Day`), which is the date when the first symptoms were started. The mobility data is from Facebook, `all_day_bing_tiles_visited_relative_change`, which is reflects positive or negative change in movement relative to baseline. The other variables related to tests are `delay`, which is the time between test results and the episode date, the gender distribution of people is given by `male`, `age` shows the average age among tested people any given day.  The last two variables, `temp` and `hum`, show the daily maximum day temperature and the average outdoor humidity during the day, respectively.
 
 Except for `age` all other variables are non-stationary.  We will take their first difference and make the series stationary before we proceed.
@@ -15274,18 +15439,20 @@ Except for `age` all other variables are non-stationary.  We will take their fir
 
 ```r
 df <- toronto2 %>%
-  mutate(dcases = difference(cases),
-         dmob = difference(mob),
-         ddelay = difference(delay),
-         dmale = difference(male),
-         dtemp = difference(temp),
-         dhum = difference(hum))
+  mutate(
+    dcases = difference(cases),
+    dmob = difference(mob),
+    ddelay = difference(delay),
+    dmale = difference(male),
+    dtemp = difference(temp),
+    dhum = difference(hum)
+  )
 
-dft <- df[ ,-c(2:5,7,8)] #removing levels
-dft <- dft[-1, c(1,3:7,2)] # reordering the columns
+dft <- df[, -c(2:5, 7, 8)] #removing levels
+dft <- dft[-1, c(1, 3:7, 2)] # reordering the columns
 ```
 
-Let's first use a univariate setting for a single-window forecasting, which is the last 7 days.  
+First, we will use a univariate setting for a single-window forecasting, which is the last 7 days.  
 
 ## Univariate
 
@@ -15302,46 +15469,46 @@ fh <- matrix(0, length(w), h)
 rownames(fh) <- w
 colnames(fh) <- 1:h
 
-for(s in 1:length(w)){
-  dt <- as.data.frame(embed(as.matrix(dft[ ,2]), w[s]))
+for (s in 1:length(w)) {
+  dt <- as.data.frame(embed(as.matrix(dft[, 2]), w[s]))
   test_ind = nrow(dt) - (h)
-  train <- dt[1:test_ind, ]
-  test <- dt[-c(1:test_ind), ]
-  y <- train[ ,1]
-  X <- train[ ,-1]
+  train <- dt[1:test_ind,]
+  test <- dt[-c(1:test_ind),]
+  y <- train[, 1]
+  X <- train[, -1]
   
-    for (i in 1:h) {
-      fit <- randomForest(X, y)
-      fh[s, ] <- predict(fit, test[ ,-1])
-      y <- y[-1]
-      X <- X[-nrow(X), ]
-    }
+  for (i in 1:h) {
+    fit <- randomForest(X, y)
+    fh[s,] <- predict(fit, test[, -1])
+    y <- y[-1]
+    X <- X[-nrow(X),]
+  }
 }
 
 fh
 ```
 
 ```
-##              1          2        3          4         5           6         7
-## 3  -15.9234333   8.674467 16.80702  -5.516478 -2.665583  15.1997667  1.656136
-## 4  -12.1391000  -5.546633 19.06582  -3.354100 -0.781700   0.7203905  3.027567
-## 5   -0.5163333  -7.000667 30.40157  -9.348467 -1.751900  -8.8061667 12.010333
-## 6    4.7688333  -8.129314 24.36007 -11.748200 17.193033  -8.4335000 18.690967
-## 7    1.0963667 -15.134067 29.55220 -14.437467 19.655000 -21.4036333 14.804667
-## 8    9.4242333 -23.274567 44.91027 -11.082867 15.167933 -17.3076667 28.031933
-## 9   -8.8280333 -34.704467 63.34503 -21.473367 12.320333 -27.7585667 16.435400
-## 10  -8.7552000 -35.269467 66.01573 -25.050200 15.561733 -23.4471333 10.459300
-## 11   0.0473000 -30.091833 65.44997 -25.430833 16.551233 -18.7945333 11.521900
-## 12   4.2920667 -30.847700 56.32973 -23.433933 16.762100 -16.7179000 14.347600
-## 13  -2.4865333 -30.588533 52.20083 -23.308600 10.000033 -17.6130667  8.027267
-## 14  -2.5725000 -29.501833 54.57207 -22.387400 13.898833 -10.7203667  9.691200
-## 15  -5.8711000 -33.123400 59.61483 -20.856933 14.605767  -7.3618000 13.209600
-## 16  -8.8194000 -36.204400 56.20417 -23.577100 13.916733 -10.8225667 11.797167
-## 17  -9.2253667 -34.702633 59.10270 -25.113500 15.856067 -15.2575333 13.861200
-## 18  -6.0064000 -31.865800 56.80097 -23.461433 12.593400  -8.8054000 13.980500
-## 19  -8.1841333 -30.077667 60.42817 -23.972900 13.934367 -12.5083000 10.801400
-## 20  -9.0513000 -29.037767 58.41837 -25.682367 15.712033 -15.0894667 13.966800
-## 21  -8.3895333 -28.543033 60.40127 -21.189900  9.592267 -13.4498333 14.317333
+##              1          2        3          4         5          6          7
+## 3  -15.9289667   8.210767 18.96167  -5.951248 -5.422900  15.895133 -0.1105333
+## 4   -9.4216333  -5.586133 22.32650  -3.761310 -0.444900  -1.894233  3.0504000
+## 5   -1.2438667  -5.541267 33.62136  -9.063767 -1.794433  -9.748733 16.4341667
+## 6    4.7844667  -9.002667 23.25693 -11.409200 13.223233 -12.937933 16.8046000
+## 7    2.0243667 -16.547167 30.16763 -14.590333 13.503500 -22.113100 12.5927667
+## 8    4.5474333 -24.117567 44.26567 -11.486767 15.114567 -16.128367 27.1569667
+## 9   -3.6966667 -37.467433 66.23103 -19.467967 14.779500 -23.198767 17.4873000
+## 10  -6.9036333 -35.680600 70.18703 -25.370200 14.147567 -21.051467 12.9969667
+## 11   0.9950333 -29.910033 63.41630 -25.773000 19.443467 -19.698400 15.1844000
+## 12   2.2359667 -29.181833 61.65840 -24.491733 16.817867 -15.552300 13.5540667
+## 13  -1.3064667 -31.045933 54.64903 -23.087767 11.724267  -9.906600 12.4120333
+## 14  -3.4698333 -28.736000 56.46040 -22.205600 18.486700 -11.990533 12.7867333
+## 15  -2.2694667 -35.102067 48.32880 -23.826067 15.043133 -12.621267 11.3795333
+## 16 -16.2784333 -36.768100 56.63847 -23.272867 13.546533 -13.983167 12.9414000
+## 17  -9.9887667 -32.262267 59.45367 -27.335133 14.573567 -16.577200 10.6857000
+## 18  -9.5311333 -35.403833 59.50233 -24.536067 14.964033 -12.222600 10.9897000
+## 19  -8.8701000 -31.395367 59.98397 -25.205933 15.632000 -11.702167 11.3733333
+## 20  -7.2084667 -33.882567 60.24880 -24.806667 11.053000 -14.878267 11.8647000
+## 21  -5.0307000 -30.680933 57.72057 -22.284033  9.395700 -12.918233 17.5600667
 ```
 We can now see RMSPE for each row (window size):
 
@@ -15351,16 +15518,16 @@ actual <- test[, 1]
 rmspe <- c()
 
 for (i in 1:nrow(fh)) {
-  rmspe[i] <- sqrt(mean((fh[i, ] - actual)^2))  
+  rmspe[i] <- sqrt(mean((fh[i,] - actual) ^ 2))
 }
 
 rmspe
 ```
 
 ```
-##  [1] 42.90267 43.74960 44.27032 45.50069 44.84153 51.95157 51.61115 50.98179
-##  [9] 50.43206 50.16100 47.74427 48.95038 51.59196 50.63836 50.58698 50.30308
-## [17] 49.61772 49.12016 50.09223
+##  [1] 42.88109 43.62019 45.10958 44.67562 44.42396 51.51704 53.69373 52.30613
+##  [9] 50.69759 50.35036 49.64989 49.69725 49.21206 50.70492 49.04766 50.63225
+## [17] 49.83291 50.21522 50.58987
 ```
 
 ```r
@@ -15375,26 +15542,34 @@ And, if we plot several series of our forecast with different window sizes:
 
 
 ```r
-plot(actual, type = "l", col = "red",
-     ylim = c(-80, 50),
-     ylab = "Actual (red) vs. Forecasts",
-     xlab = "Last 7 days",
-     main = "7-Day Foerecasts",
-     lwd = 3)
-lines(fh[1, ], type = "l", col = "blue")
-lines(fh[2, ], type = "l", col = "green")
-lines(fh[5, ], type = "l", col = "orange")
-lines(fh[12, ], type = "l", col = "black")
-legend("bottomright",  
-       title = "Lags",
-       legend = c("3-day", "4-day", "7-day", "14-day"), 
-       col = c("blue", "green", "orange"), 
-       lty = c(1, 1, 1, 1, 1), bty = "o", cex = 0.75)
+plot(
+  actual,
+  type = "l",
+  col = "red",
+  ylim = c(-80, 50),
+  ylab = "Actual (red) vs. Forecasts",
+  xlab = "Last 7 days",
+  main = "7-Day Foerecasts",
+  lwd = 3
+)
+lines(fh[1,], type = "l", col = "blue")
+lines(fh[2,], type = "l", col = "green")
+lines(fh[5,], type = "l", col = "orange")
+lines(fh[12,], type = "l", col = "black")
+legend(
+  "bottomright",
+  title = "Lags",
+  legend = c("3-day", "4-day", "7-day", "14-day"),
+  col = c("blue", "green", "orange"),
+  lty = c(1, 1, 1, 1, 1),
+  bty = "o",
+  cex = 0.75
+)
 ```
 
 <img src="21-TSRandomForest_files/figure-html/tsr5-1.png" width="672" />
 
-It seems that, as the window size gets larger, the forecast becomes increasingly smooth, perhaps missing the short term dynamics. Another observation is that, although "blue" (3-day window) has the minimum RMSPE, it is not able to capture ups and downs relative to 7-day or 14-day windows.  
+As the window size gets larger, the forecast becomes increasingly smooth missing the short term dynamics. Another observation is that, although "blue" (3-day window) has the minimum RMSPE, it is not able to capture ups and downs relative to 7-day or 14-day windows.  
 
 ## Multivariate
 
@@ -15411,55 +15586,56 @@ fh <- matrix(0, length(w), h)
 rownames(fh) <- w
 colnames(fh) <- 1:h
 
-for(s in 1:length(w)){
-  dt <- as.data.frame(embed(as.matrix(dft[ ,-1]), w[s]))
+for (s in 1:length(w)) {
+  dt <- as.data.frame(embed(as.matrix(dft[, -1]), w[s]))
   test_ind = nrow(dt) - (h)
-  train <- dt[1:test_ind, ]
-  test <- dt[-c(1:test_ind), ]
-  y <- train[ ,1]
-  X <- train[ ,-1]
+  train <- dt[1:test_ind,]
+  test <- dt[-c(1:test_ind),]
+  y <- train[, 1]
+  X <- train[, -1]
   
-    for (i in 1:h) {
-      fit <- randomForest(X, y)
-      fh[s, ] <- predict(fit, test[ ,-1])
-      y <- y[-1]
-      X <- X[-nrow(X), ]
-    }
+  for (i in 1:h) {
+    fit <- randomForest(X, y)
+    fh[s,] <- predict(fit, test[, -1])
+    y <- y[-1]
+    X <- X[-nrow(X),]
+  }
 }
 
 fh
 ```
 
 ```
-##             1           2        3          4           5          6         7
-## 3  -19.616100  -2.8396333 15.76550  -8.219767 -16.4661333   7.949800 -3.080133
-## 4  -24.775700  -0.1640333 16.82507  -9.264933 -14.5296667   3.325567 -3.893867
-## 5  -15.648333   2.4859667 17.33100  -9.950767  -7.5546333 -10.245533  0.793400
-## 6  -11.680233   1.5806667 21.59943 -11.161267  -0.5577333 -12.481567  4.542567
-## 7  -14.020267  -4.3378333 20.33187 -19.613567   3.3353000 -16.100300  7.316267
-## 8   -7.641467 -16.5848000 27.67567 -12.794867   6.0683333 -13.786733 10.812467
-## 9  -10.453500 -22.4751667 48.13513 -23.511633   9.6593000 -19.240467  9.976533
-## 10  -7.424200 -18.4726000 51.79417 -22.836133   7.9836667 -18.590167 10.097967
-## 11  -9.056833 -17.6223000 46.04070 -23.502033  12.5686000 -21.852333 11.043567
-## 12 -10.829933 -17.5915000 43.96557 -23.946867  13.2478333 -19.329100  6.901733
-## 13  -8.425000 -18.0482000 47.88200 -24.631767  11.1274333 -18.260600  9.713367
-## 14  -8.772400 -18.7200333 41.89373 -23.411867   9.4375333 -19.075533  6.366667
+##             1           2        3          4          5          6         7
+## 3  -20.695567  -4.5049667 14.84297  -5.690667 -17.205467   6.283600 -6.253233
+## 4  -22.160900   0.4831333 18.89210  -9.120733 -14.048933   1.709833 -3.402200
+## 5  -14.697433   1.3508000 16.30703 -12.084200  -7.699533  -9.964600  1.386367
+## 6  -12.164533   3.3715667 23.96313 -10.992333   1.389833 -12.069233  1.865433
+## 7  -16.246600  -4.2417000 22.32050 -19.930567   4.339667 -19.883567  9.118133
+## 8   -5.139800 -13.9180333 27.48713 -12.584567   3.452567 -12.517267 16.420967
+## 9  -13.791667 -23.8656000 48.57240 -21.052433   5.926867 -21.024567 10.555300
+## 10 -10.808467 -18.0650667 49.80003 -23.516467   6.458200 -20.362567 10.492900
+## 11  -8.550467 -18.9010333 48.35323 -24.802867  12.480467 -20.773100 11.063533
+## 12  -6.625767 -18.0023667 44.87017 -23.751400  11.101867 -20.616233  7.235433
+## 13  -5.115400 -17.9041000 41.61020 -27.285133   9.159433 -22.168267 11.793233
+## 14  -9.258867 -19.3939667 43.32397 -24.189367   9.289267 -18.191633  8.611467
 ```
+  
 
 ```r
-actual <- test[,1]
+actual <- test[, 1]
 rmspe <- c()
 
 for (i in 1:nrow(fh)) {
-  rmspe[i] <- sqrt(mean((fh[i,]-actual)^2))  
+  rmspe[i] <- sqrt(mean((fh[i, ] - actual) ^ 2))
 }
 
 rmspe
 ```
 
 ```
-##  [1] 42.33777 40.84328 38.90279 39.42948 38.40943 44.11712 45.14647 45.10846
-##  [9] 43.96055 42.98153 44.06632 42.85867
+##  [1] 42.60604 40.67165 38.58989 38.97738 38.52230 44.78534 45.82378 44.38235
+##  [9] 44.41539 43.25450 42.76110 43.47264
 ```
 
 ```r
@@ -15472,26 +15648,34 @@ which.min(rmspe)
 
 
 ```r
-plot(actual, type = "l", col = "red",
-     ylim = c(-80, +50),
-     ylab = "Actual (red) vs. Forecasts",
-     xlab = "Last 7 days",
-     main = "7-Day Foerecasts",
-     lwd = 3)
-lines(fh[1, ], type = "l", col = "blue")
-lines(fh[3, ], type = "l", col = "green")
-lines(fh[5, ], type = "l", col = "orange")
-lines(fh[12, ], type = "l", col = "black")
-legend("bottomright", 
-       title = "Lags",
-       legend = c("3-day", "5-day", "7-day", "14-day"), 
-       col = c("blue", "green", "orange", "black"), 
-       lty = c(1, 1, 1, 1, 1), bty = "o", cex = 0.75)
+plot(
+  actual,
+  type = "l",
+  col = "red",
+  ylim = c(-80,+50),
+  ylab = "Actual (red) vs. Forecasts",
+  xlab = "Last 7 days",
+  main = "7-Day Foerecasts",
+  lwd = 3
+)
+lines(fh[1,], type = "l", col = "blue")
+lines(fh[3,], type = "l", col = "green")
+lines(fh[5,], type = "l", col = "orange")
+lines(fh[12,], type = "l", col = "black")
+legend(
+  "bottomright",
+  title = "Lags",
+  legend = c("3-day", "5-day", "7-day", "14-day"),
+  col = c("blue", "green", "orange", "black"),
+  lty = c(1, 1, 1, 1, 1),
+  bty = "o",
+  cex = 0.75
+)
 ```
 
 <img src="21-TSRandomForest_files/figure-html/tsr7-1.png" width="672" />
 
-It seems that additional predictors do increase the accuracy. Again, relative to the best model (5-day window) our 7-day window correctly captures most ups and downs in the forecast.  Now, a visual inspection shows that all RMSPE's are lower than the univariate forecasts. We would tend to conclude that this is because of the new predictors, specially mobility, temperature, and humidity.  But, the COVID-19 data have many well-known issues related to measurement inaccuracies.  As a side note, we need to test if those differences are statistical significant or not (i.e. Diebold-Mariano Test).   
+It seems that additional predictors do increase the accuracy. Again, relative to the best model (5-day window) our 7-day window correctly captures most ups and downs in the forecast.  Now, a visual inspection shows that all RMSPE's are lower than the univariate forecasts. We would conclude that this is because of the new predictors, specially mobility, temperature, and humidity.  As a side note, we need to test if those differences are statistical significant or not (i.e. Diebold-Mariano Test).   
 
 ## Rolling and expanding windows
 
@@ -15501,32 +15685,32 @@ A seven-day window is not enough for a reliable judgment on the forecast accurac
 ```r
 library(randomForest)
 
-l = 3:10 # lags for embedding 
+l = 3:10 # lags for embedding
 ws = 150 # size of each rolling window
 rmspe <- c()
 
-all_fh <- vector(mode = "list", length = length(l))  
-all_y <-  vector(mode = "list", length = length(l))  
+all_fh <- vector(mode = "list", length = length(l))
+all_y <-  vector(mode = "list", length = length(l))
 
-for(s in 1:length(l)) {
-  dt <- as.data.frame(embed(as.matrix(dft[, -1]), l[s]))
+for (s in 1:length(l)) {
+  dt <- as.data.frame(embed(as.matrix(dft[,-1]), l[s]))
   nwin <- nrow(dt) - ws #number of windows
   fh <- c()
   y <- c()
   
-  for(i in 1:nwin){
-    train <- dt[i:(ws + i - 1), ] # each loop, window moves one day forward
-    test <- dt[(ws + i), ]
+  for (i in 1:nwin) {
+    train <- dt[i:(ws + i - 1),] # each loop, window moves one day forward
+    test <- dt[(ws + i),]
     
-    set.seed(i+s)
-    fit <- randomForest(train[, -1], train[, 1])
-    fh[i] <- predict(fit, test[, -1])
-    y[i] <- test[, 1] # to use later for plotting 
+    set.seed(i + s)
+    fit <- randomForest(train[,-1], train[, 1])
+    fh[i] <- predict(fit, test[,-1])
+    y[i] <- test[, 1] # to use later for plotting
   }
   all_y[[s]] <- y
-  all_fh[[s]] <- fh  
+  all_fh[[s]] <- fh
   err <- test[, 1] - fh
-  rmspe[s] <- sqrt(mean(err^2))
+  rmspe[s] <- sqrt(mean(err ^ 2))
 }
 
 rmspe
@@ -15545,21 +15729,31 @@ l[bst] # Winning lag in embedding
 ## [1] 4
 ```
 
-To change the application above to an expanding-window forecast, we just need to change `dt[i:(ws + i - 1), ]` to `dt[1:(ws + i - 1), ]` in the script.  Now, we can plot the results:  
+To adjust the application above to an expanding-window forecast, we just need to change `dt[i:(ws + i - 1), ]` to `dt[1:(ws + i - 1), ]` in the script.
+  
+Now, we can plot the results:  
 
 
 ```r
-par(mfrow=c(1,2))
-plot(all_y[[bst]], type = "l", col="red",
-     ylab = "Actual (red) vs Predicted (Blue)",
-     xlab = "Days",
-     main = "1-Day-Ahead")
-lines(all_fh[[bst]], col="blue")
-plot(all_y[[bst]][60:110], type = "o", col="red",
-     ylab = "Actual (red) vs Predicted (Blue)",
-     xlab = "Days",
-     main = "Last 50 Days")
-lines(all_fh[[bst]][60:110], col="blue")
+par(mfrow = c(1, 2))
+plot(
+  all_y[[bst]],
+  type = "l",
+  col = "red",
+  ylab = "Actual (red) vs Predicted (Blue)",
+  xlab = "Days",
+  main = "1-Day-Ahead"
+)
+lines(all_fh[[bst]], col = "blue")
+plot(
+  all_y[[bst]][60:110],
+  type = "o",
+  col = "red",
+  ylab = "Actual (red) vs Predicted (Blue)",
+  xlab = "Days",
+  main = "Last 50 Days"
+)
+lines(all_fh[[bst]][60:110], col = "blue")
 ```
 
 <img src="21-TSRandomForest_files/figure-html/tsr9-1.png" width="672" />
@@ -15576,9 +15770,9 @@ $$
 
 ```r
 set.seed(321)
-y <- rnorm(10)   
+y <- rnorm(10)
 z <- diff(y)     # first differences
-back <- cumsum(c(y[1], z)) 
+back <- cumsum(c(y[1], z))
 cbind(y, back)
 ```
 
@@ -15606,27 +15800,30 @@ y <- df$cases
 # The first actual Y should start a day earlier
 # removing all Y's until ws+l[bst]
 
-y_a_day_before <- y[-c(1:(ws+l[bst]-1))] 
+y_a_day_before <- y[-c(1:(ws + l[bst] - 1))]
 
-# This adds predicted changes to observed values a day earlier 
-back_forecast <- head(y_a_day_before, -1) + all_fh[[bst]] 
+# This adds predicted changes to observed values a day earlier
+back_forecast <- head(y_a_day_before,-1) + all_fh[[bst]]
 
 # Actual Y's in the test set starting at ws (150) + l[best] (6) + 1, which is 157
-ytest <- y[-c(1:(ws+l[bst]))] 
+ytest <- y[-c(1:(ws + l[bst]))]
 
-plot(ytest, type = "l", col = "blue",
-     ylab = "Actual Y (Blue) vs Forecast (Red)",
-     xlab = "Days",
-     main = "Back-transformed Forecast"
-     )
+plot(
+  ytest,
+  type = "l",
+  col = "blue",
+  ylab = "Actual Y (Blue) vs Forecast (Red)",
+  xlab = "Days",
+  main = "Back-transformed Forecast"
+)
 lines(back_forecast, type = "l", col = "red")
 ```
 
 <img src="21-TSRandomForest_files/figure-html/tsr11-1.png" width="672" />
 
-It seems that, for most days, our algorithm simply forecasts the next day by using the value from a day before.  If we change our algorithm to a 7-day-ahead forecast, this would be  different.   This is also a common problem when the predictive model has a poor forecasting power.  Again, this is not due to our algorithm, but forecasting an epi curve with imperfect test data is almost impossible job, as we highlighted earlier. 
+It seems that, for most days, our algorithm simply forecasts the next day by using the value from the day before.  If we change our algorithm to a 7-day-ahead forecast, this would be different.   This is also a common problem when the predictive model has a poor forecasting power.  Again, this is not due to our algorithm, but forecasting an epi curve with imperfect test data is almost impossible job, as we highlighted earlier. 
 
-In practice, however, there are several ways that we can improve the scripts above.  For example, we can consider the (rolling or expanding) window size as a hyperparameter.  We can also have an explicit training for the Random Forest algorithm.  We can have an ensemble forecasting by adding other predictive algorithms to the script, like boosting.  Further, we can develop a base forecast that would give us a benchmark to see how much our algorithm improves against that base. Moreover, we could apply a transformation to the data in order to stabilize the variance in all variables. 
+In practice, however, there are several ways that we can improve the scripts above.  For example, we can consider the (rolling or expanding) window size as a hyperparameter.  We can also have an explicit training for the Random Forest algorithm.  We can have an ensemble forecasting by adding other predictive algorithms to the script, like boosting.  Further, we can develop a base forecast that would give us a benchmark to see how much our algorithm improves against that base. Lastly, we could apply a transformation to the data in order to stabilize the variance in all variables. 
 
 
 <!--chapter:end:21-TSRandomForest.Rmd-->
@@ -15706,15 +15903,17 @@ library(fpp3)
 load("~/Dropbox/ToolShed_draft/toronto2.rds")
 toronto2 <- data
 df <- toronto2 %>%
-  mutate(dcases = difference(cases),
-         dmob = difference(mob),
-         ddelay = difference(delay),
-         dmale = difference(male),
-         dtemp = difference(temp),
-         dhum = difference(hum))
+  mutate(
+    dcases = difference(cases),
+    dmob = difference(mob),
+    ddelay = difference(delay),
+    dmale = difference(male),
+    dtemp = difference(temp),
+    dhum = difference(hum)
+  )
 
-dft <- df[ ,-c(2:5,7,8)] #removing levels
-dft <- dft[-1, c(3:7,2)] # reordering the columns
+dft <- df[, -c(2:5, 7, 8)] #removing levels
+dft <- dft[-1, c(3:7, 2)] # reordering the columns
 sdtf <- scale(dft) #
 head(sdtf)
 ```
@@ -15745,7 +15944,7 @@ We will define a three dimensional array that contains time series data.  First,
 # array
 x1 = c(1, 2, 3)
 x2 = c(4, 5, 6, 7, 8, 9)
-adata <- array(c(x1, x2), dim = c(3,3,2))
+adata <- array(c(x1, x2), dim = c(3, 3, 2))
 dim(adata)
 ```
 
@@ -15774,7 +15973,7 @@ adata
 ```
 
 ```r
-adata[1,,]
+adata[1, , ]
 ```
 
 ```
@@ -15809,7 +16008,7 @@ Suppose that this is daily data and we try to make 1-day-ahead predictions.  In 
 
 ```r
 datam <- embed(toydata, 6)
-datam <- datam[, -c(2:3)]
+datam <- datam[,-c(2:3)]
 head(datam)
 ```
 
@@ -15830,7 +16029,7 @@ head(datam)
 ## [6,]   106   206
 ```
 
-The second line in the code above removes the contemporaneous features. We should have $100 - 5 = 95$ samples, in each one we have 3 features and 5 timesteps.  The first two samples, each is a matrix of $5 \times 3$, are shown below:
+The second line in the code above removes the contemporaneous features. We should have 100 - 5 = 95 samples, in each one we have 3 features and 5 timesteps.  The first two samples, each is a matrix of $5 \times 3$, are shown below:
 
 
 ```
@@ -15856,9 +16055,9 @@ The outcome variable $y$ is 6 and 7 in the first and second samples.  Let's see 
 
 ```r
 n <- nrow(datam)
-f1 <- data.matrix(datam[, -1]) # Removing Y
+f1 <- data.matrix(datam[,-1]) # Removing Y
 f2 <- array(f1, c(n, 3, 5))
-f2[1,,]
+f2[1, , ]
 ```
 
 ```
@@ -15872,8 +16071,8 @@ We need reverse the order
 
 
 ```r
-f3 <- f2[,, 5:1]
-f3[1,,]
+f3 <- f2[, , 5:1]
+f3[1, , ]
 ```
 
 ```
@@ -15887,7 +16086,7 @@ And, taking the transposition,
 
 
 ```r
-t(f3[1,,])
+t(f3[1, , ])
 ```
 
 ```
@@ -15904,7 +16103,7 @@ For the whole array of `datam`, we use array transposition:
 
 ```r
 f4 <- aperm(f3, c(1, 3, 2))
-f4[1,,]
+f4[1, , ]
 ```
 
 ```
@@ -15920,23 +16119,23 @@ Now, we are ready to apply all these steps to our toy data with a function:
 
 
 ```r
-tensorin <- function(l, x){
-  maxl = l+1
+tensorin <- function(l, x) {
+  maxl = l + 1
   xm <- embed(x, maxl)
-  xm <- xm[, -c(2:3)] 
+  xm <- xm[,-c(2:3)]
   n <- nrow(xm)
-  f1 <- data.matrix(xm[, -1]) 
+  f1 <- data.matrix(xm[,-1])
   y <- xm[, 1]
   f2 <- array(f1, c(n, ncol(x), l))
-  f3 <- f2[,, l:1]
+  f3 <- f2[, , l:1]
   f4 <- aperm(f3, c(1, 3, 2))
   list(f4, y)
-} 
+}
 
 tensored <- tensorin(5, toydata)
 X <- tensored[1]
 y <- tensored[2]
-X[[1]][1,,]
+X[[1]][1, , ]
 ```
 
 ```
@@ -15963,7 +16162,7 @@ Note that this type of data transformation can be achieved several different way
 trnt <- tensorin(7, sdtf)
 X <- trnt[1]
 y <- trnt[2]
-X[[1]][1,,]
+X[[1]][1, , ]
 ```
 
 ```
@@ -15995,21 +16194,22 @@ As we have the input tensor stored as an array of (258, 7, 6), we are ready to d
 ```r
 library(keras)
 model <- keras_model_sequential() %>%
-  layer_simple_rnn(units = 24,
-                   input_shape = list(7, 6),
-                   dropout = 0.1, recurrent_dropout = 0.1) %>%
-  layer_dense(units = 1) %>% 
+  layer_simple_rnn(
+    units = 24,
+    input_shape = list(7, 6),
+    dropout = 0.1,
+    recurrent_dropout = 0.1
+  ) %>%
+  layer_dense(units = 1) %>%
   compile(optimizer = optimizer_rmsprop(),
-                  loss = "mse")
+          loss = "mse")
 ```
 
 As before, neural networks consist of layers and neurons in each layer.  Since we use sequence data stored in 3D tensors of shape (samples, timesteps, features) we will use recurrent layers for our RNN. The term `layer_dense` is the output layer. 
 
 We also (arbitrarily) specify two types of dropout for the units feeding into the hidden layer. The first one is set for the input feeding into a layer.  The second one is for the previous hidden units feeding into the same layer. 
 
-One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These "dropped out" inputs may be variables in the data sample or activations from a previous layer.  This is a conventional regularization method to in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: `dropout`, a float specifying the dropout rate for input units of the layer, and `recurrent_dropout`, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid.
-
-It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.
+One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These "dropped out" inputs may be variables in the data sample or activations from a previous layer.  This is a conventional regularization method in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: `dropout`, a float specifying the dropout rate for input units of the layer, and `recurrent_dropout`, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid. It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.
 
 Before fitting the model, we need to split the data.  We have 258 observations in total.  We will take the last 50 observations as our test set:
 
@@ -16030,7 +16230,7 @@ test <- 208:dim(X[[1]])[1]
 
 And, finally we fit our RNN.  There are two hyperparameters that Keras use in fitting RNN: batch size and epoch.  They are both related to how and how many times the weights in the network will be updated
 
-The batch size is the  number of observations ("samples") used in its gradient descent to update its internal parameters.  For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data.  The stochastic gradient descent, on the other hand, uses randomly selected each observation.  While the batch gradient descent is efficient (fast) it is not as robust as the stochastic gradient descent.  Therefore, Keras uses a mini-batch gradient descent as a  parameter that balance the between efficiency and robustness.
+The batch size is the  number of observations ("samples") used in its gradient descent to update its internal parameters.  For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data.  The stochastic gradient descent, on the other hand, uses randomly selected each observation.  While the batch gradient descent is efficient (fast), it is not as robust as the stochastic gradient descent.  Therefore, Keras uses a mini-batch gradient descent as a  parameter that balance the between efficiency and robustness.
 
 The number of epochs is the number of times the algorithm works trough the complete training dataset. We need multiple passes through the entire data because updating the weights with gradient descent in a single pass (one epoch) is not enough.  But, when the number of epochs goes up, the algorithm updates the weights more. As a result, the  curve goes from underfitting (very few runs) to overfitting (too many runs).
 
@@ -16039,11 +16239,14 @@ Hence, these two parameters, batch size and epoch, should be set as hyperparamet
 
 ```r
 model %>% fit(
-  X[[1]][train,, ], y[[1]][train], batch_size = 12, epochs = 75,
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
   validation_data =
-    list(X[[1]][test,, ], y[[1]][test]),
+    list(X[[1]][test, ,], y[[1]][test]),
   verbose = 0
-  ) %>% 
+) %>%
   plot()
 ```
 
@@ -16053,43 +16256,49 @@ model %>% fit(
 # prediction
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-yhat <- model %>% predict(X[[1]][test,, ])
-1 - mean((yhat -y_act)^2) / var_y # R^2
+yhat <- model %>% predict(X[[1]][test, ,])
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] 0.2491995
+## [1] 0.2706921
 ```
 
 ```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
 ```
 
 ```
-## [1] 1.495303
+## [1] 1.473745
 ```
 
 Although it could be done easily as we shown in the previous chapter, we will not back-transform the predictions to levels.  Here is the plot for the last 50 days:   
 
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "RNN Forecasting for Covid-19 Cases - in differences")
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "RNN Forecasting for Covid-19 Cases - in differences"
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
 <img src="22-TSNeural_files/figure-html/tsnn18-1.png" width="672" />
   
-It looks like, our RNN without a proper training is capturing most ups and downs correctly.  There are three groups of hyperparameters that we need to search by validation:
+It looks like, our RNN without a proper training is capturing most ups and downs correctly.
+
+There are four groups of hyperparameters that we need to search by validation:
 
 - How many days we need in the past to predict the next day’s value? (we picked 7), 
 - The number of units per layer (we picked 24), 
 - Regularization parameters, `dropout` and `recurrent_dropout` (we picked 0.1 for both), 
 - Stochastic gradient descent parameters, `batch_size` and `epochs` (we picked 12 and 75)
 
-All these parameters that we picked arbitrarily should be selected by a proper validation.  Model tuning in ANN highly depends on the package we use in deep learning.  Keras with TensorFlow is one the top AI engines available for all type of networks.  The best source for learning more on deep learning using Keras is "Deep Learning with R" by Chollet and Allaire.   
+All these parameters that we picked arbitrarily should be selected by a proper validation.  Model tuning in ANN highly depends on the package we use in deep learning.  Keras with TensorFlow is one the top AI engines available for all type of networks.  More details on deep learning using Keras is "Deep Learning with R" by Chollet and Allaire.   
 
 ## LSTM
 
@@ -16110,9 +16319,7 @@ Similar to RNN, LSTMs also have a chain-like structure, but the repeating activa
 
 <img src="png/LSTM3.png" width="75%" height="80%" />
 
-The key difference between LSTM and RNN is the cell state $C_t$ (the horizontal red line). The cell state functions like a conveyor belt and each LSTM repeating module is able to add to and remove from this belt through three gates, , as shown.
-
-This figure shows how LSTM works.  We have three gates as numbered in the figure (G1, G2, and G3).  Each gate is regulated by a sigmoid  neural net layer ($\frac{1}{1+e^{-x}}$), which outputs numbers between zero and one.  Hence, it works like a regulator or "gate keeper".  
+The key difference between LSTM and RNN is the cell state $C_t$ (the horizontal red line). The cell state functions like a conveyor belt and each LSTM repeating module is able to add to and remove from this belt through three gates.  The figure above shows how LSTM works.  We have three gates as numbered in the figure (G1, G2, and G3).  Each gate is regulated by a sigmoid  neural net layer ($\frac{1}{1+e^{-x}}$), which outputs numbers between zero and one.  Hence, it works like a regulator or "gate keeper".  
 
 The first gate (G1) is the **Forget Gate**, the first layer of the four layers, which takes $H_{t-1}$ and $X_t$ into a sigmoid function,
 
@@ -16121,7 +16328,7 @@ f_t=\sigma\left(w_f \cdot\left[H_{t-1}, X_t\right]+b_f\right)
 $$
 and produces a number between 0 and 1.  This percentage reflects the degree of $C_{t-1}$ that will be forgotten. For example, if it is zero, nothing in $C_{t-1}$ will be let through on the belt (cell state). It is interesting to note that this degree, how much of the long-term information will be kept, is determined by the recent information ($H_{t-1}$, $X_t$).  That is, if the recent information is very relevant for the prediction, the network will tune this sigmoid function so that the output will be a percentage close to 0, which will reduce the effect of the long-term information in the past, $C_{t-1}$, on prediction.
 
-The second gate (G2), **the Input Gate**, uses the same inputs, $H_{t-1}$ and $X_t$, but has two layers. The first later is again a sigmoid function that works as a gate keeper.  The second layer is a tanh function ($\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}}$) that produces a number between $-1$ and $+1$.  The objective of this layer is to update cell state $C_{t-1}$ by adding $\tilde{C_{t}}$, which contains the recent information hidden in $H_{t-1}$ and $X_t$.  This process happens in two steps:
+The second gate (G2), **the Input Gate**, uses the same inputs, $H_{t-1}$ and $X_t$, but has two layers. The first layer is again a sigmoid function that works as a gate keeper.  The second layer is a tanh function ($\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}}$) that produces a number between $-1$ and $+1$.  The objective of this layer is to update cell state $C_{t-1}$ by adding $\tilde{C_{t}}$, which contains the recent information hidden in $H_{t-1}$ and $X_t$.  This process happens in two steps:
 
 $$
 \begin{aligned}
@@ -16129,13 +16336,15 @@ i_t & =\sigma\left(w_i \cdot\left[H_{t-1}, X_t\right]+b_i\right) \\
 \tilde{C}_t & =\tanh \left(w_\tilde{C} \cdot\left[H_{t-1}, X_t\right]+b_\tilde{C}\right)
 \end{aligned}
 $$
-The first step, $i_t$, is a sigmoid function, hence a "gate keeper".  We already get it in the first layer with different weights: $f_t=\sigma\left(w_f \cdot\left[h_{t-1}, x_t\right]+b_f\right)$.  The second later, tanh function, produces the information ($h_{t-1}, x_t$) in a candidate value normalized between $-1$ and $+1$.  When the network multiplies $\tilde{C_{t}}$ with $i_t$ ($i_t \times \tilde{C_{t}}$), this new candidate value between $-1$ and $+1$ will be scaled by $i_t$ that reflects how much the network would like to update $C_{t-1}$:
+The first step, $i_t$, is a sigmoid function, hence a "gate keeper".  We already get it in the first layer with different weights: $f_t=\sigma\left(w_f \cdot\left[h_{t-1}, x_t\right]+b_f\right)$.  The second later, tanh function, produces the information ($h_{t-1}, x_t$) in a candidate value normalized between $-1$ and $+1$.  When the network multiplies $\tilde{C_{t}}$ with $i_t$ ($i_t \times \tilde{C_{t}}$), this new candidate value between $-1$ and $+1$ will be scaled by $i_t$ that reflects how much the network would like to update $C_{t-1}$.
+
+While the first two gates are about regulating the cell state ($C_t$),
 
 $$
-C_t=f_t \times C_{t-1}+i_t \times \tilde{C}_t
+C_t=f_t \times C_{t-1}+i_t \times \tilde{C}_t,
 $$
 
-While the first two gates are about regulating the cell state ($C_t$), the last one (G3) is the **Output Gate**.  The prediction at time $t$, $H_t$, has two inputs: $C_t$ and the recent information, $H_{t-1}$ and $X_t$.  The output gate will decide how it will balance between these two sources and produce $H_t$:
+the last one (G3) is the **Output Gate**.  The prediction at time $t$, $H_t$, has two inputs: $C_t$ and the recent information, $H_{t-1}$ and $X_t$.  The output gate will decide how it will balance between these two sources and produce $H_t$:
 
 $$
 \begin{aligned}
@@ -16145,22 +16354,25 @@ H_t & =o_t \times \tanh \left(C_t\right)
 $$
 Note that the tanh activation in the output function could be changed depending on the type of network we build. 
 
-The LSTM network that we described so far is a conceptual one. In practice, however, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
+The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
 
-Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network with LSTM.
+Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network desihned with LSTM.
 
 
 ```r
-model = keras_model_sequential() %>%   
-  layer_lstm(units=128, input_shape = c(7, 6), activation="relu") %>%  
-  layer_dense(units=64, activation = "relu") %>%  
-  layer_dense(units=32) %>%  
-  layer_dense(units=16) %>%  
-  layer_dense(units=1, activation = "linear")
+model = keras_model_sequential() %>%
+  layer_lstm(units = 128,
+             input_shape = c(7, 6),
+             activation = "relu") %>%
+  layer_dense(units = 64, activation = "relu") %>%
+  layer_dense(units = 32) %>%
+  layer_dense(units = 16) %>%
+  layer_dense(units = 1, activation = "linear")
 
-model %>% compile(loss = 'mse',
-                  optimizer = 'adam',
-                  metrics = list("mean_absolute_error")
+model %>% compile(
+  loss = 'mse',
+  optimizer = 'adam',
+  metrics = list("mean_absolute_error")
 ) %>%
   summary()
 ```
@@ -16183,10 +16395,13 @@ model %>% compile(loss = 'mse',
 ```
 
 ```r
-model %>% fit(X[[1]][train,, ], y[[1]][train],
-              batch_size = 12, epochs = 75,
-              validation_data = list(X[[1]][test,, ], y[[1]][test]),
-              verbose = 0
+model %>% fit(
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
+  validation_data = list(X[[1]][test, ,], y[[1]][test]),
+  verbose = 0
 ) %>%
   plot()
 ```
@@ -16194,47 +16409,54 @@ model %>% fit(X[[1]][train,, ], y[[1]][train],
 <img src="22-TSNeural_files/figure-html/tsnn20-1.png" width="672" />
 
 ```r
-yhat <- predict(model, X[[1]][test,, ])
+yhat <- predict(model, X[[1]][test, ,])
 
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-1 - mean((yhat -y_act)^2) / var_y # R^2
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] -0.0434925
-```
-
-```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
-```
-
-```
-## [1] 1.762835
+## [1] -0.3102839
 ```
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "LSTM Forecasting for Covid-19 Cases",
-     lwd = 1)
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
+```
+
+```
+## [1] 1.975375
+```
+
+```r
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "LSTM Forecasting for Covid-19 Cases",
+  lwd = 1
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
 <img src="22-TSNeural_files/figure-html/tsnn20-2.png" width="672" />
   
 Although LSTM does a good job for the last 10 days, there are specific days that it is way off.  That's why it has a higher RMSPE than RNN we had earlier.
-Before concluding this chapter, let's change our network setting slightly and see the results
+Before concluding this chapter, let's change our network setting slightly and see the results:  
   
 
 ```r
-model <- keras_model_sequential() %>%   
-  layer_lstm(units=24, input_shape = c(7, 6), activation="tanh") %>%  
-  layer_dense(units=1, activation = "linear") %>% 
-  compile(loss = 'mse',
-          optimizer = 'adam',
-          metrics = list("mean_absolute_error")
+model <- keras_model_sequential() %>%
+  layer_lstm(units = 24,
+             input_shape = c(7, 6),
+             activation = "tanh") %>%
+  layer_dense(units = 1, activation = "linear") %>%
+  compile(
+    loss = 'mse',
+    optimizer = 'adam',
+    metrics = list("mean_absolute_error")
   )
 
 model %>% summary()
@@ -16255,10 +16477,13 @@ model %>% summary()
 ```
 
 ```r
-model %>% fit(X[[1]][train,, ], y[[1]][train],
-              batch_size = 12, epochs = 75,
-              validation_data = list(X[[1]][test,, ], y[[1]][test]),
-              verbose = 0
+model %>% fit(
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
+  validation_data = list(X[[1]][test, ,], y[[1]][test]),
+  verbose = 0
 ) %>%
   plot()
 ```
@@ -16268,28 +16493,32 @@ model %>% fit(X[[1]][train,, ], y[[1]][train],
 ```r
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-yhat <- predict(model, X[[1]][test,, ])
-1 - mean((yhat -y_act)^2) / var_y # R^2
+yhat <- predict(model, X[[1]][test, ,])
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] 0.2535225
-```
-
-```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
-```
-
-```
-## [1] 1.490992
+## [1] 0.1097859
 ```
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "LSTM Forecasting for Covid-19 Cases",
-     lwd = 1)
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
+```
+
+```
+## [1] 1.628224
+```
+
+```r
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "LSTM Forecasting for Covid-19 Cases",
+  lwd = 1
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
@@ -16304,110 +16533,30 @@ Building a network that does relatively a good job requires a well-designed vali
 
 # Matrix Decompositions {-}
   
-Any matrix decomposition (and related topics) requires a solid understanding of eigenvalues and singular value decomposition (SVD).  
+Matrix decomposition, also known as matrix factorization, is a process of breaking down a matrix into simpler components that can be used to simplify calculations, solve systems of equations, and gain insight into the underlying structure of the matrix. 
+  
+Matrix decomposition plays an important role in machine learning, particularly in the areas of dimensionality reduction, data compression, and feature extraction. For example, Principal Component Analysis (PCA) is a popular method for dimensionality reduction, which involves decomposing a high-dimensional data matrix into a lower-dimensional representation while preserving the most important information. PCA achieves this by finding the eigenvectors and eigenvalues of the covariance matrix of the data and then selecting the top eigenvectors as the new basis for the data.
+
+Singular Value Decomposition (SVD) is also commonly used in recommender systems to find latent features in user-item interaction data. SVD decomposes the user-item interaction matrix into three matrices: a left singular matrix, a diagonal matrix of singular values, and a right singular matrix. The left and right singular matrices represent user and item features, respectively, while the singular values represent the importance of those features.
+
+Rank optimization is another method that finds a low-rank approximation of a matrix that best fits a set of observed data. In other words, it involves finding a lower-rank approximation of a given matrix that captures the most important features of the original matrix.  For example, SVD decomposes a matrix into a product of low-rank matrices, while PCA finds the principal components of a data matrix, which can be used to create a lower-dimensional representation of the data.   In machine learning, rank optimization is often used in applications such as collaborative filtering, image processing, and data compression. By finding a low-rank approximation of a matrix, it is possible to reduce the amount of memory needed to store the matrix and improve the efficiency of algorithms that work with the matrix.
+
+We start with the eigenvalue decomposition (EVD), which is the foundation to many matrix decomposition methods
 
 # Eigenvectors and eigenvalues  
 
-To explain eigenvalues, we first explain eigenvectors. Almost all vectors change direction, when they are multiplied by $\mathbf{A}$. Certain exceptional vectors $x$ are in the same direction as $\mathbf{A} x .$ Those are the "eigenvectors". Multiply an eigenvector by $\mathbf{A}$, and the vector $\mathbf{A}x$ is a number $\lambda$ times the original $x$.
-  
-The basic equation is $\mathbf{A} x=\lambda x$. The number $\lambda$ is an eigenvalue of $\mathbf{A}$. The eigenvalue $\lambda$ tells whether the special vector $x$ is stretched or shrunk or reversed or left unchanged-when it is multiplied by $\mathbf{A}$. We may find $\lambda=2$ or $\frac{1}{2}$ or $-1$ or 1. The eigenvalue $\lambda$ could be zero! Then $\mathbf{A} x=0 x$ means that this eigenvector $x$ is in the nullspace.
+Eigenvalues and eigenvectors have many important applications in linear algebra and beyond. For example, in machine learning, principal component analysis (PCA) involves computing the eigenvectors and eigenvalues of the covariance matrix of a data set, which can be used to reduce the dimensionality of the data while preserving its important features. 
 
-A good example comes from the powers $\mathbf{A, A^{2}, A^{3}}, \ldots$ of a matrix. Suppose you need the hundredth power $\mathbf{A}^{100}$. The starting matrix $\mathbf{A}$ becomes unrecognizable after a few steps, and $\mathbf{A}^{100}$ is very close to $\left[\begin{array}{llll}.6 & .6 ; & .4 & .4\end{array}\right]:$
+Almost all vectors change direction, when they are multiplied by a matrix, $\mathbf{A}$, except for certain vectors ($\mathbf{v}$) that are in the same direction as $\mathbf{A} \mathbf{v}.$ Those vectors are called "eigenvectors". 
 
-$$
-\begin{aligned}
-&{\left[\begin{array}{cc}
-.8 & .3 \\
-.2 & .7
-\end{array}\right] \quad\left[\begin{array}{cc}
-.70 & .45 \\
-.30 & .55
-\end{array}\right] \quad\left[\begin{array}{cc}
-.650 & .525 \\
-.350 & .475
-\end{array}\right] \ldots} & {\left[\begin{array}{ll}
-.6000 & .6000 \\
-.4000 & .4000
-\end{array}\right]} \\
-&~~~~\mathbf{A} ~~~~~~~~~~~~~~~~~~~~~~~~~\mathbf{A}^{2}~~~~~~~~~~~~~~~~~~~~\mathbf{A}^{3}& \mathbf{A}^{100}
-\end{aligned}
-$$
-  
-$\mathbf{A}^{100}$ was found by using the eigenvalues of $\mathbf{A}$, not by multiplying 100 matrices.
-   
-Those eigenvalues (here they are 1 and $1 / 2$ ) are a new way to see into the heart of a matrix. See <http://math.mit.edu/~gs/linearalgebra/ila0601.pdf> [@Strang_2016] for more details.  Most $2 \times 2$ matrices have two eigenvector directions and two eigenvalues and it can be shown that $\operatorname{det}(\mathbf{A}-\lambda I)=0$.
-
-
-```r
-#*****Eigenvalues and vectors*******
-#AX = lambdaX
-#(A − lambdaI)X = 0
-
-A <- matrix(c(2,1,8,5), 2, 2)
-ev <- eigen(A)$values
-
-# Sum of eigenvalues = sum of diagonal terms of A (called the trace of A)
-sum(ev)
-```
-
-```
-## [1] 7
-```
-
-```r
-sum(diag(A))
-```
-
-```
-## [1] 7
-```
-
-```r
-# Product of eigenvalues = determinant of A
-prod(ev)
-```
-
-```
-## [1] 2
-```
-
-```r
-det(A)
-```
-
-```
-## [1] 2
-```
-
-```r
-# Diagonal matrix D has eigenvalues = diagonal elements
-D <- matrix(c(2,0,0,5), 2, 2)
-eigen(D)
-```
-
-```
-## eigen() decomposition
-## $values
-## [1] 5 2
-## 
-## $vectors
-##      [,1] [,2]
-## [1,]    0   -1
-## [2,]    1    0
-```
-
-$\text{Rank}(\mathbf{A})$ is number of nonzero singular values of $\mathbf{A}$. Singular values are eigenvalues of $\mathbf{X'X}$ which is an $n \times n$ matrix and $\mathbf{X}$ is $m \times n$ matrix.  SVD starts with eigenvalue decomposition.  See <http://www.onmyphd.com/?p=eigen.decomposition>.  
-
-Eigendecomposition is the method to decompose a square matrix into its eigenvalues and eigenvectors. For a matrix $\mathbf{A}$, if
+We can see how we obtain the eigenvalues and eigenvectors of a matrix $\mathbf{A}$. If
 
 $$
 \mathbf{A} \mathbf{v}=\lambda \mathbf{v}
 $$
-  
-then $\mathbf{v}$ is an eigenvector of matrix $\mathbf{A}$ and $\lambda$ is the corresponding eigenvalue. That is, if matrix $\mathbf{A}$ is multiplied by a vector and the result is a scaled version of the same vector, then it is an eigenvector of $\mathbf{A}$ and the scaling factor is its eigenvalue.
-  
-So how do we find the eigenvectors of a matrix? 
-
+ 
+Then,
+   
 $$
 \begin{aligned}
 &\mathbf{A} \mathbf{v}-\lambda \mathbf{I} \mathbf{v}=0 \\
@@ -16420,42 +16569,236 @@ $$
 \operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0,
 $$
 
-because $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I}) \equiv(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.
-  
-Why? Since you want non-trivial solutions to $(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$, you want $(\mathbf{A}-\lambda \mathbf{I})$ to be non-invertible. Otherwise, its invertible and you get $\mathbf{v}=(\mathbf{A}-\lambda \mathbf{I})^{-1} \cdot 0=0$ which is a trivial solution. But a linear transformation or a matrix is non-invertible if and only if its determinant is 0 . So $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0$ for non-trivial solutions.
-  
-It's hard to understand the intuition or why eigenvectors and values are important. Here is the excerpt from [How to intuitively understand eigenvalue and eigenvector](https://math.stackexchange.com/q/243553) [@Use_eigen]:
-  
-<style type="text/css">
-blockquote {
-    padding: 10px 20px;
-    margin: 0 0 20px;
-    font-size: 14px;
-    border-left: 5px solid #eee;
-}
-</style>
+because $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I}) \equiv(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.  The reason is that we want a non-trivial solution to $(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.  Therefore, $(\mathbf{A}-\lambda \mathbf{I})$ should be non-invertible. Otherwise, if it is invertible, we get $\mathbf{v}=(\mathbf{A}-\lambda \mathbf{I})^{-1} \cdot 0=0$, which is a trivial solution. Since a matrix is non-invertible if its determinant is 0 . Thus, $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0$ for non-trivial solutions.
 
-> First let us think what a square matrix does to a vector. Consider a matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$. Let us see what the matrix $\mathbf{A}$ acting on a vector $x$ does to this vector. By action, we mean multiplication i.e. we get a new vector $y=\mathbf{A} x$.
->
-> The matrix acting on a vector $x$ does two things to the vector $x$. (1) It scales the vector; (2) It rotates the vector. It is important to understand what the matrix $\mathbf{A}$ in a set of equations $\mathbf{A x}=\mathbf{b}$ does. Matrix $\mathbf{A}$ simply "transforms" a vector $\mathbf{x}$ into another vector $\mathbf{b}$ by applying linear combination. The transformation is done within the same space or subspace. Sometimes we only want to know what would be the vector $\mathbf{b}$ if linear combination is applied, that is when we execute the equation $\mathbf{A x}=\mathbf{b}$. Other times we are interested in a reverse problem and we want to solve the equation $\mathbf{x}=\mathbf{A}^{-1} \mathbf{b}$.
->
-> However, for any matrix $\mathbf{A}$, there are some favored vectors/directions. When the matrix acts on these favored vectors, the action essentially results in just scaling the vector. There is no rotation. These favored vectors are precisely the eigenvectors and the amount by which each of these favored vectors stretches or compresses is the eigenvalue.
->
-
-So why are these eigenvectors and eigenvalues important? Consider the eigenvector corresponding to the maximum (absolute) eigenvalue. If we take a vector along this eigenvector, then the action of the matrix is maximum. No other vector when acted by this matrix will get stretched as much as this eigenvector.
-
-Hence, if a vector were to lie "close" to this eigen direction, then the "effect" of action by this matrix will be "large" i.e. the action by this matrix results in "large" response for this vector. The effect of the action by this matrix is high for large (absolute) eigenvalues and less for small (absolute) eigenvalues. Hence, the directions/vectors along which this action is high are called the principal directions or principal eigenvectors. The corresponding eigenvalues are called the principal values.
-
-Here are some examples:
+We start with a square matrix, $\mathbf{A}$, like
 
 $$
-\mathbf{\Lambda}=\left[\begin{array}{cc}
-\lambda_{1} & 0 \\
-0 & \lambda_{2}
-\end{array}\right] \\
+A =\left[\begin{array}{cc}
+1 & 2 \\
+3 & -4
+\end{array}\right]
 $$
 $$
-\mathbf{V}=\left[\mathbf{v}_1 \mathbf{v}_2\right]
+\begin{aligned}
+\det (\mathbf{A}-\lambda \mathbf{I})=
+& \left|\begin{array}{cc}
+1-\lambda & 2 \\
+3 & -4-\lambda
+\end{array}\right|=(1-\lambda)(-4-\lambda)-2 \cdot 3 \\
+& =-4-\lambda+4 \lambda+\lambda^2-6 \\
+& =\lambda^2+3 \lambda-10 \\
+& =(\lambda-2)(\lambda+5)=0 \\
+& \therefore \lambda_1=2, ~ \lambda_2=-5 \\
+&
+\end{aligned}
+$$
+
+We have two eigenvalues.  We now need to consider each eigenvalue indivudally
+
+$$
+\begin{gathered}
+\lambda_1=2 \\
+(A 1-\lambda I) \mathbf{v}=0 \\
+{\left[\begin{array}{cc}
+1-\lambda_1 & 2 \\
+3 & -4-\lambda_1
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} \\
+
+{\left[\begin{array}{cc}
+-1 & 2 \\
+3 & -6
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]}
+\end{gathered}
+$$
+Hence, 
+
+$$
+\begin{aligned}
+-v_1+2 v_2=0 \\
+3 v_1-6 v_2=0\\
+v_1=2, ~ v_2=1
+\end{aligned}
+$$
+And,
+
+$$
+\begin{aligned}
+&  \lambda_2=-5 \\
+& {\left[\begin{array}{cc}
+1-\lambda_2 & 2 \\
+3 & -4-\lambda_2
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} \\
+& {\left[\begin{array}{cc}
+6 & 2 \\
+3 & 1
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} 
+
+\end{aligned}
+$$
+Hence, 
+
+$$
+\begin{gathered}
+6 v_1+2 v_2=0 \\
+3 v_1+v_2=0 \\
+
+v_1=-1,~ v_2=3
+\end{gathered}
+$$
+We have two eigenvalues
+
+$$
+\begin{aligned}
+& \lambda_1=2 \\
+& \lambda_2=-5
+\end{aligned}
+$$
+
+And two corresponding eigenvectors
+
+$$
+\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right],\left[\begin{array}{c}
+-1 \\
+3
+\end{array}\right]
+$$
+for $\lambda_1=2$
+
+$$
+\left[\begin{array}{cc}
+1 & 2 \\
+3 & -4
+\end{array}\right]\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right]=\left[\begin{array}{l}
+2+2 \\
+6-4
+\end{array}\right]=\left[\begin{array}{l}
+4 \\
+2
+\end{array}\right]=2\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right]
+$$
+Let's see the solution in R
+
+
+```r
+A <- matrix(c(1, 3, 2, -4), 2, 2)
+eigen(A)
+```
+
+```
+## eigen() decomposition
+## $values
+## [1] -5  2
+## 
+## $vectors
+##            [,1]      [,2]
+## [1,] -0.3162278 0.8944272
+## [2,]  0.9486833 0.4472136
+```
+
+The eigenvectors are typically normalized by dividing by its length $\sqrt{v^{\prime} v}$, which is 5 in our case for $\lambda_1=2$.
+
+
+```r
+# For the ev (2, 1), for lambda
+c(2, 1) / sqrt(5)
+```
+
+```
+## [1] 0.8944272 0.4472136
+```
+
+There some nice properties that we can observe in this application.
+
+
+```r
+# Sum of eigenvalues = sum of diagonal terms of A (Trace of A)
+ev <- eigen(A)$values
+sum(ev) == sum(diag(A))
+```
+
+```
+## [1] TRUE
+```
+
+```r
+# Product of eigenvalues = determinant of A
+round(prod(ev), 4) == round(det(A), 4)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+# Diagonal matrix D has eigenvalues = diagonal elements
+D <- matrix(c(2, 0, 0, 5), 2, 2)
+eigen(D)$values == sort(diag(D), decreasing = TRUE)
+```
+
+```
+## [1] TRUE TRUE
+```
+
+We can see that, if one of the eigenvalues is zero for a matrix, the determinant of the matrix will be zero.  We willl return to this issue in Singluar Value Decomposition.
+
+Let's finish this chapter with Diagonalization and Eigendecomposition.
+
+Suppose we have $m$ linearly independent eigenvectors ($\mathbf{v_i}$ is eigenvector $i$ in a column vector in $\mathbf{V}$) of $\mathbf{A}$.
+
+$$
+\mathbf{AV}=\mathbf{A}\left[\mathbf{v_1} \mathbf{v_2} \cdots \mathbf{v_m}\right]=\left[\mathbf{A} \mathbf{v_1} \mathbf{A} \mathbf{v_2} \ldots \mathbf{A} \mathbf{v_m}\right]=\left[\begin{array}{llll}
+\lambda_1 \mathbf{v_1} & \lambda_2\mathbf{v_2}  & \ldots & \lambda_m \mathbf{v_m}
+\end{array}\right]
+$$
+
+because 
+
+$$
+\mathbf{A} \mathbf{v}=\lambda \mathbf{v}
+$$
+
+$$
+\mathbf{AV}=\left[\mathbf{v_1} \mathbf{v_2} \cdots \mathbf{v_m}\right]\left[\begin{array}{cccc}
+\lambda_1 & 0 & \cdots & 0 \\
+0 & \lambda_2 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+
+0 & 0 & \cdots & \lambda_m
+\end{array}\right]=\mathbf{V}\Lambda
 $$
 So that
 
@@ -16463,13 +16806,27 @@ $$
 \mathbf{A V=V \Lambda}
 $$
 Hence,   
+
 $$
-\mathbf{A=V \Lambda V^{-1}}
+\mathbf{A}=\mathbf{V} \Lambda \mathbf{V}^{-1}
 $$
 
 Eigendecomposition (a.k.a. spectral decomposition) decomposes a matrix $\mathbf{A}$ into a multiplication of a matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{\Lambda}$.
   
-**This can only be done if a matrix is diagonalizable**. In fact, the definition of a diagonalizable matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is that it can be eigendecomposed into $n$ eigenvectors, so that $\mathbf{V^{-1} A V=\Lambda}$.
+**This can only be done if a matrix is diagonalizable**. In fact, the definition of a diagonalizable matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is that it can be eigendecomposed into $n$ eigenvectors, so that $\mathbf{V}^{-1} \mathbf{A} \mathbf{V}=\Lambda$.
+
+$$
+\begin{align}
+\mathbf{A}^2&=(\mathbf{V} \Lambda \mathbf{V}^{-1})(\mathbf{V} \Lambda \mathbf{V}^{-1})\\
+&=\mathbf{V} \Lambda \text{I} \Lambda \mathbf{V}^{-1}\\
+&=\mathbf{V} \Lambda^2 \mathbf{V}^{-1}\\
+\end{align}
+$$
+in general
+
+$$
+\mathbf{A}^k=\mathbf{V} \Lambda^k \mathbf{V}^{-1}
+$$
 
 Example:
   
@@ -16481,9 +16838,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   11    1   63
-## [2,]   23   38   27
-## [3,]   64   44   48
+## [1,]   67   43   77
+## [2,]   99   94   72
+## [3,]   54   60    4
 ```
 
 ```r
@@ -16493,56 +16850,45 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 112.51467 -35.82062  20.30595
+## [1] 193.646874 -35.555093   6.908218
 ## 
 ## $vectors
-##            [,1]        [,2]        [,3]
-## [1,] -0.4800845 -0.80244868  0.53658428
-## [2,] -0.4260375  0.03207976 -0.83875343
-## [3,] -0.7668187  0.59585821  0.09257429
+##            [,1]       [,2]       [,3]
+## [1,] -0.4987555 -0.6059143 -0.7241552
+## [2,] -0.7753831  0.0210522  0.6612340
+## [3,] -0.3873293  0.7952513  0.1958794
 ```
 
 ```r
 V = eigen(A)$vectors
 Lam = diag(eigen(A)$values)
-# Prove that AV = V lambda and 
-A%*%V
-```
-
-```
-##           [,1]       [,2]       [,3]
-## [1,] -54.01655  28.744211  10.895854
-## [2,] -47.93547  -1.149117 -17.031686
-## [3,] -86.27835 -21.344012   1.879809
-```
-
-```r
-V%*%Lam
-```
-
-```
-##           [,1]       [,2]       [,3]
-## [1,] -54.01655  28.744211  10.895854
-## [2,] -47.93547  -1.149117 -17.031686
-## [3,] -86.27835 -21.344012   1.879809
-```
-
-```r
-# And decomposition
-V%*%Lam%*%solve(V)
+# Prove that AV = VLam
+round(A %*% V, 4) == round(V %*% Lam, 4)
 ```
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   11    1   63
-## [2,]   23   38   27
-## [3,]   64   44   48
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE
+## [3,] TRUE TRUE TRUE
 ```
 
-And, matrix inverse with eigendecomposition
+```r
+# And decomposition
+A == round(V %*% Lam %*% solve(V), 4)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE
+## [3,] TRUE TRUE TRUE
+```
+
+And, matrix inverse with eigendecomposition:
 
 $$
-\mathbf{A^{-1}=V \Lambda^{-1} V^{-1}}
+\mathbf{A}^{-1}=\mathbf{V} \Lambda^{-1} \mathbf{V}^{-1}
 $$
 
 Example:
@@ -16555,9 +16901,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   72  100   86
-## [2,]   74   96   16
-## [3,]   83   24   65
+## [1,]   21   80   72
+## [2,]    7   70    2
+## [3,]   59   12   50
 ```
 
 ```r
@@ -16569,25 +16915,25 @@ solve(A)
 ```
 
 ```
-##              [,1]         [,2]         [,3]
-## [1,] -0.012755947  0.009662804  0.014498562
-## [2,]  0.007584735  0.005354187 -0.011353141
-## [3,]  0.013487845 -0.014315588  0.001062996
+##               [,1]        [,2]         [,3]
+## [1,] -0.0146743444  0.01323899  0.020601496
+## [2,]  0.0009794154  0.01350073 -0.001950388
+## [3,]  0.0170806667 -0.01886219 -0.003841672
 ```
 
 ```r
 # And
-V%*%solve(Lam)%*%solve(V)
+V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##              [,1]         [,2]         [,3]
-## [1,] -0.012755947  0.009662804  0.014498562
-## [2,]  0.007584735  0.005354187 -0.011353141
-## [3,]  0.013487845 -0.014315588  0.001062996
+##               [,1]        [,2]         [,3]
+## [1,] -0.0146743444  0.01323899  0.020601496
+## [2,]  0.0009794154  0.01350073 -0.001950388
+## [3,]  0.0170806667 -0.01886219 -0.003841672
 ```
 
-The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, **this can only be done if a matrix is diagonalizable**.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
+The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
 
 Example:
 $$
@@ -16597,9 +16943,9 @@ $$
 \end{array}\right)
 $$
 
-As $\operatorname{det}(\mathbf{A})=0, \mathbf{A}$ is singular and its inverse is undefined. $\operatorname{Det}(\mathbf{A})$ equals the product of the eigenvalues $\theta_{\mathrm{j}}$ of $\mathrm{A}$: the matrix $\mathbf{A}$ is singular if any eigenvalue of $\mathbf{A}$ is zero.
+As $\det(\mathbf{A})=0,$ $\mathbf{A}$ is singular and its inverse is undefined.  In other words, since $\det(\mathbf{A})$ equals the product of the eigenvalues $\lambda_j$ of $\mathrm{A}$, the matrix $\mathbf{A}$ has an eigenvalue which is zero.
 
-To see this, consider the spectral decomposition of $A$ :
+To see this, consider the spectral (eigen) decomposition of $A$ :
 $$
 \mathbf{A}=\sum_{j=1}^{p} \theta_{j} \mathbf{v}_{j} \mathbf{v}_{j}^{\top}
 $$
@@ -16610,6 +16956,7 @@ The inverse of $\mathbf{A}$ is then:
 $$
 \mathbf{A}^{-1}=\sum_{j=1}^{p} \theta_{j}^{-1} \mathbf{v}_{j} \mathbf{v}_{j}^{\top}
 $$
+
 A has eigenvalues 5 and 0. The inverse of $A$ via the spectral decomposition is then undefined:
   
 $$
@@ -16620,7 +16967,53 @@ $$
 
 # Singular Value Decomposition
 
-The answer is to work with $\mathbf{A^{\top} A}$ and $\mathbf{A A^{\top}}$, both of which are symmetric (and have $n$ and $m$ orthogonal eigenvectors, respectively). So we have the following decomposition:
+Singular Value Decomposition (SVD) is another type of decomposition. Different than eigendecomposition, which requires a square matrix, SVD allows us to decompose a rectangular matrix. This is more useful because the rectangular matrix usually represents data in practice.
+
+For any matrix $\mathbf{A}$, both $\mathbf{A^{\top} A}$ and $\mathbf{A A^{\top}}$ are symmetric.  Therefore, they have $n$ and $m$ **orthogonal* eigenvectors, respectively. The proof is simple:
+
+Suppose we have a 2 x 2 symmetric matrix, $\mathbf{A}$, with two distinct eigenvalues ($\lambda_1, \lambda_2$) and two corresponding eigenvectors ($\mathbf{v}_1$ and $\mathbf{v}_1$).  Following the rule, 
+
+$$
+\begin{aligned}
+& \mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_1, \\
+& \mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_2. \\
+\end{aligned}
+$$
+Let's multiply (inner product) the first one with $\mathbf{v}_2^{\top}$:
+
+$$
+\mathbf{v}_2^{\top}\mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_2^{\top} \mathbf{v}_1
+$$
+And, the second one with  $\mathbf{v}_1^{\top}$
+
+$$
+\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_1^{\top} \mathbf{v}_2
+$$
+If we take the transpose of both side of $\mathbf{v}_2^{\top}\mathbf{A} \mathbf{v}_1=\lambda_1 \mathbf{v}_2^{\top} \mathbf{v}_1$, it will be
+
+$$
+\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_1 \mathbf{v}_1^{\top} \mathbf{v}_2
+$$
+And, subtract these last two:
+
+$$
+\begin{aligned}
+&\mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_2 \mathbf{v}_1^{\top} \mathbf{v}_2 \\
+& \mathbf{v}_1^{\top}\mathbf{A} \mathbf{v}_2=\lambda_1 \mathbf{v}_1^{\top} \mathbf{v}_2 \\
+& \hline 0=\left(\lambda_2 - \lambda_1\right)  \mathbf{v}_1^{\top} \mathbf{v}_2 
+\end{aligned}
+$$
+Since , $\lambda_1$ and $\lambda_2$ are distinct, $\lambda_2- \lambda_1$ cannot be zero. Therefore,  $ \mathbf{v}_1^{\top} \mathbf{v}_2 = 0$.  As we saw in Chapter 15, the dot products of two vectors can be expressed geometrically
+
+$$
+\begin{aligned}
+a \cdot b=\|a\|\|b\| \cos (\theta),\\
+\cos (\theta)=\frac{a \cdot b}{\|a\|\|b\|}
+\end{aligned}
+$$
+Hence, $\cos (\theta)$ has to be zero for $ \mathbf{v}_1^{\top} \mathbf{v}_2 = 0$. Since $\cos (90)=0$, the two vectors are orthogonal.
+
+We start with the following eigendecomposition for $\mathbf{A^{\top}A}$ and $\mathbf{A A^{\top}}$:
 
 $$
 \begin{aligned}
@@ -16628,11 +17021,12 @@ $$
 \mathbf{A A^{\top} =U D^{\prime} U^{\top}}
 \end{aligned}
 $$
-where $\mathbf{V}$ is an $n \times n$ orthogonal matrix consisting of the eigenvectors of $\mathbf{A^{\top} A, D}$ an $n \times n$ diagonal matrix with the eigenvalues of $\mathbf{A^{\top} A}$ on the diagonal, $\mathbf{U}$ an $m \times m$ orthogonal matrix consisting of the eigenvectors of $\mathbf{A A^{\top}}$, and $\mathbf{D^{\prime}}$ an $m \times m$ diagonal matrix with the eigenvalues of $\mathbf{A A^{\top}}$ on the diagonal.
-  
-It turns out that $\mathrm{D}$ and $\mathbf{D^{\prime}}$ have the same non-zero diagonal entries except that the order might be different.
 
-Now comes a highlight of linear algebra. Any real $m \times n$ matrix can be factored as  
+where $\mathbf{V}$ is an $n \times n$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A^{\top}A),$ and, $\mathbf{D}$ is an $n \times n$ diagonal matrix with the eigenvalues of $\mathbf{A^{\top} A}$ on the diagonal.  The same decomposition for $\mathbf{A A^{\top}}$, now $\mathbf{U}$ is an $m \times m$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A A^{\top}}$, and $\mathbf{D^{\prime}}$ is an $m \times m$ diagonal matrix with the eigenvalues of $\mathbf{A A^{\top}}$ on the diagonal.
+  
+It turns out that $\mathbf{D}$ and $\mathbf{D^{\prime}}$ have the same non-zero diagonal entries except that the order might be different.
+
+We can write SVD for any real $m \times n$ matrix as  
 
 $$
 \mathbf{A=U \Sigma V^{\top}}
@@ -16641,7 +17035,7 @@ $$
 where $\mathbf{U}$ is an $m \times m$ orthogonal matrix whose columns are the eigenvectors of $\mathbf{A A^{\top}}$, $\mathbf{V}$ is an $n \times n$ orthogonal matrix whose columns are the eigenvectors of $\mathbf{A^{\top} A}$, and $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix of the form:
 
 $$
-\Sigma=\left(\begin{array}{cccc}
+\mathbf{\Sigma}=\left(\begin{array}{cccc}
 \sigma_{1} & & & \\
 & \ddots &  \\
 & & \sigma_{n} & \\
@@ -16649,30 +17043,98 @@ $$
 0 & 0 &0 \\
 \end{array}\right)
 $$
-with $\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \sigma_{n}>0$ and $r=\operatorname{rank}(\mathbf{A})$. In the above, $\sigma_{1}, \ldots, \sigma_{n}$ are the square roots of the eigenvalues of $\mathbf{A^{\top} A}$. They are called the **singular values** of $\mathbf{A}$.
+with $\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \sigma_{n}>0$ .  The number of non-zero singular values is equal to the rank of $\operatorname{rank}(\mathbf{A})$. In $\mathbf{\Sigma}$ above, $\sigma_{1}, \ldots, \sigma_{n}$ are the square roots of the eigenvalues of $\mathbf{A^{\top} A}$. They are called the **singular values** of $\mathbf{A}$.
   
-Our basic goal is to "solve" the system $\mathbf{A} x=b$ for all matrices $\mathbf{A}$ and vectors $b$. A second goal is to solve the system using a numerically stable algorithm. A third goal is to solve the system in a reasonably efficient manner. For instance, we do not want to compute $\mathbf{A}^{-1}$ using determinants.
+One important point is that, although $\mathbf{U}$ in $\mathbf{U \Sigma V^{\top}}$ is $m \times m$, when it is multiplied by $\mathbf{\Sigma}$, it reduces to $n \times n$ due to zeros in $\mathbf{\Sigma}$.  Hence, we can actually select only those in $\mathbf{U}$ that are not going to be zeroed out due to that multiplication.  When we take only $n \times n$ from $\mathbf{U}$ matrix, it is called "Economy SVD", $\mathbf{\hat{U} \hat{\Sigma} V^{\top}}$, where all matrices will be $n \times n$.    
+  
+The singular value decomposition is very useful when our basic goal is to "solve" the system $\mathbf{A} x=b$ for all matrices $\mathbf{A}$ and vectors $b$ with a numerically stable algorithm. Some important applications of the SVD include computing the pseudoinverse, matrix approximation, and determining the rank, range, and null space of a matrix. We will see some of them in the following chapters
 
-An important point is that although $\mathbf{U}$ in $\mathbf{U \Sigma V^{\top}}$ is $m \times m$ when its multiplied by $\mathbf{\Sigma}$ it reduces to $n \times n$ matrix due to zeros in $\mathbf{\Sigma}$.  Hence, we can actually select only those in $\mathbf{U}$ that are not going to be zero out due to that multiplication and take only $n \times n$ from $\mathbf{U}$ matrix.  This is called "Economy SVD" $\mathbf{\hat{U} \hat{\Sigma} V^{\top}}$ where all matrices will be $n \times n$  
+Here is an example:
+
+
+```r
+set.seed(104)
+A <- matrix(sample(100, 12), 3, 4)
+A
+```
+
+```
+##      [,1] [,2] [,3] [,4]
+## [1,]   77   24   32   78
+## [2,]   67   61   39   96
+## [3,]   34   94   42   28
+```
+
+```r
+svda <- svd(A)
+svda
+```
+
+```
+## $d
+## [1] 199.83933  70.03623  16.09872
+## 
+## $u
+##            [,1]       [,2]       [,3]
+## [1,] -0.5515235  0.5259321 -0.6474699
+## [2,] -0.6841400  0.1588989  0.7118312
+## [3,] -0.4772571 -0.8355517 -0.2721747
+## 
+## $v
+##            [,1]       [,2]       [,3]
+## [1,] -0.5230774  0.3246068 -0.7091515
+## [2,] -0.4995577 -0.8028224  0.1427447
+## [3,] -0.3221338 -0.1722864 -0.2726277
+## [4,] -0.6107880  0.4694933  0.6343518
+```
+
+```r
+# Singular values = sqrt(eigenvalues of t(A)%*%A))
+ev <- eigen(t(A) %*% A)$values
+round(sqrt(ev), 5)
+```
+
+```
+## [1] 199.83933  70.03623  16.09872   0.00000
+```
+
+Note that this ""Economy SVD" using only the non-zero eigenvalues and their respective eigenvectors.
+
+
+```r
+Ar <- svda$u %*% diag(svda$d) %*% t(svda$v)
+Ar
+```
+
+```
+##      [,1] [,2] [,3] [,4]
+## [1,]   77   24   32   78
+## [2,]   67   61   39   96
+## [3,]   34   94   42   28
+```
+
+As we use SVD in the following chapter, its usefulness will be obvious.  
+
+
+
 
 <!--chapter:end:24-SingValueDecomp.Rmd-->
 
 # Rank(r) Approximations
 
-SVD can also be used for rank approximations a.k.a. matrix approximations.  Since $\mathbf{A=U \Sigma V^{\top}}$ can be written as
+One of the useful applications of singular value decomposition (SVD) is rank approximations, or matrix approximations.  
+
+We can write $\mathbf{A=U \Sigma V^{\top}}$ as
 
 $$
-=\sigma_{1} u_{1} v_{1}^{\top}+\sigma_{2} u_{2} v_{2}^{\top}+\ldots+\sigma_{n} u_{n} v_{n}^{\top}+ 0
+=\sigma_{1} u_{1} v_{1}^{\top}+\sigma_{2} u_{2} v_{2}^{\top}+\ldots+\sigma_{n} u_{n} v_{n}^{\top}+ 0.
 $$
-Each term in this equation is a Rank 1 matrix: $u_1$ is $n \times 1$ column vector and $v_1$ is $1 \times n$ row vector.  Hence these are the only orthogonal entries in the resulting matrix, hence Rank1.  Therefore, the first term with $\sigma_1$ is a Rank 1 $n \times n$ matrix. All other terms have the same dimension. Since $\sigma$s are ordered, the first term is the carries the most information.  So Rank 1 approximation is taking only the first term and ignoring the others.  Here is a simple example:
+Each term in this equation is a Rank(1) matrix: $u_1$ is $n \times 1$ column vector and $v_1$ is $1 \times n$ row vector. Since these are the only orthogonal entries in the resulting matrix, the first term with $\sigma_1$ is a Rank(1) $n \times n$ matrix. All other terms have the same dimension. Since $\sigma$'s are ordered, the first term is the carries the most information.  So, Rank(1) approximation is taking only the first term and ignoring the others.  Here is a simple example:
 
 
 ```r
 #rank-one approximation
-#http://cs.brown.edu/courses/cs053/current/slides/12-01-2017.pdf
-#https://cran.r-project.org/web/packages/matlib/vignettes/eigen-ex1.html
-
-A <- matrix(c(1,5,4,2), 2 ,2)
+A <- matrix(c(1, 5, 4, 2), 2 , 2)
 A
 ```
 
@@ -16683,10 +17145,12 @@ A
 ```
 
 ```r
-v1 <- matrix(eigen(t(A)%*%(A))$vector[,1], 1, 2)
-sigma <- sqrt(eigen(t(A)%*%(A))$values[1])
-u1 <- matrix(eigen(A%*%t(A))$vector[,1], 2, 1)
-Atilde <- sigma*u1%*%v1
+v1 <- matrix(eigen(t(A) %*% (A))$vector[, 1], 1, 2)
+sigma <- sqrt(eigen(t(A) %*% (A))$values[1])
+u1 <- matrix(eigen(A %*% t(A))$vector[, 1], 2, 1)
+
+# Rank(1) approximation of A
+Atilde <- sigma * u1 %*% v1
 Atilde
 ```
 
@@ -16696,70 +17160,100 @@ Atilde
 ## [2,] -4.001625 -3.234977
 ```
   
-And, Rank 2 approximation can be obtained by adding the first 2 terms and so on. As we add more terms we can get the full information in the data.  But often times, we truncate the ranks at $r$ by removing the terms with small $sigma$.  This is also called noise reduction.
+And, Rank(2) approximation can be obtained by adding the first 2 terms. As we add more terms, we can get the full information in the data.  But often times, we truncate the ranks at $r$ by removing the terms with small $sigma$.  This is also called noise reduction.
   
-Here is an example for an image compression for a matrix from our own work (Graphical Network Analysis of COVID-19 Spread).  A better example for an image can be found in the Github repo of package `rsvd` [Tiger](https://github.com/erichson/rSVD) [@Erichson_2019]:
+There are many examples on the Internet for real image compression, but we apply rank approximation to a heatmap from our own work. The heatmap shows moving-window partial correlations between daily positivity rates (Covid-19) and mobility restrictions for different time delays (days, "lags")  
 
 
 ```r
 comt <- readRDS("comt.rds")
 
-heatmap(comt, Colv = NA, Rowv = NA,
-        main = "Heatmap - Original",
-        xlab = "Lags", ylab = "Starting days of 7-day rolling windows")
+heatmap(
+  comt,
+  Colv = NA,
+  Rowv = NA,
+  main = "Heatmap - Original",
+  xlab = "Lags",
+  ylab = "Starting days of 7-day rolling windows"
+)
 ```
 
 <img src="25-RankrApprox_files/figure-html/ra2-1.png" width="672" />
 
 ```r
-# Regular SVD
-fck <-svd(comt)
+# Rank(2) with SVD
+fck <- svd(comt)
 r = 2
-comt.re <- as.matrix(fck$u[,1:r])%*%diag(fck$d)[1:r,1:r]%*%t(fck$v[,1:r])
+comt.re <-
+  as.matrix(fck$u[, 1:r]) %*% diag(fck$d)[1:r, 1:r] %*% t(fck$v[, 1:r])
 
-heatmap(comt.re, Colv = NA, Rowv = NA,
-        main = "Heatmap Matrix - Rank(2) Approx",
-        xlab = "Lags", ylab = "Startting days of 7-day rolling windows")
+heatmap(
+  comt.re,
+  Colv = NA,
+  Rowv = NA,
+  main = "Heatmap Matrix - Rank(2) Approx",
+  xlab = "Lags",
+  ylab = "Startting days of 7-day rolling windows"
+)
 ```
 
 <img src="25-RankrApprox_files/figure-html/ra2-2.png" width="672" />
 
+This Rank(2) approximation reduces the noise in the moving-window partial correlations so that we can see the clear trend about the delay in the effect of mobility restrictions on the spread. 
+
+We change the order of correlations in the original heatmap, and make it row-wise correlations: 
+
+
 ```r
 #XX' and X'X SVD
-wtf <- comt%*%t(comt)
-fck <-svd(wtf)
+wtf <- comt %*% t(comt)
+fck <- svd(wtf)
 r = 2
-comt.re2 <- as.matrix(fck$u[,1:r])%*%diag(fck$d)[1:r,1:r]%*%t(fck$v[,1:r])
+comt.re2 <-
+  as.matrix(fck$u[, 1:r]) %*% diag(fck$d)[1:r, 1:r] %*% t(fck$v[, 1:r])
 
-heatmap(comt.re2, Colv = NA, Rowv = NA,
-        main = "Row Corr. - Rank(2)",
-        xlab = "Startting days of 7-day rolling windows",
-        ylab = "Startting days of 7-day rolling windows")
+heatmap(
+  comt.re2,
+  Colv = NA,
+  Rowv = NA,
+  main = "Row Corr. - Rank(2)",
+  xlab = "Startting days of 7-day rolling windows",
+  ylab = "Startting days of 7-day rolling windows"
+)
 ```
 
-<img src="25-RankrApprox_files/figure-html/ra2-3.png" width="672" />
+<img src="25-RankrApprox_files/figure-html/ra3-1.png" width="672" />
+
+This is now worse than the original heatmap we had ealier.  When we apply a Rank(2) approximation, however, we have a very clear picture:
+
 
 ```r
-wtf <- t(comt)%*%comt
-fck <-svd(wtf)
+wtf <- t(comt) %*% comt
+fck <- svd(wtf)
 r = 2
-comt.re3 <- as.matrix(fck$u[,1:r])%*%diag(fck$d)[1:r,1:r]%*%t(fck$v[,1:r])
+comt.re3 <-
+  as.matrix(fck$u[, 1:r]) %*% diag(fck$d)[1:r, 1:r] %*% t(fck$v[, 1:r])
 
-heatmap(comt.re3, Colv = NA, Rowv = NA,
-        main = "Column Corr. - Rank(2)",
-        xlab = "Lags", ylab = "Lags")
+heatmap(
+  comt.re3,
+  Colv = NA,
+  Rowv = NA,
+  main = "Column Corr. - Rank(2)",
+  xlab = "Lags",
+  ylab = "Lags"
+)
 ```
 
-<img src="25-RankrApprox_files/figure-html/ra2-4.png" width="672" />
+<img src="25-RankrApprox_files/figure-html/ra2c-1.png" width="672" />
   
-There is a series of lectures on SVD by [Steve Brunton at YouTube](https://www.youtube.com/watch?v=nbBvuuNVfco) [@Brunton_2020] that you can benefit from greatly!
+There is a series of great lectures on SVD and other matrix approximations by Steve Brunton at YouTube <https://www.youtube.com/watch?v=nbBvuuNVfco>.
   
 
 <!--chapter:end:25-RankrApprox.Rmd-->
 
 # Moore-Penrose inverse 
 
-Another example is solving OLS with SVD:
+The Singular Value Decomposition (SVD) can be used for solving Ordinary Least Squares (OLS) problems. In particular, the SVD of the design matrix $\mathbf{X}$ can be used to compute the coefficients of the linear regression model.  Here are the steps:
   
 $$
 \mathbf{y = X \beta}\\
@@ -16769,14 +17263,24 @@ $$
 \mathbf{\Sigma^{-1}}\mathbf{U'y =  V' \beta}\\
 \mathbf{V\Sigma^{-1}}\mathbf{U'y =  \beta}\\
 $$
-  
-And 
+
+This formula for beta is computationally efficient and numerically stable, even for ill-conditioned or singular $\mathbf{X}$ matrices. Moreover, it allows us to compute the solution to the OLS problem without explicitly computing the inverse of $\mathbf{X}^T \mathbf{X}$. 
+
+Menawhile, the term
 
 $$
 \mathbf{V\Sigma^{-1}U' = M^+}
 $$
+
 is called **"generalized inverse" or The Moore-Penrose Pseudoinverse**.  
-  
+
+If $\mathbf{X}$ has full column rank, then the pseudoinverse is also the unique solution to the OLS problem. However, if $\mathbf{X}$ does not have full column rank, then its pseudoinverse may not exist or may not be unique. In this case, the OLS estimator obtained using the pseudoinverse will be a "best linear unbiased estimator" (BLUE), but it will not be the unique solution to the OLS problem.
+
+To be more specific, the OLS estimator obtained using the pseudoinverse will minimize the sum of squared residuals subject to the constraint that the coefficients are unbiased, i.e., they have zero expected value. However, there may be other linear unbiased estimators that achieve the same minimum sum of squared residuals. These alternative estimators will differ from the OLS estimator obtained using the pseudoinverse in the values they assign to the coefficients.
+
+In practice, the use of the pseudoinverse to estimate the OLS coefficients when $\mathbf{X}$ does not have full column rank can lead to numerical instability, especially if the singular values of $\mathbf{X}$ are very small. In such cases, it may be more appropriate to use regularization techniques such as ridge or Lasso regression to obtain stable and interpretable estimates. These methods penalize the size of the coefficients and can be used to obtain sparse or "shrunken" estimates, which can be particularly useful in high-dimensional settings where there are more predictors than observations.
+
+
 Here are some application of SVD and Pseudoinverse.  
 
 
@@ -16784,11 +17288,11 @@ Here are some application of SVD and Pseudoinverse.
 library(MASS)
 
 ##Simple SVD and generalized inverse
-a <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+A <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
               0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1), 9, 4)
 
-a.svd <- svd(a)
-ds <- diag(1/a.svd$d[1:3])
+a.svd <- svd(A)
+ds <- diag(1 / a.svd$d[1:3])
 u <- a.svd$u
 v <- a.svd$v
 us <- as.matrix(u[, 1:3])
@@ -16810,7 +17314,7 @@ vs <- as.matrix(v[, 1:3])
 ```
 
 ```r
-ginv(a)
+ginv(A)
 ```
 
 ```
@@ -16826,32 +17330,35 @@ ginv(a)
 ## [4,]  0.25000000  0.25000000  0.25000000
 ```
 
+We can use SVD for solving a regular OLS on simulated data:  
+
+
 ```r
-##Simulated DGP
+#Simulated DGP
 x1 <- rep(1, 20)
 x2 <- rnorm(20)
 x3 <- rnorm(20)
-u <- matrix(rnorm(20, mean=0, sd=1), nrow=20, ncol=1)
+u <- matrix(rnorm(20, mean = 0, sd = 1), nrow = 20, ncol = 1)
 X <- cbind(x1, x2, x3)
-beta <- matrix(c(0.5, 1.5, 2), nrow=3, ncol=1)
-Y <- X%*%beta + u
+beta <- matrix(c(0.5, 1.5, 2), nrow = 3, ncol = 1)
+Y <- X %*% beta + u
 
-##OLS
-betahat_OLS <- solve(t(X)%*%X)%*%t(X)%*%Y
+#OLS
+betahat_OLS <- solve(t(X) %*% X) %*% t(X) %*% Y
 betahat_OLS
 ```
 
 ```
 ##         [,1]
-## x1 0.4830153
-## x2 1.5749352
-## x3 1.8834666
+## x1 0.4908427
+## x2 1.1761261
+## x3 1.8633406
 ```
 
 ```r
-##SVD
+#SVD
 X.svd <- svd(X)
-ds <- diag(1/X.svd$d)
+ds <- diag(1 / X.svd$d)
 u <- X.svd$u
 v <- X.svd$v
 us <- as.matrix(u)
@@ -16860,7 +17367,7 @@ X.ginv_mine <- vs %*% ds %*% t(us)
 
 # Compare
 X.ginv <- ginv(X)
-round((X.ginv_mine - X.ginv),4)
+round((X.ginv_mine - X.ginv), 4)
 ```
 
 ```
@@ -16876,15 +17383,15 @@ round((X.ginv_mine - X.ginv),4)
 
 ```r
 # Now OLS
-betahat_ginv <- X.ginv %*%Y
+betahat_ginv <- X.ginv %*% Y
 betahat_ginv
 ```
 
 ```
 ##           [,1]
-## [1,] 0.4830153
-## [2,] 1.5749352
-## [3,] 1.8834666
+## [1,] 0.4908427
+## [2,] 1.1761261
+## [3,] 1.8633406
 ```
 
 ```r
@@ -16893,57 +17400,40 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.4830153
-## x2 1.5749352
-## x3 1.8834666
+## x1 0.4908427
+## x2 1.1761261
+## x3 1.8633406
 ```
   
-Now the question where and when we can use `ginv`? With a high-dimensional $\mathbf{X}$, where $p > n$, the vector $\beta$ cannot uniquely be determined from the system of equations.the solution to the normal equation is 
-
-$$
-\hat{\boldsymbol{\beta}}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{+} \mathbf{X}^{\top} \mathbf{Y}+\mathbf{v} \quad \text { for all } \mathbf{v} \in \mathcal{V}
-$$
-
-where $\mathbf{A}^{+}$denotes the Moore-Penrose inverse of the matrix $\mathbf{A}$. Therefore, there is no unique estimator of the regression parameter (See Page 7 for proof in [Lecture notes on ridge regression](https://arxiv.org/pdf/1509.09169.pdf)) [@Wieringen_2021].  To arrive at a unique regression estimator for studies with rank deficient design matrices, the minimum least squares estimator may be employed.
-
-The minimum least squares estimator of regression parameter minimizes the sum-of-squares criterion and is of minimum length. Formally, $\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}=\arg \min _{\boldsymbol{\beta} \in \mathbb{R}^{p}}\|\mathbf{Y}-\mathbf{X} \boldsymbol{\beta}\|_{2}^{2}$ such that $\left\|\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}\right\|_{2}^{2}<\|\boldsymbol{\beta}\|_{2}^{2}$ for all $\boldsymbol{\beta}$ that minimize
-$\|\mathbf{Y}-\mathbf{X} \boldsymbol{\beta}\|_{2}^{2}$.
-
-So $\hat{\boldsymbol{\beta}}_{\mathrm{MLS}}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{+} \mathbf{X}^{\top} \mathbf{Y}$ is the minimum least squares estimator of regression parameter minimizes the sum-of-squares criterion.  
-  
-As we talked before in Chapter 17, an alternative (and related) estimator of the regression parameter $\beta$ that avoids the use of the Moore-Penrose inverse and is able to deal with (super)-collinearity among the columns of the design matrix is the ridge regression estimator proposed by [Hoerl and Kennard (1970)](https://www.math.arizona.edu/~hzhang/math574m/Read/RidgeRegressionBiasedEstimationForNonorthogonalProblems.pdf). They propose to simply replace $\mathbf{X}^{\top} \mathbf{X}$ by $\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}_{p p}$ with $\lambda \in[0, \infty)$.  The ad-hoc fix solves the singularity as it adds a positive matrix, $\lambda \mathbf{I}_{p p}$, to a positive semi-definite one, $\mathbf{X}^{\top} \mathbf{X}$, making the total a positive definite matrix, which is invertible.
-
-Hence, the ad-hoc fix of the ridge regression estimator resolves the non-evaluation of the estimator in the face of super-collinearity but yields a 'ridge fit' that is not optimal in explaining the observation. Mathematically, this is due to the fact that the fit $\widehat{Y}(\lambda)$ corresponding to the ridge regression estimator is not a projection of $Y$ onto the covariate space.
 
 <!--chapter:end:26-MoorePenroseInv.Rmd-->
 
 # Principle Component Analysis
 
-Having seen SVD and Eigenvalue decomposition, now we can look at Principle Component Analysis (PCA), which is a statistical procedure that allows you to summarize the information content in large data tables.  In other words, it helps dimension reduction in big datasets.
+Having seen SVD and Eigenvalue decomposition, we can now look at Principle Component Analysis (PCA), which is a statistical procedure that allows us to summarize the information content in large data files.  In other words, PCA is a popular technique used to reduce the dimensionality of high-dimensional data while retaining most of the information in the original data.
 
-**PCA is a eigenvalue decomposition of a covariance matrix** (of data matrix $\mathbf{X}$). Since a covariance matrix is a square matrix, we can apply the eigenvalue decomposition, which reveals the unique orthogonal directions (variances) in the data so that their orthogonal linear combinations maximize the total variance.
+**PCA is a eigenvalue decomposition of a covariance matrix** (of data matrix $\mathbf{X}$). Since a covariance matrix is a square symmetric matrix, we can apply the eigenvalue decomposition, which reveals the unique orthogonal directions (variances) in the data so that their orthogonal linear combinations maximize the total variance.
 
-The goal is here a dimension reduction of the data matrix.  Hence by selecting a few loading, we can reduce the dimension of the data but capture a substantial variation in the data at the same time.  See <https://www.youtube.com/watch?v=fkf4IBRSeEc> [@Brunton_PCA] and 
-<https://setosa.io/ev/principal-component-analysis/> [@Powell_PCA]. 
+The goal is here a dimension reduction of the data matrix.  Hence by selecting a few loading, we can reduce the dimension of the data but capture a substantial variation in the data at the same time.  
 
-Principal components are the ordered (orthogonal) lines (vectors) that best account for the maximum variance in the data by their magnitude. To get the (unique) variances (direction and the magnitude) in data, we first obtain the mean-centered covariance matrix.  And as you can imagine, eigenvectors (which give the unique directions) and eigenvalues (which identify those directions' magnitude) are used for PCA:
+Principal components are the ordered (orthogonal) lines (vectors) that best account for the maximum variance in the data by their magnitude. To get the (unique) variances (direction and the magnitude) in data, we first obtain the mean-centered covariance matrix.  
 
-So when we use the covariance matrix of a data, we can use eigenvalue decomposition to identify the unique variation and their relative magnitude in the data.  Here is a simple procedure:  
+When we use the covariance matrix of the data, we can use eigenvalue decomposition to identify the unique variation (eigenvectors) and their relative magnitudes (eigenvalues) in the data.  Here is a simple procedure:  
   
-1. $\mathbf{X}$ is the data matrix,  
-2. $\mathbf{B}$ is the mean-centered data matrix,  
-3. $\mathbf{C}$ is the covariance matrix ($\mathbf{B^TB}$) (note if $\mathbf{B}$ is scaled, i.e. "z-scored", $\mathbf{B^TB}$ gives correlation matrix)
-4. Compute the eigenvectors and values of $\mathbf{C}$: $\mathbf{C} = \mathbf{VDV^{\top}}$ hence $\mathbf{CV} = \mathbf{VD}$, where $\mathbf{V}$ is the eigenvectors (loadings) and $\mathbf{D}$ is eigenvalues.
-5. Using $\mathbf{V}$, the transformation of $\mathbf{B}$ with $\mathbf{B} \mathbf{V}$ maps the data of $p$ variables to a new space of $p$ variables which are uncorrelated over the dataset. $\mathbf{T} (=\mathbf{B} \mathbf{V})$ is called the **principle component or score matrix**
-6. Since SVD of $\mathbf{B} = \mathbf{U} \Sigma \mathbf{V}^{\top}$, we can also get $\mathbf{B}\mathbf{V} = \mathbf{T} = \mathbf{U\Sigma}$. Hence the principle components are $\mathbf{T} = \mathbf{BV} = \mathbf{U\Sigma}$.
-7. However, not all the principal components need to be kept. Keeping only the first $r$ principal components, produced by using only the first $r$ eigenvectors, gives the truncated transformation $\mathbf{T}_{r} = \mathbf{B} \mathbf{V}_{r}$.  Obviously you choose those with higher variance in each directions by the order of eigenvalues.
-8. We can use $\frac{\lambda_{k}}{\sum_{i=1} \lambda_{k}}$ to identify $r$. Or cumulatively, we can see how much variation could be captured by $r$ number of $\lambda$s, which gives us an idea how many principle components to keep ...
+1. $\mathbf{X}$ is the data matrix, 
+2. $\mathbf{B}$ is the mean-centered data matrix, 
+3. $\mathbf{C}$ is the covariance matrix ($\mathbf{B}^T\mathbf{B}$). Note that, if $\mathbf{B}$ is scaled, i.e. "z-scored", $\mathbf{B}^T\mathbf{B}$ gives correlation matrix. We will have more information on covariance and correlation in Chapter 32. 
+4. The eigenvectors and values of $\mathbf{C}$ by $\mathbf{C} = \mathbf{VDV^{\top}}$.  Thus, $\mathbf{V}$ contains the eigenvectors (loadings) and $\mathbf{D}$ contains eigenvalues. 
+5. Using $\mathbf{V}$, the transformation of $\mathbf{B}$ with $\mathbf{B} \mathbf{V}$ maps the data of $p$ variables to a new space of $p$ variables which are uncorrelated over the dataset. $\mathbf{T} =\mathbf{B} \mathbf{V}$ is called the **principle component or score matrix**. 
+6. Since SVD of $\mathbf{B} = \mathbf{U} \Sigma \mathbf{V}^{\top}$, we can also get $\mathbf{B}\mathbf{V} = \mathbf{T} = \mathbf{U\Sigma}$. Hence the principle components are $\mathbf{T} = \mathbf{BV} = \mathbf{U\Sigma}$. 
+7. However, not all the principal components need to be kept. Keeping only the first $r$ principal components, produced by using only the first $r$ eigenvectors, gives the truncated transformation $\mathbf{T}_{r} = \mathbf{B} \mathbf{V}_{r}$.  Obviously you choose those with higher variance in each directions by the order of eigenvalues. 
+8. We can use $\frac{\lambda_{k}}{\sum_{i=1} \lambda_{k}}$ to identify $r$. Or cumulatively, we can see how much variation could be captured by $r$ number of $\lambda$s, which gives us an idea how many principle components to keep:  
 
 $$
 \frac{\sum_{i=1}^{r} \lambda_{k}}{\sum_{i=1}^n \lambda_{k}}
 $$
 
-Let's see an example.  Here is the data:
+We use the `factorextra` package and the `decathlon2` data for an example.  
 
 
 ```r
@@ -16973,9 +17463,8 @@ head(X)
 
 ```r
 n <- nrow(X)
-
 B <- scale(X, center = TRUE)
-C <- t(B)%*%B/(n-1)
+C <- t(B) %*% B / (n - 1)
 head(C)
 ```
 
@@ -17069,7 +17558,7 @@ Now with `prcomp()`.  First, eigenvalues:
 # With `prcomp()`
 Xpca <- prcomp(X, scale = TRUE)
 #Eigenvalues
-Xpca$sdev # you can see it's ordered
+Xpca$sdev 
 ```
 
 ```
@@ -17077,21 +17566,18 @@ Xpca$sdev # you can see it's ordered
 ##  [8] 0.5285666 0.4371645 0.3351059
 ```
 
-```r
-# They are sqrt() of eigenvalues that we calculated earlier
+They are the square root of the eigenvalues that we calculated before and they are ordered.# 
+
+
+```pca2b
 sqrt(evalues)
 ```
 
-```
-##  [1] 1.9364846 1.3210481 1.2320016 1.0159725 0.7860272 0.6544393 0.5708855
-##  [8] 0.5285666 0.4371645 0.3351059
-```
-
-Loadings ...
+And, the "loadings" (Eigenvectors):
 
 
 ```r
-#Eigenvectors (loadings)
+#Eigenvectors 
 Xpca$rotation # 10x10
 ```
 
@@ -17124,9 +17610,9 @@ Xpca$rotation # 10x10
 loadings <- Xpca$rotation
 ```
 
-Interestingly the signs of eigenvectors are flipped and opposites of what we calculated with `eigen()` above.  There are multiple discussions about the sign reversals in eignevectores.  You can find them [here](https://stats.stackexchange.com/questions/154716/pca-eigenvectors-of-opposite-sign-and-not-being-able-to-compute-eigenvectors-wi) [@Kroll_2015] and [here](https://stackoverflow.com/questions/55076133/dont-know-why-eigen-gives-a-vectors-of-wrong-sign-and-the-loading-matrix-is-j) [@Wilks_2019]
+The signs of eigenvectors are flipped and opposites of what we calculated with `eigen()` above. This is because the definition of an eigenbasis is ambiguous of sign. There are multiple discussions about the sign reversals in eignevectores.  
 
-Visualize the order ... 
+Let's visualize the order:   
 
 
 ```r
@@ -17143,14 +17629,20 @@ fviz_eig(Xpca) # Cumulative with "factoextra"
 
 ```r
 # Or
-var <- (Xpca$sdev)^2
-var_perc <- var/sum(var) * 100
+var <- (Xpca$sdev) ^ 2
+var_perc <- var / sum(var) * 100
 
-barplot(var_perc, xlab='PC', ylab='Percent Variance',
-        names.arg=1:length(var_perc), las=1,
-        ylim=c(0, max(var_perc)), col='lightgreen')
- 
-abline(h=mean(var_perc), col='red')
+barplot(
+  var_perc,
+  xlab = 'PC',
+  ylab = 'Percent Variance',
+  names.arg = 1:length(var_perc),
+  las = 1,
+  ylim = c(0, max(var_perc)),
+  col = 'lightgreen'
+)
+
+abline(h = mean(var_perc), col = 'red')
 ```
 
 <img src="27-PrincipalCompAnalysis_files/figure-html/pca4-3.png" width="672" />
@@ -17161,7 +17653,7 @@ And principle component scores $\mathbf{T} = \mathbf{X}\mathbf{V}$ (a.k.a score 
 
 
 ```r
-pc <- scale(X)%*%Xpca$rotation
+pc <- scale(X) %*% Xpca$rotation
 head(pc)
 ```
 
@@ -17214,13 +17706,13 @@ head(Xpca$x)
 
 Now you can think that if we use `evectors` that we calculated earlier with filliped signs, the data would be different.  It's similar to multiply the entire data with -1.  So the data would not change in a sense that that captures the variation between observations and variables.  That's why the sign of eigenvalues are arbitraray.
 
-With SVD ...
+Now, with SVD:  
   
 
 ```r
 # With SVD
 Xsvd <- svd(scale(X))
-pc_2 <- Xsvd$u%*%diag(Xsvd$d)
+pc_2 <- Xsvd$u %*% diag(Xsvd$d)
 dim(pc_2)
 ```
 
@@ -17275,7 +17767,7 @@ head(reduced)
 ## McMULLEN   0.2353742  0.9215376  0.8028425  1.17942532
 ```
 
-The individual columns of $\mathbf{T}$ successively inherit the maximum possible variance from $\mathbf{X}$, with each coefficient vector in $\mathbf{V}$ constrained to be a unit vector. The full principal components decomposition of $\mathbf{X}$, $\mathbf{T}=\mathbf{X V}$, where $\mathbf{V}$ is a $p \times p$ matrix of weights whose columns are the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$. Columns of $\mathbf{V}$ multiplied by the square root of corresponding eigenvalues, **that is, eigenvectors scaled up by the variances, are called loadings in PCA or in Factor analysis**.
+The individual columns of $\mathbf{T}$ successively inherit the maximum possible variance from $\mathbf{X}$, with each coefficient vector in $\mathbf{V}$ constrained to be a unit vector. In $\mathbf{T}=\mathbf{X V}$, $\mathbf{V}$ is a $p \times p$ matrix of weights whose columns are the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$. The columns of $\mathbf{V}$ multiplied by the square root of corresponding eigenvalues, that is, eigenvectors scaled up by the variances, are called loadings in PCA and Factor analysis.
 
 Note that if we make a singular value decomposition for a covariance matrix 
 
@@ -17287,157 +17779,153 @@ $$
 \end{aligned}
 $$
 
-where $\hat{\boldsymbol{\Sigma}}$ is the square diagonal matrix with the singular values of $\mathbf{X}$ and the excess zeros chopped off that satisfies $\hat{\boldsymbol{\Sigma}}^{2}=\boldsymbol{\Sigma}^{\top} \boldsymbol{\Sigma}$.
+where $\hat{\boldsymbol{\Sigma}}$ is the square diagonal matrix with the singular values of $\mathbf{X}$ and the excess zeros are chopped off so that it  satisfies $\hat{\boldsymbol{\Sigma}}^{2}=\boldsymbol{\Sigma}^{\top} \boldsymbol{\Sigma}$.
   
 Comparison with the eigenvector factorization of $\mathbf{X}^{\top} \mathbf{X}$ establishes that the right singular vectors $\mathbf{V}$ of $\mathbf{X}$ are equivalent to the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$, while the singular values $\sigma_{(k)}$ of $\mathbf{X}$ are equal to the square-root of the eigenvalues $\lambda_{(k)}$ of $\mathbf{X}^{\top} \mathbf{X}$.
 
-
-```r
-biplot(reduced[, 1:2], loadings[, 1:2], cex=0.7)
-```
-
-<img src="27-PrincipalCompAnalysis_files/figure-html/pca8-1.png" width="672" />
 
 <!--chapter:end:27-PrincipalCompAnalysis.Rmd-->
 
 # Factor Analysis
 
+Factor analysis and Principal Component Analysis (PCA) both involve reducing the dimensionality of a dataset, but they are not the same.  PCA is a mathematical technique that transforms a dataset of possibly correlated variables into a smaller set of uncorrelated variables known as principal components. The principal components are linear combinations of the original variables, and each principal component accounts for as much of the variation in the data as possible.
+
 Factor Analysis (FA) is a method for modeling observed variables, and their covariance structure, in terms of a smaller number of underlying latent (unobserved) "factors". In FA the observed variables are modeled as linear functions of the "factors." In PCA, we create new variables that are linear combinations of the observed variables.  In both PCA and FA, the dimension of the data is reduced. 
 
-A factor model can be thought of as a series of multiple regressions, predicting each of the observable variables $X_{i}$ from the values of the (unobservable) common factors $f_{i}$:
+The main difference between FA and PCA lies in their objectives. PCA aims to reduce the number of variables by identifying the most important components, while factor analysis aims to identify the underlying factors that explain the correlations among the variables. Therefore, PCA is more commonly used for data reduction or data compression, while factor analysis is more commonly used for exploring the relationships among variables.
+
+As shown below, a factor model can be represented by as a series of multiple regressions, where each $X_{i}$ ($i = 1, \cdots, p$) is a function of $m$ number of unobservable common factors $f_{i}$:
 
 $$
 \begin{gathered}
-X_{1}=\mu_{1}+l_{11} f_{1}+l_{12} f_{2}+\cdots+l_{1 m} f_{m}+\epsilon_{1} \\
-X_{2}=\mu_{2}+l_{21} f_{1}+l_{22} f_{2}+\cdots+l_{2 m} f_{m}+\epsilon_{2} \\
+X_{1}=\mu_{1}+\beta_{11} f_{1}+\beta_{12} f_{2}+\cdots+\beta_{1m} f_{m}+\epsilon_{1} \\
+X_{2}=\mu_{2}+\beta_{21} f_{1}+\beta_{22} f_{2}+\cdots+\beta_{2 m} f_{m}+\epsilon_{2} \\
 \vdots \\
-X_{p}=\mu_{p}+l_{p 1} f_{1}+l_{p 2} f_{2}+\cdots+l_{p m} f_{m}+\epsilon_{p}
+X_{p}=\mu_{p}+\beta_{p 1} f_{1}+\beta_{p 2} f_{2}+\cdots+\beta_{p m} f_{m}+\epsilon_{p}
 \end{gathered}
 $$
 
-where $\mu_{i}$ is the variable mean (intercept).
-
-The regression coefficients $l_{i j}$ (the partial slopes) for all of these multiple regressions are called factor **loadings**: $l_{i j}=$ is loading of the $i^{t h}$ variable on the $j^{t h}$ factor. With a matrix notation, we can show the matrix of factor loadings:
-
-$$
-\mathbf{L}=\left(\begin{array}{cccc}
-l_{11} & l_{12} & \ldots & l_{1 m} \\
-l_{21} & l_{22} & \ldots & l_{2 m} \\
-\vdots & \vdots & & \vdots \\
-l_{p 1} & l_{p 2} & \ldots & l_{p m}
-\end{array}\right)
-$$
-  
-The errors $\varepsilon_{i}$ are called the **specific factors**. Here, $\varepsilon_{i}=$ specific factor for variable $i$. When we collect them in a vector, we can express these series of multivariate regression as follows:
+where $\mathrm{E}\left(X_i\right)=\mu_i$, $\epsilon_{i}$ are called the **specific factors**.  The coefficients, $\beta_{i j},$ are the factor **loadings**.  We can expressed all of them in a matrix notation.
 
 \begin{equation}
 \mathbf{X}=\boldsymbol{\mu}+\mathbf{L f}+\boldsymbol{\epsilon}
-  (\#eq:25-1)
 \end{equation} 
+
+where
+
+$$
+\mathbf{L}=\left(\begin{array}{cccc}
+\beta_{11} & \beta_{12} & \ldots & \beta_{1 m} \\
+\beta_{21} & \beta_{22} & \ldots & \beta_{2 m} \\
+\vdots & \vdots & & \vdots \\
+\beta_{p 1} & \beta_{p 2} & \ldots & \beta_{p m}
+\end{array}\right)
+$$
 
 There are multiple assumptions:
   
-- $E\left(\epsilon_{i}\right)=0$ and $\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}$ (a.k.a "specific variance"), 
+- $E\left(\epsilon_{i}\right)=0$ and $\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}$, which is called as "specific variance", 
 - $E\left(f_{i}\right)=0$ and $\operatorname{var}\left(f_{i}\right)=1$,
 - $\operatorname{cov}\left(f_{i}, f_{j}\right)=0$ for $i \neq j$,
 - $\operatorname{cov}\left(\epsilon_{i}, \epsilon_{j}\right)=0$ for $i \neq j$,
 - $\operatorname{cov}\left(\epsilon_{i}, f_{j}\right)=0$,
 
-Hence,
+Given these assumptions, the variance of $X_i$ can be expressed as
+
+$$
+\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} \beta_{i j}^{2}+\psi_{i}
+$$
+
+There are two sources of the variance in $X_i$: $\sum_{j=1}^{m} \beta_{i j}^{2}$, which is called the **Communality** for variable $i$, and **specific variance**, $\psi_{i}$.  
+
+Moreover, 
   
-- $\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} l_{i j}^{2}+\psi_{i}$. The term $\sum_{j=1}^{m} l_{i j}^{2}$ is called the **Communality** for variable $i$.  The larger the communality, the better the model performance for the $i$ th variable.
 - $\operatorname{cov}\left(X_{i}, X_{j}\right)=\sigma_{i j}=\sum_{k=1}^{m} l_{i k} l_{j k}$, 
 - $\operatorname{cov}\left(X_{i}, f_{j}\right)=l_{i j}$
-  
-The factor model for our variance-covariance matrix can then be expressed as:
 
+The factor model for our variance-covariance matrix of $\mathbf{X}$ can then be expressed as:
+
+$$
 \begin{equation}
-\Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
-  (\#eq:25-2)
+\operatorname{var-cov}(\mathbf{X}) = \Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
 \end{equation} 
-
-where,
-
-$$
-\boldsymbol{\Psi}=\left(\begin{array}{cccc}
-\psi_{1} & 0 & \ldots & 0 \\
-0 & \psi_{2} & \ldots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \ldots & \psi_{p}
-\end{array}\right)
-$$
-And, 
-
-$$
-\hat{l}_{i j}=\hat{e}_{j i} \sqrt{\hat{\lambda}_j}
 $$
 
-The total variance of each variable given in the factor model (27.2) can be explained by the sum of the shared variance with another variable, $\mathbf{L} \mathbf{L}^{\prime}$ (the common variance or **communality**) and the unique variance, $\mathbf{\Psi}$, inherent to each variable (**specific variance**)
+which is the sum of the shared variance with another variable, $\mathbf{L} \mathbf{L}^{\prime}$ (the common variance or **communality**) and the unique variance, $\mathbf{\Psi}$, inherent to each variable (**specific variance**)
 
-There are multiple methods to estimate the parameters of a factor model.  In general, two methods are most common: PCA and MLE.  Let's have an example.  The data set is called `bfi` and comes from the `psych` package. It is made up of 25 self-report personality items from the International Personality Item Pool, gender, education level and age for 2800 subjects and used in the Synthetic Aperture Personality Assessment: The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate, 2 Moderately Inaccurate, 3 Slightly Inaccurate, 4 Slightly Accurate, 5 Moderately Accurate, 6 Very Accurate.
+We need to look at $\mathbf{L L}^{\prime}$, where $\mathbf{L}$ is the $p \times m$ matrix of loadings. In general, we want to have $m \ll p$.  
+
+The $i^{\text {th }}$ diagonal element of $\mathbf{L L}^{\prime}$, the sum of the squared loadings, is called the $i^{\text {th }}$ communality. The communality values represent the percent of variability explained by the common factors. The sizes of the communalities and/or the specific variances can be used to evaluate the goodness of fit.
+
+To estimate factor loadings with PCA, we first calculate the principal components of the data, and then compute the factor loadings using the eigenvectors of the correlation matrix of the standardized data.  When PCA is used, the matrix of estimated factor loadings, $\mathbf{L},$ is given by:
+
+$$
+\widehat{\mathbf{L}}=\left[\begin{array}{lll}
+\sqrt{\hat{\lambda}_1} \hat{\mathbf{v}}_1 & \sqrt{\hat{\lambda}_2} \hat{\mathbf{v}}_2 & \ldots \sqrt{\hat{\lambda}_m} \hat{\mathbf{v}}_m
+\end{array}\right]
+$$
+
+where 
+
+$$
+\hat{\beta}_{i j}=\hat{\mathbf{v}}_{i j} \sqrt{\hat{\lambda}_j}
+$$
+where $i$ is the index of the original variable, $j$ is the index of the principal component, eigenvector $(i,j)$ is the $i$-th component of the $j$-th eigenvector of the correlation matrix, eigenvalue $(j)$ is the $j$-th eigenvalue of the correlation matrix
+
+This method tries to find values of the loadings that bring the estimate of the total communality close to the total of the observed variances. The covariances are ignored.  Remember, the communality is the part of the variance of the variable that is explained by the factors. So a larger communality means a more successful factor model in explaining the variable. 
+
+Let's have an example.  The data set is called `bfi` and comes from the `psych` package. 
+
+The data includes 25 self-reported personality items from the International Personality Item Pool, gender, education level, and age for 2800 subjects.  The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate to 6 Very Accurate.
 
 
 ```r
 library(psych)
 library(GPArotation)
 data("bfi")
-describeData(bfi, head = 5, tail=5)
+str(bfi)
 ```
 
 ```
-## n.obs =  2800 of which  2236   are complete cases.   Number of variables =  28  of which all are numeric  TRUE  
-##           variable # n.obs type H1 H2 H3 H4 H5 T1 T2 T3 T4 T5
-## A1                 1  2784    1  2  2  5  4  2  6  2  2  5  2
-## A2                 2  2773    1  4  4  4  4  3  1  4  3  2  3
-## A3                 3  2774    1  3  5  5  6  3  3  4  5  2  1
-## A4                 4  2781    1  4  2  4  5  4  3  3  2  4  4
-## A5                 5  2784    1  4  5  4  5  5  3  5  5  4  2
-## C1                 6  2779    1  2  5  4  4  4  6  2  5  5  5
-## C2                 7  2776    1  3  4  5  4  4  6  3  5  5  5
-## C3                 8  2780    1  3  4  4  3  5  6  4  5  5  3
-## C4                 9  2774    1  4  3  2  5  3  1  4  1  2  3
-## C5                10  2784    1  4  4  5  5  2  1  3  1  6  3
-## E1                11  2777    1  3  1  2  5  2  1  2  2  2  3
-## E2                12  2784    1  3  1  4  3  2  4  2  2  2  3
-## E3                13  2775    1  3  6  4  4  5  5  4  6  4  1
-## E4                14  2791    1  4  4  4  4  4  5  4  3  5  2
-## E5                15  2779    1  4  3  5  4  5  6  3  6  4  2
-## N1                16  2778    1  3  3  4  2  2  1 NA  3  5  1
-## N2                17  2779    1  4  3  5  5  3  1  3  4  5  2
-## N3                18  2789    1  2  3  4  2  4  1  2  3  6  2
-## N4                19  2764    1  2  5  2  4  4 NA  3  3  4  1
-## N5                20  2771    1  3  5  3  1  3  1  3  1  1  1
-## O1                21  2778    1  3  4  4  3  3  6  6  5  5  3
-## O2                22  2800    1  6  2  2  3  3  1  3  1  2  1
-## O3                23  2772    1  3  4  5  4  4  6  5  6  5  3
-## O4                24  2786    1  4  3  5  3  3  6  4  4  5  5
-## O5                25  2780    1  3  3  2  5  3  1  2  3  1  1
-## gender            26  2800    1  1  2  2  2  1  1  1  2  1  2
-## education         27  2577    1 NA NA NA NA NA  3  4  4  4  4
-## age               28  2800    1 16 18 17 17 17 19 27 29 31 50
+## 'data.frame':	2800 obs. of  28 variables:
+##  $ A1       : int  2 2 5 4 2 6 2 4 4 2 ...
+##  $ A2       : int  4 4 4 4 3 6 5 3 3 5 ...
+##  $ A3       : int  3 5 5 6 3 5 5 1 6 6 ...
+##  $ A4       : int  4 2 4 5 4 6 3 5 3 6 ...
+##  $ A5       : int  4 5 4 5 5 5 5 1 3 5 ...
+##  $ C1       : int  2 5 4 4 4 6 5 3 6 6 ...
+##  $ C2       : int  3 4 5 4 4 6 4 2 6 5 ...
+##  $ C3       : int  3 4 4 3 5 6 4 4 3 6 ...
+##  $ C4       : int  4 3 2 5 3 1 2 2 4 2 ...
+##  $ C5       : int  4 4 5 5 2 3 3 4 5 1 ...
+##  $ E1       : int  3 1 2 5 2 2 4 3 5 2 ...
+##  $ E2       : int  3 1 4 3 2 1 3 6 3 2 ...
+##  $ E3       : int  3 6 4 4 5 6 4 4 NA 4 ...
+##  $ E4       : int  4 4 4 4 4 5 5 2 4 5 ...
+##  $ E5       : int  4 3 5 4 5 6 5 1 3 5 ...
+##  $ N1       : int  3 3 4 2 2 3 1 6 5 5 ...
+##  $ N2       : int  4 3 5 5 3 5 2 3 5 5 ...
+##  $ N3       : int  2 3 4 2 4 2 2 2 2 5 ...
+##  $ N4       : int  2 5 2 4 4 2 1 6 3 2 ...
+##  $ N5       : int  3 5 3 1 3 3 1 4 3 4 ...
+##  $ O1       : int  3 4 4 3 3 4 5 3 6 5 ...
+##  $ O2       : int  6 2 2 3 3 3 2 2 6 1 ...
+##  $ O3       : int  3 4 5 4 4 5 5 4 6 5 ...
+##  $ O4       : int  4 3 5 3 3 6 6 5 6 5 ...
+##  $ O5       : int  3 3 2 5 3 1 1 3 1 2 ...
+##  $ gender   : int  1 2 2 2 1 2 1 1 1 2 ...
+##  $ education: int  NA NA NA NA NA 3 NA 2 1 NA ...
+##  $ age      : int  16 18 17 17 17 21 18 19 19 17 ...
 ```
   
 To get rid of missing observations and the last three variables,
 
 
 ```r
-df <- bfi[complete.cases(bfi[,1:25]),1:25]
-dim(bfi[,1:25])
+df <- bfi[complete.cases(bfi[, 1:25]), 1:25]
 ```
 
-```
-## [1] 2800   25
-```
-
-```r
-dim(df)
-```
-
-```
-## [1] 2436   25
-```
-
-The first decision that we need make  is the number of factors that we will need to extract.  For $p=28$, the variance-covariance matrix $\Sigma$ contains
+The first decision that we need make  is the number of factors that we will need to extract.  For $p=25$, the variance-covariance matrix $\Sigma$ contains
 $$
 \frac{p(p+1)}{2}=\frac{25 \times 26}{2}=325
 $$
@@ -17456,7 +17944,7 @@ scree(df)
 
 <img src="28-FactorAnalysis_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
-Let's use the `factanal()` function of the build-in stats package
+Let's use the `factanal()` function of the build-in `stats` package,  which performs maximum likelihood estimation.  
 
 
 ```r
@@ -17513,9 +18001,9 @@ pa.out
 ## The p-value is 1.22e-202
 ```
 
-The first chunk provides the "uniqueness" (specific variance) for each variable, which range from 0 to 1 . The uniqueness, sometimes referred to as noise, corresponds to the proportion of variability, which can not be explained by a linear combination of the factors. This is the $\hat{\Psi}$ in the equation above. A high uniqueness for a variable indicates that the factors do not account well for its variance.
+The first chunk provides the "uniqueness" (specific variance) for each variable, which range from 0 to 1 . The uniqueness explains the proportion of variability, which cannot be explained by a linear combination of the factors. That's why it's referred to as noise. This is the $\hat{\Psi}$ in the equation above. A high uniqueness for a variable implies that the factors are not the main source of its variance.
 
-The next section reports the loadings ranging from $-1$ to $1.$ This is the $\hat{\mathbf{L}}$ in the equation (27.2) above. The loadings are the contribution of each original variable to the factor. Variables with a high loading are well explained by the factor. Notice there is no entry for certain variables since $R$ does not print loadings less than $0.1$.
+The next section reports the loadings ranging from $-1$ to $1.$ This is the $\hat{\mathbf{L}}$ in the equation (31.2) above. Variables with a high loading are well explained by the factor. Note that R does not print loadings less than $0.1$.
 
 The communalities for the $i^{t h}$ variable are computed by taking the sum of the squared loadings for that variable. This is expressed below:
 
@@ -17523,11 +18011,11 @@ $$
 \hat{h}_i^2=\sum_{j=1}^m \hat{l}_{i j}^2
 $$
 
-This proportion of the variability is denoted as **communality**. Another way to calculate the communality is to subtract the uniquenesses from 1. An appropriate factor model results in low values for uniqueness and high values for communality.
+A well-fit factor model has low values for uniqueness and high values for communality. One way to calculate the communality is to subtract the uniquenesses from 1. 
 
 
 ```r
-apply(pa.out$loadings^2,1,sum) # communality
+apply(pa.out$loadings ^ 2, 1, sum) # communality
 ```
 
 ```
@@ -17542,7 +18030,7 @@ apply(pa.out$loadings^2,1,sum) # communality
 ```
 
 ```r
-1 - apply(pa.out$loadings^2,1,sum) # uniqueness
+1 - apply(pa.out$loadings ^ 2, 1, sum) # uniqueness
 ```
 
 ```
@@ -17556,19 +18044,63 @@ apply(pa.out$loadings^2,1,sum) # communality
 ## 0.7259404
 ```
   
-The table under the loadings reports the proportion of variance explained by each factor. The row **Cumulative Var** gives the cumulative proportion of variance explained. These numbers range from 0 to 1; **Proportion Var** shows the proportion of variance explained by each factor, and the row **SS loadings** gives the sum of squared loadings. This is sometimes used to determine the value of a particular factor. A factor is worth keeping if the SS loading is greater than 1 ([Kaiser’s rule](https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr)).
+The table under the loadings reports the proportion of variance explained by each factor. `Proportion Var` shows the proportion of variance explained by each factor. The row `Cumulative Var` is the cumulative `Proportion Var`. Finally, the row `SS loadings` reports the sum of squared loadings. This can be used to determine a factor worth keeping (Kaiser Rule).
 
-The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Conventionally, we reject $H_0$ if the $p$-value is less than $0.05$. Such a result indicates that the number of factors is too low. The low $p$-value in our example above leads us to reject the $H_0$, and indicates that we fitted NOT an appropriate model. 
+The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Hence, in our example, we fitted not an appropriate model. 
 
-Finally, with our estimated factor model, we may calculate $\hat{\Sigma}$ and compare it to the observed correlation matrix, $S$, by simple matrix algebra. 
+Finally, we may compare estimated correlation matrix, $\hat{\Sigma}$ and the observed correlation matrix:
 
 
 ```r
 Lambda <- pa.out$loadings
 Psi <- diag(pa.out$uniquenesses)
-S <- pa.out$correlation
-Sigma <- Lambda %*% t(Lambda) + Psi
-round(head(S) - head(Sigma), 2)
+Sigma_hat <- Lambda %*% t(Lambda) + Psi
+head(Sigma_hat)
+```
+
+```
+##             A1         A2         A3         A4         A5          C1
+## A1  1.00000283 -0.2265272 -0.2483489 -0.1688548 -0.2292686 -0.03259104
+## A2 -0.22652719  0.9999997  0.4722224  0.3326049  0.4275597  0.13835721
+## A3 -0.24834886  0.4722224  1.0000003  0.3686079  0.4936403  0.12936294
+## A4 -0.16885485  0.3326049  0.3686079  1.0000017  0.3433611  0.13864850
+## A5 -0.22926858  0.4275597  0.4936403  0.3433611  1.0000000  0.11450065
+## C1 -0.03259104  0.1383572  0.1293629  0.1386485  0.1145007  1.00000234
+##             C2          C3          C4          C5          E1         E2
+## A1 -0.04652882 -0.04791267  0.02951427  0.03523371  0.02815444  0.0558511
+## A2  0.17883430  0.15482391 -0.12081021 -0.13814633 -0.18266118 -0.2297604
+## A3  0.16516097  0.14465370 -0.11034318 -0.14189597 -0.24413210 -0.2988190
+## A4  0.18498354  0.18859903 -0.18038121 -0.21194824 -0.14856332 -0.2229227
+## A5  0.12661287  0.12235652 -0.12717601 -0.17194282 -0.28325012 -0.3660944
+## C1  0.37253491  0.30456798 -0.37410412 -0.31041193 -0.03649401 -0.1130997
+##            E3         E4          E5          N1          N2          N3
+## A1 -0.1173724 -0.1247436 -0.03147217  0.17738934  0.16360231  0.07593942
+## A2  0.3120607  0.3412253  0.22621235 -0.09257735 -0.08847947 -0.01009412
+## A3  0.3738780  0.4163964  0.26694168 -0.10747302 -0.10694310 -0.02531812
+## A4  0.2124931  0.3080580  0.18727470 -0.12916711 -0.13311708 -0.08204545
+## A5  0.3839224  0.4444111  0.27890083 -0.20296456 -0.20215265 -0.13177926
+## C1  0.1505643  0.0926584  0.24950915 -0.05014855 -0.02623443 -0.04635470
+##             N4          N5          O1           O2          O3           O4
+## A1  0.03711760  0.01117121 -0.05551140  0.002021464 -0.08009528 -0.066085241
+## A2 -0.07360446  0.03103525  0.13218881  0.022852428  0.19161373  0.069742928
+## A3 -0.10710549  0.01476409  0.15276068  0.028155055  0.22602542  0.058986934
+## A4 -0.15287214 -0.01338970  0.03924192  0.059069402  0.06643848 -0.034070120
+## A5 -0.20800410 -0.08388175  0.16602866 -0.008940967  0.23912037  0.008904693
+## C1 -0.10426314 -0.05989091  0.18543197 -0.154255652  0.19444225  0.063216945
+##             O5
+## A1  0.03042630
+## A2 -0.03205802
+## A3 -0.03274830
+## A4  0.03835946
+## A5 -0.05224734
+## C1 -0.15426539
+```
+
+Let's check the differences:
+
+
+```r
+round(head(cor(df)) - head(Sigma_hat), 2)
 ```
 
 ```
@@ -17597,7 +18129,7 @@ round(head(S) - head(Sigma), 2)
 
 This matrix is also called as the **residual matrix**. 
 
-For more see: <https://cran.r-project.org/web/packages/factoextra/readme/README.html>
+For extracting and visualizing the results of factor analysis, we can use the `factoextra` package: <https://cran.r-project.org/web/packages/factoextra/readme/README.html>
 
 
 <!--chapter:end:28-FactorAnalysis.Rmd-->
@@ -18241,7 +18773,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] -0.3932402
+## [1] 0.7435154
 ```
 
 ```r
@@ -18249,13 +18781,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
-## [1,] -1.0000000 -0.3932402  0.6045307 -0.10480315  0.13128244  0.7553534
-## [2,] -0.3932402 -1.0000000 -0.1405025 -0.39799148  0.28679673  0.3952834
-## [3,]  0.6045307 -0.1405025 -1.0000000 -0.31701364  0.38261168 -0.3235978
-## [4,] -0.1048032 -0.3979915 -0.3170136 -1.00000000 -0.07604173 -0.1037680
-## [5,]  0.1312824  0.2867967  0.3826117 -0.07604173 -1.00000000 -0.5162070
-## [6,]  0.7553534  0.3952834 -0.3235978 -0.10376796 -0.51620704 -1.0000000
+##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,] -1.0000000  0.7435154  0.6966969  0.1582348  0.7385773  0.2923291
+## [2,]  0.7435154 -1.0000000 -0.6393338 -0.1815461 -0.6332128 -0.4691851
+## [3,]  0.6966969 -0.6393338 -1.0000000 -0.1143173 -0.6604050 -0.2087999
+## [4,]  0.1582348 -0.1815461 -0.1143173 -1.0000000  0.0336970  0.1913892
+## [5,]  0.7385773 -0.6332128 -0.6604050  0.0336970 -1.0000000 -0.4147941
+## [6,]  0.2923291 -0.4691851 -0.2087999  0.1913892 -0.4147941 -1.0000000
 ```
 
 ```r
@@ -18265,13 +18797,13 @@ pc$estimate
 ```
 
 ```
-##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
-## [1,]  1.0000000 -0.3932402  0.6045307 -0.10480315  0.13128244  0.7553534
-## [2,] -0.3932402  1.0000000 -0.1405025 -0.39799148  0.28679673  0.3952834
-## [3,]  0.6045307 -0.1405025  1.0000000 -0.31701364  0.38261168 -0.3235978
-## [4,] -0.1048032 -0.3979915 -0.3170136  1.00000000 -0.07604173 -0.1037680
-## [5,]  0.1312824  0.2867967  0.3826117 -0.07604173  1.00000000 -0.5162070
-## [6,]  0.7553534  0.3952834 -0.3235978 -0.10376796 -0.51620704  1.0000000
+##           [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,] 1.0000000  0.7435154  0.6966969  0.1582348  0.7385773  0.2923291
+## [2,] 0.7435154  1.0000000 -0.6393338 -0.1815461 -0.6332128 -0.4691851
+## [3,] 0.6966969 -0.6393338  1.0000000 -0.1143173 -0.6604050 -0.2087999
+## [4,] 0.1582348 -0.1815461 -0.1143173  1.0000000  0.0336970  0.1913892
+## [5,] 0.7385773 -0.6332128 -0.6604050  0.0336970  1.0000000 -0.4147941
+## [6,] 0.2923291 -0.4691851 -0.2087999  0.1913892 -0.4147941  1.0000000
 ```
 
 ```r
@@ -18281,22 +18813,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##            [,1]        [,2]        [,3]       [,4]        [,5]        [,6]
-## [1,]  1.1506494 -0.25329022  0.44883924 -0.5404338  0.10021918  0.29112114
-## [2,] -0.2532902  0.86633391 -0.16118419 -0.1985152 -0.02949492  0.06471793
-## [3,]  0.4488392 -0.16118419  0.40469914 -0.3503316  0.32063217 -0.01279057
-## [4,] -0.5404338 -0.19851521 -0.35033160  1.0118747 -0.25987427 -0.11652421
-## [5,]  0.1002192 -0.02949492  0.32063217 -0.2598743  0.68636965 -0.19846862
-## [6,]  0.2911211  0.06471793 -0.01279057 -0.1165242 -0.19846862  0.22379240
+##            [,1]        [,2]          [,3]          [,4]        [,5]       [,6]
+## [1,]  1.4641225  0.73176968  0.2597765348  0.1383854759  0.59624474 -0.1384850
+## [2,]  0.7317697  1.99958764 -0.3391113451 -0.3612124976 -0.04401216 -0.5190747
+## [3,]  0.2597765 -0.33911135  0.8808870430 -0.0007409402 -0.31573543  0.1448976
+## [4,]  0.1383855 -0.36121250 -0.0007409402  1.2564248534  0.21759035  0.2553944
+## [5,]  0.5962447 -0.04401216 -0.3157354263  0.2175903520  1.23930369 -0.2291602
+## [6,] -0.1384850 -0.51907474  0.1448976374  0.2553943902 -0.22916019  0.7406505
 ## 
 ## $wi
-##            [,1]       [,2]       [,3]      [,4]       [,5]       [,6]
-## [1,]  5.0403482  1.2415139 -4.5705867 0.3301249 -0.6023598 -7.5394828
-## [2,]  1.2415139  1.9774960  0.6653387 0.7850724 -0.8244700 -2.4714212
-## [3,] -4.5705867  0.6653387 11.3409813 1.4974108 -2.6343739  4.8447190
-## [4,]  0.3301249  0.7850724  1.4974108 1.9675589  0.2179720  0.6467981
-## [5,] -0.6023598 -0.8244700 -2.6343739 0.2179720  4.1790984  4.6912686
-## [6,] -7.5394828 -2.4714212  4.8447190 0.6467981  4.6912686 19.7656084
+##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
+## [1,]  2.3373165 -1.3957255 -1.7271202 -0.23543287 -1.69211473 -0.6456065
+## [2,] -1.3957255  1.5077155  1.2729347  0.21695842  1.16514190  0.8323333
+## [3,] -1.7271202  1.2729347  2.6294799  0.18040285  1.60477665  0.4890650
+## [4,] -0.2354329  0.2169584  0.1804028  0.94756204 -0.04926789 -0.2692516
+## [5,] -1.6921147  1.1651419  1.6047766 -0.04926789  2.24591139  0.8980944
+## [6,] -0.6456065  0.8323333  0.4890650 -0.26925164  0.89809441  2.0877709
 ## 
 ## $errflag
 ## [1] 0
@@ -18311,7 +18843,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] -0.3932453
+## [1] 0.743501
 ```
 
 ```r
@@ -18320,12 +18852,12 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 
 ```
 ##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
-## [1,] -1.0000000 -0.3932453  0.6045279 -0.10482964  0.13124550  0.7553638
-## [2,] -0.3932453 -1.0000000 -0.1404946 -0.39800454  0.28679778  0.3953064
-## [3,]  0.6045279 -0.1404946 -1.0000000 -0.31699454  0.38265800 -0.3235848
-## [4,] -0.1048296 -0.3980045 -0.3169945 -1.00000000 -0.07601433 -0.1037170
-## [5,]  0.1312455  0.2867978  0.3826580 -0.07601433 -1.00000000 -0.5161714
-## [6,]  0.7553638  0.3953064 -0.3235848 -0.10371696 -0.51617136 -1.0000000
+## [1,] -1.0000000  0.7435010  0.6966728  0.15819928  0.73854121  0.2922589
+## [2,]  0.7435010 -1.0000000 -0.6393100 -0.18151519 -0.63317361 -0.4691332
+## [3,]  0.6966728 -0.6393100 -1.0000000 -0.11428905 -0.66036395 -0.2087326
+## [4,]  0.1581993 -0.1815152 -0.1142891 -1.00000000  0.03377254  0.1914314
+## [5,]  0.7385412 -0.6331736 -0.6603639  0.03377254 -1.00000000 -0.4147480
+## [6,]  0.2922589 -0.4691332 -0.2087326  0.19143137 -0.41474797 -1.0000000
 ```
 
 ## High-dimensional data
@@ -19419,7 +19951,7 @@ dir()
 ## [137] "irates.dat"                     "mnist.Rdata"                   
 ## [139] "myocarde.csv"                   "packages.bib"                  
 ## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "renderc10737c5830f.rds"        
+## [143] "README.md"                      "render1df5516b4ffc.rds"        
 ## [145] "style.css"                      "table1.text"                   
 ## [147] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20413,7 +20945,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fb34dc1bfb0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fc15287df10> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -20841,8 +21373,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  4.72 4.32 -2.59 8.21 2.28 ...
-##  $ c: Factor w/ 3 levels "(-2.6,1.01]",..: 3 2 1 3 2 3 1 2 2 1
+##  $ b: num  5.92 -8.01 -6 6.36 5.59 ...
+##  $ c: Factor w/ 3 levels "(-8.02,-3.22]",..: 3 1 1 3 3 2 3 2 2 1
 ```
 
 ```r
@@ -20854,8 +21386,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  4.72 4.32 -2.59 8.21 2.28 ...
-##  $ c: Factor w/ 3 levels "(-2.6,1.01]",..: 3 2 1 3 2 3 1 2 2 1
+##  $ b: num  5.92 -8.01 -6 6.36 5.59 ...
+##  $ c: Factor w/ 3 levels "(-8.02,-3.22]",..: 3 1 1 3 3 2 3 2 2 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -20871,17 +21403,17 @@ my_data
 ```
 
 ```
-##     a          b           c          d          f          g         h
-## 1   1  4.7178834 (4.61,8.22] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  4.3204557 (1.01,4.61] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3 -2.5923226 (-2.6,1.01] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  8.2105837 (4.61,8.22] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  2.2787707 (1.01,4.61] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6  5.7635569 (4.61,8.22]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7 -0.6225081 (-2.6,1.01]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  2.7071440 (1.01,4.61]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  1.6983988 (1.01,4.61]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  0.7413923 (-2.6,1.01]  1.4863011  1.1560120         NA  0.000000
+##     a          b             c          d          f          g         h
+## 1   1  5.9226916   (1.57,6.37] -1.4863011         NA -1.1560120 -1.486301
+## 2   2 -8.0075378 (-8.02,-3.22] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3 -6.0045378 (-8.02,-3.22] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  6.3591237   (1.57,6.37] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  5.5891572   (1.57,6.37] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6  1.3978300  (-3.22,1.57]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  2.0222113   (1.57,6.37]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8 -2.1821802  (-3.22,1.57]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  0.9206698  (-3.22,1.57]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -7.0713463 (-8.02,-3.22]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21294,7 +21826,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1] -3.7484884  0.2012226  0.5329082  6.0227369  0.2783824  0.3960449
+## [1] -3.7495548  1.2744972 -0.5399030 -1.9265146 -0.7863584  1.9562647
 ```
 
 ```r
@@ -21340,12 +21872,12 @@ X_new
 ```
 
 ```
-##          [,1]      [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 2.877886 3.4625797 2.831561 3.212687 1.495299 3.632932
-## [2,] 1.534975 3.6134761 2.081743 5.126457 2.277936 2.993094
-## [3,] 1.580554 0.6765116 3.517270 4.135863 5.530581 2.686455
-## [4,] 1.718470 3.6940694 4.073304 4.222340 2.572484 2.190125
-## [5,] 3.539625 3.7545857 3.029031 4.325390 3.402083 3.893440
+##           [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+## [1,] 2.3530982 1.891725 2.777337 1.652340 3.590116 4.184539
+## [2,] 1.9260705 4.662246 3.868263 3.104062 1.036445 5.947922
+## [3,] 2.5462710 3.587862 2.916530 3.993220 3.796230 1.315979
+## [4,] 0.9107997 3.680656 2.411038 2.995375 2.273632 3.154890
+## [5,] 3.5142058 2.452007 2.486929 1.328487 3.517218 2.352935
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -22981,7 +23513,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "T" "H" "H" "H" "H" "T" "T"
+## [1] "H" "H" "T" "T" "T" "T" "T" "T"
 ```
 
 ```r
@@ -22989,7 +23521,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 2 2
+## [1] 5 6
 ```
 
 ```r
@@ -22998,7 +23530,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "T" "T" "T" "H" "H" "H"
+## [1] "H" "H" "H" "H" "T" "H" "H" "H"
 ```
 
 ```r
@@ -23006,7 +23538,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 6 2
+## [1] 4 2
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  

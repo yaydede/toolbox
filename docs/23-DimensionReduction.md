@@ -2,110 +2,30 @@
 
 # Matrix Decompositions {-}
   
-Any matrix decomposition (and related topics) requires a solid understanding of eigenvalues and singular value decomposition (SVD).  
+Matrix decomposition, also known as matrix factorization, is a process of breaking down a matrix into simpler components that can be used to simplify calculations, solve systems of equations, and gain insight into the underlying structure of the matrix. 
+  
+Matrix decomposition plays an important role in machine learning, particularly in the areas of dimensionality reduction, data compression, and feature extraction. For example, Principal Component Analysis (PCA) is a popular method for dimensionality reduction, which involves decomposing a high-dimensional data matrix into a lower-dimensional representation while preserving the most important information. PCA achieves this by finding the eigenvectors and eigenvalues of the covariance matrix of the data and then selecting the top eigenvectors as the new basis for the data.
+
+Singular Value Decomposition (SVD) is also commonly used in recommender systems to find latent features in user-item interaction data. SVD decomposes the user-item interaction matrix into three matrices: a left singular matrix, a diagonal matrix of singular values, and a right singular matrix. The left and right singular matrices represent user and item features, respectively, while the singular values represent the importance of those features.
+
+Rank optimization is another method that finds a low-rank approximation of a matrix that best fits a set of observed data. In other words, it involves finding a lower-rank approximation of a given matrix that captures the most important features of the original matrix.  For example, SVD decomposes a matrix into a product of low-rank matrices, while PCA finds the principal components of a data matrix, which can be used to create a lower-dimensional representation of the data.   In machine learning, rank optimization is often used in applications such as collaborative filtering, image processing, and data compression. By finding a low-rank approximation of a matrix, it is possible to reduce the amount of memory needed to store the matrix and improve the efficiency of algorithms that work with the matrix.
+
+We start with the eigenvalue decomposition (EVD), which is the foundation to many matrix decomposition methods
 
 # Eigenvectors and eigenvalues  
 
-To explain eigenvalues, we first explain eigenvectors. Almost all vectors change direction, when they are multiplied by $\mathbf{A}$. Certain exceptional vectors $x$ are in the same direction as $\mathbf{A} x .$ Those are the "eigenvectors". Multiply an eigenvector by $\mathbf{A}$, and the vector $\mathbf{A}x$ is a number $\lambda$ times the original $x$.
-  
-The basic equation is $\mathbf{A} x=\lambda x$. The number $\lambda$ is an eigenvalue of $\mathbf{A}$. The eigenvalue $\lambda$ tells whether the special vector $x$ is stretched or shrunk or reversed or left unchanged-when it is multiplied by $\mathbf{A}$. We may find $\lambda=2$ or $\frac{1}{2}$ or $-1$ or 1. The eigenvalue $\lambda$ could be zero! Then $\mathbf{A} x=0 x$ means that this eigenvector $x$ is in the nullspace.
+Eigenvalues and eigenvectors have many important applications in linear algebra and beyond. For example, in machine learning, principal component analysis (PCA) involves computing the eigenvectors and eigenvalues of the covariance matrix of a data set, which can be used to reduce the dimensionality of the data while preserving its important features. 
 
-A good example comes from the powers $\mathbf{A, A^{2}, A^{3}}, \ldots$ of a matrix. Suppose you need the hundredth power $\mathbf{A}^{100}$. The starting matrix $\mathbf{A}$ becomes unrecognizable after a few steps, and $\mathbf{A}^{100}$ is very close to $\left[\begin{array}{llll}.6 & .6 ; & .4 & .4\end{array}\right]:$
+Almost all vectors change direction, when they are multiplied by a matrix, $\mathbf{A}$, except for certain vectors ($\mathbf{v}$) that are in the same direction as $\mathbf{A} \mathbf{v}.$ Those vectors are called "eigenvectors". 
 
-$$
-\begin{aligned}
-&{\left[\begin{array}{cc}
-.8 & .3 \\
-.2 & .7
-\end{array}\right] \quad\left[\begin{array}{cc}
-.70 & .45 \\
-.30 & .55
-\end{array}\right] \quad\left[\begin{array}{cc}
-.650 & .525 \\
-.350 & .475
-\end{array}\right] \ldots} & {\left[\begin{array}{ll}
-.6000 & .6000 \\
-.4000 & .4000
-\end{array}\right]} \\
-&~~~~\mathbf{A} ~~~~~~~~~~~~~~~~~~~~~~~~~\mathbf{A}^{2}~~~~~~~~~~~~~~~~~~~~\mathbf{A}^{3}& \mathbf{A}^{100}
-\end{aligned}
-$$
-  
-$\mathbf{A}^{100}$ was found by using the eigenvalues of $\mathbf{A}$, not by multiplying 100 matrices.
-   
-Those eigenvalues (here they are 1 and $1 / 2$ ) are a new way to see into the heart of a matrix. See <http://math.mit.edu/~gs/linearalgebra/ila0601.pdf> [@Strang_2016] for more details.  Most $2 \times 2$ matrices have two eigenvector directions and two eigenvalues and it can be shown that $\operatorname{det}(\mathbf{A}-\lambda I)=0$.
-
-
-```r
-#*****Eigenvalues and vectors*******
-#AX = lambdaX
-#(A − lambdaI)X = 0
-
-A <- matrix(c(2,1,8,5), 2, 2)
-ev <- eigen(A)$values
-
-# Sum of eigenvalues = sum of diagonal terms of A (called the trace of A)
-sum(ev)
-```
-
-```
-## [1] 7
-```
-
-```r
-sum(diag(A))
-```
-
-```
-## [1] 7
-```
-
-```r
-# Product of eigenvalues = determinant of A
-prod(ev)
-```
-
-```
-## [1] 2
-```
-
-```r
-det(A)
-```
-
-```
-## [1] 2
-```
-
-```r
-# Diagonal matrix D has eigenvalues = diagonal elements
-D <- matrix(c(2,0,0,5), 2, 2)
-eigen(D)
-```
-
-```
-## eigen() decomposition
-## $values
-## [1] 5 2
-## 
-## $vectors
-##      [,1] [,2]
-## [1,]    0   -1
-## [2,]    1    0
-```
-
-$\text{Rank}(\mathbf{A})$ is number of nonzero singular values of $\mathbf{A}$. Singular values are eigenvalues of $\mathbf{X'X}$ which is an $n \times n$ matrix and $\mathbf{X}$ is $m \times n$ matrix.  SVD starts with eigenvalue decomposition.  See <http://www.onmyphd.com/?p=eigen.decomposition>.  
-
-Eigendecomposition is the method to decompose a square matrix into its eigenvalues and eigenvectors. For a matrix $\mathbf{A}$, if
+We can see how we obtain the eigenvalues and eigenvectors of a matrix $\mathbf{A}$. If
 
 $$
 \mathbf{A} \mathbf{v}=\lambda \mathbf{v}
 $$
-  
-then $\mathbf{v}$ is an eigenvector of matrix $\mathbf{A}$ and $\lambda$ is the corresponding eigenvalue. That is, if matrix $\mathbf{A}$ is multiplied by a vector and the result is a scaled version of the same vector, then it is an eigenvector of $\mathbf{A}$ and the scaling factor is its eigenvalue.
-  
-So how do we find the eigenvectors of a matrix? 
-
+ 
+Then,
+   
 $$
 \begin{aligned}
 &\mathbf{A} \mathbf{v}-\lambda \mathbf{I} \mathbf{v}=0 \\
@@ -118,42 +38,236 @@ $$
 \operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0,
 $$
 
-because $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I}) \equiv(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.
-  
-Why? Since you want non-trivial solutions to $(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$, you want $(\mathbf{A}-\lambda \mathbf{I})$ to be non-invertible. Otherwise, its invertible and you get $\mathbf{v}=(\mathbf{A}-\lambda \mathbf{I})^{-1} \cdot 0=0$ which is a trivial solution. But a linear transformation or a matrix is non-invertible if and only if its determinant is 0 . So $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0$ for non-trivial solutions.
-  
-It's hard to understand the intuition or why eigenvectors and values are important. Here is the excerpt from [How to intuitively understand eigenvalue and eigenvector](https://math.stackexchange.com/q/243553) [@Use_eigen]:
-  
-<style type="text/css">
-blockquote {
-    padding: 10px 20px;
-    margin: 0 0 20px;
-    font-size: 14px;
-    border-left: 5px solid #eee;
-}
-</style>
+because $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I}) \equiv(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.  The reason is that we want a non-trivial solution to $(\mathbf{A}-\lambda \mathbf{I}) \mathbf{v}=0$.  Therefore, $(\mathbf{A}-\lambda \mathbf{I})$ should be non-invertible. Otherwise, if it is invertible, we get $\mathbf{v}=(\mathbf{A}-\lambda \mathbf{I})^{-1} \cdot 0=0$, which is a trivial solution. Since a matrix is non-invertible if its determinant is 0 . Thus, $\operatorname{det}(\mathbf{A}-\lambda \mathbf{I})=0$ for non-trivial solutions.
 
-> First let us think what a square matrix does to a vector. Consider a matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$. Let us see what the matrix $\mathbf{A}$ acting on a vector $x$ does to this vector. By action, we mean multiplication i.e. we get a new vector $y=\mathbf{A} x$.
->
-> The matrix acting on a vector $x$ does two things to the vector $x$. (1) It scales the vector; (2) It rotates the vector. It is important to understand what the matrix $\mathbf{A}$ in a set of equations $\mathbf{A x}=\mathbf{b}$ does. Matrix $\mathbf{A}$ simply "transforms" a vector $\mathbf{x}$ into another vector $\mathbf{b}$ by applying linear combination. The transformation is done within the same space or subspace. Sometimes we only want to know what would be the vector $\mathbf{b}$ if linear combination is applied, that is when we execute the equation $\mathbf{A x}=\mathbf{b}$. Other times we are interested in a reverse problem and we want to solve the equation $\mathbf{x}=\mathbf{A}^{-1} \mathbf{b}$.
->
-> However, for any matrix $\mathbf{A}$, there are some favored vectors/directions. When the matrix acts on these favored vectors, the action essentially results in just scaling the vector. There is no rotation. These favored vectors are precisely the eigenvectors and the amount by which each of these favored vectors stretches or compresses is the eigenvalue.
->
-
-So why are these eigenvectors and eigenvalues important? Consider the eigenvector corresponding to the maximum (absolute) eigenvalue. If we take a vector along this eigenvector, then the action of the matrix is maximum. No other vector when acted by this matrix will get stretched as much as this eigenvector.
-
-Hence, if a vector were to lie "close" to this eigen direction, then the "effect" of action by this matrix will be "large" i.e. the action by this matrix results in "large" response for this vector. The effect of the action by this matrix is high for large (absolute) eigenvalues and less for small (absolute) eigenvalues. Hence, the directions/vectors along which this action is high are called the principal directions or principal eigenvectors. The corresponding eigenvalues are called the principal values.
-
-Here are some examples:
+We start with a square matrix, $\mathbf{A}$, like
 
 $$
-\mathbf{\Lambda}=\left[\begin{array}{cc}
-\lambda_{1} & 0 \\
-0 & \lambda_{2}
-\end{array}\right] \\
+A =\left[\begin{array}{cc}
+1 & 2 \\
+3 & -4
+\end{array}\right]
 $$
 $$
-\mathbf{V}=\left[\mathbf{v}_1 \mathbf{v}_2\right]
+\begin{aligned}
+\det (\mathbf{A}-\lambda \mathbf{I})=
+& \left|\begin{array}{cc}
+1-\lambda & 2 \\
+3 & -4-\lambda
+\end{array}\right|=(1-\lambda)(-4-\lambda)-2 \cdot 3 \\
+& =-4-\lambda+4 \lambda+\lambda^2-6 \\
+& =\lambda^2+3 \lambda-10 \\
+& =(\lambda-2)(\lambda+5)=0 \\
+& \therefore \lambda_1=2, ~ \lambda_2=-5 \\
+&
+\end{aligned}
+$$
+
+We have two eigenvalues.  We now need to consider each eigenvalue indivudally
+
+$$
+\begin{gathered}
+\lambda_1=2 \\
+(A 1-\lambda I) \mathbf{v}=0 \\
+{\left[\begin{array}{cc}
+1-\lambda_1 & 2 \\
+3 & -4-\lambda_1
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} \\
+
+{\left[\begin{array}{cc}
+-1 & 2 \\
+3 & -6
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]}
+\end{gathered}
+$$
+Hence, 
+
+$$
+\begin{aligned}
+-v_1+2 v_2=0 \\
+3 v_1-6 v_2=0\\
+v_1=2, ~ v_2=1
+\end{aligned}
+$$
+And,
+
+$$
+\begin{aligned}
+&  \lambda_2=-5 \\
+& {\left[\begin{array}{cc}
+1-\lambda_2 & 2 \\
+3 & -4-\lambda_2
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} \\
+& {\left[\begin{array}{cc}
+6 & 2 \\
+3 & 1
+\end{array}\right]\left[\begin{array}{l}
+v_1 \\
+v_2
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0
+\end{array}\right]} 
+
+\end{aligned}
+$$
+Hence, 
+
+$$
+\begin{gathered}
+6 v_1+2 v_2=0 \\
+3 v_1+v_2=0 \\
+
+v_1=-1,~ v_2=3
+\end{gathered}
+$$
+We have two eigenvalues
+
+$$
+\begin{aligned}
+& \lambda_1=2 \\
+& \lambda_2=-5
+\end{aligned}
+$$
+
+And two corresponding eigenvectors
+
+$$
+\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right],\left[\begin{array}{c}
+-1 \\
+3
+\end{array}\right]
+$$
+for $\lambda_1=2$
+
+$$
+\left[\begin{array}{cc}
+1 & 2 \\
+3 & -4
+\end{array}\right]\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right]=\left[\begin{array}{l}
+2+2 \\
+6-4
+\end{array}\right]=\left[\begin{array}{l}
+4 \\
+2
+\end{array}\right]=2\left[\begin{array}{l}
+2 \\
+1
+\end{array}\right]
+$$
+Let's see the solution in R
+
+
+```r
+A <- matrix(c(1, 3, 2, -4), 2, 2)
+eigen(A)
+```
+
+```
+## eigen() decomposition
+## $values
+## [1] -5  2
+## 
+## $vectors
+##            [,1]      [,2]
+## [1,] -0.3162278 0.8944272
+## [2,]  0.9486833 0.4472136
+```
+
+The eigenvectors are typically normalized by dividing by its length $\sqrt{v^{\prime} v}$, which is 5 in our case for $\lambda_1=2$.
+
+
+```r
+# For the ev (2, 1), for lambda
+c(2, 1) / sqrt(5)
+```
+
+```
+## [1] 0.8944272 0.4472136
+```
+
+There some nice properties that we can observe in this application.
+
+
+```r
+# Sum of eigenvalues = sum of diagonal terms of A (Trace of A)
+ev <- eigen(A)$values
+sum(ev) == sum(diag(A))
+```
+
+```
+## [1] TRUE
+```
+
+```r
+# Product of eigenvalues = determinant of A
+round(prod(ev), 4) == round(det(A), 4)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+# Diagonal matrix D has eigenvalues = diagonal elements
+D <- matrix(c(2, 0, 0, 5), 2, 2)
+eigen(D)$values == sort(diag(D), decreasing = TRUE)
+```
+
+```
+## [1] TRUE TRUE
+```
+
+We can see that, if one of the eigenvalues is zero for a matrix, the determinant of the matrix will be zero.  We willl return to this issue in Singluar Value Decomposition.
+
+Let's finish this chapter with Diagonalization and Eigendecomposition.
+
+Suppose we have $m$ linearly independent eigenvectors ($\mathbf{v_i}$ is eigenvector $i$ in a column vector in $\mathbf{V}$) of $\mathbf{A}$.
+
+$$
+\mathbf{AV}=\mathbf{A}\left[\mathbf{v_1} \mathbf{v_2} \cdots \mathbf{v_m}\right]=\left[\mathbf{A} \mathbf{v_1} \mathbf{A} \mathbf{v_2} \ldots \mathbf{A} \mathbf{v_m}\right]=\left[\begin{array}{llll}
+\lambda_1 \mathbf{v_1} & \lambda_2\mathbf{v_2}  & \ldots & \lambda_m \mathbf{v_m}
+\end{array}\right]
+$$
+
+because 
+
+$$
+\mathbf{A} \mathbf{v}=\lambda \mathbf{v}
+$$
+
+$$
+\mathbf{AV}=\left[\mathbf{v_1} \mathbf{v_2} \cdots \mathbf{v_m}\right]\left[\begin{array}{cccc}
+\lambda_1 & 0 & \cdots & 0 \\
+0 & \lambda_2 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+
+0 & 0 & \cdots & \lambda_m
+\end{array}\right]=\mathbf{V}\Lambda
 $$
 So that
 
@@ -161,13 +275,27 @@ $$
 \mathbf{A V=V \Lambda}
 $$
 Hence,   
+
 $$
-\mathbf{A=V \Lambda V^{-1}}
+\mathbf{A}=\mathbf{V} \Lambda \mathbf{V}^{-1}
 $$
 
 Eigendecomposition (a.k.a. spectral decomposition) decomposes a matrix $\mathbf{A}$ into a multiplication of a matrix of eigenvectors $\mathbf{V}$ and a diagonal matrix of eigenvalues $\mathbf{\Lambda}$.
   
-**This can only be done if a matrix is diagonalizable**. In fact, the definition of a diagonalizable matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is that it can be eigendecomposed into $n$ eigenvectors, so that $\mathbf{V^{-1} A V=\Lambda}$.
+**This can only be done if a matrix is diagonalizable**. In fact, the definition of a diagonalizable matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is that it can be eigendecomposed into $n$ eigenvectors, so that $\mathbf{V}^{-1} \mathbf{A} \mathbf{V}=\Lambda$.
+
+$$
+\begin{align}
+\mathbf{A}^2&=(\mathbf{V} \Lambda \mathbf{V}^{-1})(\mathbf{V} \Lambda \mathbf{V}^{-1})\\
+&=\mathbf{V} \Lambda \text{I} \Lambda \mathbf{V}^{-1}\\
+&=\mathbf{V} \Lambda^2 \mathbf{V}^{-1}\\
+\end{align}
+$$
+in general
+
+$$
+\mathbf{A}^k=\mathbf{V} \Lambda^k \mathbf{V}^{-1}
+$$
 
 Example:
   
@@ -179,9 +307,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   11    1   63
-## [2,]   23   38   27
-## [3,]   64   44   48
+## [1,]   67   43   77
+## [2,]   99   94   72
+## [3,]   54   60    4
 ```
 
 ```r
@@ -191,56 +319,45 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 112.51467 -35.82062  20.30595
+## [1] 193.646874 -35.555093   6.908218
 ## 
 ## $vectors
-##            [,1]        [,2]        [,3]
-## [1,] -0.4800845 -0.80244868  0.53658428
-## [2,] -0.4260375  0.03207976 -0.83875343
-## [3,] -0.7668187  0.59585821  0.09257429
+##            [,1]       [,2]       [,3]
+## [1,] -0.4987555 -0.6059143 -0.7241552
+## [2,] -0.7753831  0.0210522  0.6612340
+## [3,] -0.3873293  0.7952513  0.1958794
 ```
 
 ```r
 V = eigen(A)$vectors
 Lam = diag(eigen(A)$values)
-# Prove that AV = V lambda and 
-A%*%V
-```
-
-```
-##           [,1]       [,2]       [,3]
-## [1,] -54.01655  28.744211  10.895854
-## [2,] -47.93547  -1.149117 -17.031686
-## [3,] -86.27835 -21.344012   1.879809
-```
-
-```r
-V%*%Lam
-```
-
-```
-##           [,1]       [,2]       [,3]
-## [1,] -54.01655  28.744211  10.895854
-## [2,] -47.93547  -1.149117 -17.031686
-## [3,] -86.27835 -21.344012   1.879809
-```
-
-```r
-# And decomposition
-V%*%Lam%*%solve(V)
+# Prove that AV = VLam
+round(A %*% V, 4) == round(V %*% Lam, 4)
 ```
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   11    1   63
-## [2,]   23   38   27
-## [3,]   64   44   48
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE
+## [3,] TRUE TRUE TRUE
 ```
 
-And, matrix inverse with eigendecomposition
+```r
+# And decomposition
+A == round(V %*% Lam %*% solve(V), 4)
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE
+## [3,] TRUE TRUE TRUE
+```
+
+And, matrix inverse with eigendecomposition:
 
 $$
-\mathbf{A^{-1}=V \Lambda^{-1} V^{-1}}
+\mathbf{A}^{-1}=\mathbf{V} \Lambda^{-1} \mathbf{V}^{-1}
 $$
 
 Example:
@@ -253,9 +370,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   72  100   86
-## [2,]   74   96   16
-## [3,]   83   24   65
+## [1,]   21   80   72
+## [2,]    7   70    2
+## [3,]   59   12   50
 ```
 
 ```r
@@ -267,25 +384,25 @@ solve(A)
 ```
 
 ```
-##              [,1]         [,2]         [,3]
-## [1,] -0.012755947  0.009662804  0.014498562
-## [2,]  0.007584735  0.005354187 -0.011353141
-## [3,]  0.013487845 -0.014315588  0.001062996
+##               [,1]        [,2]         [,3]
+## [1,] -0.0146743444  0.01323899  0.020601496
+## [2,]  0.0009794154  0.01350073 -0.001950388
+## [3,]  0.0170806667 -0.01886219 -0.003841672
 ```
 
 ```r
 # And
-V%*%solve(Lam)%*%solve(V)
+V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##              [,1]         [,2]         [,3]
-## [1,] -0.012755947  0.009662804  0.014498562
-## [2,]  0.007584735  0.005354187 -0.011353141
-## [3,]  0.013487845 -0.014315588  0.001062996
+##               [,1]        [,2]         [,3]
+## [1,] -0.0146743444  0.01323899  0.020601496
+## [2,]  0.0009794154  0.01350073 -0.001950388
+## [3,]  0.0170806667 -0.01886219 -0.003841672
 ```
 
-The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, **this can only be done if a matrix is diagonalizable**.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
+The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
 
 Example:
 $$
@@ -295,9 +412,9 @@ $$
 \end{array}\right)
 $$
 
-As $\operatorname{det}(\mathbf{A})=0, \mathbf{A}$ is singular and its inverse is undefined. $\operatorname{Det}(\mathbf{A})$ equals the product of the eigenvalues $\theta_{\mathrm{j}}$ of $\mathrm{A}$: the matrix $\mathbf{A}$ is singular if any eigenvalue of $\mathbf{A}$ is zero.
+As $\det(\mathbf{A})=0,$ $\mathbf{A}$ is singular and its inverse is undefined.  In other words, since $\det(\mathbf{A})$ equals the product of the eigenvalues $\lambda_j$ of $\mathrm{A}$, the matrix $\mathbf{A}$ has an eigenvalue which is zero.
 
-To see this, consider the spectral decomposition of $A$ :
+To see this, consider the spectral (eigen) decomposition of $A$ :
 $$
 \mathbf{A}=\sum_{j=1}^{p} \theta_{j} \mathbf{v}_{j} \mathbf{v}_{j}^{\top}
 $$
@@ -308,6 +425,7 @@ The inverse of $\mathbf{A}$ is then:
 $$
 \mathbf{A}^{-1}=\sum_{j=1}^{p} \theta_{j}^{-1} \mathbf{v}_{j} \mathbf{v}_{j}^{\top}
 $$
+
 A has eigenvalues 5 and 0. The inverse of $A$ via the spectral decomposition is then undefined:
   
 $$

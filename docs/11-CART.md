@@ -2,9 +2,9 @@
 
 # CART
 
-Tree-based learning algorithms are considered to be one of the best and most used supervised learning methods. Unlike linear models, they handle non-linear relationships quite well. They are adaptable at solving classification or regression problems, which gives its name: **C**lassification **A**nd **R**egression **T**rees.
+Tree-based predictive models are one of the best and most used supervised learning methods. Unlike linear models, they handle non-linear relationships quite well. They can be applied for both classification or regression problems, which aspires its name: **C**lassification **A**nd **R**egression **T**rees.
   
-Decision tree learning algorithms are based on a decision tree, which is a flowchart where each internal **node** represents a decision point (goes left or right), each **branch** represents those decisions, and each **leaf** at the end of a branch represents the outcome of the decision.  Here is a simple decision tree about a gamble:  
+The foundation of their models is based on a decision tree, which is a flowchart where each internal **node** represents a decision point (goes left or right), each **branch** represents those decisions, and each **leaf** at the end of a branch represents the outcome of the decision.  Here is a simple decision tree about a gamble:  
 
 <img src="png/DT.png" width="130%" height="130%" />
 
@@ -16,25 +16,33 @@ Let's start with a very simple example: suppose we have the following data:
 
 
 ```r
-y <- c(1,1,1,0,0,0,1,1,0,1)
-x1 <- c(0.09, 0.11, 0.17, 0.23, 0.33, 0.5, 0.54, 0.62, 0.83, 0.88) 
+y <- c(1, 1, 1, 0, 0, 0, 1, 1, 0, 1)
+x1 <- c(0.09, 0.11, 0.17, 0.23, 0.33, 0.5, 0.54, 0.62, 0.83, 0.88)
 x2 <- c(0.5, 0.82, 0.2, 0.09, 0.58, 0.5, 0.93, 0.8, 0.3, 0.83)
 
 data <- data.frame(y = y, x1 = x1, x2 = x2)
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4,
-     ylab = "x2", xlab = "x1")
+plot(
+  data$x1,
+  data$x2,
+  col = (data$y + 1),
+  lwd = 4,
+  ylab = "x2",
+  xlab = "x1"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr2-1.png" width="672" />
   
 What's the best rule on $x_2$ to classify black ($0$) and red balls ($1$)? **Find a cutoff point on $x_2$ such that the maximum number of observations is correctly classified**  
 
-To minimize the misclassification, we find that the cutoff point should be between $(0.6; 0.79)$.  Hence the rule is $x_2 < k$, where $k \in(0.6,0.79)$  
-
+To minimize the misclassification, we find that the cutoff point should be between $\{0.6: 0.79\}$.  Hence the rule is $x_2 < k$, where $k \in\{0.6: 0.79\}.$    
 
 ```r
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4)
-abline(h = 0.62, col = "blue", lty = 5, lwd = 2)
+plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
+abline(h = 0.62,
+       col = "blue",
+       lty = 5,
+       lwd = 2)
 ```
 
 <img src="11-CART_files/figure-html/tr3-1.png" width="672" />
@@ -45,9 +53,14 @@ From this simple rule, we have two misclassified balls.  We can add a new rule i
 
 
 ```r
-plot(data$x1, data$x2, col = (data$y+1), lwd = 4)
-abline(h = 0.62, v = 0.2, col = c("blue", "darkgreen"),
-       lty = 5, lwd = 2)
+plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
+abline(
+  h = 0.62,
+  v = 0.2,
+  col = c("blue", "darkgreen"),
+  lty = 5,
+  lwd = 2
+)
 ```
 
 <img src="11-CART_files/figure-html/tr4-1.png" width="672" />
@@ -61,7 +74,7 @@ First, we need to create an index that is going to measure the **impurity** in e
 $$
 G(\mathcal{N}) = \sum_{k=1}^{K} p_{k}\left(1-p_{k}\right) = 1-\sum_{k=1}^{K} p_{k}^{2}
 $$
-where, with $p_k$ is the fraction of items labeled with class $k$ in the node. If we have a binary outcome $(k=2)$, when $p_k = 1$, $G(\mathcal{N})=0$ and when $p_k = 0.5,$ $G(\mathcal{N})=0.5$.  The former implies the minimal impurity (diversity), the latter shows the maximal impurity. A small $G$ means that a node contains predominantly observations from a single class.  As in the previous example, when we have a binary outcome with two classes, $y_i \in (0,1)$, this index can be written as:
+where, with $p_k$ is the fraction of items labeled with class $k$ in the node. If we have a binary outcome $(k=2)$, when $p_k \in \{0, 1\}$, $G(\mathcal{N})=0$ and when $p_k = 0.5,$ $G(\mathcal{N})=0.25$.  The former implies the minimal impurity (diversity), the latter shows the maximal impurity. A small $G$ means that a node contains observations predominantly from a single class.  As in the previous example, when we have a binary outcome with two classes, $y_i \in \{0, 1\}$, this index can be written as:
 
 $$
 G(\mathcal{N})=\sum_{k=1}^{2} p_{k}\left(1-p_{k}\right)=2p\left(1-p\right)
@@ -76,13 +89,13 @@ $$
 Where $p_L$, $p_R$ are the proportion of observations in $\mathcal{N}_L$ and $\mathcal{N}_R$.
   
   
-Remember, we are trying to find the rule that gives us the best cutoff point. Now we can write the rule:  
+Remember, we are trying to find the rule that gives us the best cutoff point (split). Now we can write the rule:  
 
 $$
 \Delta=G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)>\epsilon
 $$
   
-When the impurity is reduced substantially, the difference will be some positive number ($\epsilon$).  Hence, we find the cutoff point on a single variable that minimizes the impurity.  
+When the impurity is reduced substantially, the difference will be some positive number ($\epsilon$).  Hence, we find the cutoff point on a single variable that minimizes the impurity (maximizes $\Delta$).  
 
 Let's use a dataset^[[freakonometrics](https://freakonometrics.hypotheses.org/52776) [@Charpentier_scratch]], which reports about heart attacks and fatality (our binary variable).
 
@@ -91,9 +104,13 @@ Let's use a dataset^[[freakonometrics](https://freakonometrics.hypotheses.org/52
 library(readr)
 #Data
 #myocarde = read.table("http://freakonometrics.free.fr/myocarde.csv",head=TRUE, sep=";")
-myocarde <- read_delim("myocarde.csv", delim = ";" ,
-                       escape_double = FALSE, trim_ws = TRUE,
-                       show_col_types = FALSE)
+myocarde <- read_delim(
+  "myocarde.csv",
+  delim = ";" ,
+  escape_double = FALSE,
+  trim_ws = TRUE,
+  show_col_types = FALSE
+)
 myocarde <- data.frame(myocarde)
 str(myocarde)
 ```
@@ -115,10 +132,10 @@ The variable definitions are as follows: `FRCAR` (heart rate), `INCAR` (heart in
 
 ```r
 # Recode PRONO
-y <- ifelse(myocarde$PRONO=="SURVIE", 1, 0)
+y <- ifelse(myocarde$PRONO == "SURVIE", 1, 0)
 
 # Find G(N) without L and R
-G <- 2*mean(y)*(1-mean(y))
+G <- 2 * mean(y) * (1 - mean(y))
 G
 ```
 
@@ -134,7 +151,7 @@ This is the level of "impurity" in our data.  Now, we need to pick one variable 
 x_1 <- myocarde$FRCAR
 
 # Put x and y in table
-tab = table(y,x_1)
+tab = table(y, x_1)
 tab
 ```
 
@@ -149,7 +166,7 @@ tab
 ##   1   0   1   1   0   1   0   1   1
 ```
   
-Let's see how we can calculate 
+We are ready to calculate 
 
 $$
 G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)=p_{L} G\left(\mathcal{N}_{L}\right)+p_{R} G\left(\mathcal{N}_{R}\right),
@@ -158,19 +175,18 @@ when $x = 60$, for example.
 
 
 ```r
-# Let's pick an arbitrary x value, x = 60 to see if (GL + GR > GN)
-GL <- 2*mean(y[x_1 <= 60])*(1-mean(y[x_1 <= 60]))
-GR <- 2*mean(y[x_1 > 60])*(1-mean(y[x_1 > 60]))
-pL <- length(x_1[x_1 <= 60])/length(x_1) #Proportion of obs. on Left 
-pR <- length(x_1[x_1 > 60])/length(x_1) #Proportion of obs. on Right
+# x = 60, for example to see if (GL + GR > GN)
+GL <- 2 * mean(y[x_1 <= 60]) * (1 - mean(y[x_1 <= 60]))
+GR <- 2 * mean(y[x_1 > 60]) * (1 - mean(y[x_1 > 60]))
+pL <- length(x_1[x_1 <= 60]) / length(x_1) #Proportion of obs. on Left
+pR <- length(x_1[x_1 > 60]) / length(x_1) #Proportion of obs. on Right
 ```
 
 How much did we improve $G$?
   
 
 ```r
-# How much did we improve G?
-delta  = G - pL*GL - pR*GR
+delta  = G - pL * GL - pR * GR
 delta
 ```
 
@@ -178,16 +194,16 @@ delta
 ## [1] 0.009998016
 ```
 
-We need go trough each number on $x_1$ and identify the point that maximizes delta.  A function can do that:
+We need to go trough each number on $x_1$ and identify the point that maximizes delta.  A function can do that:
   
 
 ```r
-GI <- function(x){
-  GL <- 2*mean(y[x_1 <= x])*(1-mean(y[x_1 <= x])) 
-  GR <- 2*mean(y[x_1 > x])*(1-mean(y[x_1 > x]))
-  pL <- length(x_1[x_1 <= x])/length(x_1)
-  pR <- length(x_1[x_1 > x])/length(x_1)
-  del = G - pL*GL - pR*GR
+GI <- function(x) {
+  GL <- 2 * mean(y[x_1 <= x]) * (1 - mean(y[x_1 <= x]))
+  GR <- 2 * mean(y[x_1 > x]) * (1 - mean(y[x_1 > x]))
+  pL <- length(x_1[x_1 <= x]) / length(x_1)
+  pR <- length(x_1[x_1 > x]) / length(x_1)
+  del = G - pL * GL - pR * GR
   return(del)
 }
 
@@ -204,10 +220,10 @@ It works!  Now, we can use this function in a loop that goes over each unique $x
 
 ```r
 xm <- sort(unique(x_1))
-delta <- c() 
+delta <- c()
 
 # Since we don't split at the last number
-for (i in 1:length(xm)-1) {
+for (i in 1:length(xm) - 1) {
   delta[i] <- GI(xm[i])
 }
 
@@ -243,22 +259,22 @@ xm[which.max(delta)]
 ## [1] 86
 ```
   
-Although this is a simple and an imperfect algorithm, it can show us how we can build a learning system based on a decision tree.  On one variable, `FRCAR` and with only one split we improved the Gini index by 2.5\%.  Obviously this is not good enough.  Can we do more splitting?
+Although this is a simple and an imperfect algorithm, it shows us how we can build a learning system based on a decision tree.  On one variable, `FRCAR`, and with only one split we improved the Gini index by 2.5\%.  Obviously this is not good enough.  Can we do more splitting?
   
-Since we now have two nodes (Left and Right at $x_1 = 86$), we can think of each of them as one node and apply the same formula to both left and right nodes.  As you can guess, this may give us a zero-$G$, as we end up with splitting at every $x_{1i}$.  How can we prevent this overfitting?  We will see this mechanism later, which is called **pruning**.  
+Since we now have two nodes (Left and Right at $x_1 = 86$), we can consider each of them as one node and apply the same formula to both left and right nodes.  As you can guess, this may give us a zero-$G$, as we end up with splitting at every $x_{1i}$.  We can prevent this overfitting by **pruning**, which we will see later.  
 
-Let's continue our example.  Wouldn't it be a good idea if we check all seven variables and start with the one that has a significant improvements in delta when we split?  We can do it easily with a loop:  
+Wouldn't it be a good idea if we check all seven variables and start with the one that has a significant improvements in delta when we split?  We can do it easily with a loop:  
 
 
 ```r
 # Adjust our function a little: add "tr", the cutoff
-GI <- function(x, tr){
-  G <- 2*mean(y)*(1-mean(y))
-  GL <- 2*mean(y[x <= tr])*(1-mean(y[x <= tr])) 
-  GR <- 2*mean(y[x > tr])*(1-mean(y[x > tr]))
-  pL <- length(x[x <= tr])/length(x)
-  pR <- length(x[x > tr])/length(x)
-  del = G - pL*GL - pR*GR
+GI <- function(x, tr) {
+  G <- 2 * mean(y) * (1 - mean(y))
+  GL <- 2 * mean(y[x <= tr]) * (1 - mean(y[x <= tr]))
+  GR <- 2 * mean(y[x > tr]) * (1 - mean(y[x > tr]))
+  pL <- length(x[x <= tr]) / length(x)
+  pR <- length(x[x > tr]) / length(x)
+  del = G - pL * GL - pR * GR
   return(del)
 }
 
@@ -268,13 +284,13 @@ split <- c()
 maxdelta <- c()
 
 for (j in 1:ncol(d)) {
-  xm <- sort(unique(d[,j]))
+  xm <- sort(unique(d[, j]))
   delta <- c()
-  for (i in 1:length(xm)-1) {
-    delta[i] <- GI(d[,j], xm[i])
+  for (i in 1:length(xm) - 1) {
+    delta[i] <- GI(d[, j], xm[i])
   }
-maxdelta[j] <- max(delta)
-split[j] <- xm[which.max(delta)]
+  maxdelta[j] <- max(delta)
+  split[j] <- xm[which.max(delta)]
 }
 
 data.frame(variables = colnames(d), delta = maxdelta)
@@ -295,33 +311,40 @@ This is good.  We can identify that `INSYS` should be our first variable to spli
   
 
 ```r
-round(split[which.max(maxdelta)],0) # round it b/c the cutoff is x=18.7
+round(split[which.max(maxdelta)], 0)
 ```
 
 ```
 ## [1] 19
 ```
   
-We now know where to split on `INSYS`, which is 19.  Next, we can split on `INSYS`, Left and Right and move on to the next variable to split, which would be the second best: `REBUL`.
+We now know where to split on `INSYS`, which is 19.  After splitting `INSYS` left and right, we move on to the next variable to split, which would be the second best: `REBUL`.
 
-For a better interpretabilty, we can rank the importance of each variable by **their gain in Gini**.   Without using `rpart()`, we can approximately order them by looking at our delta:   
+For a better interpretability, we can rank the importance of each variable by **their gain in Gini**.   We can approximately order them by looking at our delta:   
 
 
 ```r
-# Variable importance
 dm <- matrix(maxdelta, 7, 1)
 rownames(dm) <- c(names(myocarde[1:7]))
-dm <- dm[order(dm[,1]),]
-barplot(dm, horiz = TRUE, col = "darkgreen", xlim = c(0, 0.3),
-        cex.names = 0.5, cex.axis = 0.8, main = "Variable Importance at the 1st Split")
+dm <- dm[order(dm[, 1]), ]
+
+barplot(
+  dm,
+  horiz = TRUE,
+  col = "darkgreen",
+  xlim = c(0, 0.3),
+  cex.names = 0.5,
+  cex.axis = 0.8,
+  main = "Variable Importance at the 1st Split"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr16-1.png" width="672" />
 
-## `rpart()` - Recursive Partitioning
+The package `rpart` (**R**ecursive **PART**itioning) implements all these steps that we experimented above. 
 
-The R package `rpart` implements **R**ecursive **PART**itioning. It is easy to use.
-  
+## `rpart` - Recursive Partitioning
+
 As in our case, when the response variable is categorical,  the resulting tree is called **classification tree**.  The default criterion, which is maximized in each split is the **Gini coefficient**.  The method-argument can be switched according to the type of the response variable. It is `class` for categorical, `anova` for numerical, `poisson` for count data and `exp` for survival data. If the outcome variable is a factor variable, as in our case, we do not have to specify the method.
   
 The tree is built by the following process in `rpart`: first the single variable is found that **best splits** the data into two groups. After the data is separated, this process is applied separately to each sub-group.  This goes on recursively until the subgroups either reach a **minimum size** or until no improvement can be made.  
@@ -333,12 +356,18 @@ Here, we apply `rpart` to our data without any modification to its default argum
 
 ```r
 library(rpart)
-tree = rpart(PRONO ~., data = myocarde, method = "class")
+tree = rpart(PRONO ~ ., data = myocarde, method = "class")
 
 # Plot it
 library(rpart.plot) # You can use plot() but prp() is much better
-prp(tree, type = 2, extra = 1, split.col = "red",
-    split.border.col = "blue", box.col = "pink")
+prp(
+  tree,
+  type = 2,
+  extra = 1,
+  split.col = "red",
+  split.border.col = "blue",
+  box.col = "pink"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr17-1.png" width="672" />
@@ -347,33 +376,27 @@ This shows that the left node (`DECES`) cannot be significantly improved by a fu
 
 Note that we haven't trained our model explicitly. There are two ways to **control** the growth of a tree:
   
-1. We can limit the growth of our tree by using its control parameters and by checking if the split is worth it, which is, as a default, what `rpart()` is doing with 10-fold cross-validation;
+1. We can limit the growth of our tree by using its control parameters and by checking if the split is worth it, which is, as a default, what `rpart` is doing with 10-fold cross-validation.
 2. We can grow the tree without any limitation and then `prune` it.  
   
 Since we use the default control parameters with 10-fold CV, our first tree was grown by the first strategy.  Before going further, let's spend some time on the main arguments of `rpart()`:  
 
 `rpart(formula, data, weights, subset, na.action = na.rpart, method, model = FALSE, x = FALSE, y = TRUE, parms, control, cost, ...)`      
   
-We briefly describe some of its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
+The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
   
-- `formula`: the model formula, as in `lm()`. If the outcome $y$ has more than two levels, then categorical predictors must be fit by exhaustive enumeration, which can take a very long time.  
-- `data, weights, subset`: as in other models.  
-- `parms`: There are three parameters: prior (the vector of prior probabilities), loss (the loss matrix - for different weights for misclassification, split (could be "Gini" or "information Entropy").  
-- `na.action`: default is `na.part`, which removes only those rows for which either the response or ALL of the predictors are missing.  Hence `rpart()` retains partially missing observations. This is the single most useful feature of rpart models.  
-- `control`: a list of control parameters, usually the result of the `rpart.control` function:  
-
 `rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, surrogatestyle = 0, maxdepth = 30, ...)`   
   
-- `minsplit`: The minimum number of observations in a node for which the routine will even try to compute a split. The default is 20. This parameter can save computation time since smaller nodes are almost always pruned away by cross-validation. 
+- `minsplit`: The minimum number of observations in a node for which the routine will even try to compute a split. The default is 20. 
 - `minbucket`: The minimum number of observations in a terminal node: This defaults to `minsplit`/3.
-- `maxcompete`: This parameter controls the number that will be printed. The default is 5.
-- `xval`: The number of cross-validations to be done.  Default is 10.
-- `maxsurrogate`: The maximum number of surrogate variables to retain at each node. Surrogates give different information than competitor splits. The competitor list asks **which other splits would have as many correct classifications** surrogates ask **which other splits would classify the same subjects in the same way** which is a harsher criteria.
-- `usesurrogate`: If the value is 0, then a subject (observation) who is missing the primary split variable does not progress further down the tree.
 - `cp`: The threshold complexity parameter. Default is 0.01. 
+- `maxcompete`: The number of alternative splits in addition to the best that will be printed.
+- `maxsurrogate`: The maximum number of surrogate variables to retain at each node. 
+- `usesurrogate`: If the value is 0, then a subject (observation) who is missing the primary split variable does not progress further down the tree.
+- `xval`: The number of cross-validations to be done.  Default is 10.
+- `maxdepth`: The maximum depth of any node of the final tree
 
-
-**What are the surrogates?** They have two primary functions: first, to split the data when the primary splitter is missing. Remember, `rpart()` does not drop the subject if it has a missing observation on a variable.  When the observation missing on the primary split on that variable, `rpart()` find a surrogate for the variable so that it can carry out the split.  As in our case, the primary splitter ($x$ variable) may never have been missing in the training data. However, when it comes time to make predictions on future data, we have no idea whether that particular splitter will always be available for each observations. When it is missing, then the surrogates will be able to take over and take on the work that the primary splitter accomplished during the initial building of the tree.  
+Remember, `rpart` does not drop the subject if it has a missing observation on a predictor.  When the observation missing on the primary split on that variable, `rpart` find a surrogate for the variable so that it can carry out the split.  
 
 We can see the the growth of the tree by looking at its CV table:  
 
@@ -396,25 +419,27 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.51724 0.11861
-## 3 0.010000      2   0.24138 0.55172 0.12140
+## 2 0.034483      1   0.27586 0.58621 0.12399
+## 3 0.010000      2   0.24138 0.58621 0.12399
 ```
 
-The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.000000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error by 72.4138\% to 27.5862\% (1.000000 `rel error` - 0.724138 `CP`).  This relative gain (`CP`) can be calculated as follows:
+The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
+  
+This relative gain (`CP`) can be calculated as follows:
 
 $$
 \frac{\Delta}{G(\mathcal{N})}=\frac{G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)}{G(\mathcal{N})}.
 $$
 
-If this gain exceeds 1\% - the default value -  `rpart()` splits in two on a variable.  As you can see from the table above, since there is no significant relative gain at the $3^{rd}$ split exceeding the default parameter 0.01, `rpart()` decides to stop growing the tree after the $2^{nd}$ split.  
+If this gain exceeds 1\%, which is the default value, `rpart()` splits a variable.  As you can see from the table above, since there is no significant relative gain at the $3^{rd}$ split more than the default parameter 0.01, `rpart()` decides to stop growing the tree after the $2^{nd}$ split.  
 
 Note that, we also calculated both the nominator and the denominator in our own algorithm: $\Delta = 0.2832801$ and $G(\mathcal{N}) = 0.4832375$.  Hence the relative gain was $\frac{\Delta}{G(\mathcal{N})}=0.586213$ in our case.  We can replicate the same results if we change our outcome from factor to numeric: 
 
 
 ```r
 myocarde_v2 <- myocarde
-myocarde_v2$PRONO = (myocarde_v2$PRONO=="SURVIE")*1
-cart = rpart(PRONO~.,data=myocarde_v2)
+myocarde_v2$PRONO = ifelse(myocarde$PRONO == "SURVIE", 1, 0)
+cart = rpart(PRONO ~ ., data = myocarde_v2)
 printcp(cart)
 ```
 
@@ -431,15 +456,13 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01039 0.045234
-## 2 0.101694      1   0.41379 0.72601 0.154725
-## 3 0.028263      2   0.31209 0.73703 0.158931
-## 4 0.010000      3   0.28383 0.74653 0.155961
+## 1 0.586213      0   1.00000 1.01723 0.045506
+## 2 0.101694      1   0.41379 0.75967 0.162915
+## 3 0.028263      2   0.31209 0.67803 0.151231
+## 4 0.010000      3   0.28383 0.65947 0.150977
 ```
 
-It is not so easy to follow the `rpart` calculations for classification. Although the explanations in the [vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) [@Atkinson_2022] suggests that Gini is used for classification, it seems that cost complexity pruning (`cp`) is reported based on accuracy (misclassification error) [rather than Gini](https://stats.stackexchange.com/q/223211) [@Alan_2016].
-  
-As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rapart() `above) are the same.  
+As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
 
 What's the variable importance of `rpart()`?    
 
@@ -448,31 +471,40 @@ What's the variable importance of `rpart()`?
 # Variable Importance
 vi <- tree$variable.importance
 vi <- vi[order(vi)]
-barplot(vi/100, horiz = TRUE, col = "lightgreen",
-        cex.names = 0.5, cex.axis = 0.8, main = "Variable Importance - rpart()")
+barplot(
+  vi / 100,
+  horiz = TRUE,
+  col = "lightgreen",
+  cex.names = 0.5,
+  cex.axis = 0.8,
+  main = "Variable Importance - rpart()"
+)
 ```
 
 <img src="11-CART_files/figure-html/tr20-1.png" width="672" />
 
-It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods.  In `rpart()`, the value is calculated:
+It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods.  In `rpart`, the value is calculated as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.
 
->(...) as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.
->
-  
 ## Pruning 
 
-We can now apply the second method to our case by removing the default limits in growing our tree.  We can do it by changing the parameters of the `rpart` fit.  Let's see what happens if we override these parameters:   
+We can now apply the second method to our case by removing the default limits in growing our tree.  We can do it by changing the parameters of the `rpart` fit.  Let's see what happens if we override these parameters.   
 
 
 ```r
 # let's change the minsplit and minbucket
-tree2 = rpart(PRONO ~., data = myocarde,
-              control = rpart.control(minsplit = 2, minbucket = 1,
-              cp = 0), method = "class")
+tree2 = rpart(
+  PRONO ~ .,
+  data = myocarde,
+  control = rpart.control(
+    minsplit = 2,
+    minbucket = 1,
+    cp = 0
+  ),
+  method = "class"
+)
 
-# Plot it with a different package now
 library(rattle)
-# You can use plot() but prp() is much better
+# You can use plot() but prp() is an alternative
 fancyRpartPlot(tree2, caption = NULL)
 ```
 
@@ -482,7 +514,7 @@ This is our **fully grown tree** with a "perfect" fit, because it identifies eve
 
 Let's summarize what we have seen so far: we can either go with the first strategy and **limit** the growth of the tree or we can have a fully developed tree then we can `prune` it.  
 
-The general idea in pruning is to reduce the tree's complexity by keeping only the most important splits.  When we grow a tree, `rpart()` performs 10-fold cross-validation on the data.  We can see the cross-validation result by `printcp()`.  
+The general idea in pruning is to reduce the tree's complexity by keeping only the most important splits.  When we grow a tree, `rpart` performs 10-fold cross-validation on the data.  We can see the cross-validation result by `printcp()`.  
 
 
 ```r
@@ -504,9 +536,9 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.55172 0.12140
-## 4 0.017241      6  0.034483 0.51724 0.11861
+## 2 0.103448      1  0.275862 0.48276 0.11560
+## 3 0.034483      2  0.172414 0.37931 0.10513
+## 4 0.017241      6  0.034483 0.55172 0.12140
 ## 5 0.000000      8  0.000000 0.55172 0.12140
 ```
 
@@ -522,17 +554,17 @@ min_cp
 ```
 
 ```
-## [1] 0.01724138
+## [1] 0.03448276
 ```
 
-Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, more levels (each row represents a different height of the tree) in the tree mean that it has a lower classification error on the training. However, you run the risk of overfitting. Often, the cross-validation error will actually grow as the tree gets more levels.
+Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
 
 There are two common ways to prune a tree by `rpart`:  
   
 1. Use the first level (i.e. least `nsplit`) with minimum `xerror`. The first level only kicks in when there are multiple levels having the same, minimum `xerror`. This is the most common used method. 
 2. Use the first level where `xerror` < min(`xerror`) + `xstd`, the level whose `xerror` is at or below horizontal line. This method takes into account the variability of `xerror` resulting from cross-validation.  
 
-Therefore, it seems that we should prune our tree at the $4^{th}$ split.  We use `cp` to prune the tree in `rpart` as follows:  
+If we decide to prune our tree at the minimum `cp`:  
 
 
 ```r
@@ -547,17 +579,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INCAR INSYS PVENT
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.55172 0.12140
-## 4 0.017241      6  0.034483 0.51724 0.11861
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.48276 0.11560
+## 3 0.034483      2   0.17241 0.37931 0.10513
 ```
 
 ```r
@@ -566,15 +597,14 @@ fancyRpartPlot(ptree2)
 
 <img src="11-CART_files/figure-html/tr23-1.png" width="672" />
   
-Now we have applied two approaches, limiting tree growth and pruning a fully grown tree. We also have two different trees: "**tree**" and "**ptree2**".  How can we test their performances?  We know that we cannot test it with the training data.  When applying this in practice, we should have a test dataset to check their performance.
+Now we have applied two approaches: limiting the tree's growth and pruning a fully grown tree. Hence, we have two different trees: `tree` and `ptree2`. In the first case, we can use `cp` or other control parameters in `rpart.control` as hyperparameters and tune them on the test set.  In the second case, we can grow the tree to its maximum capacity and tune its pruning as to maximize the prediction accuracy on the test set.  We will not show the tuning of a tree here. Instead, we will see many improved tree-based models and tuned them in this section.    
 
 ## Classification with Titanic
 
-Let's end this sections with a more realistic example: we will predict survival on the Titanic.  
+We can use `rpart` to predict survival on the Titanic.  
 
 
 ```r
-# load the data
 library(PASWR)
 data(titanic3)
 str(titanic3)
@@ -611,16 +641,29 @@ What predictors are associated with those who perished compared to those who sur
 
 
 ```r
-titan <- rpart(survived~sex+age+pclass+sibsp+parch, data=titanic3, method="class")
+titan <-
+  rpart(survived ~ sex + age + pclass + sibsp + parch,
+        data = titanic3,
+        method = "class")
 
-prp(titan, extra=1, faclen=5, box.col=c("indianred1","aquamarine")[tree$frame$yval])
+prp(
+  titan,
+  extra = 1,
+  faclen = 5,
+  box.col = c("indianred1", "aquamarine")[tree$frame$yval]
+)
 ```
 
 <img src="11-CART_files/figure-html/tr25-1.png" width="672" />
 
 ```r
-barplot(titan$variable.importance, horiz=TRUE,
-        col="yellow3", cex.axis = 0.7, cex.names = 0.7)
+barplot(
+  titan$variable.importance,
+  horiz = TRUE,
+  col = "yellow3",
+  cex.axis = 0.7,
+  cex.names = 0.7
+)
 ```
 
 <img src="11-CART_files/figure-html/tr25-2.png" width="672" />
@@ -648,9 +691,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.562 0.029710
-## 4 0.011333      5     0.504  0.544 0.029359
-## 5 0.010000      9     0.458  0.544 0.029359
+## 3 0.015000      3     0.534  0.568 0.029825
+## 4 0.011333      5     0.504  0.564 0.029749
+## 5 0.010000      9     0.458  0.548 0.029438
 ```
 
 ```r
@@ -667,16 +710,19 @@ library(ROCR)
 
 #test/train split
 set.seed(1)
-ind <- sample(nrow(titanic3), nrow(titanic3)*0.7)
-train <- titanic3[ind, ]
-test <- titanic3[-ind, ]
+ind <- sample(nrow(titanic3), nrow(titanic3) * 0.7)
+train <- titanic3[ind,]
+test <- titanic3[-ind,]
 
 #Tree on train
-titan2 <- rpart(survived~sex+age+pclass+sibsp+parch, data=train, method="class")
+titan2 <-
+  rpart(survived ~ sex + age + pclass + sibsp + parch,
+        data = train,
+        method = "class")
 phat <- predict(titan2, test, type = "prob")
 
 #AUC
-pred_rocr <- prediction(phat[,2], test$survived)
+pred_rocr <- prediction(phat[, 2], test$survived)
 auc_ROCR <- performance(pred_rocr, measure = "auc")
 auc_ROCR@y.values[[1]]
 ```
@@ -685,13 +731,13 @@ auc_ROCR@y.values[[1]]
 ## [1] 0.814118
 ```
 
-Here, we report only AUC in this simple example.  Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in `rpart`).  Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse).  This can easily be done in `rpart` by the loss matrix.
+Here, we report only AUC in this simple example.  We can use Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in `rpart`).  Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse).  This can easily be done in `rpart` by the loss matrix.
 
 Before commenting on the strengths and weaknesses of CART, let's see a regression tree.  
 
 ## Regression Tree
 
-The same partitioning procedure can be applied when the outcome variable is not qualitative.  A splitting criterion, which is used to decide which variable gives the best split, was either the Gini or log-likelihood function for a classification problem. Now we can can use the anova method as a splitting criteria:
+The same partitioning procedure can be applied when the outcome variable is not qualitative.  For a classification problem, a splitting criterion was either the Gini or log-likelihood function. When we have numerical outcome variable, we can can use the anova method to decide which variable gives the best split:
 
 $$
 S S_{T}-\left(S S_{L}+S S_{R}\right),
@@ -699,10 +745,14 @@ $$
 where
 
 $$
-SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2},
+SS=\sum\left(y_{i}-\bar{y}\right)^{2},
 $$
    
-which is the sum of squares for the node and $SS_R$ and $SS_L$ are the sums of squares for the right and left splits, respectively.  Similar to our delta method, if $SS_{T}-\left(SS_{L}+SS_{R}\right)$ is positive and significant, we make the split on the node (the variable).  After the split, the fitted value of the node is the mean of $y$ of that node.  The `anova` method is used for regression trees, which is the default method if $y$ a simple numeric vector.  However, when $y_i \in (0,1)$,  
+which is the sum of squares for the node (T), the right (R), and the left (L) splits.  
+  
+Similar to our delta method, if $SS_{T}-\left(SS_{L}+SS_{R}\right)$ is positive and significant, we make the split on the node (the variable).  After the split, the fitted value of the node is the mean of $y$ of that node.
+  
+The `anova` method is the default method if $y$ a simple numeric vector.  However, when $y_i \in (0,1)$,  
   
 $$
 SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2}=\sum y_{i}^2 -n\bar{y}^2=\sum y_{i} -n\bar{y}^2=n\bar y -n\bar{y}^2=np(1-p)
@@ -710,15 +760,15 @@ $$
   
 Hence, we can show that the **relative gain** would be the same in regression trees using $SS_T$ or Gini when $y_i \in (0,1)$.  
 
-It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant.  We will use `rpart()` in an example:  
+It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant.  We will use `rpart` in an example:  
 
 
 ```r
 # simulated data
 set.seed(1)
-x <- runif(100, -2, 2)
-y <- 1 + 1*x + 4*I(x^2) - 4*I(x^3) + rnorm(100, 0, 6)
-d <- data.frame("y" = y, "x" = x)
+x <- runif(100,-2, 2)
+y <- 1 + 1 * x + 4 * I(x ^ 2) - 4 * I(x ^ 3) + rnorm(100, 0, 6)
+dt <- data.frame("y" = y, "x" = x)
 plot(x, y, col = "gray")
 ```
 
@@ -726,13 +776,13 @@ plot(x, y, col = "gray")
 
 ```r
 # Tree
-fit1 <- rpart(y ~ x, minsplit=83, d) # we want to have 1 split
+fit1 <- rpart(y ~ x, minsplit = 83, dt) # we want to have 1 split
 fancyRpartPlot(fit1)
 ```
 
 <img src="11-CART_files/figure-html/tr28-2.png" width="672" />
 
-When we have split at $x=-0.65$, `rpart` calculates two constant $\hat{f}(x_i)$'s both for the "left" and "right" splits:  
+When we have split at $x=-0.65$, `rpart` calculates two constant $\hat{f}(x_i)$'s both for the left and right splits:  
 
 
 ```r
@@ -751,14 +801,14 @@ mean(y[x > -0.65])
 ## [1] 0.9205211
 ```
 
-Here we see them on the plot:  
+Here, we see them on the plot:  
 
 
 ```r
-z <- seq(min(x), max(x), length.out=1000)
+z <- seq(min(x), max(x), length.out = 1000)
 plot(x, y, col = "gray")
-lines(z, predict(fit1, data.frame(x=z)), col="blue", lwd=3)
-abline(v = -0.65, col="red")
+lines(z, predict(fit1, data.frame(x = z)), col = "blue", lwd = 3)
+abline(v = -0.65, col = "red")
 ```
 
 <img src="11-CART_files/figure-html/tr30-1.png" width="672" />
@@ -768,7 +818,7 @@ If we reduce the `minsplit`,
 
 ```r
 # Tree
-fit2 <- rpart(y ~ x, minsplit=6, d)
+fit2 <- rpart(y ~ x, minsplit = 6, dt)
 fancyRpartPlot(fit2)
 ```
 
@@ -777,12 +827,12 @@ fancyRpartPlot(fit2)
 ```r
 # On the plot
 plot(x, y, col = "gray")
-lines(z, predict(fit2, data.frame(x=z)), col="green", lwd=3)
+lines(z, predict(fit2, data.frame(x = z)), col = "green", lwd = 3)
 ```
 
 <img src="11-CART_files/figure-html/tr31-2.png" width="672" />
   
-We will use an example of predicting Baseball players’ salaries, which is one of the most common example [online](https://rdrr.io/cran/ISLR/man/Hitters.html) [@ISLR_2021].  This data set is deduced from the Baseball fielding data set: fielding performance includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
+We will use an example of predicting Baseball players’ salaries from the ISLR package [@ISLR_2021].  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
 
 
 ```r
@@ -823,14 +873,13 @@ Let's consider 3 covariates for the sake of simplicity: `Years` (Number of years
 
 ```r
 # Remove NA's
-df=Hitters[complete.cases(Hitters$Salary),]
+df <- Hitters[complete.cases(Hitters$Salary),]
 dfshort <- df[, c(19, 7, 2, 1)]
 
-#Build the tree
-tree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort, cp=0)
-#cp=0 so fully grown
+# cp=0, so it's fully grown
+tree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort, cp = 0)
 
-prp(tree, extra=1, faclen=5)
+prp(tree, extra = 1, faclen = 5)
 ```
 
 <img src="11-CART_files/figure-html/tr33-1.png" width="672" />
@@ -839,7 +888,7 @@ It works on the same principle as we described before: find terminal nodes that 
 
 
 ```r
-ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort)
+ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort)
 prp(ptree, extra=1, faclen=5)
 ```
 
@@ -849,20 +898,20 @@ We can see its prediction power similar to what we did in the Titanic data examp
   
 
 ```r
-#test/train split
+# Test/train split
 set.seed(123)
-ind <- sample(nrow(dfshort), nrow(dfshort)*0.7)
-train <- dfshort[ind, ]
-test <- dfshort[-ind, ]
+ind <- sample(nrow(dfshort), nrow(dfshort) * 0.7)
+train <- dfshort[ind,]
+test <- dfshort[-ind,]
 
-#Tree and lm() on train
-ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data=dfshort)
+# Tree and lm() on train
+ptree <- rpart(log(Salary) ~ Years + Hits + AtBat, data = dfshort)
 predtree <- predict(ptree, test)
-lin <- lm(log(Salary) ~ ., data=dfshort)
+lin <- lm(log(Salary) ~ ., data = dfshort)
 predlin <- predict(lin, test)
 
-#RMSPE
-rmspe_tree <- sqrt(mean((log(test$Salary) - predtree)^2))
+# RMSPE
+rmspe_tree <- sqrt(mean((log(test$Salary) - predtree) ^ 2))
 rmspe_tree
 ```
 
@@ -871,7 +920,7 @@ rmspe_tree
 ```
 
 ```r
-rmspe_lin <- sqrt(mean((log(test$Salary) - predlin)^2))
+rmspe_lin <- sqrt(mean((log(test$Salary) - predlin) ^ 2))
 rmspe_lin
 ```
 
@@ -881,5 +930,5 @@ rmspe_lin
 
 In this simple example, our the tree would do a better job.
 
-**Trees tend to work well for problems where there are important nonlinearities and interactions. The results are really intuitive and interpretable. However, trees are known to be quite sensitive to the original sample.  Therefore, the models trained in one sample may have poor predictive accuracy on another sample.** These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.
+Trees tend to work well for problems where there are important nonlinearities and interactions. Yet, they are known to be quite sensitive to the original sample.  Therefore, the models trained in one sample may have poor predictive accuracy on another sample. These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.
 

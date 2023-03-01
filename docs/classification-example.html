@@ -51,18 +51,6 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.0/htmlwidgets.js"></script>
-<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.26/datatables.js"></script>
-<link href="libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
-<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
-<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
-<link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
-<script src="libs/selectize-0.12.0/selectize.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
 
 <style type="text/css">
@@ -279,12 +267,12 @@ div.csl-indent {
 <li class="chapter" data-level="12" data-path="cart.html"><a href="cart.html"><i class="fa fa-check"></i><b>12</b> CART</a>
 <ul>
 <li class="chapter" data-level="12.1" data-path="cart.html"><a href="cart.html#cart---classification-tree"><i class="fa fa-check"></i><b>12.1</b> CART - Classification Tree</a></li>
-<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart()</code> - Recursive Partitioning</a></li>
+<li class="chapter" data-level="12.2" data-path="cart.html"><a href="cart.html#rpart---recursive-partitioning"><i class="fa fa-check"></i><b>12.2</b> <code>rpart</code> - Recursive Partitioning</a></li>
 <li class="chapter" data-level="12.3" data-path="cart.html"><a href="cart.html#pruning"><i class="fa fa-check"></i><b>12.3</b> Pruning</a></li>
 <li class="chapter" data-level="12.4" data-path="cart.html"><a href="cart.html#classification-with-titanic"><i class="fa fa-check"></i><b>12.4</b> Classification with Titanic</a></li>
 <li class="chapter" data-level="12.5" data-path="cart.html"><a href="cart.html#regression-tree"><i class="fa fa-check"></i><b>12.5</b> Regression Tree</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble learning</a>
+<li class="chapter" data-level="13" data-path="ensemble-learning.html"><a href="ensemble-learning.html"><i class="fa fa-check"></i><b>13</b> Ensemble Learning</a>
 <ul>
 <li class="chapter" data-level="13.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#bagging"><i class="fa fa-check"></i><b>13.1</b> Bagging</a></li>
 <li class="chapter" data-level="13.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#random-forest"><i class="fa fa-check"></i><b>13.2</b> Random Forest</a></li>
@@ -292,14 +280,14 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="13.3.1" data-path="ensemble-learning.html"><a href="ensemble-learning.html#sequential-ensemble-with-gbm"><i class="fa fa-check"></i><b>13.3.1</b> Sequential ensemble with <code>gbm</code></a></li>
 <li class="chapter" data-level="13.3.2" data-path="ensemble-learning.html"><a href="ensemble-learning.html#adaboost"><i class="fa fa-check"></i><b>13.3.2</b> AdaBoost</a></li>
-<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#extreme-gradient-boosting-xgboost"><i class="fa fa-check"></i><b>13.3.3</b> Extreme Gradient Boosting (XGBoost)</a></li>
+<li class="chapter" data-level="13.3.3" data-path="ensemble-learning.html"><a href="ensemble-learning.html#xgboost"><i class="fa fa-check"></i><b>13.3.3</b> XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="ensemble-applications.html"><a href="ensemble-applications.html"><i class="fa fa-check"></i><b>14</b> Ensemble Applications</a>
 <ul>
 <li class="chapter" data-level="14.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification"><i class="fa fa-check"></i><b>14.1</b> Classification</a></li>
 <li class="chapter" data-level="14.2" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression"><i class="fa fa-check"></i><b>14.2</b> Regression</a></li>
-<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#dataset-level-explainers"><i class="fa fa-check"></i><b>14.3</b> Dataset-level explainers</a></li>
+<li class="chapter" data-level="14.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#exploration"><i class="fa fa-check"></i><b>14.3</b> Exploration</a></li>
 <li class="chapter" data-level="14.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-applications"><i class="fa fa-check"></i><b>14.4</b> Boosting Applications</a>
 <ul>
 <li class="chapter" data-level="14.4.1" data-path="ensemble-applications.html"><a href="ensemble-applications.html#regression-1"><i class="fa fa-check"></i><b>14.4.1</b> Regression</a></li>
@@ -693,7 +681,7 @@ Of course this is just a notational difference and nothing changes in calculatio
 <span id="cb474-3"><a href="classification-example.html#cb474-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf, <span class="at">colorize =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb474-4"><a href="classification-example.html#cb474-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="10-TuningClass_files/figure-html/tc19-1.png" width="672" /></p>
-<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="classification-example.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And our &quot;own&quot; ROC (we will use ROCR in this book, though)</span></span>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="classification-example.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And our &quot;own&quot; ROC</span></span>
 <span id="cb475-2"><a href="classification-example.html#cb475-2" aria-hidden="true" tabindex="-1"></a>phator <span class="ot">&lt;-</span> phat[<span class="fu">order</span>(phat)]</span>
 <span id="cb475-3"><a href="classification-example.html#cb475-3" aria-hidden="true" tabindex="-1"></a>phator[phator <span class="sc">&lt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb475-4"><a href="classification-example.html#cb475-4" aria-hidden="true" tabindex="-1"></a>phator[phator <span class="sc">&gt;</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
@@ -740,7 +728,7 @@ Of course this is just a notational difference and nothing changes in calculatio
 <div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="classification-example.html#cb484-1" aria-hidden="true" tabindex="-1"></a>yHat <span class="ot">&lt;-</span> phat <span class="sc">&gt;</span> opt_th</span>
 <span id="cb484-2"><a href="classification-example.html#cb484-2" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, tsdf<span class="sc">$</span>Y)</span>
 <span id="cb484-3"><a href="classification-example.html#cb484-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb484-4"><a href="classification-example.html#cb484-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to rotate the table (we did before)</span></span>
+<span id="cb484-4"><a href="classification-example.html#cb484-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to rotate the table</span></span>
 <span id="cb484-5"><a href="classification-example.html#cb484-5" aria-hidden="true" tabindex="-1"></a>rot <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb484-6"><a href="classification-example.html#cb484-6" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, rev)</span>
 <span id="cb484-7"><a href="classification-example.html#cb484-7" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">apply</span>(t, <span class="dv">1</span>, rev)</span>
@@ -872,7 +860,7 @@ Of course this is just a notational difference and nothing changes in calculatio
 <div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="classification-example.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
 <span id="cb493-2"><a href="classification-example.html#cb493-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
 <span id="cb493-3"><a href="classification-example.html#cb493-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb493-4"><a href="classification-example.html#cb493-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co">#for the same results, no need otherwise</span></span>
+<span id="cb493-4"><a href="classification-example.html#cb493-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) </span>
 <span id="cb493-5"><a href="classification-example.html#cb493-5" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb493-6"><a href="classification-example.html#cb493-6" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">10</span></span>
 <span id="cb493-7"><a href="classification-example.html#cb493-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -934,51 +922,49 @@ Of course this is just a notational difference and nothing changes in calculatio
 <p>We can compare kNN with LPM (and Logistic) by AUC (not the one given above!) but “k” is not stable. Although, we can go with the mean of “k” or the mode of “k”, we can address this problem by changing the order of loops and using bootstrapping in our training instead of 10-fold CV, which would also increase the number or loops hence the running time.</p>
 <p>Before jumping into this possible solution, we need to think about what we have done so far. We trained our kNN. That is, we got the value of our hyperparameter. We should use our tuned kNN to test it on the test data that we put aside at the beginning. The proper way to that, however, is to have several loops, instead of one like what we did here, and calculate the test AUC for comparison, which is similar to what we did in LPM and Logistic before. We will not do it here as the running time would be very long, which, by the way, shows the importance of having fast “machines” as well as efficient algorithms.</p>
 <p>A more stable, but much longer, suggestion for tuning our kNN application is using a bootstrapping method. It runs multiple loops and takes the average of AUC with the same “k”. The example below is restricted to 20 runs for each “k”. Note that bootstrapping (See Chapter 37.5) is a process of resampling with replacement (all values in the sample have an equal probability of being selected, including multiple times, so a value could have duplicates).</p>
-<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="classification-example.html#cb500-1" aria-hidden="true" tabindex="-1"></a> <span class="do">#### Test/Train split - as before!########</span></span>
-<span id="cb500-2"><a href="classification-example.html#cb500-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># however, this is done only once here.</span></span>
-<span id="cb500-3"><a href="classification-example.html#cb500-3" aria-hidden="true" tabindex="-1"></a> <span class="co"># Should be done in a loop multiple times</span></span>
-<span id="cb500-4"><a href="classification-example.html#cb500-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-5"><a href="classification-example.html#cb500-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb500-6"><a href="classification-example.html#cb500-6" aria-hidden="true" tabindex="-1"></a> sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb500-7"><a href="classification-example.html#cb500-7" aria-hidden="true" tabindex="-1"></a> h <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb500-8"><a href="classification-example.html#cb500-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-9"><a href="classification-example.html#cb500-9" aria-hidden="true" tabindex="-1"></a> ind_test <span class="ot">&lt;-</span> sh[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df)<span class="sc">/</span>h)]</span>
-<span id="cb500-10"><a href="classification-example.html#cb500-10" aria-hidden="true" tabindex="-1"></a> ind_train <span class="ot">&lt;-</span> sh[<span class="sc">-</span>ind_test]</span>
-<span id="cb500-11"><a href="classification-example.html#cb500-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-12"><a href="classification-example.html#cb500-12" aria-hidden="true" tabindex="-1"></a> <span class="co"># Put 10% a side as a test set</span></span>
-<span id="cb500-13"><a href="classification-example.html#cb500-13" aria-hidden="true" tabindex="-1"></a> trdf <span class="ot">&lt;-</span> df[ind_train, ]</span>
-<span id="cb500-14"><a href="classification-example.html#cb500-14" aria-hidden="true" tabindex="-1"></a> tsdf <span class="ot">&lt;-</span> df[ind_test, ]</span>
-<span id="cb500-15"><a href="classification-example.html#cb500-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-16"><a href="classification-example.html#cb500-16" aria-hidden="true" tabindex="-1"></a> <span class="do">########## Bootstrapping ############</span></span>
-<span id="cb500-17"><a href="classification-example.html#cb500-17" aria-hidden="true" tabindex="-1"></a> <span class="co"># Note that we use `by=2` to reduce the running time</span></span>
-<span id="cb500-18"><a href="classification-example.html#cb500-18" aria-hidden="true" tabindex="-1"></a> <span class="co"># With a faster machine, that could be set to 1.</span></span>
-<span id="cb500-19"><a href="classification-example.html#cb500-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-20"><a href="classification-example.html#cb500-20" aria-hidden="true" tabindex="-1"></a> k <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
-<span id="cb500-21"><a href="classification-example.html#cb500-21" aria-hidden="true" tabindex="-1"></a> m <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co"># number of bootstrap loops (could be higher to, like 50)</span></span>
-<span id="cb500-22"><a href="classification-example.html#cb500-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-23"><a href="classification-example.html#cb500-23" aria-hidden="true" tabindex="-1"></a> MAUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb500-24"><a href="classification-example.html#cb500-24" aria-hidden="true" tabindex="-1"></a> k_opt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb500-25"><a href="classification-example.html#cb500-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-26"><a href="classification-example.html#cb500-26" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(k)){</span>
-<span id="cb500-27"><a href="classification-example.html#cb500-27" aria-hidden="true" tabindex="-1"></a>   AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb500-28"><a href="classification-example.html#cb500-28" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb500-29"><a href="classification-example.html#cb500-29" aria-hidden="true" tabindex="-1"></a>     <span class="co">#Here is the heart of bootstrapped tuning</span></span>
-<span id="cb500-30"><a href="classification-example.html#cb500-30" aria-hidden="true" tabindex="-1"></a>     <span class="fu">set.seed</span>(l) </span>
-<span id="cb500-31"><a href="classification-example.html#cb500-31" aria-hidden="true" tabindex="-1"></a>     bind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(trdf), <span class="fu">nrow</span>(trdf), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb500-32"><a href="classification-example.html#cb500-32" aria-hidden="true" tabindex="-1"></a>     uind <span class="ot">&lt;-</span> <span class="fu">unique</span>(bind)</span>
-<span id="cb500-33"><a href="classification-example.html#cb500-33" aria-hidden="true" tabindex="-1"></a>     df_train <span class="ot">&lt;-</span> df[uind, ]</span>
-<span id="cb500-34"><a href="classification-example.html#cb500-34" aria-hidden="true" tabindex="-1"></a>     df_val <span class="ot">&lt;-</span> df[<span class="sc">-</span>uind, ]</span>
-<span id="cb500-35"><a href="classification-example.html#cb500-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-36"><a href="classification-example.html#cb500-36" aria-hidden="true" tabindex="-1"></a>     model <span class="ot">&lt;-</span> <span class="fu">knn3</span>(IncomeLevel <span class="sc">~</span>., <span class="at">data =</span> df_train, <span class="at">k =</span> k[i])</span>
-<span id="cb500-37"><a href="classification-example.html#cb500-37" aria-hidden="true" tabindex="-1"></a>     phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, df_val, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb500-38"><a href="classification-example.html#cb500-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-39"><a href="classification-example.html#cb500-39" aria-hidden="true" tabindex="-1"></a>     <span class="co">#AUC</span></span>
-<span id="cb500-40"><a href="classification-example.html#cb500-40" aria-hidden="true" tabindex="-1"></a>     pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[,<span class="dv">2</span>], df_val<span class="sc">$</span>IncomeLevel)</span>
-<span id="cb500-41"><a href="classification-example.html#cb500-41" aria-hidden="true" tabindex="-1"></a>     auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
-<span id="cb500-42"><a href="classification-example.html#cb500-42" aria-hidden="true" tabindex="-1"></a>     AUC[l] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
-<span id="cb500-43"><a href="classification-example.html#cb500-43" aria-hidden="true" tabindex="-1"></a>   }</span>
-<span id="cb500-44"><a href="classification-example.html#cb500-44" aria-hidden="true" tabindex="-1"></a>   MAUC[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(AUC)</span>
-<span id="cb500-45"><a href="classification-example.html#cb500-45" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="classification-example.html#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### Test/Train split - as before!########</span></span>
+<span id="cb500-2"><a href="classification-example.html#cb500-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-3"><a href="classification-example.html#cb500-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb500-4"><a href="classification-example.html#cb500-4" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb500-5"><a href="classification-example.html#cb500-5" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># should be set to 100 or more</span></span>
+<span id="cb500-6"><a href="classification-example.html#cb500-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-7"><a href="classification-example.html#cb500-7" aria-hidden="true" tabindex="-1"></a>ind_test <span class="ot">&lt;-</span> sh[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df) <span class="sc">/</span> h)]</span>
+<span id="cb500-8"><a href="classification-example.html#cb500-8" aria-hidden="true" tabindex="-1"></a>ind_train <span class="ot">&lt;-</span> sh[<span class="sc">-</span>ind_test]</span>
+<span id="cb500-9"><a href="classification-example.html#cb500-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-10"><a href="classification-example.html#cb500-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Put 10% a side as a test set</span></span>
+<span id="cb500-11"><a href="classification-example.html#cb500-11" aria-hidden="true" tabindex="-1"></a>trdf <span class="ot">&lt;-</span> df[ind_train,]</span>
+<span id="cb500-12"><a href="classification-example.html#cb500-12" aria-hidden="true" tabindex="-1"></a>tsdf <span class="ot">&lt;-</span> df[ind_test,]</span>
+<span id="cb500-13"><a href="classification-example.html#cb500-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-14"><a href="classification-example.html#cb500-14" aria-hidden="true" tabindex="-1"></a><span class="do">########## Bootstrapping ############</span></span>
+<span id="cb500-15"><a href="classification-example.html#cb500-15" aria-hidden="true" tabindex="-1"></a><span class="co"># We use `by=2` to reduce the running time</span></span>
+<span id="cb500-16"><a href="classification-example.html#cb500-16" aria-hidden="true" tabindex="-1"></a><span class="co"># With a faster machine, that could be set to 1.</span></span>
+<span id="cb500-17"><a href="classification-example.html#cb500-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-18"><a href="classification-example.html#cb500-18" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">50</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb500-19"><a href="classification-example.html#cb500-19" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="co"># number of bootstrap loops (could be higher too, like 50)</span></span>
+<span id="cb500-20"><a href="classification-example.html#cb500-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-21"><a href="classification-example.html#cb500-21" aria-hidden="true" tabindex="-1"></a>MAUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-22"><a href="classification-example.html#cb500-22" aria-hidden="true" tabindex="-1"></a>k_opt <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-23"><a href="classification-example.html#cb500-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-24"><a href="classification-example.html#cb500-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(k)) {</span>
+<span id="cb500-25"><a href="classification-example.html#cb500-25" aria-hidden="true" tabindex="-1"></a>  AUC <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb500-26"><a href="classification-example.html#cb500-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m) {</span>
+<span id="cb500-27"><a href="classification-example.html#cb500-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Here is the heart of bootstrapped tuning</span></span>
+<span id="cb500-28"><a href="classification-example.html#cb500-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(l)</span>
+<span id="cb500-29"><a href="classification-example.html#cb500-29" aria-hidden="true" tabindex="-1"></a>    bind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(trdf), <span class="fu">nrow</span>(trdf), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb500-30"><a href="classification-example.html#cb500-30" aria-hidden="true" tabindex="-1"></a>    uind <span class="ot">&lt;-</span> <span class="fu">unique</span>(bind)</span>
+<span id="cb500-31"><a href="classification-example.html#cb500-31" aria-hidden="true" tabindex="-1"></a>    df_train <span class="ot">&lt;-</span> df[uind,]</span>
+<span id="cb500-32"><a href="classification-example.html#cb500-32" aria-hidden="true" tabindex="-1"></a>    df_val <span class="ot">&lt;-</span> df[<span class="sc">-</span>uind,]</span>
+<span id="cb500-33"><a href="classification-example.html#cb500-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb500-34"><a href="classification-example.html#cb500-34" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">knn3</span>(IncomeLevel <span class="sc">~</span> ., <span class="at">data =</span> df_train, <span class="at">k =</span> k[i])</span>
+<span id="cb500-35"><a href="classification-example.html#cb500-35" aria-hidden="true" tabindex="-1"></a>    phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, df_val, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb500-36"><a href="classification-example.html#cb500-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb500-37"><a href="classification-example.html#cb500-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">#AUC</span></span>
+<span id="cb500-38"><a href="classification-example.html#cb500-38" aria-hidden="true" tabindex="-1"></a>    pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[, <span class="dv">2</span>], df_val<span class="sc">$</span>IncomeLevel)</span>
+<span id="cb500-39"><a href="classification-example.html#cb500-39" aria-hidden="true" tabindex="-1"></a>    auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb500-40"><a href="classification-example.html#cb500-40" aria-hidden="true" tabindex="-1"></a>    AUC[l] <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb500-41"><a href="classification-example.html#cb500-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb500-42"><a href="classification-example.html#cb500-42" aria-hidden="true" tabindex="-1"></a>  MAUC[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(AUC)</span>
+<span id="cb500-43"><a href="classification-example.html#cb500-43" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>OK … now finding the optimal “k”</p>
 <div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="classification-example.html#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(k, MAUC, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
 <p><img src="10-TuningClass_files/figure-html/tc27-1.png" width="672" /></p>
@@ -1134,8 +1120,8 @@ Of course this is just a notational difference and nothing changes in calculatio
 ##                                           
 ##        &#39;Positive&#39; Class : Less            
 ## </code></pre>
-<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="classification-example.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we don&#39;t specify &quot;More&quot; as our positive results, the first level</span></span>
-<span id="cb516-2"><a href="classification-example.html#cb516-2" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;Less&quot; will be used as the &quot;positive&quot; result.</span></span>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="classification-example.html#cb516-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If we don&#39;t specify &quot;More&quot; as our positive class, the first level</span></span>
+<span id="cb516-2"><a href="classification-example.html#cb516-2" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;Less&quot; will be &quot;positive&quot;.</span></span>
 <span id="cb516-3"><a href="classification-example.html#cb516-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb516-4"><a href="classification-example.html#cb516-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(model_knn3, tsdf, <span class="at">type =</span> <span class="st">&quot;raw&quot;</span>),</span>
 <span id="cb516-5"><a href="classification-example.html#cb516-5" aria-hidden="true" tabindex="-1"></a>                tsdf<span class="sc">$</span>IncomeLevel, <span class="at">positive =</span> <span class="st">&quot;More&quot;</span>)</span></code></pre></div>

@@ -1,18 +1,16 @@
-# Ensemble learning
+# Ensemble Learning
 
 Bagging, random forests and, boosting methods are the main methods of ensemble learning - a machine learning method where multiple models are trained to solve the same problem.  The main idea is that, instead of using all features (predictors) in one complex base model running on the whole data, we combine multiple models each using selected number of features and subsections of the data. With this, we can have a more robust learning system.
   
-Often, these single models are called a "weak" models.  This is because, individually, they are imperfect due to their lack of complexity and/or their use of only a subsection of the data. The "weakness" can be thought of their insignificant contribution to the prediction problem. A **weak classifier**, for example, is that its error rate is only slightly better than a random guessing.  When we use a single robust model, poor predictors would be eliminated in the training procedure.  However, although each poor predictor has a very small contribution in training, their combination represented in weak models would be huge.  
-
-Ensemble learning systems help these poor predictors have their "voice" in the training process by **keeping them in the system rather than eliminating them**.  That's the main reason why ensemble methods are robust and the main tools of machine learning.  
+What inspires ensemble learning is the idea of the “wisdom of crowds”.  It suggests that "many are smarter than the few" so that collective decision-making of a diverse and larger group of individuals is better than that of a single expert. When we use a single robust model, poor predictors would be eliminated in the training procedure.  Although each poor predictor has a very small contribution in training, their combination would be significant.  Ensemble learning systems help these poor predictors have their "voice" in the training process by **keeping them in the system rather than eliminating them**.  That is the main reason why ensemble methods represent robust learning algorithms in machine learning.  
 
 ## Bagging
 
-Bagging gets its name from **B**ootstrap **agg**regat**ing** of trees.  It works with a few simple arguments:
+Bagging gets its name from **B**ootstrap **agg**regat**ing** of trees.  The idea is simple: we train many trees each of which use a separate bootstrapped sample then aggregate them to one tree for the final decision. It works with few steps:
 
-1. Select number of trees `B`, and the tree depth `D`,
-2. Create a loop `B` times,
-3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth `D` on that sample.  
+1. Select number of trees (B), and the tree depth (D),
+2. Create a loop (B) times,
+3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth D on that sample.  
 
 Let's see an example with the titanic dataset:  
 
@@ -27,14 +25,14 @@ clr = c("pink","red","blue","yellow","darkgreen",
         "orange","brown","purple","darkblue")
 
 n = nrow(titanic3)
-par(mfrow=c(3,3)) # this is for putting all plots together
+par(mfrow=c(3,3))
 
 for(i in 1:9){  # Here B = 9
-  set.seed(i)
-  idx = sample(n, n, replace = TRUE) #Bootstrap sampling with replacement TRUE
+  set.seed(i*2)
+  idx = sample(n, n, replace = TRUE) #Bootstrap sampling with replacement
   tr <- titanic3[idx,]
-  cart =  rpart(survived~sex+age+pclass+sibsp+parch, data = tr,
-                cp=0, method="class") # Unpruned
+  cart =  rpart(survived~sex+age+pclass+sibsp+parch,
+                cp = 0, data = tr, method = "class") #unpruned
   prp(cart, type=1, extra=1, box.col=clr[i])
 }
 ```
@@ -52,13 +50,13 @@ library(ROCR)
 
 #test/train split
 set.seed(1)
-ind <- sample(nrow(titanic3), nrow(titanic3)*0.8)
+ind <- sample(nrow(titanic3), nrow(titanic3) * 0.8)
 train <- titanic3[ind, ]
 test <- titanic3[-ind, ]
 
 #Single tree
 cart <-  rpart(survived ~ sex + age + pclass + sibsp + parch,
-                data = train, method="class") #Pruned
+                data = train, method = "class") #Pruned
 phat1 <- predict(cart, test, type = "prob") 
 
 #AUC
@@ -67,27 +65,28 @@ auc_ROCR <- performance(pred_rocr, measure = "auc")
 auc_ROCR@y.values[[1]]
 ```
 
-Let's do the bagging:
+Now, we apply bagging:
 
 ```{r en3, warning=FALSE, message=FALSE}
 B = 100 # number of trees
-phat2 <- matrix(0, B, nrow(test)) #Container
 
-# Loop
+phat2 <- matrix(0, B, nrow(test))
+
+# Loops
 for(i in 1:B){  
   set.seed(i) # to make it reproducible
-  idx <- sample(nrow(train), nrow(train), replace=TRUE)
-  dt <- train[idx,]
-  
+  idx <- sample(nrow(train), nrow(train), replace = TRUE)
+  dt <- train[idx, ]
+ 
   cart_B <- rpart(survived ~ sex + age + pclass + sibsp + parch,
-                data = dt, method="class") #Pruned
+                cp = 0, data = dt, method = "class") # unpruned
   phat2[i,] <- predict(cart_B, test, type = "prob")[, 2]
 }
 
 dim(phat2)
 ```
 
-You can see in that `phat2` matrix is $100 \times 262$.  Each column is representing the predicted probability that `survived` = 1. We have 100 trees (rows in `phat2`) and 100 predicted probabilities for each the observation in the test data.  The only job we will have now to take the average of 100 predicted probabilities for each column.
+You can see in that `phat2` is a $100 \times 262$ matrix.  Each column is representing the predicted probability that `survived` = 1. We have 100 trees (rows in `phat2`) and 100 predicted probabilities for each the observation in the test data.  The only job we will have now to take the average of 100 predicted probabilities for each column.
   
 ```{r en4, warning=FALSE, message=FALSE}
 # Take the average
@@ -99,37 +98,76 @@ auc_ROCR <- performance(pred_rocr, measure = "auc")
 auc_ROCR@y.values[[1]]
 ```
 
-Hence, we have a slight improvement over a single tree.  But the main idea behind bagging is to reduce the variance in prediction.  The reason for this reduction is simple: we take the mean prediction of all bootstrapped samples.  Remember, when we use a simple tree and make 500 bootstrapping validations, each one of them gives a different MSPE (in regressions) or AUC (in classification).  We did that many times before.  The difference now is that we average `yhat` in regressions or `phat` in classifications (or `yhat` with majority voting).  This reduces the prediction uncertainty drastically.  To test this, we have to run the same script multiple times and see how AUC with bagging would vary in each run relative to a single tree.  Final point is that, `B` the number of trees could be a hyperparameter.  That is, if we set less or more trees, what would happen to AUC?
+Hence, we have a slight improvement over a single tree. We can see how the number of trees (B) would cumulatively increases AUC (reduces MSPE in regressions).   
+```{r en5, warning=FALSE, message=FALSE}
+B = 300 
 
-All these issues bring us to another model, random forest:  
+phat3 <- matrix(0, B, nrow(test))
+AUC <- c()
+
+for (i in 1:B) {
+  set.seed(i) 
+  idx <- sample(nrow(train), nrow(train), replace = TRUE)
+  dt <- train[idx,]
+  
+  fit <- rpart(
+    survived ~ sex + age + pclass + sibsp + parch,
+    cp = 0,
+    data = dt,
+    method = "class"
+  )
+  
+  phat3[i, ] <- predict(fit, test, type = "prob")[, 2]
+  
+  phat_f <- colMeans(phat3)
+  
+  #AUC
+  pred_rocr <- prediction(phat_f, test$survived)
+  auc_ROCR <- performance(pred_rocr, measure = "auc")
+  AUC[i] <- auc_ROCR@y.values[[1]]
+}
+
+plot(AUC, type = "l", col = "red",
+     xlab = "B - Number of trees",
+     lwd = 2)
+```
+
+As it is clear from the plot that, when we use a large value of B, the AUC (or error in regression) becomes stable.  Therefore, we do not need to tune the number of trees with bagging. Using a value of B sufficiently large would suffice.
+
+The main idea behind bagging is to reduce the variance in prediction.  The reason for this reduction is simple: we take the mean prediction of all bootstrapped samples.  Remember, when we use a simple tree and make 500 bootstrapping validations, each one of them gives a different MSPE (in regressions) or AUC (in classification).  The difference now is that we average `yhat` in regressions or `phat` in classifications (or `yhat` with majority voting).  This reduces the prediction uncertainty drastically. 
+
+Bagging works very well for high-variance base learners, such as decision trees or kNN.  If the learner is stable, bagging adds little to the model's performance. This brings us to another and improved ensemble method, random forests.   
 
 ## Random Forest
 
-**Random Forest = Bagging + subsample of covariates at each node**.  We have done the first part above, and to some degree, it's understandable.  But, **"subsampling covariates at each node"** is new.  
+**Random Forest = Bagging + subsample of covariates at each node**.  We have done the first part before.   Random forests algorithm produces many single trees based on randomly selected a subset of observations and features. Since the algorithm leads to many single trees (like a forest) with a sufficient variation, the averaging them provides relatively a smooth and, more importantly, better predictive power than a single tree. Random forests and regression trees are particularly effective in settings with a large number of features that are correlated each other. The splits will generally ignore those covariates, and as a result, the performance will remain strong even in settings with many features.
 
 We will use the Breiman and Cutler's [Random Forests for Classification and Regression](https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm): `randomForest()`[@Brei_2004].
 
 Here are the steps and the loop structure:  
 
-1. Select number of trees `ntree`, subsampling parameter `mtry`, and the tree depth `maxnodes`,
+1. Select number of trees (`ntree`), subsampling parameter (`mtry`), and the tree depth `maxnodes`,
 2. Create a loop `ntree` times,
 3. In each loop, (a) generate a bootstrap sample from the original data; (b) estimate a tree of depth `maxnodes` on that sample,
-4. But, for split in the tree (this is our second loop), randomly select `mtry` original covariates and do the split among those.  
+4. But, for each split in the tree (this is our second loop), randomly select `mtry` original covariates and do the split among those.  
 
 Hence, bagging is a special case of random forest, with `mtry` = number of features ($P$).
   
-Let's talk about this "subsampling covariates at each node".  When we think on this idea little bit more, we can see the rationale: suppose there is one very strong covariate in the sample.  Almost all trees will use this covariate in the top split.  All of the trees will look quite similar to each other.  Hence the predictions will be highly correlated.  **Averaging many highly correlated quantities does not lead to a large reduction in variance**.  Random forests **decorrelate** the trees.  Hence Random Forest further reduces the sensitivity of trees to the data points that are not in the original dataset.
+As we think on the idea of "subsampling covariates at each node" little bit more, we can see the rationale: suppose there is one very strong covariate in the sample.  Almost all trees will use this covariate in the top split.  All of the trees will look quite similar to each other.  Hence the predictions will be highly correlated.  **Averaging many highly correlated quantities does not lead to a large reduction in variance**.  Random forests **decorrelate** the trees and, thus, further reduces the sensitivity of trees to the data points that are not in the original dataset.
 
 How are we going to pick `mtry`?  In practice, default values are `mtry` = $P/3$ in regression and `mtry` = $\sqrt{P}$ classification. (See `mtry` in `?randomForest`). Note that, with this parameter (`mtry`), we can run a pure bagging model with `randomForest()`, instead of `rpart()`, if we set `mtry` = $P$.  
 
-You can think of a random forest model as a robust version of CART models.  There are some default parameters that can be tuned in `randomForest()`, which lead to the same (two ways) way to grow a tree as in CART.  Hastie et al. argues that (Elements of Statistical Learning, 2009, p.596) the problem of overfitting is not that large in random forests.  As the depth of a tree increases (`maxnodes`, see below), overfitting is argued to be minor.
+With the bootstrap resampling process for each tree, random forests have an efficient and reasonable approximation of the test error calculated from out-of-bag (OOB) sets. When bootstrap aggregating is performed, two independent sets are created. One set, the bootstrap sample, is the data chosen to be “in-the-bag” by sampling with replacement. The out-of-bag set is all data not chosen in the sampling process. Hence, there is no need for cross-validation or a separate test set to obtain an unbiased estimate of the prediction error. It is estimated internally as each tree is constructed using a different bootstrap sample from the original data. About one-third of the cases (observations) are left out of the bootstrap sample and not used in the construction of the $k^{th}$ tree. In this way, a test set classification is obtained for each case in about one-third of the trees. In each run, the class is selected when it
+gets most of the votes among the OOB cases. The proportion of times that the selected class for the observation is not equal to the true class over all observations in OOB set is called the OOB error estimate. This has proven to be unbiased in many tests.  Note that the forest’s variance decreases as the number of trees grows. Thus, more accurate predictions are likely to be obtained by choosing a large number of trees.
+
+You can think of a random forest model as a robust version of CART models.  There are some default parameters that can be tuned in `randomForest()`.  It is  argued that, however, the problem of overfitting is minor in random forests.
 
 >Segal (2004) demonstrates small gains in performance by controlling the depths of the individual trees grown in random forests. Our experience is that using full-grown trees seldom costs much, and results in one less tuning parameter. Figure 15.8 shows the modest effect of depth control in a simple regression example. (Hastie et al., 2009, p.596)  
 >
   
 Let's start with a simulation to show random forest and CART models:  
 
-```{r en5, warning=FALSE, message=FALSE}
+```{r en6, warning=FALSE, message=FALSE}
 library(randomForest)
 # Note that this is actually Bagging since we have only 1 variable
 
@@ -137,78 +175,91 @@ library(randomForest)
 set.seed(1)
 n = 500
 x <- runif(n)
-y <- sin(12*(x+.2))/(x+.2) + rnorm(n)/2
+y <- sin(12 * (x + .2)) / (x + .2) + rnorm(n) / 2
 
 # Fitting the models
-fit.tree <- rpart(y~x) #CART
-fit.rf1 <- randomForest(y~x) #No depth control
-fit.rf2 <- randomForest(y~x, maxnodes=20) # Control it
+fit.tree <- rpart(y ~ x) #CART
+fit.rf1 <- randomForest(y ~ x) #No depth control
+fit.rf2 <- randomForest(y ~ x, maxnodes = 20) # Control it
 
 # Plot observations and predicted values
-z <- seq(min(x), max(x), length.out=1000)
-par(mfrow=c(1,1))
-plot(x, y, col="gray", ylim=c(-4,4))
-lines(z, predict(fit.rf1, data.frame(x=z)), col="green", lwd=2)
-lines(z, predict(fit.rf2, data.frame(x=z)), col="red", lwd=2)
-lines(z, predict(fit.tree, data.frame(x=z)), col="blue", lwd=1.5)
-legend("bottomright", c("Random Forest: maxnodes=max","Random Forest: maxnodes=20",
-                        "CART: single regression tree"),
-       col=c("green","red", "blue"),
-       lty=c(1,1,1), bty = "n" )
+z <- seq(min(x), max(x), length.out = 1000)
+par(mfrow = c(1, 1))
+plot(x, y, col = "gray", ylim = c(-4, 4))
+lines(z,
+      predict(fit.rf1, data.frame(x = z)),
+      col = "green",
+      lwd = 2)
+lines(z,
+      predict(fit.rf2, data.frame(x = z)),
+      col = "red",
+      lwd = 2)
+lines(z,
+      predict(fit.tree, data.frame(x = z)),
+      col = "blue",
+      lwd = 1.5)
+legend("bottomright",
+  c("Random Forest: maxnodes=max",
+    "Random Forest: maxnodes=20",
+    "CART: single regression tree"),
+  col = c("green", "red", "blue"),
+  lty = c(1, 1, 1),
+  bty = "n"
+)
 ```
 
-The random forest models are definitely improvements over CART, but which one is better?  Although random forest models should not overfit when increasing the number of trees (`ntree`) in the forest, it seems that there is no consensus on the depth of tree, `maxnodes` in the field. Hence, the question for practitioners becomes whether it would be possible to improve the model's performance if we tune Random Forest parameters?  
+The random forest models are definitely improvements over CART, but which one is better?  Although random forest models should not overfit when increasing the number of trees (`ntree`) in the forest, in practice `maxnodes` and `mtry` are used as hyperparameters in the field. 
 
 Let's use out-of-bag (OOB) MSE to tune Random Forest parameters in our case to see if there is any improvement.  
 
-```{r en6, warning=FALSE, message=FALSE}
-# OOB-MSE
-a <- randomForest(y~x)
-a
-a$mse[500]
-```
-
-Let's control our tree depth:
-
 ```{r en7, warning=FALSE, message=FALSE}
-maxnode <- c(10,50,100,500)
+maxnode <- c(10, 50, 100, 500)
 for (i in 1:length(maxnode)) {
-  a <- randomForest(y~x, maxnodes = maxnode[i])
+  a <- randomForest(y ~ x, maxnodes = maxnode[i])
+  print(c(maxnode[i], a$mse[500]))
+}
+
+# Increase ntree = 1500
+maxnode <- c(10, 50, 100, 500)
+for (i in 1:length(maxnode)) {
+  a <- randomForest(y ~ x, maxnodes = maxnode[i], ntree = 2500)
   print(c(maxnode[i], a$mse[500]))
 }
 ```
 
-We can see that OOB-MSE is smaller with `maxnodes` = 50. Of course we can have a more refined sequence of `maxnodes` series to test.  Similarly, we can select parameter `mtry` with a grid search.  
+We can see that OOB-MSE is smaller with `maxnodes` = 50 even when we increase `ntree` = 1500 . Of course we can have a finer sequence of `maxnodes` series to test.  Similarly, we can select parameter `mtry` with a grid search.  In a bagged model we set `mtry` = $P$.  If we don't set it, the default values for `mtry` are square-root of $p$ for classification and $p/3$ in regression, where $p$ is number of features.  If we want, we can tune both parameters with cross-validation.  The effectiveness of tuning random forest models in improving their prediction accuracy is an open question in practice.  
 
-**We need to understand that there is no need to perform cross-validation in Random Forest**. By bootstrapping, each tree uses around 2/3 of the observations. The remaining 1/3 of observations are referred to as the **out-of-bag (OOB)** observations, which are used for out-sample predictions.  All performance measures for the model are based on these OOB predictions including MSE in case of regressions.  
-
-We can manually calculate `mse_oob[500]`  
+Bagging and random forest models tend to work well for problems where there are important nonlinearities and interactions.  More importantly, **they are robust to the original sample** and more efficient than single trees.  However, **the results would be less intuitive and difficult to interpret**. Nevertheless, we can obtain an overall summary of the importance of each covariates using SSR (for regression) or Gini index (for classification).  The index records the total amount that the SSR or Gini is decreased due to splits over a given covariate, averaged over all `ntree` trees.  
 
 ```{r en8, warning=FALSE, message=FALSE}
-# OOB-MSE
-a <- randomForest(y~x)
-a
-a$mse[500]
+rf <-
+  randomForest(
+    as.factor(survived) ~ sex + age + pclass + sibsp + parch,
+    data = titanic3,
+    na.action = na.omit,
+    localImp = TRUE,
+  )
 
-# Manually
-mean((a$predicted - y)^2)
+plot(rf, main = "Learning curve of the forest")
+legend(
+  "topright",
+  c(
+    "Error for 'Survived'",
+    "Misclassification error",
+    "Error for 'Dead'"
+  ),
+  lty = c(1, 1, 1),
+  col = c("green", "black", "red")
+)
 ```
 
-In a bagged model we set `mtry` = $P$.  If we want, we can tune the maximum number of terminal nodes that trees in the forest can have, `maxnodes`.  If it is not specified, trees are grown to the maximum possible value, **which is the number of observations**.  In practice, although there is no 100\% consensus, the general approach is to grow the trees with the maximum number of terminal nodes.  We have shown that, however, with a cross-validation, this parameter can be set so that OOB-MSE would be smaller than the one with the maximum `maxnodes`.  
+The plot shows the evolution of out-of-bag errors when the number of trees increases. The learning curves reach to a stable section right after a couple of trees.  With 500 trees, which is the default number, the OOB estimate of our error rate is around 0.2, which can be seen in the basic information concerning our model below
 
-In a random forest model, in addition to `maxnodes` (which is again set to $n$),  we can tune the number of variables randomly sampled as candidates at each split, `mtry`.  If we don't set it, the default values for `mtry` are square-root of $p$ for classification and $p/3$ in regression, where $p$ is number of variables/features.  If we want, we can tune both parameters with cross-validation.  The effectiveness of tuning random forest models in improving their prediction accuracy is an open question in practice.  
-
-Bagging and random forest models tend to work well for problems where there are important nonlinearities and interactions.  More importantly, **they are robust to the original sample** and more efficient than single trees. There are several tables in the Breiman's original [paper](https://link.springer.com/article/10.1023%2FA%3A1010933404324) [@Breiman_2001] comparing the performance of random forest and single tree (CART) models.
-
-However, **the results would be less intuitive and difficult to interpret**. Nevertheless, we can obtain an overall summary of the importance of each covariates using SSR (for regression) or Gini index (for classification).  The index records the total amount that the SSR or Gini is decreased due to splits over a given covariate, averaged over all `ntree` trees.  
-
-```{r en9, warning=FALSE, message=FALSE}
-rf <- randomForest(as.factor(survived) ~ sex + age + pclass + sibsp + parch,
-                   data=titanic3, na.action = na.omit)
-importance(rf)
+```{r en9}
+rf
 ```
 
-We will see a several applications on CART, bagging and Random Forest in the lab section covering this chapter.
+We will see a several applications on CART, bagging and Random Forest later in Chapter 14.
 
 ## Boosting
 
@@ -265,17 +316,20 @@ Now, we will have a loop that will "boost" the model.  What we mean by boosting 
 ```{r en12, warning=FALSE, message=FALSE}
 h <- 0.1 # shrinkage parameter
 
-# Add this adjusted prediction error, `yr` to our main data frame
+# Calculate the prediction error adjusted by h
+yr <- df$y - h * yp 
+
+# Add this adjusted prediction error, `yr` to our main data frame,
 # which will be our target variable to predict later
-df$yr <- df$y - h * yp 
+df$yr <- yr
 
 # Store the "first" predictions in YP
 YP <- h * yp 
 ```
 
-Note that if `h`=1, it would give us usual "residuals".  Hence, `h` controls for "how much error" we would like to reduce.  
+Note that if `h`= 1, it would give us usual "residuals".  Hence, `h` controls for "how much error" we would like to reduce.  
 
-**Step 3**: Now, predict the "error" in a loop that repeats itself many times.
+**Step 3**: Now, we will predict the "error" in a loop that repeats itself many times.
 
 ```{r en13, warning=FALSE, message=FALSE}
 # Boosting loop for t times (trees)
@@ -335,37 +389,37 @@ for(t in 1:100){
 viz(101)
 ```
 
-It overfits. Unlike random forests, boosting can overfit if the number of trees (B) and depth of each tree (D) are too large.
+It overfits. Unlike random forests, boosting can overfit if the number of trees (B) and depth of each tree (D) are too large.  By averaging over a large number of trees, bagging and random forests reduces variability. Boosting does not average over the trees.  
   
-By averaging over a large number of trees, bagging and random forests reduces variability. Boosting does not average over the trees.  This shows that $h$ should be tuned by a cross-validation process.  The generalized [boosted regression modeling (GBM)](https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf) [@Ridgeway_2020] can be used for boosted regressions.  Note that there are many arguments with their specific default values in the function.  For example, `n.tree` ($B$) is 100 and `shrinkage` ($h$) is 0.1. `interaction.depth`, $D$, specifying the maximum depth of each tree, is 1, which implies an additive model (2 implies a model with up to 2-way interactions).  A smaller $h$ typically requires more trees $B$. It allows more and different shaped trees to attack the residuals.  
+This shows that $h$ should be tuned by a proper process.  The generalized [boosted regression modeling (GBM)](https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf) [@Ridgeway_2020] can also be used for boosting regressions.  Note that there are many arguments with their specific default values in the function.  For example, `n.tree` (B) is 100 and `shrinkage` ($h$) is 0.1. The `gbm()` function also has `interaction.depth` (D) specifying the maximum depth of each tree. When it is 1, the model is just an additive model, while 2 implies a model with up to 2-way interactions.  A smaller $h$ typically requires more trees $B$. It allows more and different shaped trees to attack the residuals.  
 
-Here is the application of `gbm()` to our simulated data:  
+Here is the application of `gbm` to our simulated data:  
 
 ```{r en16, warning=FALSE, message=FALSE}
 library(gbm)
 
 # Note bag.fraction = 1 (no CV).  The default is 0.5
-bo1 <- gbm(y ~ x, distribution="gaussian", n.tree = 100, data = df,
+bo1 <- gbm(y ~ x, distribution = "gaussian", n.tree = 100, data = df,
               shrinkage = 0.1, bag.fraction = 1)
 
-bo2 <- gbm(y ~ x, distribution="gaussian", data = df) # All default
+bo2 <- gbm(y ~ x, distribution = "gaussian", data = df) # All default
 
-plot(df$x, df$y, ylab="", xlab="") #Data points
-lines(df$x, predict(bo1, data=df, n.trees=t), type="s",
-      col="red", lwd=3) #line for without CV
-lines(df$x, predict(bo2, n.trees=t, data=df), type="s",
-      col="green", lwd=3) #line with default parameters with CV
+plot(df$x, df$y, ylab = "", xlab = "") #Data points
+lines(df$x, predict(bo1, data = df, n.trees = t), type = "s",
+      col = "red", lwd = 3) #line for without CV
+lines(df$x, predict(bo2, n.trees = t, data = df), type = "s",
+      col = "green", lwd = 3) #line with default parameters with CV
 ```
 
-Let's see boosting for classification
+We can also use a boosting application for classification problems, which is what we will loomk at next.
 
 ### AdaBoost
 
-One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a qualitative variable.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree `b` among `B` trees, produces a prediction taking the two values $\{-1,1\}$.  
+One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
 
 To understand how AdaBoost works, let's look at the algorithm step by step:    
 
-1. Select the number of trees `B`, and the tree depth `D`;
+1. Select the number of trees B, and the tree depth D;
 2. Set initial weights, $w_i=1/n$, for each observation.
 3. Fit a classification tree $\hat{m}_{b}(x)$ at $b=1$, the first tree.
 3. Calculate the following misclassification error for $b=1$:  
@@ -380,9 +434,9 @@ $$
 \alpha_{b}=0.5\log \left(\frac{1-e r r_{b}}{e r r_{b}}\right)
 $$
   
-This gives us log odds.  For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or `log(success/failure)`.   
+For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
 
-5. If the observation `i` is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
+5. If the observation $i$ is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
 
 $$
 w_{i} \leftarrow w_{i} e^{\alpha_b}
@@ -394,7 +448,7 @@ Let's try some numbers:
 #Suppose err = 0.2, n=100
 n = 100
 err = 0.2
-alpha <- 0.5*log((1-err)/err)
+alpha <- 0.5 * log((1 - err) / err)
 alpha
 exp(alpha)
 ```
@@ -403,25 +457,25 @@ So, the new weight for the misclassified $i$ in the second tree (i.e., $b=2$ stu
 
 ```{r en18, warning=FALSE, message=FALSE}
 # For misclassified obervations
-weight_miss <- (1/n)*(exp(alpha))
+weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 
 # For correctly classified observation
-weight_corr <- (1/n)*(exp(-alpha))
+weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
 
-This shows that as the misclassification error goes up, it increases the weights (0.04) of each misclassified observation relative to correctly classified observations and reduces the weights for correctly classified observations (0.0025).  
+This shows that as the misclassification error goes up, it increases the weights for each misclassified observation and reduces the weights for correctly classified observations.  
 
-6. With this procedure, in each loop from `b` to `B`, it reapply $\hat{m}_{b}(x)$  to the data using updated weights $w_i$ in each `b` by updating in weights by:  
+6. With this procedure, in each loop from $b$ to B, it applies $\hat{m}_{b}(x)$  to the data using updated weights $w_i$ in each $b$:  
 
 $$
 \mathbf{err}_{b}=\frac{\sum_{i=1}^{n} w_{i} \mathbf{I}\left(y_{i} \neq \hat{m}_{b}\left(x_{i}\right)\right)}{\sum_{i=1}^{n} w_{i}}
 $$
 
-We know that the sum of the weights are supposed to be 1.  So a normalization for all weights between 0 and 1 would handle this issue in each iteration.  The algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until $B$.  We can use `rpart()` in each tree with `weights` option as we will shown momentarily.  
+We normalize all weights between 0 and 1 so that sum of the weights would be one in each iteration.  Hence, the algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until B.  We can use `rpart` in each tree with `weights` option as we will shown momentarily.  
 
-Here is an example with the `myocarde` data that we used in CARD:
+Here is an example with the `myocarde` data that we only use the first 6 observation:
 
 ```{r en19}
 library(readr)
@@ -431,7 +485,7 @@ myocarde <- read_delim("myocarde.csv", delim = ";" ,
                        show_col_types = FALSE)
 myocarde <- data.frame(myocarde)
 df <- head(myocarde)
-df$W = 1/nrow(df)
+df$Weights = 1 / nrow(df)
 df
 ```
 
@@ -440,50 +494,45 @@ Suppose that our first stump misclassifies the first observation.  So the error 
 ```{r en20}
 # Alpha
 n = nrow(df)
-err = 1/n
-alpha <- 0.5*log((1-err)/err)
+err = 1 / n
+alpha <- 0.5 * log((1 - err) / err)
 alpha
 exp(alpha)
 
-# ****** Weights *******
-# For misclassified obervations
-weight_miss <- (1/n)*(exp(alpha))
+
+# Weights for misclassified observations
+weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 
-# For correctly classified observation
-weight_corr <- (1/n)*(exp(-alpha))
+# Weights for correctly classified observations
+weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
   
 Hence, our new sample weights
 
 ```{r en21}
-df$NW <- c(weight_miss, rep(weight_corr, 5))
-df$Norm <- df$NW/sum(df$NW) # nromalizing
-#Ignoring X's
-df[,8:11]
+df$New_weights <- c(weight_miss, rep(weight_corr, 5))
+df$Norm_weights <- df$New_weight / sum(df$New_weight) # normalizing
+# Not reporting X's for now
+df[, 8:11]
 ```
 
-Now, the new dataset:
-  
-```{r en22}
-df$bins <- cumsum(df$Norm)
-df[,8:12]
+We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  We now need to incorporate these weights and resample these six observations. Since incorrectly classified records have higher sample weights, the probability to select those records is very high.
+
+If we use a simple tree as our base classifier, we can directly incorporate these weights into `rpart`.  We can use other base classifier. In that case, we can do resampling with these probability weights: 
+
+```{r}
+set.seed(123)
+ind <- sample(6, 6, replace = TRUE, prob = df$Norm_weights)
+df[ind, -c(9:12)] # After
 ```
 
-Now supposed we run `runif(n=6, min = 0, max = 1)` and get $0.2201686, 0.9465279, 0.5118751, 0.8167266, 0.2208179, 0.1183170.$ Since incorrectly classified records have higher sample weights, the probability to select those records is very high.  We select the observation that these random numbers in their bin:
-
-```{r en23}
-df[c(1,6,2,4,1,1), -c(9:12)] # after
-df[,1:8] # before
-```
-
-  
-Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+As we can see, the misclassified observation is repeated three times in the new sample.  Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
 
 7. Finally, in the output, the contributions from classifiers that fit the data better are given more weight (a larger $\alpha_b$ means a better fit).  Unlike a random forest algorithm where each tree gets an equal weight in final decision, here some stumps get more say in final classification.  Moreover, "forest of stumps" the order of trees is important.
 
-Hence, the final prediction on $y_i$ will be combined from all trees, `b` to `B`, through a weighted majority vote:      
+Hence, the final prediction on $y_i$ will be combined from all trees, $b$ to B, through a weighted majority vote:      
 
 $$
 \hat{y}_{i}=\operatorname{sign}\left(\sum_{b=1}^{B} \alpha_{b} \hat{m}_{b}(x)\right),
@@ -499,23 +548,30 @@ $$
 \end{array}\right.
 $$
   
-Here is a simple simulation to show how `alpha` will make the importance of each tree ($\hat{m}_{b}(x)$) different:  
+Here is a simple simulation to show how $\alpha_b$ will make the importance of each tree ($\hat{m}_{b}(x)$) different:  
 
 ```{r en24, warning=FALSE, message=FALSE}
 n = 1000
 set.seed(1)
 err <- sample(seq(0, 1, 0.01), n, replace = TRUE)
-alpha = 0.5*log((1-err)/err)
+alpha = 0.5 * log((1 - err) / err)
 ind = order(err)
-plot(err[ind], alpha[ind], xlab = "error (err)", ylab = "alpha",
-     type = "o", col = "red", lwd = 2)
+plot(
+  err[ind],
+  alpha[ind],
+  xlab = "error (err)",
+  ylab = "alpha",
+  type = "o",
+  col = "red",
+  lwd = 2
+)
 ```
 
 We can see that when there is no misclassification error (`err` = 0), "alpha” will be a large positive number.  When the classifier very weak and predicts as good as a random guess (`err` = 0.5), the importance of the classifier will be 0.  If all the observations are incorrectly classified (`err` = 1), our alpha value will be a negative integer.
 
 The AdaBoost.M1 is known as a "discrete classifier" because it directly calculates discrete class labels $\hat{y}_i$, rather than predicted probabilities, $\hat{p}_i$.    
 
-What type of classifier, $\hat{m}_{b}(x)$, would we choose?  Usually a "weak classifier" like a "stump" (a two terminal-node classification tree, i.e 1 split) would be enough.  The $\hat{m}_{b}(x)$ choose one variable to form a stump that gives the lowest Gini index. 
+What type of classifier, $\hat{m}_{b}(x)$, would we choose?  Usually a "weak classifier" like a "stump" (a two terminal-node classification tree, i.e one split) would be enough.  The $\hat{m}_{b}(x)$ choose one variable to form a stump that gives the lowest Gini index. 
 
 Here is our simple example with the `myocarde` data to show how we can boost a simple weak learner (stump) by using AdaBoost algorithm:
   
@@ -526,6 +582,7 @@ library(rpart)
 myocarde <- read_delim("myocarde.csv", delim = ";" ,
                        escape_double = FALSE, trim_ws = TRUE,
                        show_col_types = FALSE)
+
 myocarde <- data.frame(myocarde)
 y <- (myocarde[ , "PRONO"] == "SURVIE") * 2 - 1
 x <- myocarde[ , 1:7]
@@ -534,28 +591,28 @@ df <- data.frame(x, y)
 # Setting
 rnd = 100 # number of rounds
 m = nrow(x)
-W <- rep(1/m, m) # initial weights
-S <- list() # container to save all stumps
+whts <- rep(1 / m, m) # initial weights
+st <- list() # container to save all stumps
 alpha <- vector(mode = "numeric", rnd) # container for alpha
 y_hat <- vector(mode = "numeric", m) # container for final predictions
 
 set.seed(123)
 for(i in 1:rnd) {
-  S[[i]] <- rpart(y ~., data = df, weights = W, maxdepth = 1, method = "class")
-  yhat <- predict(S[[i]], x, type = "class")
+  st[[i]] <- rpart(y ~., data = df, weights = whts, maxdepth = 1, method = "class")
+  yhat <- predict(st[[i]], x, type = "class")
   yhat <- as.numeric(as.character(yhat))
-  e <- sum((yhat!=y) * W)
+  e <- sum((yhat != y) * whts)
   # alpha
-  alpha[i] <- 0.5 * log((1-e) / e)
+  alpha[i] <- 0.5 * log((1 - e) / e)
   # Updating weights 
-  W <- W * exp(-alpha[i] * y * yhat)
+  whts <- whts * exp(-alpha[i] * y * yhat)
   # Normalizing weights
-  W <- W / sum(W)
+  whts <- whts / sum(whts)
 }
  
-# Using each stump for  S[i] for final predictions
+# Using each stump for final predictions
 for (i in 1:rnd) {
-  pred = predict(S[[i]], df, type = "class")
+  pred = predict(st[[i]], df, type = "class")
   pred = as.numeric(as.character(pred))
   y_hat = y_hat + (alpha[i] * pred)
 }
@@ -563,7 +620,7 @@ for (i in 1:rnd) {
 # Let's see what y_hat is
 y_hat
 
-# Now use sign() function
+# sign() function
 pred <- sign(y_hat)
 
 # Confusion matrix
@@ -579,7 +636,7 @@ plt <- c(1,5,10,30, 60, 90)
 
 p = par(mfrow=c(2,3))
 for(i in 1:length(plt)){
-prp(S[[i]], type = 2, extra = 1, split.col = "red",
+prp(st[[i]], type = 2, extra = 1, split.col = "red",
     split.border.col = "blue", box.col = "pink")
 }
 par(p)
@@ -594,17 +651,18 @@ summary(ada)
 pred <- predict(ada, x)
 table(pred, y)
 ```
-These results provide in-sample predictions.  When we use it in a real example, we can train AdaBoost.M1 by the tree depths (1 in our example) and the number of iterations (100 trees in our example).  Although, there are simulations that AdaBoost is stubbornly resistant to overfitting, you can try with different tree depth and number of trees.   
+  
+These results provide in-sample predictions.  When we use it in a real example, we can train AdaBoost.M1 by the tree depths (1 in our example) and the number of iterations (100 trees in our example).  
 
 An application is provided in the next chapter.  
   
-### Extreme Gradient Boosting (XGBoost)
+### XGBoost
 
-Extreme Gradient Boosting (XGBoost) the most efficient version of the gradient boosting framework by its capacity to implement parallel computation on a single machine.  It can be used for regression and classification problems with two modes: linear models and tree learning algorithm.  This is important because, as we will see in the next section (and Section 6), XGBoost can be used for regularization in linear models.  As always, however, decision trees are much better to catch a nonlinear link between predictors and outcome. Thus, comparison between two methods can provide quick information to the practitioner, specially in causal analyses, about the structure of alternative models. 
+Extreme Gradient Boosting (XGBoost) the most efficient version of the gradient boosting framework by its capacity to implement parallel computation on a single machine.  It can be used for regression and classification problems with two modes: linear models and tree learning algorithm.  That means XGBoost can also be used for regularization in linear models (Section VIII).  As decision trees are much better to catch a nonlinear link between predictors and outcome, comparison between two modes can provide quick information to the practitioner, specially in causal analyses, about the structure of alternative models. 
 
-The XGBoost has several unique advantages: its speed is measured as "10 times faster than the `gbm`" (see its [vignette](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html)) and it accepts very efficient input data structures, such as a *sparse* matrix^[In a sparse matrix, cells containing 0 are not stored in memory. Therefore, in a dataset mainly made of 0, the memory size is reduced.].  This special input structure in `xgboost` requires some additional data preparation: a matrix input for the features and a vector for the response. Therefore, a matrix input of the features requires to encode our categorical variables, as we showed before.  The matrix can also be selected 3 possible choices: a regular R matrix, a sparse matrix from the `Matrix` package, 
+The XGBoost has several unique advantages: its speed is measured as "10 times faster than the `gbm`" (see its [vignette](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html)) and it accepts very efficient input data structures, such as a *sparse* matrix^[In a sparse matrix, cells containing 0 are not stored in memory. Therefore, in a dataset mainly made of 0, the memory size is reduced.].  This special input structure in `xgboost` requires some additional data preparation: a matrix input for the features and a vector for the response. Therefore, a matrix input of the features requires to encode our categorical variables.  The matrix can also be selected several possible choices: a regular R matrix, a sparse matrix from the `Matrix` package, and its own class, `xgb.Matrix`. 
 
-We will use a regression example here and leave the classification example to the next chapter in boosting applications.  We will use the [Ames housing data](https://www.tmwr.org/ames.html)  to see the best "predictors" of the sale price.
+We start with a regression example here and leave the classification example to the next chapter in boosting applications.  We will use the [Ames housing data](https://www.tmwr.org/ames.html)  to see the best "predictors" of the sale price.
 
 ```{r en28, warning=FALSE, message=FALSE}
 library(xgboost)
@@ -612,57 +670,64 @@ library(mltools)
 library(data.table)
 library(modeldata) # This can also be loaded by the tidymodels package
 data(ames)
-#str(ames)
 dim(ames)
 ```
 
-The `xgboost` algorithm accepts its input data as a matrix.  Therefore all the categorical variables have be one-hot coded, which creates a large matrix with even with a small size data.  That's why using more memory efficient matrix types (sparse matrix etc.) speeds up the process.  We ignore it here and use a regular R matrix, for now.     
+Since, the `xgboost` algorithm accepts its input data as a matrix, all categorical variables have be one-hot coded, which creates a large matrix even with a small size data.  That's why using more memory efficient matrix types (sparse matrix etc.) speeds up the process.  We ignore it here and use a regular R matrix, for now.     
   
 ```{r en29, warning=FALSE, message=FALSE}
 ames_new <- one_hot(as.data.table(ames))
 df <- as.data.frame(ames_new)
 
 ind <- sample(nrow(df), nrow(df), replace = TRUE)
-train <- df[ind, ]
-test <- df[-ind, ]
+train <- df[ind,]
+test <- df[-ind,]
 
-X <- as.matrix(train[, -which(names(train) == "Sale_Price")])
+X <- as.matrix(train[,-which(names(train) == "Sale_Price")])
 Y <- train$Sale_Price
 ```
   
-Now we are ready for finding the optimal tuning parameters.  One strategy in tuning is to see if there is a substantial difference between train and CV errors.  As we have seen in `gbm`, we first start with the number trees and the learning rate.  If the difference still persists, we introduce regularization parameters.  There are three regularization parameters: `gamma`, `lambda`, and `alpha`.  The last two are similar to what we will see in a linear regularization next chapter.  Let's start with the data preparation as `xgboost` requires a matrix input for the features and a vector for the response. We will do it without a grid search. This should be done with sweeping a grid of hyperparamaters (including `gamma`, `lambda`, and `alpha`):
+Now we are ready for finding the optimal tuning parameters.  One strategy in tuning is to see if there is a substantial difference between train and CV errors.  We first start with the number of trees and the learning rate.  If the difference still persists, we introduce regularization parameters.  There are three regularization parameters: `gamma`, `lambda`, and `alpha`.  The last two are similar to what we will see in regularization in Section VIII.
+  
+Here is our first run without a grid search.  We will have a regression tree.  The default booster is `gbtree` for tree-based models.  For linear models it should be set to `gblinear`.  The number of parameters and their combinations are very extensive in XGBoost.  Please see them here: <https://xgboost.readthedocs.io/en/latest/parameter.html#global-configuration>.  The combination of parameters we picked below is just an example.  
 
 ```{r en30, warning=FALSE, message=FALSE, cache=TRUE}
+#
+params = list(
+  eta = 0.1, # Step size in boosting (default is 0.3)
+  max_depth = 3, # maximum depth of the tree (default is 6)
+  min_child_weight = 3, # minimum number of instances in each node
+  subsample = 0.8, # Subsample ratio of the training instances
+  colsample_bytree = 1.0 # the fraction of columns to be subsampled
+)
+
 set.seed(123)
 boost <- xgb.cv(
   data = X,
   label = Y,
-  nrounds = 3000,
-  objective = "reg:squarederror",
-  early_stopping_rounds = 50, 
-  nfold = 10,
-  params = list(
-    eta = 0.1,
-    max_depth = 3,
-    min_child_weight = 3,
-    subsample = 0.8,
-    colsample_bytree = 1.0),
-  verbose = 0
+  nrounds = 3000, # the max number of iterations
+  nthread = 4, # the number of CPU cores
+  objective = "reg:squarederror", # regression tree
+  early_stopping_rounds = 50, # Stop if doesn't improve after 50 rounds 
+  nfold = 10, # 10-fold-CV
+  params = params,
+  verbose = 0 #silent
 )  
 ```
 
 Let's see the RMSE and the best iteration:
 
 ```{r en31, warning=FALSE, message=FALSE}
-boost$best_iteration
+best_it <- boost$best_iteration
+best_it
 min(boost$evaluation_log$test_rmse_mean)
 
-# One possible grid would be: 
+# One possible grid would be:
 # param_grid <- expand.grid(
 #   eta = 0.01,
-#   max_depth = 3, 
+#   max_depth = 3,
 #   min_child_weight = 3,
-#   subsample = 0.5, 
+#   subsample = 0.5,
 #   colsample_bytree = 0.5,
 #   gamma = c(0, 1, 10, 100, 1000),
 #   lambda = seq(0, 0.01, 0.1, 1, 100, 1000),
@@ -674,45 +739,36 @@ min(boost$evaluation_log$test_rmse_mean)
 # and find the parameters that gives the minimum rmse
 ```
 
-Now after identifying the best model, we can use it on the test data:
+Now after identifying the tuning parameters, we build the best model:
 
 ```{r en32, warning=FALSE, message=FALSE, cache=TRUE}
-params <- list(
-  eta = 0.01,
-  max_depth = 3,
-  min_child_weight = 3,
-  subsample = 0.8,
-  colsample_bytree = 1.0
-)
-
 tr_model <- xgboost(
   params = params,
   data = X,
   label = Y,
-  nrounds = 2515,
+  nrounds = best_it,
   objective = "reg:squarederror",
   verbose = 0
 )
 ```
 
-This trained (best fitting model) is enough to obtain the top 10 influential features in our final model using the impurity (gain) metric:
+We can obtain the top 10 influential features in our final model using the impurity (gain) metric:
 
 ```{r en33, warning=FALSE, message=FALSE}
 library(vip)
 vip(tr_model,
-    aesthetics = list(color = "green", fill = "darkgreen")) 
+    aesthetics = list(color = "green", fill = "orange")) 
 ```
 
 Now, we can use our trained model for predictions using our test set.  Note that, again, `xgboost` would only accept matrix inputs.  
   
 ```{r en34, warning=FALSE, message=FALSE}
 yhat <- predict(tr_model,
-               as.matrix(test[,-which(names(test) == "Sale_Price")]))
-rmse_test <- sqrt(mean((test[,which(names(train) == "Sale_Price")]-yhat)^2))
+                as.matrix(test[, -which(names(test) == "Sale_Price")]))
+rmse_test <-
+  sqrt(mean((test[, which(names(train) == "Sale_Price")] - yhat) ^ 2))
 rmse_test
 ```
   
-Note the big difference between training and test RMSPE's.  This is an indication that our "example" grid is not doing a good job.  We should include regularization tuning parameters and run a full scale grid search.  
-
-We will look at a classification example in the next chapter (Ch.13).  But, a curious reader would ask: would it be better had we run random forest?  Or, could it have been better with a full scale grid search?    
+Note the big difference between training and test RMSPE's.  This is an indication that our "example grid" is not doing a good job.  We should include regularization tuning parameters and run a full scale grid search.  We will look at a classification example in the next chapter (Chapter 13).  
   

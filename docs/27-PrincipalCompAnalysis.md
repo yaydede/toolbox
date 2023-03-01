@@ -1,30 +1,29 @@
 # Principle Component Analysis
 
-Having seen SVD and Eigenvalue decomposition, now we can look at Principle Component Analysis (PCA), which is a statistical procedure that allows you to summarize the information content in large data tables.  In other words, it helps dimension reduction in big datasets.
+Having seen SVD and Eigenvalue decomposition, we can now look at Principle Component Analysis (PCA), which is a statistical procedure that allows us to summarize the information content in large data files.  In other words, PCA is a popular technique used to reduce the dimensionality of high-dimensional data while retaining most of the information in the original data.
 
-**PCA is a eigenvalue decomposition of a covariance matrix** (of data matrix $\mathbf{X}$). Since a covariance matrix is a square matrix, we can apply the eigenvalue decomposition, which reveals the unique orthogonal directions (variances) in the data so that their orthogonal linear combinations maximize the total variance.
+**PCA is a eigenvalue decomposition of a covariance matrix** (of data matrix $\mathbf{X}$). Since a covariance matrix is a square symmetric matrix, we can apply the eigenvalue decomposition, which reveals the unique orthogonal directions (variances) in the data so that their orthogonal linear combinations maximize the total variance.
 
-The goal is here a dimension reduction of the data matrix.  Hence by selecting a few loading, we can reduce the dimension of the data but capture a substantial variation in the data at the same time.  See <https://www.youtube.com/watch?v=fkf4IBRSeEc> [@Brunton_PCA] and 
-<https://setosa.io/ev/principal-component-analysis/> [@Powell_PCA]. 
+The goal is here a dimension reduction of the data matrix.  Hence by selecting a few loading, we can reduce the dimension of the data but capture a substantial variation in the data at the same time.  
 
-Principal components are the ordered (orthogonal) lines (vectors) that best account for the maximum variance in the data by their magnitude. To get the (unique) variances (direction and the magnitude) in data, we first obtain the mean-centered covariance matrix.  And as you can imagine, eigenvectors (which give the unique directions) and eigenvalues (which identify those directions' magnitude) are used for PCA:
+Principal components are the ordered (orthogonal) lines (vectors) that best account for the maximum variance in the data by their magnitude. To get the (unique) variances (direction and the magnitude) in data, we first obtain the mean-centered covariance matrix.  
 
-So when we use the covariance matrix of a data, we can use eigenvalue decomposition to identify the unique variation and their relative magnitude in the data.  Here is a simple procedure:  
+When we use the covariance matrix of the data, we can use eigenvalue decomposition to identify the unique variation (eigenvectors) and their relative magnitudes (eigenvalues) in the data.  Here is a simple procedure:  
   
-1. $\mathbf{X}$ is the data matrix,  
-2. $\mathbf{B}$ is the mean-centered data matrix,  
-3. $\mathbf{C}$ is the covariance matrix ($\mathbf{B^TB}$) (note if $\mathbf{B}$ is scaled, i.e. "z-scored", $\mathbf{B^TB}$ gives correlation matrix)
-4. Compute the eigenvectors and values of $\mathbf{C}$: $\mathbf{C} = \mathbf{VDV^{\top}}$ hence $\mathbf{CV} = \mathbf{VD}$, where $\mathbf{V}$ is the eigenvectors (loadings) and $\mathbf{D}$ is eigenvalues.
-5. Using $\mathbf{V}$, the transformation of $\mathbf{B}$ with $\mathbf{B} \mathbf{V}$ maps the data of $p$ variables to a new space of $p$ variables which are uncorrelated over the dataset. $\mathbf{T} (=\mathbf{B} \mathbf{V})$ is called the **principle component or score matrix**
-6. Since SVD of $\mathbf{B} = \mathbf{U} \Sigma \mathbf{V}^{\top}$, we can also get $\mathbf{B}\mathbf{V} = \mathbf{T} = \mathbf{U\Sigma}$. Hence the principle components are $\mathbf{T} = \mathbf{BV} = \mathbf{U\Sigma}$.
-7. However, not all the principal components need to be kept. Keeping only the first $r$ principal components, produced by using only the first $r$ eigenvectors, gives the truncated transformation $\mathbf{T}_{r} = \mathbf{B} \mathbf{V}_{r}$.  Obviously you choose those with higher variance in each directions by the order of eigenvalues.
-8. We can use $\frac{\lambda_{k}}{\sum_{i=1} \lambda_{k}}$ to identify $r$. Or cumulatively, we can see how much variation could be captured by $r$ number of $\lambda$s, which gives us an idea how many principle components to keep ...
+1. $\mathbf{X}$ is the data matrix, 
+2. $\mathbf{B}$ is the mean-centered data matrix, 
+3. $\mathbf{C}$ is the covariance matrix ($\mathbf{B}^T\mathbf{B}$). Note that, if $\mathbf{B}$ is scaled, i.e. "z-scored", $\mathbf{B}^T\mathbf{B}$ gives correlation matrix. We will have more information on covariance and correlation in Chapter 32. 
+4. The eigenvectors and values of $\mathbf{C}$ by $\mathbf{C} = \mathbf{VDV^{\top}}$.  Thus, $\mathbf{V}$ contains the eigenvectors (loadings) and $\mathbf{D}$ contains eigenvalues. 
+5. Using $\mathbf{V}$, the transformation of $\mathbf{B}$ with $\mathbf{B} \mathbf{V}$ maps the data of $p$ variables to a new space of $p$ variables which are uncorrelated over the dataset. $\mathbf{T} =\mathbf{B} \mathbf{V}$ is called the **principle component or score matrix**. 
+6. Since SVD of $\mathbf{B} = \mathbf{U} \Sigma \mathbf{V}^{\top}$, we can also get $\mathbf{B}\mathbf{V} = \mathbf{T} = \mathbf{U\Sigma}$. Hence the principle components are $\mathbf{T} = \mathbf{BV} = \mathbf{U\Sigma}$. 
+7. However, not all the principal components need to be kept. Keeping only the first $r$ principal components, produced by using only the first $r$ eigenvectors, gives the truncated transformation $\mathbf{T}_{r} = \mathbf{B} \mathbf{V}_{r}$.  Obviously you choose those with higher variance in each directions by the order of eigenvalues. 
+8. We can use $\frac{\lambda_{k}}{\sum_{i=1} \lambda_{k}}$ to identify $r$. Or cumulatively, we can see how much variation could be captured by $r$ number of $\lambda$s, which gives us an idea how many principle components to keep:  
 
 $$
 \frac{\sum_{i=1}^{r} \lambda_{k}}{\sum_{i=1}^n \lambda_{k}}
 $$
 
-Let's see an example.  Here is the data:
+We use the `factorextra` package and the `decathlon2` data for an example.  
 
 
 ```r
@@ -54,9 +53,8 @@ head(X)
 
 ```r
 n <- nrow(X)
-
 B <- scale(X, center = TRUE)
-C <- t(B)%*%B/(n-1)
+C <- t(B) %*% B / (n - 1)
 head(C)
 ```
 
@@ -150,7 +148,7 @@ Now with `prcomp()`.  First, eigenvalues:
 # With `prcomp()`
 Xpca <- prcomp(X, scale = TRUE)
 #Eigenvalues
-Xpca$sdev # you can see it's ordered
+Xpca$sdev 
 ```
 
 ```
@@ -158,21 +156,18 @@ Xpca$sdev # you can see it's ordered
 ##  [8] 0.5285666 0.4371645 0.3351059
 ```
 
-```r
-# They are sqrt() of eigenvalues that we calculated earlier
+They are the square root of the eigenvalues that we calculated before and they are ordered.# 
+
+
+```pca2b
 sqrt(evalues)
 ```
 
-```
-##  [1] 1.9364846 1.3210481 1.2320016 1.0159725 0.7860272 0.6544393 0.5708855
-##  [8] 0.5285666 0.4371645 0.3351059
-```
-
-Loadings ...
+And, the "loadings" (Eigenvectors):
 
 
 ```r
-#Eigenvectors (loadings)
+#Eigenvectors 
 Xpca$rotation # 10x10
 ```
 
@@ -205,9 +200,9 @@ Xpca$rotation # 10x10
 loadings <- Xpca$rotation
 ```
 
-Interestingly the signs of eigenvectors are flipped and opposites of what we calculated with `eigen()` above.  There are multiple discussions about the sign reversals in eignevectores.  You can find them [here](https://stats.stackexchange.com/questions/154716/pca-eigenvectors-of-opposite-sign-and-not-being-able-to-compute-eigenvectors-wi) [@Kroll_2015] and [here](https://stackoverflow.com/questions/55076133/dont-know-why-eigen-gives-a-vectors-of-wrong-sign-and-the-loading-matrix-is-j) [@Wilks_2019]
+The signs of eigenvectors are flipped and opposites of what we calculated with `eigen()` above. This is because the definition of an eigenbasis is ambiguous of sign. There are multiple discussions about the sign reversals in eignevectores.  
 
-Visualize the order ... 
+Let's visualize the order:   
 
 
 ```r
@@ -224,14 +219,20 @@ fviz_eig(Xpca) # Cumulative with "factoextra"
 
 ```r
 # Or
-var <- (Xpca$sdev)^2
-var_perc <- var/sum(var) * 100
+var <- (Xpca$sdev) ^ 2
+var_perc <- var / sum(var) * 100
 
-barplot(var_perc, xlab='PC', ylab='Percent Variance',
-        names.arg=1:length(var_perc), las=1,
-        ylim=c(0, max(var_perc)), col='lightgreen')
- 
-abline(h=mean(var_perc), col='red')
+barplot(
+  var_perc,
+  xlab = 'PC',
+  ylab = 'Percent Variance',
+  names.arg = 1:length(var_perc),
+  las = 1,
+  ylim = c(0, max(var_perc)),
+  col = 'lightgreen'
+)
+
+abline(h = mean(var_perc), col = 'red')
 ```
 
 <img src="27-PrincipalCompAnalysis_files/figure-html/pca4-3.png" width="672" />
@@ -242,7 +243,7 @@ And principle component scores $\mathbf{T} = \mathbf{X}\mathbf{V}$ (a.k.a score 
 
 
 ```r
-pc <- scale(X)%*%Xpca$rotation
+pc <- scale(X) %*% Xpca$rotation
 head(pc)
 ```
 
@@ -295,13 +296,13 @@ head(Xpca$x)
 
 Now you can think that if we use `evectors` that we calculated earlier with filliped signs, the data would be different.  It's similar to multiply the entire data with -1.  So the data would not change in a sense that that captures the variation between observations and variables.  That's why the sign of eigenvalues are arbitraray.
 
-With SVD ...
+Now, with SVD:  
   
 
 ```r
 # With SVD
 Xsvd <- svd(scale(X))
-pc_2 <- Xsvd$u%*%diag(Xsvd$d)
+pc_2 <- Xsvd$u %*% diag(Xsvd$d)
 dim(pc_2)
 ```
 
@@ -356,7 +357,7 @@ head(reduced)
 ## McMULLEN   0.2353742  0.9215376  0.8028425  1.17942532
 ```
 
-The individual columns of $\mathbf{T}$ successively inherit the maximum possible variance from $\mathbf{X}$, with each coefficient vector in $\mathbf{V}$ constrained to be a unit vector. The full principal components decomposition of $\mathbf{X}$, $\mathbf{T}=\mathbf{X V}$, where $\mathbf{V}$ is a $p \times p$ matrix of weights whose columns are the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$. Columns of $\mathbf{V}$ multiplied by the square root of corresponding eigenvalues, **that is, eigenvectors scaled up by the variances, are called loadings in PCA or in Factor analysis**.
+The individual columns of $\mathbf{T}$ successively inherit the maximum possible variance from $\mathbf{X}$, with each coefficient vector in $\mathbf{V}$ constrained to be a unit vector. In $\mathbf{T}=\mathbf{X V}$, $\mathbf{V}$ is a $p \times p$ matrix of weights whose columns are the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$. The columns of $\mathbf{V}$ multiplied by the square root of corresponding eigenvalues, that is, eigenvectors scaled up by the variances, are called loadings in PCA and Factor analysis.
 
 Note that if we make a singular value decomposition for a covariance matrix 
 
@@ -368,13 +369,7 @@ $$
 \end{aligned}
 $$
 
-where $\hat{\boldsymbol{\Sigma}}$ is the square diagonal matrix with the singular values of $\mathbf{X}$ and the excess zeros chopped off that satisfies $\hat{\boldsymbol{\Sigma}}^{2}=\boldsymbol{\Sigma}^{\top} \boldsymbol{\Sigma}$.
+where $\hat{\boldsymbol{\Sigma}}$ is the square diagonal matrix with the singular values of $\mathbf{X}$ and the excess zeros are chopped off so that it  satisfies $\hat{\boldsymbol{\Sigma}}^{2}=\boldsymbol{\Sigma}^{\top} \boldsymbol{\Sigma}$.
   
 Comparison with the eigenvector factorization of $\mathbf{X}^{\top} \mathbf{X}$ establishes that the right singular vectors $\mathbf{V}$ of $\mathbf{X}$ are equivalent to the eigenvectors of $\mathbf{X}^{\top} \mathbf{X}$, while the singular values $\sigma_{(k)}$ of $\mathbf{X}$ are equal to the square-root of the eigenvalues $\lambda_{(k)}$ of $\mathbf{X}^{\top} \mathbf{X}$.
 
-
-```r
-biplot(reduced[, 1:2], loadings[, 1:2], cex=0.7)
-```
-
-<img src="27-PrincipalCompAnalysis_files/figure-html/pca8-1.png" width="672" />

@@ -17,9 +17,9 @@ Up to this point we have seen "probabilistic" binary classifiers, such as kNN, C
 > In machine learning, support-vector machines are supervised learning models with associated learning algorithms that analyze data for classification and regression analysis. Developed at AT&T Bell Laboratories by Vladimir Vapnik with colleagues (Boser et al., 1992, Guyon et al., 1993, Cortes and Vapnik, 1995, Vapnik et al., 1997) SVMs are one of the most robust prediction methods, being based on statistical learning frameworks or VC theory proposed by Vapnik (1982, 1995) and Chervonenkis (1974). Given a set of training examples, each marked as belonging to one of two categories, an SVM training algorithm builds a model that assigns new examples to one category or the other, making it a non-probabilistic binary linear classifier (although methods such as Platt scaling exist to use SVM in a probabilistic classification setting). SVM maps training examples to points in space so as to maximise the width of the gap between the two categories. New examples are then mapped into that same space and predicted to belong to a category based on which side of the gap they fall.
 >
   
-We will develop our discussion in this chapter on two cases: Separable by a linear class boundary (Optimal Separating Classifier) and separable by a non-linear class boundary (Support-Vector Machines).  First section has no practical importance as (when) we usually face non-linear class boundary problems in real life.  However, it will help us build SVM step by step.
+We will develop our discussion in this chapter on two cases: a linear class boundary (Optimal Separating Classifier) and a non-linear class boundary (Support-Vector Machines).  First section has no practical importance as (when) we usually face non-linear class boundary problems in real life.  However, it will help us build SVM step by step.
 
-We will use a simplifying assumption here to start with: the classes are perfectly linearly separable at the data points by using a single straight line. Thus we have two predictors: $X_1$ and $X_2$.  Let's look at an example:
+We will use a simplifying assumption here to start with: the classes are perfectly linearly separable at the data points by using a single straight line. Thus we have two predictors: $x_1$ and $x_2$.  Let's look at an example:
 
 
 ```r
@@ -45,13 +45,13 @@ abline(a = 0.29, b = 0.6, col = "orange",lwd = 2)
 
 <img src="14-SVM_files/figure-html/sv2-1.png" width="672" />
 
-We call this line a hyperplane (in 2-dimensional case it's a line) that separates blacks from reds.  Let's mathematically define it:
+We call this line a hyperplane (well, in a 2-dimensional case it's a line) that separates blacks from reds.  Let's mathematically define it:
   
 $$
 \beta_{0}+X_{1} \beta_{1}+X_{2} \beta_{2} = 0
 $$
   
-hence the "line":
+Hence, the "line":
 
 $$
 X_{2}=-\hat{\beta}_{0} / \hat{\beta}_{2}-\hat{\beta}_{1} / \hat{\beta}_{2} X_{1} .
@@ -62,7 +62,7 @@ $$
 \beta_{0}+X_{1} \beta_{1}+X_{2} \beta_{2}>0 \text { (red) } \text { or }<0 \text { (black) }
 $$
 
-As soon as we come up with the line, the classification is simple.  But, we have two questions to answer: (1) how are we going to get the line from the data? (2) How can we decide which line among many alternatives giving the same classification score on the training data is the best in terms of generalization (a better prediction accuracy on different observations).  There are many possible hyperplanes with the same classification score:
+As soon as we come up with the line, the classification is simple.  But, we have two questions to answer: (1) How are we going to derive the line from the data? (2) How can we decide which line among many alternatives, which give the same classification score on the training data, is the best in terms of generalization (a better prediction accuracy on different observations).  There are many possible hyperplanes with the same classification score:
 
 
 ```r
@@ -85,20 +85,20 @@ $$
   
 ## Optimal Separating Classifier
 
-Given a decision boundary separating the dataset and satisfying:
+We start with a decision boundary separating the dataset and satisfying:
 
 $$
 \mathbf{w} \cdot \mathbf{x}+b=0,
 $$
   
-where $\mathbf{w}$ is the vector of weights (coefficients) and $b$ is the intercept.  We use $\mathbf{w} \cdot \mathbf{x}$ with a dot product, instead of $\mathbf{w}^{T} \mathbf{x}$. We can select two others hyperplanes $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$$ which also separate the data and have the following equations :
+where $\mathbf{w}$ is the vector of weights (coefficients) and $b$ is the intercept.  We use $\mathbf{w} \cdot \mathbf{x}$ with a dot product, instead of $\mathbf{w}^{T} \mathbf{x}$. We can select two others hyperplanes $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$ which also separate the data and have the following equations :
   
 $$
 \mathbf{w} \cdot \mathbf{x}+b=\delta \\
 \mathbf{w} \cdot \mathbf{x}+b=-\delta
 $$
   
-so that decision boundary is equidistant from $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$.  For now, we can arbitrarily set $\delta=1$ to simplify the problem.
+We define the the decision boundary, which is equidistant from $\mathcal{H}_{1}$ and $\mathcal{H}_{0}$.  For now, we can arbitrarily set $\delta=1$ to simplify the problem.
   
 $$
 \mathbf{w} \cdot \mathbf{x}+b=1 \\
@@ -119,32 +119,32 @@ Moreover, the distance of an observation from the hyperplane can be seen as a me
 
 ### The Margin
 
-We will use a little vector algebra and start with the vector normal
+In order to understand how we can find the margin, we will use a bit vector algebra.  Let's start defining the vector normal
 
 Let $\mathbf{u}=\left\langle u_{1}, u_{2}, u_{3}\right\rangle$ and $\mathbf{v}=\left\langle v_{1}, v_{2}, v_{3}\right\rangle$ be two vectors with a common initial point.  Then $\mathbf{u}, \mathbf{v}$ and $\mathbf{u}-\mathbf{v}$ form a triangle, as shown.
 
-<img src="png/triangle.png" width="146" />
+<img src="png/triangle.png" width="115%" height="115%" />
 
 By the Law of Cosines,
   
 $$
-|\mathbf{u}-\mathbf{v}|^{2}=|\mathbf{u}|^{2}+|\mathbf{v}|^{2}-2|\mathbf{u}||\mathbf{v}| \cos \theta
+\|\mathbf{u}-\mathbf{v}\|^{2}=\|\mathbf{u}\|^{2}+\|\mathbf{v}\|^{2}-2\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta
 $$
-where $\theta$ is the angle between $\mathbf{u}$ and $\mathbf{v}$. Note that $|\mathbf{u}|$ is representing the vector norm not the absolute value. Using the formula for the magnitude of a vector, we obtain
+where $\theta$ is the angle between $\mathbf{u}$ and $\mathbf{v}$. Note that $\|\mathbf{u}\|$ is representing the vector norm. Using the formula for the magnitude of a vector, we obtain
 
 $$
-\left(u_{1}-v_{1}\right)^{2}+\left(u_{2}-v_{2}\right)^{2}+\left(u_{3}-v_{3}\right)^{2}=\left(u_{1}^{2}+u_{2}^{2}+u_{3}^{2}\right)+\left(v_{1}^{2}+v_{2}^{2}+v_{3}^{2}\right)-2|\mathbf{u}||\mathbf{v}| \cos \theta \\
-u_{1} v_{1}+u_{2} v_{2}+u_{3} v_{3}=|\mathbf{u}||\mathbf{v}| \cos \theta \\
-\mathbf{u} \cdot \mathbf{v}=|\mathbf{u}||\mathbf{v}| \cos \theta\text {. }
+\left(u_{1}-v_{1}\right)^{2}+\left(u_{2}-v_{2}\right)^{2}+\left(u_{3}-v_{3}\right)^{2}=\left(u_{1}^{2}+u_{2}^{2}+u_{3}^{2}\right)+\left(v_{1}^{2}+v_{2}^{2}+v_{3}^{2}\right)-2\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta \\
+u_{1} v_{1}+u_{2} v_{2}+u_{3} v_{3}=\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta \\
+\mathbf{u} \cdot \mathbf{v}=\|\mathbf{u}\|\|\mathbf{v}\| \cos \theta\text {. }
 $$
 
-Suppose that two nonzero vectors $\mathbf{u}$ and $\mathbf{v}$ have an angle between them that is $\theta=\pi / 2$. That is, $\mathbf{u}$ and $\mathbf{v}$ are perpendicular, or orthogonal. Then, we have
+Suppose that two nonzero vectors $\mathbf{u}$ and $\mathbf{v}$ have an angle between them, $\theta=\pi / 2$. That is, $\mathbf{u}$ and $\mathbf{v}$ are perpendicular, or orthogonal. Then, we have
 
 $$
 \mathbf{u} \cdot \mathbf{v}=|\mathbf{u}||\mathbf{v}| \cos \frac{\pi}{2}=0
 $$
 
-In other words, if $\mathbf{u} \cdot \mathbf{v}=0$, then we must have $\cos \theta=0$, where $\theta$ is the angle between them, which implies that $\theta=\pi / 2$, and therefore $\mathbf{u}$ and $\mathbf{v}$ are orthogonal. In summary, $\mathbf{u} \cdot \mathbf{v}=0$ if and only if $\mathbf{u}$ and $\mathbf{v}$ are orthogonal.
+In other words, if $\mathbf{u} \cdot \mathbf{v}=0$, then we must have $\cos \theta=0$, where $\theta$ is the angle between them, which implies that $\theta=\pi / 2$ (remember $\operatorname{Cos} 90^{\circ}=0$). In summary, $\mathbf{u} \cdot \mathbf{v}=0$ if and only if $\mathbf{u}$ and $\mathbf{v}$ are orthogonal.
 
 Using this fact, we can see that the vector $\mathbf{w}$ is perpendicular (a.k.a "normal") to $\mathcal{H}_{1}$, $\mathbf{w} \cdot \mathbf{x}+b=0.$  Consider the points $x_{a}$ and $x_{b}$, which lie on $\mathcal{H}_{1}$. This gives us two equations:
 
@@ -155,7 +155,7 @@ $$
 \end{aligned}
 $$
   
-Subtracting these two equations results in $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)=0$. Note that the vector $\mathbf{x}_{a}-\mathbf{x}_{b}$ lies on $\mathcal{H}_{1}$. Since the dot product $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)$ is zero, $\mathbf{w}$ must be orthogonal to $\mathbf{x}_{a}-\mathbf{x}_{b}$, and in turn, to $\mathcal{H}_{1}$.  Note that this can be repeated for the decision boundary or $\mathcal{H}_{0}$ too.
+Subtracting these two equations results in $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)=0$. Note that the vector $\mathbf{x}_{a}-\mathbf{x}_{b}$ lies on $\mathcal{H}_{1}$. Since the dot product $\mathbf{w} .\left(\mathbf{x}_{a}-\mathbf{x}_{b}\right)$ is zero, $\mathbf{w}$ must be orthogonal to $\mathbf{x}_{a}-\mathbf{x}_{b},$ thus, to $\mathcal{H}_{1}$ as well.  This can be repeated for the decision boundary or $\mathcal{H}_{0}$ too.
 
 <img src="14-SVM_files/figure-html/sv6-1.png" width="672" />
   
@@ -165,13 +165,13 @@ $$
 \mathbf{u}=\frac{\mathbf{w}}{\|\mathbf{w}\|},
 $$
 
-where $\|\mathbf{w}\| = \sqrt{w_{1}^{2}+w_{2}^{2}} \dots=\sqrt{w_{1} w_{1}+w_{2} w_{2} \dots} = \mathbf{w}.\mathbf{w}$, which is called the magnitude (or length) of the vector^[Note that we switch the norm notation from a single bar to double bars]. As it is a unit vector $\|\mathbf{u}\|=1$ and it has the same direction as $\mathbf{w}$ it is also perpendicular to the hyperplane.  If we multiply $\mathbf{u}$ by $m$, which is the distance from either hyperplanes to the boundary, we get the vector $\mathbf{k}=m \mathbf{u}$. We observed that $\|\mathbf{k}\|=m$ and $\mathbf{k}$ is perpendicular to $\mathcal{H}_{1}$ (since it has the same direction as $\mathbf{u}$).  Hence, $\mathbf{k}$ is the vector with same magnitude and direction of $m$ we were looking for.  The rest will be relatively a simple algebra:
+where $\|\mathbf{w}\| = \sqrt{w_{1}^{2}+w_{2}^{2}} \dots=\sqrt{w_{1} w_{1}+w_{2} w_{2} \dots} = \mathbf{w}.\mathbf{w}$, which is called the magnitude (or length) of the vector. Since it is a unit vector ($\|\mathbf{u}\|=1$) and it has the same direction as $\mathbf{w}$ it is also perpendicular to the hyperplane.  If we multiply $\mathbf{u}$ by $m$, which is the distance from either hyperplanes to the boundary, we get the vector $\mathbf{k}=m \mathbf{u}$. We observed that $\|\mathbf{k}\|=m$ and $\mathbf{k}$ is perpendicular to $\mathcal{H}_{1}$ (since it has the same direction as $\mathbf{u}$).  Hence, $\mathbf{k}$ is the vector with the same magnitude and direction of $m$ we were looking for.  The rest will be relatively a simple algebra:
 
 $$
 \mathbf{k}=m \mathbf{u}=m \frac{\mathbf{w}}{\|\mathbf{w}\|}
 $$
 
-We start from a point, $\mathbf{x}_{0}$ on $\mathcal{H}_{0}$ and add $k$ to find the point $\mathbf{x^\prime}=\mathbf{x}_{0}+\mathbf{k}$ is on the decision boundary, which means that $\mathbf{w} \cdot \mathbf{x^\prime}+b=0$.
+We start from a point, $\mathbf{x}_{0}$ on $\mathcal{H}_{0}$ and add $k$ to find the point $\mathbf{x^\prime}=\mathbf{x}_{0}+\mathbf{k}$ on the decision boundary, which means that $\mathbf{w} \cdot \mathbf{x^\prime}+b=0$.
 
 $$
 \begin{gathered}
@@ -221,7 +221,7 @@ $$
 y_{i}\left(\mathbf{w} \cdot \mathbf{x}_{i}+b\right) \geq 1 ~~~~~\text { for all} ~~~ i
 $$
   
-Usually, it is confusing to have a fixed threshold, "1", in the constraint.  To see the origin of this, we define our optimization problem as
+Usually, it is confusing to have a fixed threshold, 1, in the constraint.  To see the origin of this, we define our optimization problem as
 
 $$
 \operatorname{argmax}\left(\mathbf{w}^{*}, b^{*}\right)~~ m ~~~~~\text {such that } ~~~~~ y_{i}(\mathbf{w} \cdot \mathbf{x}_{i}+b) \geq m.
@@ -280,13 +280,16 @@ library(e1071)
 
 # Sample data - Perfectly separated
 set.seed(1)
-x <- matrix(rnorm(20*2), ncol = 2)
-y <- c(rep(-1,10), rep(1,10))
-x[y==1,] <- x[y==1,] + 2
-dat <- data.frame(x=x, y=as.factor(y))
+x <- matrix(rnorm(20 * 2), ncol = 2)
+y <- c(rep(-1, 10), rep(1, 10))
+x[y == 1, ] <- x[y == 1, ] + 2
+dat <- data.frame(x = x, y = as.factor(y))
 
 # Support Vector Machine model
-mfit <- svm(y~., data = dat, kernel = "linear", scale = FALSE)
+mfit <- svm(y ~ .,
+            data = dat,
+            kernel = "linear",
+            scale = FALSE)
 summary(mfit)
 ```
 
@@ -313,7 +316,10 @@ summary(mfit)
 ```
 
 ```r
-plot(mfit, dat, grid = 200, col = c("lightgray", "lightpink"))
+plot(mfit,
+     dat,
+     grid = 200,
+     col = c("lightgray", "lightpink"))
 ```
 
 <img src="14-SVM_files/figure-html/sv7-1.png" width="672" />
@@ -326,7 +332,7 @@ What if we have cases like,
 
 <img src="14-SVM_files/figure-html/sv8-1.png" width="672" />
 
-In the first plot, although the orange boundary would perfectly separates the classes, it would be less "generalizable" (i.e., more specific to the train data means more prediction errors) than the blue boundary.  In the second plot, there doesn't exist a linear boundary without an error.  **If we can tolerate a mistake**, however, the blue line can be used as a separating boundary.  In both cases the blue lines could be the solution with some kind of "tolerance" level.  It turn out that, if we are able to introduce this "error tolerance" to our optimization problem described in the perfectly separable case, we can make the "Optimal Separating Classifier" as a trainable model by tuning the "error tolerance", which can be our hyperparameter.   This is exactly what we will do:
+In the first plot, although the orange boundary would perfectly separates the classes, it would be less "generalizable" (i.e., more specific to the train data means more prediction errors) than the blue boundary.  In the second plot, there doesn't exist a linear boundary without an error.  **If we can tolerate a mistake**, however, the blue line can be used as a separating boundary.  In both cases the blue lines could be the solution with some kind of "tolerance" level.  It turns out that, if we are able to introduce this "error tolerance" to our optimization problem described in the perfectly separable case, we can make the "Optimal Separating Classifier" as a trainable model by tuning the "error tolerance", which can be our hyperparameter.   This is exactly what we will do:
 
 $$
 \operatorname{argmin}\left(\mathbf{w}^{*}, b^{*}\right) \|\mathbf{w}\| ~~~~~~~\text {such that } ~~~~~~~ y_{i}(\mathbf{w} \cdot \mathbf{x}_{i}+b) \geq 1
@@ -360,25 +366,38 @@ This approach is also called *soft margin classification* or *support vector cla
 
 ```r
 set.seed(1)
-x <- matrix(rnorm(20*2), ncol = 2)
-y <- c(rep(-1,10), rep(1,10))
-x[y==1,] <- x[y==1,] + 1
-dt <- data.frame(x=x, y=as.factor(y))
+x <- matrix(rnorm(20 * 2), ncol = 2)
+y <- c(rep(-1, 10), rep(1, 10))
+x[y == 1, ] <- x[y == 1, ] + 1
+dt <- data.frame(x = x, y = as.factor(y))
 
 # C = 10
-mfit10 <- svm(y~., data = dt, kernel = "linear",
-              scale = FALSE, cost = 10)
-plot(mfit10, dat, grid = 200,
-     col = c("lightgray", "lightpink"), 
-     main = "C = 10")
+mfit10 <- svm(
+  y ~ .,
+  data = dt,
+  kernel = "linear",
+  scale = FALSE,
+  cost = 10
+)
+
+plot(
+  mfit10,
+  dat,
+  grid = 200,
+  col = c("lightgray", "lightpink"),
+  main = "C = 10"
+)
 ```
 
 <img src="14-SVM_files/figure-html/sv9-1.png" width="672" />
 
 ```r
 # Tuning C
-tuned <- tune(svm, y~., data = dat, kernel = "linear",
-                 ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+tuned <- tune(svm,
+              y ~ .,
+              data = dat,
+              kernel = "linear",
+              ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
 (best <- tuned$best.model)
 ```
 
@@ -447,10 +466,12 @@ $$
 Which can be set in Lagrangian:
 
 $$
-\min L=1 / 2\|\mathbf{w}\|^{2}-\sum \alpha_i \left[y_i \left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right],\\
-\min L=1 / 2\|\mathbf{w}\|^{2}-\sum \alpha_i y_i \left(\mathbf{w} \cdot \mathbf{x}_i\right) + b\sum \alpha_i y_i+\sum \alpha_i, 
+\min L=0.5\|\mathbf{w}\|^{2}-\sum \alpha_i \left[y_i \left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right],\\
+\min L=0.5\|\mathbf{w}\|^{2}-\sum \alpha_i y_i \left(\mathbf{w} \cdot \mathbf{x}_i\right) + b\sum \alpha_i y_i+\sum \alpha_i, 
 $$
-with respect to $\mathbf{w},b$.  These are also called as "primal form". Hence the first order conditions are
+with respect to $\mathbf{w},b$.  These are also called as "primal forms".
+  
+Hence the first order conditions are
 
 $$
 \begin{aligned}
@@ -465,13 +486,13 @@ $$
 \max L\left(\alpha_{i}\right)=\sum_{i=1}^{n}\alpha_{i}-\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n}\alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)
 $$
 
-The solution to this involves computing the just the inner products of $x_{i}, x_{j}$, which the key point SVM problems.  
+The solution to this involves computing the just the inner products of $x_{i}, x_{j}$, which is the key point in SVM problems.  
 
 $$
 \alpha_{i}\left[y_{i}\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)-1\right]=0 ~~~~~\forall i
 $$
   
-From these we can see that, if $\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)>1$ (since $x_{i}$ is not on the boundary of the slab), $\alpha_{i}$ will be $0$.  Therefore, the most of the $\alpha_{i}$ 's will be zero as we have a few support vectors (on the gutters or margin). This reduces the dimensionality of the solution!
+From these we can see that, if $\left(\mathbf{w} \cdot \mathbf{x}_i + b\right)>1$ (since $x_{i}$ is not on the boundary of the slab), $\alpha_{i}$ will be $0.$  Therefore, the most of the $\alpha_{i}$ 's will be zero as we have a few support vectors (on the gutters or margin). This reduces the dimensionality of the solution!
 
 Notice that inner products provide some measure of "similarity". The inner product between 2 vectors of unit length returns the cosine of the angle between them, which reveals how "far apart" they are.  We have seen that if they are perpendicular (completely unlike) their inner product is 0; or, if they are parallel their inner product is 1 (completely similar).
 
@@ -483,7 +504,9 @@ $$
   
 If two features $\mathbf{x}_{i}, \mathbf{x}_{j}$ are completely dissimilar (their dot product will be 0), they don't contribute to $L$.  Or, if they are completely alike, their dot product will be 1. In this case, suppose that both $\mathbf{x}_{i}$ and $\mathbf{x}_{j}$ predict the same output value $y_{i}$ (either $+1$ or $-1$ ). Then $y_{i} y_{j}$ is always 1, and the value of $\alpha_{i} \alpha_{j} y_{i} y_{j} \mathbf{x}_{i} \mathbf{x}_{j}$ will be positive. But this would decrease the value of $L$ (since it would subtract from the first term sum). So, the algorithm downgrades similar feature vectors that make the same prediction. On the other hand, when $x_{i}$, and $x_{j}$ make opposite predictions (i.e., predicting different classes, one is $+1$, the other $-1$) about the output value $y_{i}$, but are otherwise very closely similar (i.e., their dot product is $1$), then the product $a_{i} a_{j} y_{i} y_{j} x_{i} x$ will be negative.  Since we are subtracting it, it adds to the sum maximizing $L$. This is precisely the examples that algorithm is looking for: the critical ones that tell the two classes apart.
   
-What if the decision function is not linear as we have in the figure above? What transform would separate these?  The idea in SVM is to obtain a nonlinear separation by mapping the data to a higher dimensional space. Remember the function we want to optimize: $L=\sum \alpha_{i}-1 / 2 \sum \alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ where $\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ is the dot product of the two feature vectors. We can transform them, for example, by $\phi$ that is a quadratic polynomial.  As we discussed earlier, however, we don't know the function explicitly.  And worse, as the we increase the degree of polynomial, the optimization becomes computational impossible.
+What if the decision function is not linear as we have in the figure above? What transform would separate these?  The idea in SVM is to obtain a nonlinear separation by mapping the data to a higher dimensional space.
+  
+Remember the function we want to optimize: $L=\sum \alpha_{i}-1 / 2 \sum \alpha_{i} \alpha_{j} y_{i} y_{j}\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ where $\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)$ is the dot product of the two feature vectors. We can transform them, for example, by $\phi$ that is a quadratic polynomial.  As we discussed earlier, however, we don't know the function explicitly.  And worse, as we increase the degree of polynomial, the optimization becomes computational impossible.
 
 If there is a "kernel function" $K$ such that $K\left(\mathbf{x}_{i} \cdot \mathbf{x}_{j}\right)=\phi\left(\mathbf{x}_{i}\right) \cdot \phi\left(\mathbf{x}_{j}\right)$, then we do not need to know or compute $\phi$ at all.  That is, the kernel function defines inner products in the transformed space. Or, it defines similarity in the transformed space.
 
@@ -504,9 +527,7 @@ K(\mathbf{x}, \mathbf{y})=\tanh (\kappa \mathbf{x} \cdot \mathbf{y}-\delta)
 \end{gathered}
 $$
   
-$1^{\text {st }}$ is polynomial (includes $\mathrm{x} \cdot \mathrm{x}$ as special case)
-$2^{\text {nd }}$ is radial basis function (Gaussian)
-$3^{\text {rd }}$ is sigmoid (Neural Net activation function)
+The first one is polynomial (includes $\mathrm{x} \cdot \mathrm{x}$ as special case); the second one is radial basis function (Gaussian), the last one is sigmoid function.  
 
 Here is the SVM application to our data:
 
@@ -588,6 +609,8 @@ abline(a = 0, b = 1)
   
 ## Application with SVM
 
+Let's finsh this chapter with an example:
+
 
 ```r
 train <- read.csv("adult_train.csv", header = FALSE)
@@ -626,52 +649,38 @@ tbl
 ind <- which(data$NativeCountry==" Holand-Netherlands")
 data <- data[-ind, ]
 
-#Converting chr to factor with `apply()` family
+#Converting chr to factor
 df <- data
 df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)],
                                        as.factor)
-
-str(df)
 ```
 
-```
-## 'data.frame':	32560 obs. of  15 variables:
-##  $ Age          : int  39 50 38 53 28 37 49 52 31 42 ...
-##  $ WorkClass    : Factor w/ 9 levels " ?"," Federal-gov",..: 8 7 5 5 5 5 5 7 5 5 ...
-##  $ fnlwgt       : int  77516 83311 215646 234721 338409 284582 160187 209642 45781 159449 ...
-##  $ Education    : Factor w/ 16 levels " 10th"," 11th",..: 10 10 12 2 10 13 7 12 13 10 ...
-##  $ EducationNum : int  13 13 9 7 13 14 5 9 14 13 ...
-##  $ MaritalStatus: Factor w/ 7 levels " Divorced"," Married-AF-spouse",..: 5 3 1 3 3 3 4 3 5 3 ...
-##  $ Occupation   : Factor w/ 15 levels " ?"," Adm-clerical",..: 2 5 7 7 11 5 9 5 11 5 ...
-##  $ Relationship : Factor w/ 6 levels " Husband"," Not-in-family",..: 2 1 2 1 6 6 2 1 2 1 ...
-##  $ Race         : Factor w/ 5 levels " Amer-Indian-Eskimo",..: 5 5 5 3 3 5 3 5 5 5 ...
-##  $ Sex          : Factor w/ 2 levels " Female"," Male": 2 2 2 2 1 1 1 2 1 2 ...
-##  $ CapitalGain  : int  2174 0 0 0 0 0 0 0 14084 5178 ...
-##  $ CapitalLoss  : int  0 0 0 0 0 0 0 0 0 0 ...
-##  $ HoursPerWeek : int  40 13 40 40 40 40 16 45 50 40 ...
-##  $ NativeCountry: Factor w/ 41 levels " ?"," Cambodia",..: 39 39 39 39 6 39 23 39 39 39 ...
-##  $ IncomeLevel  : Factor w/ 2 levels " <=50K"," >50K": 1 1 1 1 1 1 1 2 2 2 ...
-```
-
-When we use the whole data it takes very long time and memory.  A much better way to deal with this issue is to not use all of the data.  This is because, most data pints will be redundant from the SVM's perspective.  Remember,  SVM only benefits from having more data near the decision boundaries. Therefore, we can randomly select, say, 10% of the training data (it should be done multiple times to see its consistency), and understand what its performance looks like:
+When we use the whole data it takes very long time and memory.  A much better way to deal with this issue is to not use all of the data.  This is because, most data points will be redundant from the SVM's perspective.  Remember,  SVM only benefits from having more data near the decision boundaries. Therefore, we can randomly select, say, 10% of the training data (it should be done multiple times to see its consistency), and understand what its performance looks like:
 
 
 ```r
 # Initial Split 90-10% split
 set.seed(123)
-ind <- sample(nrow(df), nrow(df)*0.90, replace = FALSE)
-train <- df[ind, ]
-test <- df[-ind, ]
+ind <- sample(nrow(df), nrow(df) * 0.90, replace = FALSE)
+train <- df[ind,]
+test <- df[-ind,]
 
 # Using 10% of the train
 set.seed(321)
-ind <- sample(nrow(train), nrow(train)*0.10, replace = FALSE)
-dft <- train[ind, ]
+ind <- sample(nrow(train), nrow(train) * 0.10, replace = FALSE)
+dft <- train[ind,]
 
 # You should check different kernels with a finer grid
-tuning <- tune(svm, IncomeLevel~., data=dft, kernel="radial",
-                 ranges = list(cost = c(0.1, 1, 10, 100),
-                               gamma = c(0.05, 0.5, 1, 2, 3, 4)))
+tuning <- tune(
+  svm,
+  IncomeLevel ~ .,
+  data = dft,
+  kernel = "radial",
+  ranges = list(
+    cost = c(0.1, 1, 10, 100),
+    gamma = c(0.05, 0.5, 1, 2, 3, 4)
+  )
+)
 tuning$best.model
 ```
 

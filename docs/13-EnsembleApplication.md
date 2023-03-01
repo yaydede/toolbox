@@ -1,6 +1,6 @@
 # Ensemble Applications
 
-To conclude this section we will cover classification and regression applications using bagging, random forest, boosting and SVM. First we will start with a classification problem.  In comparing different ensemble methods, we must look not only at their accuracy, but evaluate their stability as well.
+To conclude this section we will cover classification and regression applications using bagging, random forest and, boosting. First we will start with a classification problem.  In comparing different ensemble methods, we must look not only at their accuracy, but evaluate their stability as well.
 
 
 ## Classification
@@ -47,7 +47,7 @@ for (i in 1:n) {
   model2 <- randomForest(survived~sex+age+pclass+sibsp+parch,
                          ntree = B, mtry = p, data = train) #Bagged
   model3 <- randomForest(survived~sex+age+pclass+sibsp+parch,
-                         ntree = B, data = train) # RF    
+                         ntree = B, data = train, localImp = TRUE) # RF    
   
   phat1 <- predict(model1, test, type = "prob")
   phat2 <- predict(model2, test, type = "prob")
@@ -79,12 +79,10 @@ data.frame(model, AUCs, sd)
 ##         model      AUCs         sd
 ## 1 Single-Tree 0.8129740 0.02585391
 ## 2     Bagging 0.8128962 0.01709652
-## 3          RF 0.8409750 0.01659263
+## 3          RF 0.8411901 0.01698504
 ```
 
-There is a consensus that we can determine a bagged model’s test error without using cross-validation.  The reason for this is usually stated that each bootstrapped sample contains about two-thirds of the original dataset’s observations. Out-of-Bag (OOB) observations are the remaining 1/3 of the observations that were not used to fit the bagged tree.
-
-We did the bagging by using `randomForest` in the previous application.  Let's see if we can obtain a similar result with our manual bagging using `rpart()` pruned and unpruned:
+There is a consensus that we can determine a bagged model’s test error without using cross-validation.  We used `randomForest` for bagging in the previous application.  By default, bagging grows classification trees to their maximal size. If we want to prune each tree, however, it is not clear whether or not this may decrease prediction error.  Let's see if we can obtain a similar result with our manual bagging using `rpart` pruned and unpruned:
 
 
 ```r
@@ -114,7 +112,7 @@ for (i in 1:n) {
                   data = tr,
                   control = rpart.control(minsplit = 2, minbucket = 1
                                           , cp = 0),
-                  method = "class") # unpruned
+                  method = "class") # Unpruned
     phatp[j, ] <- predict(modelp, test, type = "prob")[, 2]
     phatup[j, ] <- predict(modelup, test, type = "prob")[, 2]
   }
@@ -133,44 +131,25 @@ for (i in 1:n) {
   AUCup[i] <- auc_ROCR@y.values[[1]]
 }
 
-mean(AUCp)
+model <- c("Pruned", "Unpruned")
+AUCs <- c(mean(AUCp), mean(AUCup))
+sd <- c(sqrt(var(AUCp)), sqrt(var(AUCup)))
+data.frame(model, AUCs, sd) 
 ```
 
 ```
-## [1] 0.8523158
-```
-
-```r
-sqrt(var(AUCp))
-```
-
-```
-## [1] 0.01626892
-```
-
-```r
-mean(AUCup)
-```
-
-```
-## [1] 0.8180802
-```
-
-```r
-sqrt(var(AUCup))
-```
-
-```
-## [1] 0.01693003
+##      model      AUCs         sd
+## 1   Pruned 0.8523158 0.01626892
+## 2 Unpruned 0.8180802 0.01693003
 ```
   
-We can see a significant reduction in uncertainty and improvement in accuracy relative to a single tree.  Moreover, our manual bagging with the cross-validated (pruned) single tree using `rpart()` doing a better job than the bagging using `randomForest()`.  When we use "unpruned" single-tree using `rpart()` for bagging, the result becomes very similar to one that we obtain with random forest. Further, the number of bootstrapped trees (B) would be a hyperparameter to tune in bagging.  You can try the same script multiple times with different B vales such as 50, 100, 150.  In our experiment (not shown here), it seems that results are not sensitive to B as long as B is large enough like 50 and more.
+We can see a significant reduction in uncertainty and improvement in accuracy relative to a single tree.  When we use "unpruned" single-tree using `rpart()` for bagging, the result becomes very similar to one that we obtain with random forest.  Using pruned trees for bagging improves the accuracy in our case. 
 
 This would also be the case in regression trees, where we would be averaging `yhat`'s and calculating RMSPE and its standard deviations instead of AUC.
 
 ## Regression
 
-Consider the same data set we used earlier chapters to predict baseball player's salary:  
+Consider the data we used earlier chapters to predict baseball player's salary:  
 
 
 ```r
@@ -226,36 +205,17 @@ for (i in 1:n) {
   RMSPEp[i] <- sqrt(mean((test$logsal - yhatpr)^2))
   RMSPEup[i] <- sqrt(mean((test$logsal - yhatupr)^2))
 }
-  
-mean(RMSPEp)
+
+model <- c("Pruned", "Unpruned")
+RMSPEs <- c(mean(RMSPEp), mean(RMSPEup))
+sd <- c(sqrt(var(RMSPEp)), sqrt(var(RMSPEup)))
+data.frame(model, RMSPEs, sd) 
 ```
 
 ```
-## [1] 0.501984
-```
-
-```r
-sqrt(var(RMSPEp))
-```
-
-```
-## [1] 0.05817388
-```
-
-```r
-mean(RMSPEup)
-```
-
-```
-## [1] 0.4808079
-```
-
-```r
-sqrt(var(RMSPEup))
-```
-
-```
-## [1] 0.06223845
+##      model    RMSPEs         sd
+## 1   Pruned 0.5019840 0.05817388
+## 2 Unpruned 0.4808079 0.06223845
 ```
 
 With and without pruning, the results are very similar.  Let's put all these together and do it with Random Forest:  
@@ -312,10 +272,26 @@ data.frame(model, RMSPEs, sd)
 ## 3          RF 0.4631194 0.06045187
 ```
 
-As you can see, random forest has the lowest RMSPE and thus performs the best, whereas the CART model has the highest RMSPE.
+Random forest has the lowest RMSPE.
 
 
-## Dataset-level explainers
+## Exploration
+
+While the task in machine learning is to achieve the best predictive capacity, for many applications identifying the major predictors could be the major objective. Of course, finding the most important predictors is contingent on the model’s predictive performance.  As we discussed earlier, however, there is a trade-off between prediction accuracy and interpretability.  Although there are many different aspects of interpretability, it refer to understanding the relationship between the predicted outcome and the predictors.
+
+The interpretability in predictive modeling is an active research area.  Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar and [Explanatory Model Analysis](https://ema.drwhy.ai) by Biecek and Burzykowski (2020). 
+
+Explorations of predictive models are classified in two major groups.  The first one is the instance-level exploration, or example-based explanation methods, which present methods for exploration of a model’s predictions for a single observation.  For example, for a particular subject (person, firm, patient), we may want to know contribution of the different features to the predicted outcome for the subject.  The main idea is to understand marginal effect of a predictor on the prediction for a specific subject. There are two important methods in this level: Shapley Additive Explanations (SHAP) and Local Interpretable Model-agnostic Explanations (LIME). We will not explain and apply them here in this book.  These two methods are easily accessible with multiple examples in both books we cited ealrier.  
+
+The second group of explanation methods focuses on dataset-level explainers, which help understand the average behavior of a machine learning model for an entire set of observations. Here, we will focus on several variable-importance measures.  They are permutation-based variable importance metrics offering a model-agnostic approach to the assessment of the influence of an explanatory variable on a model’s performance.  
+
+There are several options to evaluate how important is the variable $x$ in predictions. One major method is the permutation-based variable-importance in which the effect of a variable is removed through a random reshuffling of the data in $x$. This method takes the original data under $x$, permutates (mixes) its values, and gets “new” data, on which computes the weighted decrease of impurity corresponding to splits along the variable $x$ and averages this quantity over all trees. If a variable is an important predictor in the model, after its permutation, the mean decrease impurity (MDI - `MeanDecreaseGini`) rises. It is shown that building a tree with additional irrelevant variables does not alter the importance of relevant variables in an infinite sample setting. 
+
+Another measure of significance, Mean Decrease Accuracy (MDA), stems from the idea that if the variable is not important, rearranging its values should not degrade prediction accuracy. The MDA relies on a different principle and uses the out-of-bag error estimate.  Every tree in the forest has its own out-of-bag sample, on which the prediction accuracy is measured. To calculate MDA, the values of the variable in the out-of-bag-sample are randomly shuffled and the decrease in prediction accuracy on the shuffled data is measured.  This process is repeated for all variables and trees.  The MDA averaged over all trees is  ranked. If a variable has insignificant predictive power, shuffling may not lead to substantial decrease in accuracy.
+
+For a numeric outcome (regression problem) there are two similar measures. The percentage increase in mean square error (`%IncMSE`), which is calculated by shuffling the values of the out-of-bag samples, is analogous to MDA.  Increase in node purity (`IncNodePurity`), which is calculated based on the reduction in sum of squared errors whenever a variable is chosen to split is,  analogous to MDI.
+
+Here are the variable importance measures for our random forest application (`model3`):
 
 
 ```r
@@ -325,40 +301,8 @@ varImpPlot(model3)
 
 <img src="13-EnsembleApplication_files/figure-html/ea6-1.png" width="672" />
 
-We will now dig deeper with `randomForestExplainer` (see its [vignette](https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html)) [@Palu_2012] and `DALEX` packages. Assuming that the observations form a representative sample from a general population, dataset-level explainers can provide information about the quality of predictions for the population.
-
-
-```r
-library(randomForestExplainer)
-library(DT)
-
-min_depth_frame <- min_depth_distribution(model3)
-importance_frame <- measure_importance(model3)
-tabl <- cbind(importance_frame[,1], round(importance_frame[,2:7],4))
-datatable(tabl, rownames = FALSE, filter="top", options = list(pageLength = 10, scrollX=T) )
-```
-
-```{=html}
-<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-da20c4f9345e4dcd3dad" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-da20c4f9345e4dcd3dad">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"factor\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;Assists&quot;,&quot;AtBat&quot;,&quot;CAtBat&quot;,&quot;CHits&quot;,&quot;CHmRun&quot;,&quot;CRBI&quot;,&quot;CRuns&quot;,&quot;CWalks&quot;,&quot;Division&quot;,&quot;Errors&quot;,&quot;Hits&quot;,&quot;HmRun&quot;,&quot;League&quot;,&quot;NewLeague&quot;,&quot;PutOuts&quot;,&quot;RBI&quot;,&quot;Runs&quot;,&quot;Walks&quot;,&quot;Years&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"2.0762\" data-max=\"7.7239\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"442\" data-max=\"2752\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"7e-04\" data-max=\"0.2415\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0.1574\" data-max=\"38.3175\" data-scale=\"4\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"285\" data-max=\"500\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"133\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Assists","AtBat","CAtBat","CHits","CHmRun","CRBI","CRuns","CWalks","Division","Errors","Hits","HmRun","League","NewLeague","PutOuts","RBI","Runs","Walks","Years"],[4.3853,2.8806,2.3783,2.2543,3.4449,2.826,2.0763,3.0903,7.0259,4.6268,3.0863,4.0196,7.7239,7.0973,3.6546,3.4869,3.5189,3.5323,4.5977],[2351,2691,2598,2711,2556,2752,2731,2579,691,2080,2582,2229,442,627,2593,2620,2543,2576,1716],[0.0112,0.0823,0.2181,0.222,0.0465,0.1037,0.2415,0.0843,0.0009,0.0092,0.0891,0.0229,0.0007,0.0012,0.0174,0.0407,0.0516,0.0398,0.0247],[2.0354,9.8977,38.3175,34.6914,6.5335,19.5414,35.0894,18.0455,0.261,1.275,9.389,3.5544,0.1574,0.243,3.9026,6.9162,5.8962,5.9405,5.5647],[496,498,499,499,497,500,499,499,380,491,499,495,285,363,498,497,497,499,482],[0,5,133,110,7,55,101,52,0,0,7,0,0,0,0,7,1,0,22]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>importance_frame[, 1]<\/th>\n      <th>mean_min_depth<\/th>\n      <th>no_of_nodes<\/th>\n      <th>mse_increase<\/th>\n      <th>node_purity_increase<\/th>\n      <th>no_of_trees<\/th>\n      <th>times_a_root<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6]}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
-```
+And, the partial dependence plot gives a graphical representation of the marginal effect of a variable on the class probability (classification) or response (regression).  The intuition behind it is simple: change the value of a predictor and see how much the prediction will change (log wage in our example).
   
-
-```r
-plot_multi_way_importance(importance_frame, x_measure = "mean_min_depth",
-                          y_measure = "mse_increase",
-                          size_measure = "p_value", no_of_labels = 6)
-```
-
-<img src="13-EnsembleApplication_files/figure-html/ea8-1.png" width="672" />
-
-```r
-plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
-                            main = "Distribution of minimal depth and its mean")
-```
-
-<img src="13-EnsembleApplication_files/figure-html/unnamed-chunk-1-1.png" width="672" />
-
 
 ```r
 partialPlot(model3, test, CRuns, xlab="CRuns",
@@ -368,7 +312,82 @@ partialPlot(model3, test, CRuns, xlab="CRuns",
 
 <img src="13-EnsembleApplication_files/figure-html/ea9-1.png" width="672" />
 
+There are several libraries that we can use to improve presentation of permutation-based variable importance metrics: the `randomForestExplainer` package (see its [vignette](https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html)) [@Palu_2012] and.the `DALEX` packages. 
 
+
+
+```r
+library(randomForestExplainer)
+
+importance_frame <- measure_importance(model3)
+importance_frame
+```
+
+```
+##     variable mean_min_depth no_of_nodes mse_increase node_purity_increase
+## 1    Assists       4.385264        2351 0.0111643040            2.0354183
+## 2      AtBat       2.880632        2691 0.0823060539            9.8976694
+## 3     CAtBat       2.378316        2598 0.2180919045           38.3175006
+## 4      CHits       2.254316        2711 0.2219603757           34.6913645
+## 5     CHmRun       3.444948        2556 0.0465389503            6.5334618
+## 6       CRBI       2.826000        2752 0.1037441042           19.5413640
+## 7      CRuns       2.076316        2731 0.2415297175           35.0893626
+## 8     CWalks       3.090316        2579 0.0842675407           18.0455320
+## 9   Division       7.025920         691 0.0009003443            0.2610306
+## 10    Errors       4.626844        2080 0.0091803849            1.2750433
+## 11      Hits       3.086316        2582 0.0891232078            9.3889994
+## 12     HmRun       4.019580        2229 0.0229235515            3.5544146
+## 13    League       7.723940         442 0.0007442309            0.1574101
+## 14 NewLeague       7.097292         627 0.0012483369            0.2430058
+## 15   PutOuts       3.654632        2593 0.0174281111            3.9026093
+## 16       RBI       3.486948        2620 0.0406771125            6.9162313
+## 17      Runs       3.518948        2543 0.0515670394            5.8962241
+## 18     Walks       3.532316        2576 0.0397964535            5.9405180
+## 19     Years       4.597688        1716 0.0246697278            5.5647402
+##    no_of_trees times_a_root      p_value
+## 1          496            0 3.136068e-04
+## 2          498            5 2.277643e-26
+## 3          499          133 2.885642e-18
+## 4          499          110 2.632589e-28
+## 5          497            7 4.203385e-15
+## 6          500           55 1.727502e-32
+## 7          499          101 2.602255e-30
+## 8          499           52 8.510193e-17
+## 9          380            0 1.000000e+00
+## 10         491            0 9.939409e-01
+## 11         499            7 5.036363e-17
+## 12         495            0 2.179972e-01
+## 13         285            0 1.000000e+00
+## 14         363            0 1.000000e+00
+## 15         498            0 7.131388e-18
+## 16         497            7 4.777556e-20
+## 17         497            1 3.461522e-14
+## 18         499            0 1.432750e-16
+## 19         482           22 1.000000e+00
+```
+
+This table shows few more metrics in addition to `mse_increase` and `node_purity_increase`.  The first column, `mean_min_depth`, the average of the first time this variable is used to split the tree. Therefore, more important variables have lower minimum depth values. The metric `no_of_nodes` shows the total number of nodes that use for splitting.  Finally, `times_a_root` shows how many times the split occurs at the root. The last column, `p_value` for the one-sided binomial test, which tells us whether the observed number of of nodes in which the variable was used for splitting exceeds the theoretical number of successes if they were random. 
+
+We can take advantage of several multidimensional plots from the `randomForestExplainer` package:
+  
+
+```r
+plot_multi_way_importance(importance_frame, x_measure = "mean_min_depth",
+                          y_measure = "mse_increase",
+                          size_measure = "p_value", no_of_labels = 6)
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea8-1.png" width="672" />
+  
+
+```r
+min_depth_frame <- min_depth_distribution(model3)
+plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
+                            main = "Distribution of minimal depth and its mean")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+  
 ## Boosting Applications
 
 We need to tune the boosting applications with `gbm()`.  There are three tuning parameters: `h`, `B`, and `D`.  We will do the tuning with grid search and apply parallel processing.  We will have both regression and classification problems.  Finally we will compare OLS, CART, Bagging, RF and boosting.
@@ -401,12 +420,12 @@ test_mse <- c()
 
 # D = 1 and B = 1000
 for(i in 1:length(h)){
-    boos <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+    boos <- gbm(Salary~., distribution = "gaussian", n.trees = 1000,
             interaction.depth = 1, shrinkage = h[i], data = train)
     prboos <- predict(boos, test, n.trees = 100)
-    test_mse[i] <- mean((test$Salary - prboos)^2)
+    test_mse[i] <- mean((test$Salary - prboos) ^ 2)
 }
-plot(h, test_mse, type = "l", col="blue", main = "MSE - Prediction")
+plot(h, test_mse, type = "l", col = "blue", main = "MSE - Prediction")
 ```
 
 <img src="13-EnsembleApplication_files/figure-html/ea11-1.png" width="672" />
@@ -425,14 +444,6 @@ min(test_mse)
 
 ```
 ## [1] 0.181286
-```
-
-```r
-test_mse[10]
-```
-
-```
-## [1] 0.1895487
 ```
 
 A complete but limited grid search is here:  
@@ -457,10 +468,10 @@ for(i in 1:nrow(grid)){
       ind <- sample(nrow(df), nrow(df), replace = TRUE)
       train <- df[ind, ]
       test <- df[-ind, ]
-      boos <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+      boos <- gbm(Salary~., distribution ="gaussian", n.trees = 1000,
               interaction.depth = grid[i,1], shrinkage = grid[i,3], data = train)
       prboos <- predict(boos, test, n.trees = grid[i,2])
-      test_mse[j] <- mean((test$Salary - prboos)^2)
+      test_mse[j] <- mean((test$Salary - prboos) ^ 2)
       },
     silent = TRUE)
   }
@@ -486,7 +497,25 @@ grid[as.numeric(which.min(mse)), ]
 
 ### Random search with parallel processing
   
-Now, we will apply a random grid search (see [Random Search for Hyper-Parameter Optimization](https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf)) [@Bergs_2012].  We also apply a parallel multicore processing using `doParallel` and `foreach()` to accelerate the grid search.   
+Now, we will apply a random grid search introduced by Bergstra and Bengio in [Random Search for Hyper-Parameter Optimization](https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf)) [@Bergs_2012].  This paper shows that randomly chosen trials are more efficient for hyperparameter optimization than trials on a grid.  Random search is a slight variation on grid search. Instead of searching over the entire grid, random search evaluates randomly selected parts on the grid. 
+
+To characterize the performance of random search, the authors use the analytic form of the expectation. The expected probability of finding the target is $1.0$ minus the probability of missing the target with every single one of $T$ trials in the experiment. If the volume of the target relative to the unit hypercube is $(v / V=0.01)$ and there are $T$ trials, then this probability of finding the target is
+
+$$
+1-\left(1-\frac{v}{V}\right)^T=1-0.99^T .
+$$
+In more practical terms, for any distribution over a sample space with a maximum, we can find the number of randomly selected points from the grid.  First, we define the confidence level, say 95\%.  Then we decide how many points we wish to have around the maximum.  We can decide as a number or directly as a percentage.  Let's say we decide 0.01\% interval around the maximum.  Then the formula will be
+
+$$
+1-(1-0.01)^T>0.95,
+$$
+which can be solved as
+
+$$
+\text{T} = \log (1-0.95)/\log (1-0.01)
+$$
+
+We also apply a parallel multicore processing using `doParallel` and `foreach()` to accelerate the grid search. More details can be found at [Getting Started with doParallel and foreach](https://cran.r-project.org/web/packages/doParallel/vignettes/gettingstartedParallel.pdf).
 
 
 ```r
@@ -501,7 +530,7 @@ grid <- as.matrix(expand.grid(D, B, h))
 
 #Random grid-search
 conf_lev <- 0.95
-num_max <- 5
+num_max <- 5 # we define it by numbers
 n <- log(1-conf_lev)/log(1-num_max/nrow(grid))
 set.seed(123)
 ind <- sample(nrow(grid), nrow(grid)*(n/nrow(grid)), replace = FALSE)
@@ -632,7 +661,7 @@ b
 ## mse_ols   0.06907506
 ```
 
-Interesting!  The random forest is the winner.  However, boosting is not tuned in the algorithm.  With the full grid search in the previous algorithm, boosting and RF are close contenders.  
+The random forest and boosting have similar performances.  However, boosting and is not tuned in the algorithm.  With the full grid search in the previous algorithm, boosting would be a better choice.  
 
 Let's have a classification example.
 
@@ -664,7 +693,7 @@ str(df)
 
 ```r
 #Change SALES to a factor variable
-df$Sales <- ifelse(Carseats$Sales<=8, 0, 1)
+df$Sales <- ifelse(Carseats$Sales <= 8, 0, 1)
 str(df$Sales)
 ```
 
@@ -680,7 +709,7 @@ library(ROCR)
 library(rpart)
 library(randomForest)
 
-df <- df[complete.cases(df),]
+df <- df[complete.cases(df), ]
 df$d <- as.factor(df$Sales)
 
 n <- 50
@@ -783,7 +812,7 @@ sqrt(var(AUC5))
 ## [1] 0.0117673
 ```
   
-I choose this example, not because I want to give you a pessimistic impressions about machine learning applications.  But, when we do predictions, we cannot assume that our complex algorithms will always be better than a simple OLS.  We judge the success of prediction not only its own AUC and stability, but also how much it improves over a benchmark.
+I choose this example to show that we cannot assume that our complex algorithms will always be better than a simple OLS.  We judge the success of prediction not only its own AUC and stability, but also how much it improves over a benchmark.
   
 ### AdaBoost.M1
 
@@ -796,7 +825,7 @@ library(ISLR)
 df <- Carseats
 
 #Change SALES to a factor variable
-df$Sales <- ifelse(Carseats$Sales<=8, -1, 1) #JOUSBoost requires -1,1 coding
+df$Sales <- ifelse(Carseats$Sales <= 8, -1, 1) #adaboost requires -1,1 coding
 str(df$Sales)
 ```
 
@@ -805,7 +834,7 @@ str(df$Sales)
 ```
 
 ```r
-# JOUSBoost requires X as a matrix
+# adaboost requires X as a matrix
 # so factor variables must be coded as numerical
 
 # With `one-hot()`
@@ -874,7 +903,7 @@ We will classify them in three groups:
   - `objective` = "reg:squarederror" for linear regression, "binary:logistic"  binary classification (it returns class probabilities).  See the official guide for more options.
   - `eval_metric` = no default. Depending on objective selected, it could be one of those: `mae`, `Logloss`, `AUC`, `RMSE`, `error` - (#wrong cases/#all cases), `mlogloss` - multiclass.
   
-Before executing a full-scale grid search, see what default parameters provide you.  That's your "base" model's prediction accuracy, which can improve from.  If the result is not giving you a desired accuracy, as we did in Chapter 12, set `eta` = 0.1 and the other parameters at their default values. Using `xgb.cv` function get best `n_rounds` and build a model with these parameters.  See how much improvement you will get in its accuracy.  Then apply the full-scale grid search.  
+Before executing a full-scale grid search, see what default parameters provide you.  That's your "base" model's prediction accuracy, which can improve from.  If the result is not giving you a desired accuracy, as we did in Chapter 13.3.3, set `eta` = 0.1 and the other parameters at their default values. Using `xgb.cv` function get best `n_rounds` and build a model with these parameters.  See how much improvement you will get in its accuracy.  Then apply the full-scale grid search.  
 
 We will use the same data ("Adult") as we used in Chapter 11.
 
@@ -1017,12 +1046,11 @@ cvb <- xgb.cv( params = params,
 ## Stopping. Best iteration:
 ## [59]	train-logloss:0.231852+0.000732	test-logloss:0.278273+0.004699
 ```
-
-We have the best iteration at 55.  
-
+  
 
 ```r
-cvb$best_iteration
+theb <- cvb$best_iteration
+theb
 ```
 
 ```
@@ -1033,7 +1061,7 @@ cvb$best_iteration
 ```r
 model_default <- xgb.train (params = params,
                             data = ttrain,
-                            nrounds = 79,
+                            nrounds = theb,
                             watchlist = list(val=ttest,train=ttrain),
                             print_every_n = 10,
                             maximize = F ,
@@ -1047,12 +1075,10 @@ model_default <- xgb.train (params = params,
 ## [31]	val-auc:0.928464	train-auc:0.942277 
 ## [41]	val-auc:0.929252	train-auc:0.946379 
 ## [51]	val-auc:0.928459	train-auc:0.949633 
-## [61]	val-auc:0.928208	train-auc:0.952297 
-## [71]	val-auc:0.927833	train-auc:0.954337 
-## [79]	val-auc:0.927487	train-auc:0.956330
+## [59]	val-auc:0.928224	train-auc:0.951403
 ```
   
-Which is the same, if we had used `xgboost()` instead of `xgb.train()`:
+And the prediction:
 
 
 ```r
@@ -1066,7 +1092,7 @@ auc_ROCR@y.values[[1]]
 ```
 
 ```
-## [1] 0.9274875
+## [1] 0.9282243
 ```
 
 ```r
@@ -1078,6 +1104,6 @@ abline(a = 0, b = 1)
 
 <img src="13-EnsembleApplication_files/figure-html/ea25-1.png" width="672" />
 
-You can go back to 11.3.2 and see that XGBoost is better than kNN in this example without even a proper grid search.  To get the confusion matrix, we need to find the optimal discriminating threshold, where the J-index at the ROC curve (with the maximum AUC is achived) is maximized (See Chapter 10).  
+You can go back to Chapter 11.3.2 and see that XGBoost is better than kNN in this example without even a proper grid search.  
 
 

@@ -690,7 +690,7 @@ abline(a = 0, b = 1)
 <img src="10-TuningClass_files/figure-html/tc19-1.png" width="672" />
 
 ```r
-# And our "own" ROC (we will use ROCR in this book, though)
+# And our "own" ROC
 phator <- phat[order(phat)]
 phator[phator < 0] <- 0
 phator[phator > 1] <- 1
@@ -769,7 +769,7 @@ And the confusion table (from the last run):
 yHat <- phat > opt_th
 conf_table <- table(yHat, tsdf$Y)
 
-# Function to rotate the table (we did before)
+# Function to rotate the table
 rot <- function(x){
   t <- apply(x, 2, rev)
   tt <- apply(t, 1, rev)
@@ -935,7 +935,7 @@ Now we are ready.  Here is our kNN training:
 library(caret)
 library(ROCR)
 
-set.seed(123) #for the same results, no need otherwise
+set.seed(123) 
 sh <- sample(nrow(df), nrow(df), replace = FALSE)
 h <- 10
 
@@ -1024,51 +1024,49 @@ A more stable, but much longer, suggestion for tuning our kNN application is usi
 
 
 ```r
- #### Test/Train split - as before!########
- # however, this is done only once here.
- # Should be done in a loop multiple times
+#### Test/Train split - as before!########
 
- set.seed(123)
- sh <- sample(nrow(df), nrow(df), replace = FALSE)
- h <- 10
+set.seed(123)
+sh <- sample(nrow(df), nrow(df), replace = FALSE)
+h <- 10 # should be set to 100 or more
 
- ind_test <- sh[1:(nrow(df)/h)]
- ind_train <- sh[-ind_test]
+ind_test <- sh[1:(nrow(df) / h)]
+ind_train <- sh[-ind_test]
 
- # Put 10% a side as a test set
- trdf <- df[ind_train, ]
- tsdf <- df[ind_test, ]
+# Put 10% a side as a test set
+trdf <- df[ind_train,]
+tsdf <- df[ind_test,]
 
- ########## Bootstrapping ############
- # Note that we use `by=2` to reduce the running time
- # With a faster machine, that could be set to 1.
+########## Bootstrapping ############
+# We use `by=2` to reduce the running time
+# With a faster machine, that could be set to 1.
 
- k <- seq(from = 3, to = 50, by = 2)
- m <- 20 # number of bootstrap loops (could be higher to, like 50)
+k <- seq(from = 3, to = 50, by = 2)
+m <- 20 # number of bootstrap loops (could be higher too, like 50)
 
- MAUC <- c()
- k_opt <- c()
+MAUC <- c()
+k_opt <- c()
 
- for(i in 1:length(k)){
-   AUC <- c()
-   for(l in 1:m){
-     #Here is the heart of bootstrapped tuning
-     set.seed(l) 
-     bind <- sample(nrow(trdf), nrow(trdf), replace = TRUE)
-     uind <- unique(bind)
-     df_train <- df[uind, ]
-     df_val <- df[-uind, ]
-
-     model <- knn3(IncomeLevel ~., data = df_train, k = k[i])
-     phat <- predict(model, df_val, type = "prob")
-
-     #AUC
-     pred_rocr <- prediction(phat[,2], df_val$IncomeLevel)
-     auc_ROCR <- performance(pred_rocr, measure = "auc")
-     AUC[l] <- auc_ROCR@y.values[[1]]
-   }
-   MAUC[i] <- mean(AUC)
- }
+for (i in 1:length(k)) {
+  AUC <- c()
+  for (l in 1:m) {
+    #Here is the heart of bootstrapped tuning
+    set.seed(l)
+    bind <- sample(nrow(trdf), nrow(trdf), replace = TRUE)
+    uind <- unique(bind)
+    df_train <- df[uind,]
+    df_val <- df[-uind,]
+    
+    model <- knn3(IncomeLevel ~ ., data = df_train, k = k[i])
+    phat <- predict(model, df_val, type = "prob")
+    
+    #AUC
+    pred_rocr <- prediction(phat[, 2], df_val$IncomeLevel)
+    auc_ROCR <- performance(pred_rocr, measure = "auc")
+    AUC[l] <- auc_ROCR@y.values[[1]]
+  }
+  MAUC[i] <- mean(AUC)
+}
 ```
 
 OK ... now finding the optimal "k"
@@ -1282,8 +1280,8 @@ confusionMatrix(predict(model_knn3, tsdf, type = "raw"),
 ```
 
 ```r
-# If we don't specify "More" as our positive results, the first level
-# "Less" will be used as the "positive" result.
+# If we don't specify "More" as our positive class, the first level
+# "Less" will be "positive".
 
 confusionMatrix(predict(model_knn3, tsdf, type = "raw"),
                 tsdf$IncomeLevel, positive = "More")

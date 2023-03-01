@@ -1,141 +1,143 @@
 # Factor Analysis
 
+Factor analysis and Principal Component Analysis (PCA) both involve reducing the dimensionality of a dataset, but they are not the same.  PCA is a mathematical technique that transforms a dataset of possibly correlated variables into a smaller set of uncorrelated variables known as principal components. The principal components are linear combinations of the original variables, and each principal component accounts for as much of the variation in the data as possible.
+
 Factor Analysis (FA) is a method for modeling observed variables, and their covariance structure, in terms of a smaller number of underlying latent (unobserved) "factors". In FA the observed variables are modeled as linear functions of the "factors." In PCA, we create new variables that are linear combinations of the observed variables.  In both PCA and FA, the dimension of the data is reduced. 
 
-A factor model can be thought of as a series of multiple regressions, predicting each of the observable variables $X_{i}$ from the values of the (unobservable) common factors $f_{i}$:
+The main difference between FA and PCA lies in their objectives. PCA aims to reduce the number of variables by identifying the most important components, while factor analysis aims to identify the underlying factors that explain the correlations among the variables. Therefore, PCA is more commonly used for data reduction or data compression, while factor analysis is more commonly used for exploring the relationships among variables.
+
+As shown below, a factor model can be represented by as a series of multiple regressions, where each $X_{i}$ ($i = 1, \cdots, p$) is a function of $m$ number of unobservable common factors $f_{i}$:
 
 $$
 \begin{gathered}
-X_{1}=\mu_{1}+l_{11} f_{1}+l_{12} f_{2}+\cdots+l_{1 m} f_{m}+\epsilon_{1} \\
-X_{2}=\mu_{2}+l_{21} f_{1}+l_{22} f_{2}+\cdots+l_{2 m} f_{m}+\epsilon_{2} \\
+X_{1}=\mu_{1}+\beta_{11} f_{1}+\beta_{12} f_{2}+\cdots+\beta_{1m} f_{m}+\epsilon_{1} \\
+X_{2}=\mu_{2}+\beta_{21} f_{1}+\beta_{22} f_{2}+\cdots+\beta_{2 m} f_{m}+\epsilon_{2} \\
 \vdots \\
-X_{p}=\mu_{p}+l_{p 1} f_{1}+l_{p 2} f_{2}+\cdots+l_{p m} f_{m}+\epsilon_{p}
+X_{p}=\mu_{p}+\beta_{p 1} f_{1}+\beta_{p 2} f_{2}+\cdots+\beta_{p m} f_{m}+\epsilon_{p}
 \end{gathered}
 $$
 
-where $\mu_{i}$ is the variable mean (intercept).
-
-The regression coefficients $l_{i j}$ (the partial slopes) for all of these multiple regressions are called factor **loadings**: $l_{i j}=$ is loading of the $i^{t h}$ variable on the $j^{t h}$ factor. With a matrix notation, we can show the matrix of factor loadings:
-
-$$
-\mathbf{L}=\left(\begin{array}{cccc}
-l_{11} & l_{12} & \ldots & l_{1 m} \\
-l_{21} & l_{22} & \ldots & l_{2 m} \\
-\vdots & \vdots & & \vdots \\
-l_{p 1} & l_{p 2} & \ldots & l_{p m}
-\end{array}\right)
-$$
-  
-The errors $\varepsilon_{i}$ are called the **specific factors**. Here, $\varepsilon_{i}=$ specific factor for variable $i$. When we collect them in a vector, we can express these series of multivariate regression as follows:
+where $\mathrm{E}\left(X_i\right)=\mu_i$, $\epsilon_{i}$ are called the **specific factors**.  The coefficients, $\beta_{i j},$ are the factor **loadings**.  We can expressed all of them in a matrix notation.
 
 \begin{equation}
 \mathbf{X}=\boldsymbol{\mu}+\mathbf{L f}+\boldsymbol{\epsilon}
-  (\#eq:25-1)
 \end{equation} 
+
+where
+
+$$
+\mathbf{L}=\left(\begin{array}{cccc}
+\beta_{11} & \beta_{12} & \ldots & \beta_{1 m} \\
+\beta_{21} & \beta_{22} & \ldots & \beta_{2 m} \\
+\vdots & \vdots & & \vdots \\
+\beta_{p 1} & \beta_{p 2} & \ldots & \beta_{p m}
+\end{array}\right)
+$$
 
 There are multiple assumptions:
   
-- $E\left(\epsilon_{i}\right)=0$ and $\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}$ (a.k.a "specific variance"), 
+- $E\left(\epsilon_{i}\right)=0$ and $\operatorname{var}\left(\epsilon_{i}\right)=\psi_{i}$, which is called as "specific variance", 
 - $E\left(f_{i}\right)=0$ and $\operatorname{var}\left(f_{i}\right)=1$,
 - $\operatorname{cov}\left(f_{i}, f_{j}\right)=0$ for $i \neq j$,
 - $\operatorname{cov}\left(\epsilon_{i}, \epsilon_{j}\right)=0$ for $i \neq j$,
 - $\operatorname{cov}\left(\epsilon_{i}, f_{j}\right)=0$,
 
-Hence,
+Given these assumptions, the variance of $X_i$ can be expressed as
+
+$$
+\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} \beta_{i j}^{2}+\psi_{i}
+$$
+
+There are two sources of the variance in $X_i$: $\sum_{j=1}^{m} \beta_{i j}^{2}$, which is called the **Communality** for variable $i$, and **specific variance**, $\psi_{i}$.  
+
+Moreover, 
   
-- $\operatorname{var}\left(X_{i}\right)=\sigma_{i}^{2}=\sum_{j=1}^{m} l_{i j}^{2}+\psi_{i}$. The term $\sum_{j=1}^{m} l_{i j}^{2}$ is called the **Communality** for variable $i$.  The larger the communality, the better the model performance for the $i$ th variable.
 - $\operatorname{cov}\left(X_{i}, X_{j}\right)=\sigma_{i j}=\sum_{k=1}^{m} l_{i k} l_{j k}$, 
 - $\operatorname{cov}\left(X_{i}, f_{j}\right)=l_{i j}$
-  
-The factor model for our variance-covariance matrix can then be expressed as:
 
+The factor model for our variance-covariance matrix of $\mathbf{X}$ can then be expressed as:
+
+$$
 \begin{equation}
-\Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
-  (\#eq:25-2)
+\operatorname{var-cov}(\mathbf{X}) = \Sigma=\mathbf{L L}^{\prime}+\mathbf{\Psi}
 \end{equation} 
-
-where,
-
-$$
-\boldsymbol{\Psi}=\left(\begin{array}{cccc}
-\psi_{1} & 0 & \ldots & 0 \\
-0 & \psi_{2} & \ldots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \ldots & \psi_{p}
-\end{array}\right)
-$$
-And, 
-
-$$
-\hat{l}_{i j}=\hat{e}_{j i} \sqrt{\hat{\lambda}_j}
 $$
 
-The total variance of each variable given in the factor model (27.2) can be explained by the sum of the shared variance with another variable, $\mathbf{L} \mathbf{L}^{\prime}$ (the common variance or **communality**) and the unique variance, $\mathbf{\Psi}$, inherent to each variable (**specific variance**)
+which is the sum of the shared variance with another variable, $\mathbf{L} \mathbf{L}^{\prime}$ (the common variance or **communality**) and the unique variance, $\mathbf{\Psi}$, inherent to each variable (**specific variance**)
 
-There are multiple methods to estimate the parameters of a factor model.  In general, two methods are most common: PCA and MLE.  Let's have an example.  The data set is called `bfi` and comes from the `psych` package. It is made up of 25 self-report personality items from the International Personality Item Pool, gender, education level and age for 2800 subjects and used in the Synthetic Aperture Personality Assessment: The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate, 2 Moderately Inaccurate, 3 Slightly Inaccurate, 4 Slightly Accurate, 5 Moderately Accurate, 6 Very Accurate.
+We need to look at $\mathbf{L L}^{\prime}$, where $\mathbf{L}$ is the $p \times m$ matrix of loadings. In general, we want to have $m \ll p$.  
+
+The $i^{\text {th }}$ diagonal element of $\mathbf{L L}^{\prime}$, the sum of the squared loadings, is called the $i^{\text {th }}$ communality. The communality values represent the percent of variability explained by the common factors. The sizes of the communalities and/or the specific variances can be used to evaluate the goodness of fit.
+
+To estimate factor loadings with PCA, we first calculate the principal components of the data, and then compute the factor loadings using the eigenvectors of the correlation matrix of the standardized data.  When PCA is used, the matrix of estimated factor loadings, $\mathbf{L},$ is given by:
+
+$$
+\widehat{\mathbf{L}}=\left[\begin{array}{lll}
+\sqrt{\hat{\lambda}_1} \hat{\mathbf{v}}_1 & \sqrt{\hat{\lambda}_2} \hat{\mathbf{v}}_2 & \ldots \sqrt{\hat{\lambda}_m} \hat{\mathbf{v}}_m
+\end{array}\right]
+$$
+
+where 
+
+$$
+\hat{\beta}_{i j}=\hat{\mathbf{v}}_{i j} \sqrt{\hat{\lambda}_j}
+$$
+where $i$ is the index of the original variable, $j$ is the index of the principal component, eigenvector $(i,j)$ is the $i$-th component of the $j$-th eigenvector of the correlation matrix, eigenvalue $(j)$ is the $j$-th eigenvalue of the correlation matrix
+
+This method tries to find values of the loadings that bring the estimate of the total communality close to the total of the observed variances. The covariances are ignored.  Remember, the communality is the part of the variance of the variable that is explained by the factors. So a larger communality means a more successful factor model in explaining the variable. 
+
+Let's have an example.  The data set is called `bfi` and comes from the `psych` package. 
+
+The data includes 25 self-reported personality items from the International Personality Item Pool, gender, education level, and age for 2800 subjects.  The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate to 6 Very Accurate.
 
 
 ```r
 library(psych)
 library(GPArotation)
 data("bfi")
-describeData(bfi, head = 5, tail=5)
+str(bfi)
 ```
 
 ```
-## n.obs =  2800 of which  2236   are complete cases.   Number of variables =  28  of which all are numeric  TRUE  
-##           variable # n.obs type H1 H2 H3 H4 H5 T1 T2 T3 T4 T5
-## A1                 1  2784    1  2  2  5  4  2  6  2  2  5  2
-## A2                 2  2773    1  4  4  4  4  3  1  4  3  2  3
-## A3                 3  2774    1  3  5  5  6  3  3  4  5  2  1
-## A4                 4  2781    1  4  2  4  5  4  3  3  2  4  4
-## A5                 5  2784    1  4  5  4  5  5  3  5  5  4  2
-## C1                 6  2779    1  2  5  4  4  4  6  2  5  5  5
-## C2                 7  2776    1  3  4  5  4  4  6  3  5  5  5
-## C3                 8  2780    1  3  4  4  3  5  6  4  5  5  3
-## C4                 9  2774    1  4  3  2  5  3  1  4  1  2  3
-## C5                10  2784    1  4  4  5  5  2  1  3  1  6  3
-## E1                11  2777    1  3  1  2  5  2  1  2  2  2  3
-## E2                12  2784    1  3  1  4  3  2  4  2  2  2  3
-## E3                13  2775    1  3  6  4  4  5  5  4  6  4  1
-## E4                14  2791    1  4  4  4  4  4  5  4  3  5  2
-## E5                15  2779    1  4  3  5  4  5  6  3  6  4  2
-## N1                16  2778    1  3  3  4  2  2  1 NA  3  5  1
-## N2                17  2779    1  4  3  5  5  3  1  3  4  5  2
-## N3                18  2789    1  2  3  4  2  4  1  2  3  6  2
-## N4                19  2764    1  2  5  2  4  4 NA  3  3  4  1
-## N5                20  2771    1  3  5  3  1  3  1  3  1  1  1
-## O1                21  2778    1  3  4  4  3  3  6  6  5  5  3
-## O2                22  2800    1  6  2  2  3  3  1  3  1  2  1
-## O3                23  2772    1  3  4  5  4  4  6  5  6  5  3
-## O4                24  2786    1  4  3  5  3  3  6  4  4  5  5
-## O5                25  2780    1  3  3  2  5  3  1  2  3  1  1
-## gender            26  2800    1  1  2  2  2  1  1  1  2  1  2
-## education         27  2577    1 NA NA NA NA NA  3  4  4  4  4
-## age               28  2800    1 16 18 17 17 17 19 27 29 31 50
+## 'data.frame':	2800 obs. of  28 variables:
+##  $ A1       : int  2 2 5 4 2 6 2 4 4 2 ...
+##  $ A2       : int  4 4 4 4 3 6 5 3 3 5 ...
+##  $ A3       : int  3 5 5 6 3 5 5 1 6 6 ...
+##  $ A4       : int  4 2 4 5 4 6 3 5 3 6 ...
+##  $ A5       : int  4 5 4 5 5 5 5 1 3 5 ...
+##  $ C1       : int  2 5 4 4 4 6 5 3 6 6 ...
+##  $ C2       : int  3 4 5 4 4 6 4 2 6 5 ...
+##  $ C3       : int  3 4 4 3 5 6 4 4 3 6 ...
+##  $ C4       : int  4 3 2 5 3 1 2 2 4 2 ...
+##  $ C5       : int  4 4 5 5 2 3 3 4 5 1 ...
+##  $ E1       : int  3 1 2 5 2 2 4 3 5 2 ...
+##  $ E2       : int  3 1 4 3 2 1 3 6 3 2 ...
+##  $ E3       : int  3 6 4 4 5 6 4 4 NA 4 ...
+##  $ E4       : int  4 4 4 4 4 5 5 2 4 5 ...
+##  $ E5       : int  4 3 5 4 5 6 5 1 3 5 ...
+##  $ N1       : int  3 3 4 2 2 3 1 6 5 5 ...
+##  $ N2       : int  4 3 5 5 3 5 2 3 5 5 ...
+##  $ N3       : int  2 3 4 2 4 2 2 2 2 5 ...
+##  $ N4       : int  2 5 2 4 4 2 1 6 3 2 ...
+##  $ N5       : int  3 5 3 1 3 3 1 4 3 4 ...
+##  $ O1       : int  3 4 4 3 3 4 5 3 6 5 ...
+##  $ O2       : int  6 2 2 3 3 3 2 2 6 1 ...
+##  $ O3       : int  3 4 5 4 4 5 5 4 6 5 ...
+##  $ O4       : int  4 3 5 3 3 6 6 5 6 5 ...
+##  $ O5       : int  3 3 2 5 3 1 1 3 1 2 ...
+##  $ gender   : int  1 2 2 2 1 2 1 1 1 2 ...
+##  $ education: int  NA NA NA NA NA 3 NA 2 1 NA ...
+##  $ age      : int  16 18 17 17 17 21 18 19 19 17 ...
 ```
   
 To get rid of missing observations and the last three variables,
 
 
 ```r
-df <- bfi[complete.cases(bfi[,1:25]),1:25]
-dim(bfi[,1:25])
+df <- bfi[complete.cases(bfi[, 1:25]), 1:25]
 ```
 
-```
-## [1] 2800   25
-```
-
-```r
-dim(df)
-```
-
-```
-## [1] 2436   25
-```
-
-The first decision that we need make  is the number of factors that we will need to extract.  For $p=28$, the variance-covariance matrix $\Sigma$ contains
+The first decision that we need make  is the number of factors that we will need to extract.  For $p=25$, the variance-covariance matrix $\Sigma$ contains
 $$
 \frac{p(p+1)}{2}=\frac{25 \times 26}{2}=325
 $$
@@ -154,7 +156,7 @@ scree(df)
 
 <img src="28-FactorAnalysis_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
-Let's use the `factanal()` function of the build-in stats package
+Let's use the `factanal()` function of the build-in `stats` package,  which performs maximum likelihood estimation.  
 
 
 ```r
@@ -211,9 +213,9 @@ pa.out
 ## The p-value is 1.22e-202
 ```
 
-The first chunk provides the "uniqueness" (specific variance) for each variable, which range from 0 to 1 . The uniqueness, sometimes referred to as noise, corresponds to the proportion of variability, which can not be explained by a linear combination of the factors. This is the $\hat{\Psi}$ in the equation above. A high uniqueness for a variable indicates that the factors do not account well for its variance.
+The first chunk provides the "uniqueness" (specific variance) for each variable, which range from 0 to 1 . The uniqueness explains the proportion of variability, which cannot be explained by a linear combination of the factors. That's why it's referred to as noise. This is the $\hat{\Psi}$ in the equation above. A high uniqueness for a variable implies that the factors are not the main source of its variance.
 
-The next section reports the loadings ranging from $-1$ to $1.$ This is the $\hat{\mathbf{L}}$ in the equation (27.2) above. The loadings are the contribution of each original variable to the factor. Variables with a high loading are well explained by the factor. Notice there is no entry for certain variables since $R$ does not print loadings less than $0.1$.
+The next section reports the loadings ranging from $-1$ to $1.$ This is the $\hat{\mathbf{L}}$ in the equation (31.2) above. Variables with a high loading are well explained by the factor. Note that R does not print loadings less than $0.1$.
 
 The communalities for the $i^{t h}$ variable are computed by taking the sum of the squared loadings for that variable. This is expressed below:
 
@@ -221,11 +223,11 @@ $$
 \hat{h}_i^2=\sum_{j=1}^m \hat{l}_{i j}^2
 $$
 
-This proportion of the variability is denoted as **communality**. Another way to calculate the communality is to subtract the uniquenesses from 1. An appropriate factor model results in low values for uniqueness and high values for communality.
+A well-fit factor model has low values for uniqueness and high values for communality. One way to calculate the communality is to subtract the uniquenesses from 1. 
 
 
 ```r
-apply(pa.out$loadings^2,1,sum) # communality
+apply(pa.out$loadings ^ 2, 1, sum) # communality
 ```
 
 ```
@@ -240,7 +242,7 @@ apply(pa.out$loadings^2,1,sum) # communality
 ```
 
 ```r
-1 - apply(pa.out$loadings^2,1,sum) # uniqueness
+1 - apply(pa.out$loadings ^ 2, 1, sum) # uniqueness
 ```
 
 ```
@@ -254,19 +256,63 @@ apply(pa.out$loadings^2,1,sum) # communality
 ## 0.7259404
 ```
   
-The table under the loadings reports the proportion of variance explained by each factor. The row **Cumulative Var** gives the cumulative proportion of variance explained. These numbers range from 0 to 1; **Proportion Var** shows the proportion of variance explained by each factor, and the row **SS loadings** gives the sum of squared loadings. This is sometimes used to determine the value of a particular factor. A factor is worth keeping if the SS loading is greater than 1 ([Kaiser’s rule](https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr)).
+The table under the loadings reports the proportion of variance explained by each factor. `Proportion Var` shows the proportion of variance explained by each factor. The row `Cumulative Var` is the cumulative `Proportion Var`. Finally, the row `SS loadings` reports the sum of squared loadings. This can be used to determine a factor worth keeping (Kaiser Rule).
 
-The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Conventionally, we reject $H_0$ if the $p$-value is less than $0.05$. Such a result indicates that the number of factors is too low. The low $p$-value in our example above leads us to reject the $H_0$, and indicates that we fitted NOT an appropriate model. 
+The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Hence, in our example, we fitted not an appropriate model. 
 
-Finally, with our estimated factor model, we may calculate $\hat{\Sigma}$ and compare it to the observed correlation matrix, $S$, by simple matrix algebra. 
+Finally, we may compare estimated correlation matrix, $\hat{\Sigma}$ and the observed correlation matrix:
 
 
 ```r
 Lambda <- pa.out$loadings
 Psi <- diag(pa.out$uniquenesses)
-S <- pa.out$correlation
-Sigma <- Lambda %*% t(Lambda) + Psi
-round(head(S) - head(Sigma), 2)
+Sigma_hat <- Lambda %*% t(Lambda) + Psi
+head(Sigma_hat)
+```
+
+```
+##             A1         A2         A3         A4         A5          C1
+## A1  1.00000283 -0.2265272 -0.2483489 -0.1688548 -0.2292686 -0.03259104
+## A2 -0.22652719  0.9999997  0.4722224  0.3326049  0.4275597  0.13835721
+## A3 -0.24834886  0.4722224  1.0000003  0.3686079  0.4936403  0.12936294
+## A4 -0.16885485  0.3326049  0.3686079  1.0000017  0.3433611  0.13864850
+## A5 -0.22926858  0.4275597  0.4936403  0.3433611  1.0000000  0.11450065
+## C1 -0.03259104  0.1383572  0.1293629  0.1386485  0.1145007  1.00000234
+##             C2          C3          C4          C5          E1         E2
+## A1 -0.04652882 -0.04791267  0.02951427  0.03523371  0.02815444  0.0558511
+## A2  0.17883430  0.15482391 -0.12081021 -0.13814633 -0.18266118 -0.2297604
+## A3  0.16516097  0.14465370 -0.11034318 -0.14189597 -0.24413210 -0.2988190
+## A4  0.18498354  0.18859903 -0.18038121 -0.21194824 -0.14856332 -0.2229227
+## A5  0.12661287  0.12235652 -0.12717601 -0.17194282 -0.28325012 -0.3660944
+## C1  0.37253491  0.30456798 -0.37410412 -0.31041193 -0.03649401 -0.1130997
+##            E3         E4          E5          N1          N2          N3
+## A1 -0.1173724 -0.1247436 -0.03147217  0.17738934  0.16360231  0.07593942
+## A2  0.3120607  0.3412253  0.22621235 -0.09257735 -0.08847947 -0.01009412
+## A3  0.3738780  0.4163964  0.26694168 -0.10747302 -0.10694310 -0.02531812
+## A4  0.2124931  0.3080580  0.18727470 -0.12916711 -0.13311708 -0.08204545
+## A5  0.3839224  0.4444111  0.27890083 -0.20296456 -0.20215265 -0.13177926
+## C1  0.1505643  0.0926584  0.24950915 -0.05014855 -0.02623443 -0.04635470
+##             N4          N5          O1           O2          O3           O4
+## A1  0.03711760  0.01117121 -0.05551140  0.002021464 -0.08009528 -0.066085241
+## A2 -0.07360446  0.03103525  0.13218881  0.022852428  0.19161373  0.069742928
+## A3 -0.10710549  0.01476409  0.15276068  0.028155055  0.22602542  0.058986934
+## A4 -0.15287214 -0.01338970  0.03924192  0.059069402  0.06643848 -0.034070120
+## A5 -0.20800410 -0.08388175  0.16602866 -0.008940967  0.23912037  0.008904693
+## C1 -0.10426314 -0.05989091  0.18543197 -0.154255652  0.19444225  0.063216945
+##             O5
+## A1  0.03042630
+## A2 -0.03205802
+## A3 -0.03274830
+## A4  0.03835946
+## A5 -0.05224734
+## C1 -0.15426539
+```
+
+Let's check the differences:
+
+
+```r
+round(head(cor(df)) - head(Sigma_hat), 2)
 ```
 
 ```
@@ -295,5 +341,5 @@ round(head(S) - head(Sigma), 2)
 
 This matrix is also called as the **residual matrix**. 
 
-For more see: <https://cran.r-project.org/web/packages/factoextra/readme/README.html>
+For extracting and visualizing the results of factor analysis, we can use the `factoextra` package: <https://cran.r-project.org/web/packages/factoextra/readme/README.html>
 

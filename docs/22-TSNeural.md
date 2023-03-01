@@ -73,15 +73,17 @@ library(fpp3)
 load("~/Dropbox/ToolShed_draft/toronto2.rds")
 toronto2 <- data
 df <- toronto2 %>%
-  mutate(dcases = difference(cases),
-         dmob = difference(mob),
-         ddelay = difference(delay),
-         dmale = difference(male),
-         dtemp = difference(temp),
-         dhum = difference(hum))
+  mutate(
+    dcases = difference(cases),
+    dmob = difference(mob),
+    ddelay = difference(delay),
+    dmale = difference(male),
+    dtemp = difference(temp),
+    dhum = difference(hum)
+  )
 
-dft <- df[ ,-c(2:5,7,8)] #removing levels
-dft <- dft[-1, c(3:7,2)] # reordering the columns
+dft <- df[, -c(2:5, 7, 8)] #removing levels
+dft <- dft[-1, c(3:7, 2)] # reordering the columns
 sdtf <- scale(dft) #
 head(sdtf)
 ```
@@ -112,7 +114,7 @@ We will define a three dimensional array that contains time series data.  First,
 # array
 x1 = c(1, 2, 3)
 x2 = c(4, 5, 6, 7, 8, 9)
-adata <- array(c(x1, x2), dim = c(3,3,2))
+adata <- array(c(x1, x2), dim = c(3, 3, 2))
 dim(adata)
 ```
 
@@ -141,7 +143,7 @@ adata
 ```
 
 ```r
-adata[1,,]
+adata[1, , ]
 ```
 
 ```
@@ -176,7 +178,7 @@ Suppose that this is daily data and we try to make 1-day-ahead predictions.  In 
 
 ```r
 datam <- embed(toydata, 6)
-datam <- datam[, -c(2:3)]
+datam <- datam[,-c(2:3)]
 head(datam)
 ```
 
@@ -197,7 +199,7 @@ head(datam)
 ## [6,]   106   206
 ```
 
-The second line in the code above removes the contemporaneous features. We should have $100 - 5 = 95$ samples, in each one we have 3 features and 5 timesteps.  The first two samples, each is a matrix of $5 \times 3$, are shown below:
+The second line in the code above removes the contemporaneous features. We should have 100 - 5 = 95 samples, in each one we have 3 features and 5 timesteps.  The first two samples, each is a matrix of $5 \times 3$, are shown below:
 
 
 ```
@@ -223,9 +225,9 @@ The outcome variable $y$ is 6 and 7 in the first and second samples.  Let's see 
 
 ```r
 n <- nrow(datam)
-f1 <- data.matrix(datam[, -1]) # Removing Y
+f1 <- data.matrix(datam[,-1]) # Removing Y
 f2 <- array(f1, c(n, 3, 5))
-f2[1,,]
+f2[1, , ]
 ```
 
 ```
@@ -239,8 +241,8 @@ We need reverse the order
 
 
 ```r
-f3 <- f2[,, 5:1]
-f3[1,,]
+f3 <- f2[, , 5:1]
+f3[1, , ]
 ```
 
 ```
@@ -254,7 +256,7 @@ And, taking the transposition,
 
 
 ```r
-t(f3[1,,])
+t(f3[1, , ])
 ```
 
 ```
@@ -271,7 +273,7 @@ For the whole array of `datam`, we use array transposition:
 
 ```r
 f4 <- aperm(f3, c(1, 3, 2))
-f4[1,,]
+f4[1, , ]
 ```
 
 ```
@@ -287,23 +289,23 @@ Now, we are ready to apply all these steps to our toy data with a function:
 
 
 ```r
-tensorin <- function(l, x){
-  maxl = l+1
+tensorin <- function(l, x) {
+  maxl = l + 1
   xm <- embed(x, maxl)
-  xm <- xm[, -c(2:3)] 
+  xm <- xm[,-c(2:3)]
   n <- nrow(xm)
-  f1 <- data.matrix(xm[, -1]) 
+  f1 <- data.matrix(xm[,-1])
   y <- xm[, 1]
   f2 <- array(f1, c(n, ncol(x), l))
-  f3 <- f2[,, l:1]
+  f3 <- f2[, , l:1]
   f4 <- aperm(f3, c(1, 3, 2))
   list(f4, y)
-} 
+}
 
 tensored <- tensorin(5, toydata)
 X <- tensored[1]
 y <- tensored[2]
-X[[1]][1,,]
+X[[1]][1, , ]
 ```
 
 ```
@@ -330,7 +332,7 @@ Note that this type of data transformation can be achieved several different way
 trnt <- tensorin(7, sdtf)
 X <- trnt[1]
 y <- trnt[2]
-X[[1]][1,,]
+X[[1]][1, , ]
 ```
 
 ```
@@ -362,21 +364,22 @@ As we have the input tensor stored as an array of (258, 7, 6), we are ready to d
 ```r
 library(keras)
 model <- keras_model_sequential() %>%
-  layer_simple_rnn(units = 24,
-                   input_shape = list(7, 6),
-                   dropout = 0.1, recurrent_dropout = 0.1) %>%
-  layer_dense(units = 1) %>% 
+  layer_simple_rnn(
+    units = 24,
+    input_shape = list(7, 6),
+    dropout = 0.1,
+    recurrent_dropout = 0.1
+  ) %>%
+  layer_dense(units = 1) %>%
   compile(optimizer = optimizer_rmsprop(),
-                  loss = "mse")
+          loss = "mse")
 ```
 
 As before, neural networks consist of layers and neurons in each layer.  Since we use sequence data stored in 3D tensors of shape (samples, timesteps, features) we will use recurrent layers for our RNN. The term `layer_dense` is the output layer. 
 
 We also (arbitrarily) specify two types of dropout for the units feeding into the hidden layer. The first one is set for the input feeding into a layer.  The second one is for the previous hidden units feeding into the same layer. 
 
-One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These "dropped out" inputs may be variables in the data sample or activations from a previous layer.  This is a conventional regularization method to in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: `dropout`, a float specifying the dropout rate for input units of the layer, and `recurrent_dropout`, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid.
-
-It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.
+One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These "dropped out" inputs may be variables in the data sample or activations from a previous layer.  This is a conventional regularization method in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: `dropout`, a float specifying the dropout rate for input units of the layer, and `recurrent_dropout`, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid. It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.
 
 Before fitting the model, we need to split the data.  We have 258 observations in total.  We will take the last 50 observations as our test set:
 
@@ -397,7 +400,7 @@ test <- 208:dim(X[[1]])[1]
 
 And, finally we fit our RNN.  There are two hyperparameters that Keras use in fitting RNN: batch size and epoch.  They are both related to how and how many times the weights in the network will be updated
 
-The batch size is the  number of observations ("samples") used in its gradient descent to update its internal parameters.  For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data.  The stochastic gradient descent, on the other hand, uses randomly selected each observation.  While the batch gradient descent is efficient (fast) it is not as robust as the stochastic gradient descent.  Therefore, Keras uses a mini-batch gradient descent as a  parameter that balance the between efficiency and robustness.
+The batch size is the  number of observations ("samples") used in its gradient descent to update its internal parameters.  For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data.  The stochastic gradient descent, on the other hand, uses randomly selected each observation.  While the batch gradient descent is efficient (fast), it is not as robust as the stochastic gradient descent.  Therefore, Keras uses a mini-batch gradient descent as a  parameter that balance the between efficiency and robustness.
 
 The number of epochs is the number of times the algorithm works trough the complete training dataset. We need multiple passes through the entire data because updating the weights with gradient descent in a single pass (one epoch) is not enough.  But, when the number of epochs goes up, the algorithm updates the weights more. As a result, the  curve goes from underfitting (very few runs) to overfitting (too many runs).
 
@@ -406,11 +409,14 @@ Hence, these two parameters, batch size and epoch, should be set as hyperparamet
 
 ```r
 model %>% fit(
-  X[[1]][train,, ], y[[1]][train], batch_size = 12, epochs = 75,
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
   validation_data =
-    list(X[[1]][test,, ], y[[1]][test]),
+    list(X[[1]][test, ,], y[[1]][test]),
   verbose = 0
-  ) %>% 
+) %>%
   plot()
 ```
 
@@ -420,43 +426,49 @@ model %>% fit(
 # prediction
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-yhat <- model %>% predict(X[[1]][test,, ])
-1 - mean((yhat -y_act)^2) / var_y # R^2
+yhat <- model %>% predict(X[[1]][test, ,])
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] 0.2491995
+## [1] 0.2706921
 ```
 
 ```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
 ```
 
 ```
-## [1] 1.495303
+## [1] 1.473745
 ```
 
 Although it could be done easily as we shown in the previous chapter, we will not back-transform the predictions to levels.  Here is the plot for the last 50 days:   
 
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "RNN Forecasting for Covid-19 Cases - in differences")
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "RNN Forecasting for Covid-19 Cases - in differences"
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
 <img src="22-TSNeural_files/figure-html/tsnn18-1.png" width="672" />
   
-It looks like, our RNN without a proper training is capturing most ups and downs correctly.  There are three groups of hyperparameters that we need to search by validation:
+It looks like, our RNN without a proper training is capturing most ups and downs correctly.
+
+There are four groups of hyperparameters that we need to search by validation:
 
 - How many days we need in the past to predict the next day’s value? (we picked 7), 
 - The number of units per layer (we picked 24), 
 - Regularization parameters, `dropout` and `recurrent_dropout` (we picked 0.1 for both), 
 - Stochastic gradient descent parameters, `batch_size` and `epochs` (we picked 12 and 75)
 
-All these parameters that we picked arbitrarily should be selected by a proper validation.  Model tuning in ANN highly depends on the package we use in deep learning.  Keras with TensorFlow is one the top AI engines available for all type of networks.  The best source for learning more on deep learning using Keras is "Deep Learning with R" by Chollet and Allaire.   
+All these parameters that we picked arbitrarily should be selected by a proper validation.  Model tuning in ANN highly depends on the package we use in deep learning.  Keras with TensorFlow is one the top AI engines available for all type of networks.  More details on deep learning using Keras is "Deep Learning with R" by Chollet and Allaire.   
 
 ## LSTM
 
@@ -477,9 +489,7 @@ Similar to RNN, LSTMs also have a chain-like structure, but the repeating activa
 
 <img src="png/LSTM3.png" width="75%" height="80%" />
 
-The key difference between LSTM and RNN is the cell state $C_t$ (the horizontal red line). The cell state functions like a conveyor belt and each LSTM repeating module is able to add to and remove from this belt through three gates, , as shown.
-
-This figure shows how LSTM works.  We have three gates as numbered in the figure (G1, G2, and G3).  Each gate is regulated by a sigmoid  neural net layer ($\frac{1}{1+e^{-x}}$), which outputs numbers between zero and one.  Hence, it works like a regulator or "gate keeper".  
+The key difference between LSTM and RNN is the cell state $C_t$ (the horizontal red line). The cell state functions like a conveyor belt and each LSTM repeating module is able to add to and remove from this belt through three gates.  The figure above shows how LSTM works.  We have three gates as numbered in the figure (G1, G2, and G3).  Each gate is regulated by a sigmoid  neural net layer ($\frac{1}{1+e^{-x}}$), which outputs numbers between zero and one.  Hence, it works like a regulator or "gate keeper".  
 
 The first gate (G1) is the **Forget Gate**, the first layer of the four layers, which takes $H_{t-1}$ and $X_t$ into a sigmoid function,
 
@@ -488,7 +498,7 @@ f_t=\sigma\left(w_f \cdot\left[H_{t-1}, X_t\right]+b_f\right)
 $$
 and produces a number between 0 and 1.  This percentage reflects the degree of $C_{t-1}$ that will be forgotten. For example, if it is zero, nothing in $C_{t-1}$ will be let through on the belt (cell state). It is interesting to note that this degree, how much of the long-term information will be kept, is determined by the recent information ($H_{t-1}$, $X_t$).  That is, if the recent information is very relevant for the prediction, the network will tune this sigmoid function so that the output will be a percentage close to 0, which will reduce the effect of the long-term information in the past, $C_{t-1}$, on prediction.
 
-The second gate (G2), **the Input Gate**, uses the same inputs, $H_{t-1}$ and $X_t$, but has two layers. The first later is again a sigmoid function that works as a gate keeper.  The second layer is a tanh function ($\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}}$) that produces a number between $-1$ and $+1$.  The objective of this layer is to update cell state $C_{t-1}$ by adding $\tilde{C_{t}}$, which contains the recent information hidden in $H_{t-1}$ and $X_t$.  This process happens in two steps:
+The second gate (G2), **the Input Gate**, uses the same inputs, $H_{t-1}$ and $X_t$, but has two layers. The first layer is again a sigmoid function that works as a gate keeper.  The second layer is a tanh function ($\tanh x=\frac{e^x-e^{-x}}{e^x+e^{-x}}$) that produces a number between $-1$ and $+1$.  The objective of this layer is to update cell state $C_{t-1}$ by adding $\tilde{C_{t}}$, which contains the recent information hidden in $H_{t-1}$ and $X_t$.  This process happens in two steps:
 
 $$
 \begin{aligned}
@@ -496,13 +506,15 @@ i_t & =\sigma\left(w_i \cdot\left[H_{t-1}, X_t\right]+b_i\right) \\
 \tilde{C}_t & =\tanh \left(w_\tilde{C} \cdot\left[H_{t-1}, X_t\right]+b_\tilde{C}\right)
 \end{aligned}
 $$
-The first step, $i_t$, is a sigmoid function, hence a "gate keeper".  We already get it in the first layer with different weights: $f_t=\sigma\left(w_f \cdot\left[h_{t-1}, x_t\right]+b_f\right)$.  The second later, tanh function, produces the information ($h_{t-1}, x_t$) in a candidate value normalized between $-1$ and $+1$.  When the network multiplies $\tilde{C_{t}}$ with $i_t$ ($i_t \times \tilde{C_{t}}$), this new candidate value between $-1$ and $+1$ will be scaled by $i_t$ that reflects how much the network would like to update $C_{t-1}$:
+The first step, $i_t$, is a sigmoid function, hence a "gate keeper".  We already get it in the first layer with different weights: $f_t=\sigma\left(w_f \cdot\left[h_{t-1}, x_t\right]+b_f\right)$.  The second later, tanh function, produces the information ($h_{t-1}, x_t$) in a candidate value normalized between $-1$ and $+1$.  When the network multiplies $\tilde{C_{t}}$ with $i_t$ ($i_t \times \tilde{C_{t}}$), this new candidate value between $-1$ and $+1$ will be scaled by $i_t$ that reflects how much the network would like to update $C_{t-1}$.
+
+While the first two gates are about regulating the cell state ($C_t$),
 
 $$
-C_t=f_t \times C_{t-1}+i_t \times \tilde{C}_t
+C_t=f_t \times C_{t-1}+i_t \times \tilde{C}_t,
 $$
 
-While the first two gates are about regulating the cell state ($C_t$), the last one (G3) is the **Output Gate**.  The prediction at time $t$, $H_t$, has two inputs: $C_t$ and the recent information, $H_{t-1}$ and $X_t$.  The output gate will decide how it will balance between these two sources and produce $H_t$:
+the last one (G3) is the **Output Gate**.  The prediction at time $t$, $H_t$, has two inputs: $C_t$ and the recent information, $H_{t-1}$ and $X_t$.  The output gate will decide how it will balance between these two sources and produce $H_t$:
 
 $$
 \begin{aligned}
@@ -512,22 +524,25 @@ H_t & =o_t \times \tanh \left(C_t\right)
 $$
 Note that the tanh activation in the output function could be changed depending on the type of network we build. 
 
-The LSTM network that we described so far is a conceptual one. In practice, however, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
+The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
 
-Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network with LSTM.
+Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network desihned with LSTM.
 
 
 ```r
-model = keras_model_sequential() %>%   
-  layer_lstm(units=128, input_shape = c(7, 6), activation="relu") %>%  
-  layer_dense(units=64, activation = "relu") %>%  
-  layer_dense(units=32) %>%  
-  layer_dense(units=16) %>%  
-  layer_dense(units=1, activation = "linear")
+model = keras_model_sequential() %>%
+  layer_lstm(units = 128,
+             input_shape = c(7, 6),
+             activation = "relu") %>%
+  layer_dense(units = 64, activation = "relu") %>%
+  layer_dense(units = 32) %>%
+  layer_dense(units = 16) %>%
+  layer_dense(units = 1, activation = "linear")
 
-model %>% compile(loss = 'mse',
-                  optimizer = 'adam',
-                  metrics = list("mean_absolute_error")
+model %>% compile(
+  loss = 'mse',
+  optimizer = 'adam',
+  metrics = list("mean_absolute_error")
 ) %>%
   summary()
 ```
@@ -550,10 +565,13 @@ model %>% compile(loss = 'mse',
 ```
 
 ```r
-model %>% fit(X[[1]][train,, ], y[[1]][train],
-              batch_size = 12, epochs = 75,
-              validation_data = list(X[[1]][test,, ], y[[1]][test]),
-              verbose = 0
+model %>% fit(
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
+  validation_data = list(X[[1]][test, ,], y[[1]][test]),
+  verbose = 0
 ) %>%
   plot()
 ```
@@ -561,47 +579,54 @@ model %>% fit(X[[1]][train,, ], y[[1]][train],
 <img src="22-TSNeural_files/figure-html/tsnn20-1.png" width="672" />
 
 ```r
-yhat <- predict(model, X[[1]][test,, ])
+yhat <- predict(model, X[[1]][test, ,])
 
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-1 - mean((yhat -y_act)^2) / var_y # R^2
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] -0.0434925
-```
-
-```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
-```
-
-```
-## [1] 1.762835
+## [1] -0.3102839
 ```
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "LSTM Forecasting for Covid-19 Cases",
-     lwd = 1)
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
+```
+
+```
+## [1] 1.975375
+```
+
+```r
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "LSTM Forecasting for Covid-19 Cases",
+  lwd = 1
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
 <img src="22-TSNeural_files/figure-html/tsnn20-2.png" width="672" />
   
 Although LSTM does a good job for the last 10 days, there are specific days that it is way off.  That's why it has a higher RMSPE than RNN we had earlier.
-Before concluding this chapter, let's change our network setting slightly and see the results
+Before concluding this chapter, let's change our network setting slightly and see the results:  
   
 
 ```r
-model <- keras_model_sequential() %>%   
-  layer_lstm(units=24, input_shape = c(7, 6), activation="tanh") %>%  
-  layer_dense(units=1, activation = "linear") %>% 
-  compile(loss = 'mse',
-          optimizer = 'adam',
-          metrics = list("mean_absolute_error")
+model <- keras_model_sequential() %>%
+  layer_lstm(units = 24,
+             input_shape = c(7, 6),
+             activation = "tanh") %>%
+  layer_dense(units = 1, activation = "linear") %>%
+  compile(
+    loss = 'mse',
+    optimizer = 'adam',
+    metrics = list("mean_absolute_error")
   )
 
 model %>% summary()
@@ -622,10 +647,13 @@ model %>% summary()
 ```
 
 ```r
-model %>% fit(X[[1]][train,, ], y[[1]][train],
-              batch_size = 12, epochs = 75,
-              validation_data = list(X[[1]][test,, ], y[[1]][test]),
-              verbose = 0
+model %>% fit(
+  X[[1]][train, ,],
+  y[[1]][train],
+  batch_size = 12,
+  epochs = 75,
+  validation_data = list(X[[1]][test, ,], y[[1]][test]),
+  verbose = 0
 ) %>%
   plot()
 ```
@@ -635,28 +663,32 @@ model %>% fit(X[[1]][train,, ], y[[1]][train],
 ```r
 y_act <- y[[1]][test]
 var_y <- var(y_act)
-yhat <- predict(model, X[[1]][test,, ])
-1 - mean((yhat -y_act)^2) / var_y # R^2
+yhat <- predict(model, X[[1]][test, ,])
+1 - mean((yhat - y_act) ^ 2) / var_y # R^2
 ```
 
 ```
-## [1] 0.2535225
-```
-
-```r
-sqrt(mean((yhat -y_act)^2)) # RMSPE
-```
-
-```
-## [1] 1.490992
+## [1] 0.1097859
 ```
 
 ```r
-plot(y[[1]][test], type ="l", col = "blue",
-     ylab = "Actual (Blue) vs. Prediction (Red)",
-     xlab = "Last 50 Days",
-     main = "LSTM Forecasting for Covid-19 Cases",
-     lwd = 1)
+sqrt(mean((yhat - y_act) ^ 2)) # RMSPE
+```
+
+```
+## [1] 1.628224
+```
+
+```r
+plot(
+  y[[1]][test],
+  type = "l",
+  col = "blue",
+  ylab = "Actual (Blue) vs. Prediction (Red)",
+  xlab = "Last 50 Days",
+  main = "LSTM Forecasting for Covid-19 Cases",
+  lwd = 1
+)
 lines(yhat, col = "red", lwd = 2)
 ```
 
