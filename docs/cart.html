@@ -758,12 +758,12 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.48276 0.11560
+## 2 0.034483      1   0.27586 0.51724 0.11861
 ## 3 0.010000      2   0.24138 0.51724 0.11861</code></pre>
 <p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.00000 in the table) in the root node. In other words, <code>rel error</code> gives the percentage of misclassified labels, when it’s multiplied with the <code>Root node error</code> (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by <code>rpart</code>’s CV.</p>
 <div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="cart.html#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">predict</span>(tree, <span class="at">type=</span><span class="st">&quot;class&quot;</span>)<span class="sc">!=</span>myocarde<span class="sc">$</span>PRONO)<span class="sc">/</span><span class="fu">nrow</span>(myocarde)</span></code></pre></div>
 <pre><code>## [1] 0.09859155</code></pre>
-<p>The <code>xerror</code> provides the same information but when it is apply to test sets.</p>
+<p>The <code>xerror</code> provides the same information about the cross-validation error applied to test sets.</p>
 <p>The <strong>relative</strong> improvement, or gain, due to a split is given by <code>CP</code> (cost complexity pruning), which is 0.724138 in the first split on <code>INSYS</code>. Therefore, the first split on <code>INSYS</code> reduces (improves) this error to 27.5862% (<code>rel error</code>).</p>
 <p>This relative gain (<code>CP</code>) can be calculated as follows:</p>
 <p><span class="math display">\[
@@ -787,10 +787,10 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.02108 0.045717
-## 2 0.101694      1   0.41379 0.82389 0.163065
-## 3 0.028263      2   0.31209 0.75810 0.157869
-## 4 0.010000      3   0.28383 0.70815 0.151724</code></pre>
+## 1 0.586213      0   1.00000 1.02192 0.045988
+## 2 0.101694      1   0.41379 0.85558 0.167261
+## 3 0.028263      2   0.31209 0.72050 0.149740
+## 4 0.010000      3   0.28383 0.62418 0.131435</code></pre>
 <p>As you see, when the outcome is not a factor variable, <code>rpart</code> applies a <strong>regression tree</strong> method, which minimizes the sum of squares, <span class="math inline">\(\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2\)</span>. However, when <span class="math inline">\(y_i\)</span> is a binary number with two values 0 and 1, the sum of squares becomes <span class="math inline">\(np(1-p)\)</span>, which gives the same relative gain as Gini. This is clear as both relative gains (our calculation and the calculation by <code>rpart</code> above) are the same.</p>
 <p>What’s the variable importance of <code>rpart()</code>?</p>
 <div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="cart.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
@@ -844,10 +844,10 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.48276 0.11560
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.55172 0.12140
-## 5 0.000000      8  0.000000 0.51724 0.11861</code></pre>
+## 2 0.103448      1  0.275862 0.68966 0.13070
+## 3 0.034483      2  0.172414 0.62069 0.12640
+## 4 0.017241      6  0.034483 0.68966 0.13070
+## 5 0.000000      8  0.000000 0.72414 0.13261</code></pre>
 <div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="cart.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr22-1.png" width="672" /></p>
 <div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="cart.html#cb555-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
@@ -876,8 +876,8 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.48276 0.11560
-## 3 0.034483      2   0.17241 0.44828 0.11237</code></pre>
+## 2 0.103448      1   0.27586 0.68966 0.13070
+## 3 0.034483      2   0.17241 0.62069 0.12640</code></pre>
 <div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="cart.html#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr23-1.png" width="672" /></p>
 <p>Now we have applied two approaches: limiting the tree’s growth and pruning a fully grown tree. Hence, we have two different trees: <code>tree</code> and <code>ptree2</code>. In the first case, we can use <code>cp</code> or other control parameters in <code>rpart.control</code> as hyperparameters and tune them on the test set. In the second case, we can grow the tree to its maximum capacity and tune its pruning as to maximize the prediction accuracy on the test set. We will not show the tuning of a tree here. Instead, we will see many improved tree-based models and tuned them in this section.</p>
@@ -948,9 +948,9 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.538 0.029238
-## 4 0.011333      5     0.504  0.530 0.029076
-## 5 0.010000      9     0.458  0.530 0.029076</code></pre>
+## 3 0.015000      3     0.534  0.560 0.029672
+## 4 0.011333      5     0.504  0.540 0.029279
+## 5 0.010000      9     0.458  0.532 0.029117</code></pre>
 <div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb566-1"><a href="cart.html#cb566-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr26-1.png" width="672" /></p>
 <p>Of course, we would like to see the tree’s prediction accuracy by using a test dataset and the confusion table metrics.</p>

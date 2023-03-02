@@ -419,7 +419,7 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.48276 0.11560
+## 2 0.034483      1   0.27586 0.51724 0.11861
 ## 3 0.010000      2   0.24138 0.51724 0.11861
 ```
 
@@ -434,7 +434,7 @@ sum(predict(tree, type="class")!=myocarde$PRONO)/nrow(myocarde)
 ## [1] 0.09859155
 ```
 
-The `xerror` provides the same information but when it is apply to test sets.
+The `xerror` provides the same information about the cross-validation error applied to test sets.
 
 The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
   
@@ -469,10 +469,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.02108 0.045717
-## 2 0.101694      1   0.41379 0.82389 0.163065
-## 3 0.028263      2   0.31209 0.75810 0.157869
-## 4 0.010000      3   0.28383 0.70815 0.151724
+## 1 0.586213      0   1.00000 1.02192 0.045988
+## 2 0.101694      1   0.41379 0.85558 0.167261
+## 3 0.028263      2   0.31209 0.72050 0.149740
+## 4 0.010000      3   0.28383 0.62418 0.131435
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -549,10 +549,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.48276 0.11560
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.55172 0.12140
-## 5 0.000000      8  0.000000 0.51724 0.11861
+## 2 0.103448      1  0.275862 0.68966 0.13070
+## 3 0.034483      2  0.172414 0.62069 0.12640
+## 4 0.017241      6  0.034483 0.68966 0.13070
+## 5 0.000000      8  0.000000 0.72414 0.13261
 ```
 
 ```r
@@ -600,8 +600,8 @@ printcp(ptree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.48276 0.11560
-## 3 0.034483      2   0.17241 0.44828 0.11237
+## 2 0.103448      1   0.27586 0.68966 0.13070
+## 3 0.034483      2   0.17241 0.62069 0.12640
 ```
 
 ```r
@@ -704,9 +704,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.538 0.029238
-## 4 0.011333      5     0.504  0.530 0.029076
-## 5 0.010000      9     0.458  0.530 0.029076
+## 3 0.015000      3     0.534  0.560 0.029672
+## 4 0.011333      5     0.504  0.540 0.029279
+## 5 0.010000      9     0.458  0.532 0.029117
 ```
 
 ```r

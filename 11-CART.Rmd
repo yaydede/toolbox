@@ -320,7 +320,7 @@ The `rel error` of each iteration of the tree is the fraction of mislabeled elem
 sum(predict(tree, type="class")!=myocarde$PRONO)/nrow(myocarde)
 ```
 
-The `xerror` provides the same information but when it is apply to test sets.
+The `xerror` provides the same information about the cross-validation error applied to test sets.
 
 The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
   
