@@ -496,34 +496,34 @@ div.csl-indent {
 y_i=x_i^{\prime} \beta+u_i, ~~~~~i=1, \ldots, n
 \]</span></p>
 <p>where <span class="math inline">\(\beta\)</span> is <span class="math inline">\(p \times 1\)</span>. First, we consider the case where <span class="math inline">\(p&lt;n\)</span> then move to the case where <span class="math inline">\(p \geq n\)</span>. We define <span class="math inline">\(\beta=(1,1,0,0)^{\prime}\)</span> and <span class="math inline">\(n=100\)</span>.</p>
-<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb830-1"><a href="sparsity.html#cb830-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This function generates the data</span></span>
-<span id="cb830-2"><a href="sparsity.html#cb830-2" aria-hidden="true" tabindex="-1"></a>dgp <span class="ot">&lt;-</span> <span class="cf">function</span>(N, Beta) {</span>
-<span id="cb830-3"><a href="sparsity.html#cb830-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">length</span>(Beta)</span>
-<span id="cb830-4"><a href="sparsity.html#cb830-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb830-5"><a href="sparsity.html#cb830-5" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N <span class="sc">*</span> p), <span class="at">ncol =</span> p)</span>
-<span id="cb830-6"><a href="sparsity.html#cb830-6" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N), <span class="at">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb830-7"><a href="sparsity.html#cb830-7" aria-hidden="true" tabindex="-1"></a>  dgm <span class="ot">&lt;-</span> X <span class="sc">%*%</span> Beta</span>
-<span id="cb830-8"><a href="sparsity.html#cb830-8" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> Beta <span class="sc">+</span> u</span>
-<span id="cb830-9"><a href="sparsity.html#cb830-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb830-10"><a href="sparsity.html#cb830-10" aria-hidden="true" tabindex="-1"></a>  return <span class="ot">&lt;-</span> <span class="fu">list</span>(y, X)</span>
-<span id="cb830-11"><a href="sparsity.html#cb830-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb830-12"><a href="sparsity.html#cb830-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb830-13"><a href="sparsity.html#cb830-13" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">100</span></span>
-<span id="cb830-14"><a href="sparsity.html#cb830-14" aria-hidden="true" tabindex="-1"></a>Beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb830-15"><a href="sparsity.html#cb830-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb830-16"><a href="sparsity.html#cb830-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">148</span>)</span>
-<span id="cb830-17"><a href="sparsity.html#cb830-17" aria-hidden="true" tabindex="-1"></a>Output <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
-<span id="cb830-18"><a href="sparsity.html#cb830-18" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> Output[[<span class="dv">1</span>]]</span>
-<span id="cb830-19"><a href="sparsity.html#cb830-19" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> Output[[<span class="dv">2</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb832-1"><a href="sparsity.html#cb832-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This function generates the data</span></span>
+<span id="cb832-2"><a href="sparsity.html#cb832-2" aria-hidden="true" tabindex="-1"></a>dgp <span class="ot">&lt;-</span> <span class="cf">function</span>(N, Beta) {</span>
+<span id="cb832-3"><a href="sparsity.html#cb832-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">length</span>(Beta)</span>
+<span id="cb832-4"><a href="sparsity.html#cb832-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb832-5"><a href="sparsity.html#cb832-5" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N <span class="sc">*</span> p), <span class="at">ncol =</span> p)</span>
+<span id="cb832-6"><a href="sparsity.html#cb832-6" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N), <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb832-7"><a href="sparsity.html#cb832-7" aria-hidden="true" tabindex="-1"></a>  dgm <span class="ot">&lt;-</span> X <span class="sc">%*%</span> Beta</span>
+<span id="cb832-8"><a href="sparsity.html#cb832-8" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> Beta <span class="sc">+</span> u</span>
+<span id="cb832-9"><a href="sparsity.html#cb832-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb832-10"><a href="sparsity.html#cb832-10" aria-hidden="true" tabindex="-1"></a>  return <span class="ot">&lt;-</span> <span class="fu">list</span>(y, X)</span>
+<span id="cb832-11"><a href="sparsity.html#cb832-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb832-12"><a href="sparsity.html#cb832-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb832-13"><a href="sparsity.html#cb832-13" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb832-14"><a href="sparsity.html#cb832-14" aria-hidden="true" tabindex="-1"></a>Beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb832-15"><a href="sparsity.html#cb832-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb832-16"><a href="sparsity.html#cb832-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">148</span>)</span>
+<span id="cb832-17"><a href="sparsity.html#cb832-17" aria-hidden="true" tabindex="-1"></a>Output <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
+<span id="cb832-18"><a href="sparsity.html#cb832-18" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> Output[[<span class="dv">1</span>]]</span>
+<span id="cb832-19"><a href="sparsity.html#cb832-19" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> Output[[<span class="dv">2</span>]]</span></code></pre></div>
 <p>First, we apply lasso</p>
-<div class="sourceCode" id="cb831"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb831-1"><a href="sparsity.html#cb831-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
-<span id="cb831-2"><a href="sparsity.html#cb831-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb831-3"><a href="sparsity.html#cb831-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">432</span>)</span>
-<span id="cb831-4"><a href="sparsity.html#cb831-4" aria-hidden="true" tabindex="-1"></a>lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
-<span id="cb831-5"><a href="sparsity.html#cb831-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb831-6"><a href="sparsity.html#cb831-6" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
-<span id="cb831-7"><a href="sparsity.html#cb831-7" aria-hidden="true" tabindex="-1"></a>S_matrix <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">t</span>(beta_hat), <span class="st">&quot;lambda&quot;</span> <span class="ot">=</span> lasso<span class="sc">$</span>lambda)</span>
-<span id="cb831-8"><a href="sparsity.html#cb831-8" aria-hidden="true" tabindex="-1"></a>S_matrix[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">25</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">55</span><span class="sc">:</span><span class="dv">60</span>), ] <span class="co"># selected rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb833-1"><a href="sparsity.html#cb833-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb833-2"><a href="sparsity.html#cb833-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb833-3"><a href="sparsity.html#cb833-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">432</span>)</span>
+<span id="cb833-4"><a href="sparsity.html#cb833-4" aria-hidden="true" tabindex="-1"></a>lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb833-5"><a href="sparsity.html#cb833-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb833-6"><a href="sparsity.html#cb833-6" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
+<span id="cb833-7"><a href="sparsity.html#cb833-7" aria-hidden="true" tabindex="-1"></a>S_matrix <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">t</span>(beta_hat), <span class="st">&quot;lambda&quot;</span> <span class="ot">=</span> lasso<span class="sc">$</span>lambda)</span>
+<span id="cb833-8"><a href="sparsity.html#cb833-8" aria-hidden="true" tabindex="-1"></a>S_matrix[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">25</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">55</span><span class="sc">:</span><span class="dv">60</span>), ] <span class="co"># selected rows</span></span></code></pre></div>
 <pre><code>## 20 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
 ##             V1        V2          V3         V4      lambda
 ## s0  .          .          .          .          1.083220708
@@ -555,21 +555,21 @@ P\left(\hat{\mathcal{A}}_{\lambda_{BIC}}=\mathcal{A}\right) \rightarrow 1
 <p><span class="math display">\[
 B I C_\lambda=\log \left(S S E_\lambda\right)+\frac{\log (n)}{n} n z_\lambda
 \]</span></p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb833-1"><a href="sparsity.html#cb833-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict yhat for each of 61 lambda (s)</span></span>
-<span id="cb833-2"><a href="sparsity.html#cb833-2" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
-<span id="cb833-3"><a href="sparsity.html#cb833-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(y_hat)</span></code></pre></div>
+<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb835-1"><a href="sparsity.html#cb835-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict yhat for each of 61 lambda (s)</span></span>
+<span id="cb835-2"><a href="sparsity.html#cb835-2" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
+<span id="cb835-3"><a href="sparsity.html#cb835-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(y_hat)</span></code></pre></div>
 <pre><code>## [1] 100  60</code></pre>
-<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb835-1"><a href="sparsity.html#cb835-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSE for each lambda (s)</span></span>
-<span id="cb835-2"><a href="sparsity.html#cb835-2" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb835-3"><a href="sparsity.html#cb835-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
-<span id="cb835-4"><a href="sparsity.html#cb835-4" aria-hidden="true" tabindex="-1"></a>  SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, i] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
-<span id="cb835-5"><a href="sparsity.html#cb835-5" aria-hidden="true" tabindex="-1"></a>  SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
-<span id="cb835-6"><a href="sparsity.html#cb835-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb835-7"><a href="sparsity.html#cb835-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb835-8"><a href="sparsity.html#cb835-8" aria-hidden="true" tabindex="-1"></a><span class="co"># BIC</span></span>
-<span id="cb835-9"><a href="sparsity.html#cb835-9" aria-hidden="true" tabindex="-1"></a>nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>) <span class="co"># Number of non-zero coefficients for each lambda</span></span>
-<span id="cb835-10"><a href="sparsity.html#cb835-10" aria-hidden="true" tabindex="-1"></a>BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz <span class="co"># BIC</span></span>
-<span id="cb835-11"><a href="sparsity.html#cb835-11" aria-hidden="true" tabindex="-1"></a>BIC</span></code></pre></div>
+<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="sparsity.html#cb837-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SSE for each lambda (s)</span></span>
+<span id="cb837-2"><a href="sparsity.html#cb837-2" aria-hidden="true" tabindex="-1"></a>SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb837-3"><a href="sparsity.html#cb837-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
+<span id="cb837-4"><a href="sparsity.html#cb837-4" aria-hidden="true" tabindex="-1"></a>  SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, i] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
+<span id="cb837-5"><a href="sparsity.html#cb837-5" aria-hidden="true" tabindex="-1"></a>  SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
+<span id="cb837-6"><a href="sparsity.html#cb837-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb837-7"><a href="sparsity.html#cb837-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb837-8"><a href="sparsity.html#cb837-8" aria-hidden="true" tabindex="-1"></a><span class="co"># BIC</span></span>
+<span id="cb837-9"><a href="sparsity.html#cb837-9" aria-hidden="true" tabindex="-1"></a>nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>) <span class="co"># Number of non-zero coefficients for each lambda</span></span>
+<span id="cb837-10"><a href="sparsity.html#cb837-10" aria-hidden="true" tabindex="-1"></a>BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz <span class="co"># BIC</span></span>
+<span id="cb837-11"><a href="sparsity.html#cb837-11" aria-hidden="true" tabindex="-1"></a>BIC</span></code></pre></div>
 <pre><code>##       s0       s1       s2       s3       s4       s5       s6       s7 
 ## 5.598919 5.595359 5.468287 5.348947 5.237755 5.135013 5.040883 4.955387 
 ##       s8       s9      s10      s11      s12      s13      s14      s15 
@@ -587,13 +587,13 @@ B I C_\lambda=\log \left(S S E_\lambda\right)+\frac{\log (n)}{n} n z_\lambda
 ##      s56      s57      s58      s59 
 ## 4.457650 4.457614 4.457584 4.457559</code></pre>
 <p>And, the selected model that has the minimum BIC</p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="sparsity.html#cb837-1" aria-hidden="true" tabindex="-1"></a>beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
-<span id="cb837-2"><a href="sparsity.html#cb837-2" aria-hidden="true" tabindex="-1"></a>beta_lasso</span></code></pre></div>
+<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb839-1"><a href="sparsity.html#cb839-1" aria-hidden="true" tabindex="-1"></a>beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
+<span id="cb839-2"><a href="sparsity.html#cb839-2" aria-hidden="true" tabindex="-1"></a>beta_lasso</span></code></pre></div>
 <pre><code>##        V1        V2        V3        V4 
 ## 0.8887426 0.8461243 0.0000000 0.0000000</code></pre>
 <p>This is the <code>beta_hat</code> that identifies the true sparsity. And, the second Oracle property, the <span class="math inline">\(\ell_2\)</span> error:</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb839-1"><a href="sparsity.html#cb839-1" aria-hidden="true" tabindex="-1"></a>l_2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb839-2"><a href="sparsity.html#cb839-2" aria-hidden="true" tabindex="-1"></a>l_2</span></code></pre></div>
+<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb841-1"><a href="sparsity.html#cb841-1" aria-hidden="true" tabindex="-1"></a>l_2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb841-2"><a href="sparsity.html#cb841-2" aria-hidden="true" tabindex="-1"></a>l_2</span></code></pre></div>
 <pre><code>## [1] 0.189884</code></pre>
 <p>Here we will create a simulation that will report two Oracle Properties for Lasso and Adaptive Lasso:</p>
 <ul>
@@ -603,128 +603,128 @@ B I C_\lambda=\log \left(S S E_\lambda\right)+\frac{\log (n)}{n} n z_\lambda
 </ul>
 <p><strong>Lasso</strong></p>
 <p>We first have a function, <code>msc()</code>, that executes a simulation with all the steps shown before:</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb841-1"><a href="sparsity.html#cb841-1" aria-hidden="true" tabindex="-1"></a>mcs <span class="ot">&lt;-</span> <span class="cf">function</span>(mc, N, Beta) {</span>
-<span id="cb841-2"><a href="sparsity.html#cb841-2" aria-hidden="true" tabindex="-1"></a>  mcmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> mc, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb841-3"><a href="sparsity.html#cb841-3" aria-hidden="true" tabindex="-1"></a>  beta_lasso_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="fu">length</span>(Beta))</span>
-<span id="cb841-4"><a href="sparsity.html#cb841-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb841-5"><a href="sparsity.html#cb841-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>mc) {</span>
-<span id="cb841-6"><a href="sparsity.html#cb841-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i)</span>
-<span id="cb841-7"><a href="sparsity.html#cb841-7" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
-<span id="cb841-8"><a href="sparsity.html#cb841-8" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
-<span id="cb841-9"><a href="sparsity.html#cb841-9" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
-<span id="cb841-10"><a href="sparsity.html#cb841-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb841-11"><a href="sparsity.html#cb841-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i)</span>
-<span id="cb841-12"><a href="sparsity.html#cb841-12" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
-<span id="cb841-13"><a href="sparsity.html#cb841-13" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta    <span class="co"># beta_hat is a matrix</span></span>
-<span id="cb841-14"><a href="sparsity.html#cb841-14" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
-<span id="cb841-15"><a href="sparsity.html#cb841-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb841-16"><a href="sparsity.html#cb841-16" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb841-17"><a href="sparsity.html#cb841-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
-<span id="cb841-18"><a href="sparsity.html#cb841-18" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
-<span id="cb841-19"><a href="sparsity.html#cb841-19" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
-<span id="cb841-20"><a href="sparsity.html#cb841-20" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb841-21"><a href="sparsity.html#cb841-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb841-22"><a href="sparsity.html#cb841-22" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb841-23"><a href="sparsity.html#cb841-23" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
-<span id="cb841-24"><a href="sparsity.html#cb841-24" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
-<span id="cb841-25"><a href="sparsity.html#cb841-25" aria-hidden="true" tabindex="-1"></a>    nonz_beta <span class="ot">=</span> <span class="fu">length</span>(Beta[Beta <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb841-26"><a href="sparsity.html#cb841-26" aria-hidden="true" tabindex="-1"></a>    nonz_beta_hat <span class="ot">=</span> <span class="fu">length</span>(beta_lasso[beta_lasso <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb841-27"><a href="sparsity.html#cb841-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb841-28"><a href="sparsity.html#cb841-28" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb841-29"><a href="sparsity.html#cb841-29" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nonz_beta <span class="sc">!=</span> nonz_beta_hat, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb841-30"><a href="sparsity.html#cb841-30" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>(beta_lasso <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb841-31"><a href="sparsity.html#cb841-31" aria-hidden="true" tabindex="-1"></a>    beta_lasso_mat[i, ] <span class="ot">&lt;-</span> beta_lasso</span>
-<span id="cb841-32"><a href="sparsity.html#cb841-32" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb841-33"><a href="sparsity.html#cb841-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mcmat, beta_lasso_mat))</span>
-<span id="cb841-34"><a href="sparsity.html#cb841-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb843-1"><a href="sparsity.html#cb843-1" aria-hidden="true" tabindex="-1"></a>mcs <span class="ot">&lt;-</span> <span class="cf">function</span>(mc, N, Beta) {</span>
+<span id="cb843-2"><a href="sparsity.html#cb843-2" aria-hidden="true" tabindex="-1"></a>  mcmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> mc, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb843-3"><a href="sparsity.html#cb843-3" aria-hidden="true" tabindex="-1"></a>  beta_lasso_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="fu">length</span>(Beta))</span>
+<span id="cb843-4"><a href="sparsity.html#cb843-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb843-5"><a href="sparsity.html#cb843-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>mc) {</span>
+<span id="cb843-6"><a href="sparsity.html#cb843-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i)</span>
+<span id="cb843-7"><a href="sparsity.html#cb843-7" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
+<span id="cb843-8"><a href="sparsity.html#cb843-8" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
+<span id="cb843-9"><a href="sparsity.html#cb843-9" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
+<span id="cb843-10"><a href="sparsity.html#cb843-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb843-11"><a href="sparsity.html#cb843-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i)</span>
+<span id="cb843-12"><a href="sparsity.html#cb843-12" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb843-13"><a href="sparsity.html#cb843-13" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta    <span class="co"># beta_hat is a matrix</span></span>
+<span id="cb843-14"><a href="sparsity.html#cb843-14" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
+<span id="cb843-15"><a href="sparsity.html#cb843-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb843-16"><a href="sparsity.html#cb843-16" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb843-17"><a href="sparsity.html#cb843-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
+<span id="cb843-18"><a href="sparsity.html#cb843-18" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
+<span id="cb843-19"><a href="sparsity.html#cb843-19" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
+<span id="cb843-20"><a href="sparsity.html#cb843-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb843-21"><a href="sparsity.html#cb843-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb843-22"><a href="sparsity.html#cb843-22" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb843-23"><a href="sparsity.html#cb843-23" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
+<span id="cb843-24"><a href="sparsity.html#cb843-24" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
+<span id="cb843-25"><a href="sparsity.html#cb843-25" aria-hidden="true" tabindex="-1"></a>    nonz_beta <span class="ot">=</span> <span class="fu">length</span>(Beta[Beta <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb843-26"><a href="sparsity.html#cb843-26" aria-hidden="true" tabindex="-1"></a>    nonz_beta_hat <span class="ot">=</span> <span class="fu">length</span>(beta_lasso[beta_lasso <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb843-27"><a href="sparsity.html#cb843-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb843-28"><a href="sparsity.html#cb843-28" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb843-29"><a href="sparsity.html#cb843-29" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nonz_beta <span class="sc">!=</span> nonz_beta_hat, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb843-30"><a href="sparsity.html#cb843-30" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>(beta_lasso <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb843-31"><a href="sparsity.html#cb843-31" aria-hidden="true" tabindex="-1"></a>    beta_lasso_mat[i, ] <span class="ot">&lt;-</span> beta_lasso</span>
+<span id="cb843-32"><a href="sparsity.html#cb843-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb843-33"><a href="sparsity.html#cb843-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mcmat, beta_lasso_mat))</span>
+<span id="cb843-34"><a href="sparsity.html#cb843-34" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>We are ready for simulation:</p>
-<div class="sourceCode" id="cb842"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb842-1"><a href="sparsity.html#cb842-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb842-2"><a href="sparsity.html#cb842-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb842-3"><a href="sparsity.html#cb842-3" aria-hidden="true" tabindex="-1"></a>Beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">nc =</span> <span class="dv">1</span>)</span>
-<span id="cb842-4"><a href="sparsity.html#cb842-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">mcs</span>(mc, N, Beta) <span class="co">#see the function</span></span>
-<span id="cb842-5"><a href="sparsity.html#cb842-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb842-6"><a href="sparsity.html#cb842-6" aria-hidden="true" tabindex="-1"></a>MC_betas <span class="ot">=</span> output[[<span class="dv">2</span>]]</span>
-<span id="cb842-7"><a href="sparsity.html#cb842-7" aria-hidden="true" tabindex="-1"></a>MC_performance <span class="ot">=</span> output[[<span class="dv">1</span>]]</span>
-<span id="cb842-8"><a href="sparsity.html#cb842-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb842-9"><a href="sparsity.html#cb842-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">2</span>]) <span class="co">#how many times lasso finds true sparsity</span></span></code></pre></div>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb844-1"><a href="sparsity.html#cb844-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb844-2"><a href="sparsity.html#cb844-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb844-3"><a href="sparsity.html#cb844-3" aria-hidden="true" tabindex="-1"></a>Beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">nc =</span> <span class="dv">1</span>)</span>
+<span id="cb844-4"><a href="sparsity.html#cb844-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">mcs</span>(mc, N, Beta) <span class="co">#see the function</span></span>
+<span id="cb844-5"><a href="sparsity.html#cb844-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb844-6"><a href="sparsity.html#cb844-6" aria-hidden="true" tabindex="-1"></a>MC_betas <span class="ot">=</span> output[[<span class="dv">2</span>]]</span>
+<span id="cb844-7"><a href="sparsity.html#cb844-7" aria-hidden="true" tabindex="-1"></a>MC_performance <span class="ot">=</span> output[[<span class="dv">1</span>]]</span>
+<span id="cb844-8"><a href="sparsity.html#cb844-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb844-9"><a href="sparsity.html#cb844-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">2</span>]) <span class="co">#how many times lasso finds true sparsity</span></span></code></pre></div>
 <pre><code>## [1] 400</code></pre>
 <p>This is the first property: lasso identifies the true sparsity <span class="math inline">\(400/500 = 80\%\)</span> of cases. And the second property, <span class="math inline">\(\ell_2\)</span> error, in the simulation is (in total):</p>
-<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb844-1"><a href="sparsity.html#cb844-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb846-1"><a href="sparsity.html#cb846-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] 29.41841</code></pre>
 <p><strong>Adaptive Lasso</strong></p>
 <p>This time we let our adaptive lasso use lasso coefficients as penalty weights in <code>glmnet()</code>. Let’s have the same function with Adaptive Lasso for the simulation:</p>
-<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb846-1"><a href="sparsity.html#cb846-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adaptive LASSO</span></span>
-<span id="cb846-2"><a href="sparsity.html#cb846-2" aria-hidden="true" tabindex="-1"></a>mcsA <span class="ot">&lt;-</span> <span class="cf">function</span>(mc, N, Beta) {</span>
-<span id="cb846-3"><a href="sparsity.html#cb846-3" aria-hidden="true" tabindex="-1"></a>  mcmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="dv">3</span>)</span>
-<span id="cb846-4"><a href="sparsity.html#cb846-4" aria-hidden="true" tabindex="-1"></a>  beta_lasso_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="fu">length</span>(Beta))</span>
-<span id="cb846-5"><a href="sparsity.html#cb846-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb846-6"><a href="sparsity.html#cb846-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>mc) {</span>
-<span id="cb846-7"><a href="sparsity.html#cb846-7" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
-<span id="cb846-8"><a href="sparsity.html#cb846-8" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
-<span id="cb846-9"><a href="sparsity.html#cb846-9" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
-<span id="cb846-10"><a href="sparsity.html#cb846-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-11"><a href="sparsity.html#cb846-11" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
-<span id="cb846-12"><a href="sparsity.html#cb846-12" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
-<span id="cb846-13"><a href="sparsity.html#cb846-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-14"><a href="sparsity.html#cb846-14" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
-<span id="cb846-15"><a href="sparsity.html#cb846-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-16"><a href="sparsity.html#cb846-16" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb846-17"><a href="sparsity.html#cb846-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
-<span id="cb846-18"><a href="sparsity.html#cb846-18" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
-<span id="cb846-19"><a href="sparsity.html#cb846-19" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
-<span id="cb846-20"><a href="sparsity.html#cb846-20" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb846-21"><a href="sparsity.html#cb846-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-22"><a href="sparsity.html#cb846-22" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb846-23"><a href="sparsity.html#cb846-23" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
-<span id="cb846-24"><a href="sparsity.html#cb846-24" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
-<span id="cb846-25"><a href="sparsity.html#cb846-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-26"><a href="sparsity.html#cb846-26" aria-hidden="true" tabindex="-1"></a>    weights <span class="ot">=</span> <span class="fu">abs</span>(beta_lasso) <span class="sc">^</span> (<span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb846-27"><a href="sparsity.html#cb846-27" aria-hidden="true" tabindex="-1"></a>    weights[beta_lasso <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="dv">10</span> <span class="co"># to handle inf&#39;s</span></span>
-<span id="cb846-28"><a href="sparsity.html#cb846-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-29"><a href="sparsity.html#cb846-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Now Adaptive Lasso</span></span>
-<span id="cb846-30"><a href="sparsity.html#cb846-30" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span></span>
-<span id="cb846-31"><a href="sparsity.html#cb846-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">glmnet</span>(</span>
-<span id="cb846-32"><a href="sparsity.html#cb846-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> X,</span>
-<span id="cb846-33"><a href="sparsity.html#cb846-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> y,</span>
-<span id="cb846-34"><a href="sparsity.html#cb846-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
-<span id="cb846-35"><a href="sparsity.html#cb846-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">penalty.factor =</span> weights</span>
-<span id="cb846-36"><a href="sparsity.html#cb846-36" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb846-37"><a href="sparsity.html#cb846-37" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
-<span id="cb846-38"><a href="sparsity.html#cb846-38" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-39"><a href="sparsity.html#cb846-39" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
-<span id="cb846-40"><a href="sparsity.html#cb846-40" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-41"><a href="sparsity.html#cb846-41" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb846-42"><a href="sparsity.html#cb846-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
-<span id="cb846-43"><a href="sparsity.html#cb846-43" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
-<span id="cb846-44"><a href="sparsity.html#cb846-44" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
-<span id="cb846-45"><a href="sparsity.html#cb846-45" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb846-46"><a href="sparsity.html#cb846-46" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-47"><a href="sparsity.html#cb846-47" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb846-48"><a href="sparsity.html#cb846-48" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
-<span id="cb846-49"><a href="sparsity.html#cb846-49" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
-<span id="cb846-50"><a href="sparsity.html#cb846-50" aria-hidden="true" tabindex="-1"></a>    nonz_beta <span class="ot">=</span> <span class="fu">length</span>(Beta[Beta <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb846-51"><a href="sparsity.html#cb846-51" aria-hidden="true" tabindex="-1"></a>    nonz_beta_hat <span class="ot">=</span> <span class="fu">length</span>(beta_lasso[beta_lasso <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb846-52"><a href="sparsity.html#cb846-52" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb846-53"><a href="sparsity.html#cb846-53" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb846-54"><a href="sparsity.html#cb846-54" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nonz_beta <span class="sc">!=</span> nonz_beta_hat, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb846-55"><a href="sparsity.html#cb846-55" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>(beta_lasso <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb846-56"><a href="sparsity.html#cb846-56" aria-hidden="true" tabindex="-1"></a>    beta_lasso_mat[i, ] <span class="ot">&lt;-</span> beta_lasso</span>
-<span id="cb846-57"><a href="sparsity.html#cb846-57" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb846-58"><a href="sparsity.html#cb846-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mcmat, beta_lasso_mat))</span>
-<span id="cb846-59"><a href="sparsity.html#cb846-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb848-1"><a href="sparsity.html#cb848-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adaptive LASSO</span></span>
+<span id="cb848-2"><a href="sparsity.html#cb848-2" aria-hidden="true" tabindex="-1"></a>mcsA <span class="ot">&lt;-</span> <span class="cf">function</span>(mc, N, Beta) {</span>
+<span id="cb848-3"><a href="sparsity.html#cb848-3" aria-hidden="true" tabindex="-1"></a>  mcmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="dv">3</span>)</span>
+<span id="cb848-4"><a href="sparsity.html#cb848-4" aria-hidden="true" tabindex="-1"></a>  beta_lasso_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nr =</span> mc, <span class="at">nc =</span> <span class="fu">length</span>(Beta))</span>
+<span id="cb848-5"><a href="sparsity.html#cb848-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb848-6"><a href="sparsity.html#cb848-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>mc) {</span>
+<span id="cb848-7"><a href="sparsity.html#cb848-7" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">dgp</span>(N, Beta)</span>
+<span id="cb848-8"><a href="sparsity.html#cb848-8" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
+<span id="cb848-9"><a href="sparsity.html#cb848-9" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
+<span id="cb848-10"><a href="sparsity.html#cb848-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-11"><a href="sparsity.html#cb848-11" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> X, <span class="at">y =</span> y, <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb848-12"><a href="sparsity.html#cb848-12" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
+<span id="cb848-13"><a href="sparsity.html#cb848-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-14"><a href="sparsity.html#cb848-14" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
+<span id="cb848-15"><a href="sparsity.html#cb848-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-16"><a href="sparsity.html#cb848-16" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb848-17"><a href="sparsity.html#cb848-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
+<span id="cb848-18"><a href="sparsity.html#cb848-18" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
+<span id="cb848-19"><a href="sparsity.html#cb848-19" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
+<span id="cb848-20"><a href="sparsity.html#cb848-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb848-21"><a href="sparsity.html#cb848-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-22"><a href="sparsity.html#cb848-22" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb848-23"><a href="sparsity.html#cb848-23" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
+<span id="cb848-24"><a href="sparsity.html#cb848-24" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
+<span id="cb848-25"><a href="sparsity.html#cb848-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-26"><a href="sparsity.html#cb848-26" aria-hidden="true" tabindex="-1"></a>    weights <span class="ot">=</span> <span class="fu">abs</span>(beta_lasso) <span class="sc">^</span> (<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb848-27"><a href="sparsity.html#cb848-27" aria-hidden="true" tabindex="-1"></a>    weights[beta_lasso <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="dv">10</span> <span class="co"># to handle inf&#39;s</span></span>
+<span id="cb848-28"><a href="sparsity.html#cb848-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-29"><a href="sparsity.html#cb848-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Now Adaptive Lasso</span></span>
+<span id="cb848-30"><a href="sparsity.html#cb848-30" aria-hidden="true" tabindex="-1"></a>    lasso <span class="ot">&lt;-</span></span>
+<span id="cb848-31"><a href="sparsity.html#cb848-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">glmnet</span>(</span>
+<span id="cb848-32"><a href="sparsity.html#cb848-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> X,</span>
+<span id="cb848-33"><a href="sparsity.html#cb848-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> y,</span>
+<span id="cb848-34"><a href="sparsity.html#cb848-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">family =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb848-35"><a href="sparsity.html#cb848-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">penalty.factor =</span> weights</span>
+<span id="cb848-36"><a href="sparsity.html#cb848-36" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb848-37"><a href="sparsity.html#cb848-37" aria-hidden="true" tabindex="-1"></a>    beta_hat <span class="ot">&lt;-</span> lasso<span class="sc">$</span>beta</span>
+<span id="cb848-38"><a href="sparsity.html#cb848-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-39"><a href="sparsity.html#cb848-39" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="ot">=</span> <span class="fu">predict</span>(lasso, <span class="at">newx =</span> X)</span>
+<span id="cb848-40"><a href="sparsity.html#cb848-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-41"><a href="sparsity.html#cb848-41" aria-hidden="true" tabindex="-1"></a>    SSE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb848-42"><a href="sparsity.html#cb848-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(y_hat)) {</span>
+<span id="cb848-43"><a href="sparsity.html#cb848-43" aria-hidden="true" tabindex="-1"></a>      SSE_each <span class="ot">&lt;-</span> <span class="fu">sum</span>((y_hat[, j] <span class="sc">-</span> y[, <span class="dv">1</span>]) <span class="sc">^</span> (<span class="dv">2</span>))</span>
+<span id="cb848-44"><a href="sparsity.html#cb848-44" aria-hidden="true" tabindex="-1"></a>      SSE <span class="ot">&lt;-</span> <span class="fu">c</span>(SSE, SSE_each)</span>
+<span id="cb848-45"><a href="sparsity.html#cb848-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb848-46"><a href="sparsity.html#cb848-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-47"><a href="sparsity.html#cb848-47" aria-hidden="true" tabindex="-1"></a>    nz <span class="ot">&lt;-</span> <span class="fu">colSums</span>(beta_hat <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb848-48"><a href="sparsity.html#cb848-48" aria-hidden="true" tabindex="-1"></a>    BIC <span class="ot">&lt;-</span> <span class="fu">log</span>(SSE) <span class="sc">+</span> (<span class="fu">log</span>(N) <span class="sc">/</span> N) <span class="sc">*</span> nz</span>
+<span id="cb848-49"><a href="sparsity.html#cb848-49" aria-hidden="true" tabindex="-1"></a>    beta_lasso <span class="ot">&lt;-</span> beta_hat[, <span class="fu">which</span>(BIC <span class="sc">==</span> <span class="fu">min</span>(BIC))]</span>
+<span id="cb848-50"><a href="sparsity.html#cb848-50" aria-hidden="true" tabindex="-1"></a>    nonz_beta <span class="ot">=</span> <span class="fu">length</span>(Beta[Beta <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb848-51"><a href="sparsity.html#cb848-51" aria-hidden="true" tabindex="-1"></a>    nonz_beta_hat <span class="ot">=</span> <span class="fu">length</span>(beta_lasso[beta_lasso <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb848-52"><a href="sparsity.html#cb848-52" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb848-53"><a href="sparsity.html#cb848-53" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((beta_lasso <span class="sc">-</span> Beta) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb848-54"><a href="sparsity.html#cb848-54" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nonz_beta <span class="sc">!=</span> nonz_beta_hat, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb848-55"><a href="sparsity.html#cb848-55" aria-hidden="true" tabindex="-1"></a>    mcmat[i, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sum</span>(beta_lasso <span class="sc">!=</span> <span class="dv">0</span>)</span>
+<span id="cb848-56"><a href="sparsity.html#cb848-56" aria-hidden="true" tabindex="-1"></a>    beta_lasso_mat[i, ] <span class="ot">&lt;-</span> beta_lasso</span>
+<span id="cb848-57"><a href="sparsity.html#cb848-57" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb848-58"><a href="sparsity.html#cb848-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(mcmat, beta_lasso_mat))</span>
+<span id="cb848-59"><a href="sparsity.html#cb848-59" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Here are the results for adaptive lasso:</p>
-<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb847-1"><a href="sparsity.html#cb847-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb847-2"><a href="sparsity.html#cb847-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb847-3"><a href="sparsity.html#cb847-3" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">nc =</span> <span class="dv">1</span>)</span>
-<span id="cb847-4"><a href="sparsity.html#cb847-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">mcsA</span>(mc, N, beta) <span class="co">#see the function</span></span>
-<span id="cb847-5"><a href="sparsity.html#cb847-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb847-6"><a href="sparsity.html#cb847-6" aria-hidden="true" tabindex="-1"></a>MC_betas <span class="ot">=</span> output[[<span class="dv">2</span>]]</span>
-<span id="cb847-7"><a href="sparsity.html#cb847-7" aria-hidden="true" tabindex="-1"></a>MC_performance <span class="ot">=</span> output[[<span class="dv">1</span>]]</span>
-<span id="cb847-8"><a href="sparsity.html#cb847-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb847-9"><a href="sparsity.html#cb847-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="sparsity.html#cb849-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb849-2"><a href="sparsity.html#cb849-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb849-3"><a href="sparsity.html#cb849-3" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">nc =</span> <span class="dv">1</span>)</span>
+<span id="cb849-4"><a href="sparsity.html#cb849-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">mcsA</span>(mc, N, beta) <span class="co">#see the function</span></span>
+<span id="cb849-5"><a href="sparsity.html#cb849-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb849-6"><a href="sparsity.html#cb849-6" aria-hidden="true" tabindex="-1"></a>MC_betas <span class="ot">=</span> output[[<span class="dv">2</span>]]</span>
+<span id="cb849-7"><a href="sparsity.html#cb849-7" aria-hidden="true" tabindex="-1"></a>MC_performance <span class="ot">=</span> output[[<span class="dv">1</span>]]</span>
+<span id="cb849-8"><a href="sparsity.html#cb849-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb849-9"><a href="sparsity.html#cb849-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[, <span class="dv">2</span>])</span></code></pre></div>
 <pre><code>## [1] 492</code></pre>
 <p>And,</p>
-<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="sparsity.html#cb849-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[,<span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb851"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb851-1"><a href="sparsity.html#cb851-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(MC_performance[,<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] 20.21311</code></pre>
 <p>The simulation results clearly show that Adaptive Lasso is an Oracle estimator and a better choice for sparsity applications.</p>
 <p>We saw here a basic application of adaptive lasso, which has several different variations in practice, such as Thresholded Lasso and Rigorous Lasso. Model selections with lasso has been an active research area. One of the well-known applications is the double-selection lasso linear regression method that can be used for variable selections. Moreover, lasso type applications are also used in time-series forecasting and graphical network analysis for dimension reductions.</p>

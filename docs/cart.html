@@ -758,19 +758,23 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.58621 0.12399
-## 3 0.010000      2   0.24138 0.58621 0.12399</code></pre>
-<p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.00000 in the table) in the root node. The <strong>relative</strong> improvement, or gain, due to a split is given by <code>CP</code> (cost complexity pruning), which is 0.724138 in the first split on <code>INSYS</code>. Therefore, the first split on <code>INSYS</code> reduces (improves) this error to 27.5862% (<code>rel error</code>).</p>
+## 2 0.034483      1   0.27586 0.48276 0.11560
+## 3 0.010000      2   0.24138 0.51724 0.11861</code></pre>
+<p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.00000 in the table) in the root node. In other words, <code>rel error</code> gives the percentage of misclassified labels, when it’s multiplied with the <code>Root node error</code> (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by <code>rpart</code>’s CV.</p>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="cart.html#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">predict</span>(tree, <span class="at">type=</span><span class="st">&quot;class&quot;</span>)<span class="sc">!=</span>myocarde<span class="sc">$</span>PRONO)<span class="sc">/</span><span class="fu">nrow</span>(myocarde)</span></code></pre></div>
+<pre><code>## [1] 0.09859155</code></pre>
+<p>The <code>xerror</code> provides the same information but when it is apply to test sets.</p>
+<p>The <strong>relative</strong> improvement, or gain, due to a split is given by <code>CP</code> (cost complexity pruning), which is 0.724138 in the first split on <code>INSYS</code>. Therefore, the first split on <code>INSYS</code> reduces (improves) this error to 27.5862% (<code>rel error</code>).</p>
 <p>This relative gain (<code>CP</code>) can be calculated as follows:</p>
 <p><span class="math display">\[
 \frac{\Delta}{G(\mathcal{N})}=\frac{G(\mathcal{N})-G\left(\mathcal{N}_{L}, \mathcal{N}_{R}\right)}{G(\mathcal{N})}.
 \]</span></p>
 <p>If this gain exceeds 1%, which is the default value, <code>rpart()</code> splits a variable. As you can see from the table above, since there is no significant relative gain at the <span class="math inline">\(3^{rd}\)</span> split more than the default parameter 0.01, <code>rpart()</code> decides to stop growing the tree after the <span class="math inline">\(2^{nd}\)</span> split.</p>
 <p>Note that, we also calculated both the nominator and the denominator in our own algorithm: <span class="math inline">\(\Delta = 0.2832801\)</span> and <span class="math inline">\(G(\mathcal{N}) = 0.4832375\)</span>. Hence the relative gain was <span class="math inline">\(\frac{\Delta}{G(\mathcal{N})}=0.586213\)</span> in our case. We can replicate the same results if we change our outcome from factor to numeric:</p>
-<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="cart.html#cb546-1" aria-hidden="true" tabindex="-1"></a>myocarde_v2 <span class="ot">&lt;-</span> myocarde</span>
-<span id="cb546-2"><a href="cart.html#cb546-2" aria-hidden="true" tabindex="-1"></a>myocarde_v2<span class="sc">$</span>PRONO <span class="ot">=</span> <span class="fu">ifelse</span>(myocarde<span class="sc">$</span>PRONO <span class="sc">==</span> <span class="st">&quot;SURVIE&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb546-3"><a href="cart.html#cb546-3" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">=</span> <span class="fu">rpart</span>(PRONO <span class="sc">~</span> ., <span class="at">data =</span> myocarde_v2)</span>
-<span id="cb546-4"><a href="cart.html#cb546-4" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(cart)</span></code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="cart.html#cb548-1" aria-hidden="true" tabindex="-1"></a>myocarde_v2 <span class="ot">&lt;-</span> myocarde</span>
+<span id="cb548-2"><a href="cart.html#cb548-2" aria-hidden="true" tabindex="-1"></a>myocarde_v2<span class="sc">$</span>PRONO <span class="ot">=</span> <span class="fu">ifelse</span>(myocarde<span class="sc">$</span>PRONO <span class="sc">==</span> <span class="st">&quot;SURVIE&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb548-3"><a href="cart.html#cb548-3" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">=</span> <span class="fu">rpart</span>(PRONO <span class="sc">~</span> ., <span class="at">data =</span> myocarde_v2)</span>
+<span id="cb548-4"><a href="cart.html#cb548-4" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(cart)</span></code></pre></div>
 <pre><code>## 
 ## Regression tree:
 ## rpart(formula = PRONO ~ ., data = myocarde_v2)
@@ -783,49 +787,49 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01723 0.045506
-## 2 0.101694      1   0.41379 0.75967 0.162915
-## 3 0.028263      2   0.31209 0.67803 0.151231
-## 4 0.010000      3   0.28383 0.65947 0.150977</code></pre>
+## 1 0.586213      0   1.00000 1.02108 0.045717
+## 2 0.101694      1   0.41379 0.82389 0.163065
+## 3 0.028263      2   0.31209 0.75810 0.157869
+## 4 0.010000      3   0.28383 0.70815 0.151724</code></pre>
 <p>As you see, when the outcome is not a factor variable, <code>rpart</code> applies a <strong>regression tree</strong> method, which minimizes the sum of squares, <span class="math inline">\(\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2\)</span>. However, when <span class="math inline">\(y_i\)</span> is a binary number with two values 0 and 1, the sum of squares becomes <span class="math inline">\(np(1-p)\)</span>, which gives the same relative gain as Gini. This is clear as both relative gains (our calculation and the calculation by <code>rpart</code> above) are the same.</p>
 <p>What’s the variable importance of <code>rpart()</code>?</p>
-<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="cart.html#cb548-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
-<span id="cb548-2"><a href="cart.html#cb548-2" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> tree<span class="sc">$</span>variable.importance</span>
-<span id="cb548-3"><a href="cart.html#cb548-3" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> vi[<span class="fu">order</span>(vi)]</span>
-<span id="cb548-4"><a href="cart.html#cb548-4" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
-<span id="cb548-5"><a href="cart.html#cb548-5" aria-hidden="true" tabindex="-1"></a>  vi <span class="sc">/</span> <span class="dv">100</span>,</span>
-<span id="cb548-6"><a href="cart.html#cb548-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb548-7"><a href="cart.html#cb548-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>,</span>
-<span id="cb548-8"><a href="cart.html#cb548-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.names =</span> <span class="fl">0.5</span>,</span>
-<span id="cb548-9"><a href="cart.html#cb548-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.8</span>,</span>
-<span id="cb548-10"><a href="cart.html#cb548-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Variable Importance - rpart()&quot;</span></span>
-<span id="cb548-11"><a href="cart.html#cb548-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="cart.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
+<span id="cb550-2"><a href="cart.html#cb550-2" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> tree<span class="sc">$</span>variable.importance</span>
+<span id="cb550-3"><a href="cart.html#cb550-3" aria-hidden="true" tabindex="-1"></a>vi <span class="ot">&lt;-</span> vi[<span class="fu">order</span>(vi)]</span>
+<span id="cb550-4"><a href="cart.html#cb550-4" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb550-5"><a href="cart.html#cb550-5" aria-hidden="true" tabindex="-1"></a>  vi <span class="sc">/</span> <span class="dv">100</span>,</span>
+<span id="cb550-6"><a href="cart.html#cb550-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb550-7"><a href="cart.html#cb550-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>,</span>
+<span id="cb550-8"><a href="cart.html#cb550-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.names =</span> <span class="fl">0.5</span>,</span>
+<span id="cb550-9"><a href="cart.html#cb550-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.8</span>,</span>
+<span id="cb550-10"><a href="cart.html#cb550-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Variable Importance - rpart()&quot;</span></span>
+<span id="cb550-11"><a href="cart.html#cb550-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr20-1.png" width="672" /></p>
 <p>It seems that the order of variables are similar, but magnitudes are slightly different due to the differences in calculating methods. In <code>rpart</code>, the value is calculated as the sum of the decrease in impurity both when the variable appear as a primary split and when it appears as a surrogate.</p>
 </div>
 <div id="pruning" class="section level2 hasAnchor" number="12.3">
 <h2><span class="header-section-number">12.3</span> Pruning<a href="cart.html#pruning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can now apply the second method to our case by removing the default limits in growing our tree. We can do it by changing the parameters of the <code>rpart</code> fit. Let’s see what happens if we override these parameters.</p>
-<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="cart.html#cb549-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s change the minsplit and minbucket</span></span>
-<span id="cb549-2"><a href="cart.html#cb549-2" aria-hidden="true" tabindex="-1"></a>tree2 <span class="ot">=</span> <span class="fu">rpart</span>(</span>
-<span id="cb549-3"><a href="cart.html#cb549-3" aria-hidden="true" tabindex="-1"></a>  PRONO <span class="sc">~</span> .,</span>
-<span id="cb549-4"><a href="cart.html#cb549-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> myocarde,</span>
-<span id="cb549-5"><a href="cart.html#cb549-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">rpart.control</span>(</span>
-<span id="cb549-6"><a href="cart.html#cb549-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">minsplit =</span> <span class="dv">2</span>,</span>
-<span id="cb549-7"><a href="cart.html#cb549-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">minbucket =</span> <span class="dv">1</span>,</span>
-<span id="cb549-8"><a href="cart.html#cb549-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">cp =</span> <span class="dv">0</span></span>
-<span id="cb549-9"><a href="cart.html#cb549-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb549-10"><a href="cart.html#cb549-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;class&quot;</span></span>
-<span id="cb549-11"><a href="cart.html#cb549-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb549-12"><a href="cart.html#cb549-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb549-13"><a href="cart.html#cb549-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span>
-<span id="cb549-14"><a href="cart.html#cb549-14" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use plot() but prp() is an alternative</span></span>
-<span id="cb549-15"><a href="cart.html#cb549-15" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(tree2, <span class="at">caption =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb551-1"><a href="cart.html#cb551-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s change the minsplit and minbucket</span></span>
+<span id="cb551-2"><a href="cart.html#cb551-2" aria-hidden="true" tabindex="-1"></a>tree2 <span class="ot">=</span> <span class="fu">rpart</span>(</span>
+<span id="cb551-3"><a href="cart.html#cb551-3" aria-hidden="true" tabindex="-1"></a>  PRONO <span class="sc">~</span> .,</span>
+<span id="cb551-4"><a href="cart.html#cb551-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> myocarde,</span>
+<span id="cb551-5"><a href="cart.html#cb551-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">rpart.control</span>(</span>
+<span id="cb551-6"><a href="cart.html#cb551-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">minsplit =</span> <span class="dv">2</span>,</span>
+<span id="cb551-7"><a href="cart.html#cb551-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">minbucket =</span> <span class="dv">1</span>,</span>
+<span id="cb551-8"><a href="cart.html#cb551-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">cp =</span> <span class="dv">0</span></span>
+<span id="cb551-9"><a href="cart.html#cb551-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb551-10"><a href="cart.html#cb551-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;class&quot;</span></span>
+<span id="cb551-11"><a href="cart.html#cb551-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb551-12"><a href="cart.html#cb551-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb551-13"><a href="cart.html#cb551-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span>
+<span id="cb551-14"><a href="cart.html#cb551-14" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use plot() but prp() is an alternative</span></span>
+<span id="cb551-15"><a href="cart.html#cb551-15" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(tree2, <span class="at">caption =</span> <span class="cn">NULL</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr21-1.png" width="672" /></p>
 <p>This is our <strong>fully grown tree</strong> with a “perfect” fit, because it identifies every outcome (<code>DECES</code> and <code>SURVIE</code>) correctly at the terminal nodes (%’s give proportion of observations). Obviously, this is not a good idea as it overfits.</p>
 <p>Let’s summarize what we have seen so far: we can either go with the first strategy and <strong>limit</strong> the growth of the tree or we can have a fully developed tree then we can <code>prune</code> it.</p>
 <p>The general idea in pruning is to reduce the tree’s complexity by keeping only the most important splits. When we grow a tree, <code>rpart</code> performs 10-fold cross-validation on the data. We can see the cross-validation result by <code>printcp()</code>.</p>
-<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="cart.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(tree2)</span></code></pre></div>
+<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="cart.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(tree2)</span></code></pre></div>
 <pre><code>## 
 ## Classification tree:
 ## rpart(formula = PRONO ~ ., data = myocarde, method = &quot;class&quot;, 
@@ -841,13 +845,13 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
 ## 2 0.103448      1  0.275862 0.48276 0.11560
-## 3 0.034483      2  0.172414 0.37931 0.10513
+## 3 0.034483      2  0.172414 0.44828 0.11237
 ## 4 0.017241      6  0.034483 0.55172 0.12140
-## 5 0.000000      8  0.000000 0.55172 0.12140</code></pre>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="cart.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
+## 5 0.000000      8  0.000000 0.51724 0.11861</code></pre>
+<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="cart.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr22-1.png" width="672" /></p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="cart.html#cb553-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
-<span id="cb553-2"><a href="cart.html#cb553-2" aria-hidden="true" tabindex="-1"></a>min_cp</span></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="cart.html#cb555-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
+<span id="cb555-2"><a href="cart.html#cb555-2" aria-hidden="true" tabindex="-1"></a>min_cp</span></code></pre></div>
 <pre><code>## [1] 0.03448276</code></pre>
 <p>Remember <code>rpart</code> has a built-in process for cross-validation. The <code>xerror</code> is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).</p>
 <p>There are two common ways to prune a tree by <code>rpart</code>:</p>
@@ -856,8 +860,8 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 <li>Use the first level where <code>xerror</code> &lt; min(<code>xerror</code>) + <code>xstd</code>, the level whose <code>xerror</code> is at or below horizontal line. This method takes into account the variability of <code>xerror</code> resulting from cross-validation.</li>
 </ol>
 <p>If we decide to prune our tree at the minimum <code>cp</code>:</p>
-<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="cart.html#cb555-1" aria-hidden="true" tabindex="-1"></a>ptree2 <span class="ot">&lt;-</span> <span class="fu">prune</span>(tree2, <span class="at">cp =</span> min_cp)</span>
-<span id="cb555-2"><a href="cart.html#cb555-2" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(ptree2)</span></code></pre></div>
+<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb557-1"><a href="cart.html#cb557-1" aria-hidden="true" tabindex="-1"></a>ptree2 <span class="ot">&lt;-</span> <span class="fu">prune</span>(tree2, <span class="at">cp =</span> min_cp)</span>
+<span id="cb557-2"><a href="cart.html#cb557-2" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(ptree2)</span></code></pre></div>
 <pre><code>## 
 ## Classification tree:
 ## rpart(formula = PRONO ~ ., data = myocarde, method = &quot;class&quot;, 
@@ -873,17 +877,17 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
 ## 2 0.103448      1   0.27586 0.48276 0.11560
-## 3 0.034483      2   0.17241 0.37931 0.10513</code></pre>
-<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb557-1"><a href="cart.html#cb557-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
+## 3 0.034483      2   0.17241 0.44828 0.11237</code></pre>
+<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="cart.html#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr23-1.png" width="672" /></p>
 <p>Now we have applied two approaches: limiting the tree’s growth and pruning a fully grown tree. Hence, we have two different trees: <code>tree</code> and <code>ptree2</code>. In the first case, we can use <code>cp</code> or other control parameters in <code>rpart.control</code> as hyperparameters and tune them on the test set. In the second case, we can grow the tree to its maximum capacity and tune its pruning as to maximize the prediction accuracy on the test set. We will not show the tuning of a tree here. Instead, we will see many improved tree-based models and tuned them in this section.</p>
 </div>
 <div id="classification-with-titanic" class="section level2 hasAnchor" number="12.4">
 <h2><span class="header-section-number">12.4</span> Classification with Titanic<a href="cart.html#classification-with-titanic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can use <code>rpart</code> to predict survival on the Titanic.</p>
-<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb558-1"><a href="cart.html#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PASWR)</span>
-<span id="cb558-2"><a href="cart.html#cb558-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(titanic3)</span>
-<span id="cb558-3"><a href="cart.html#cb558-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(titanic3)</span></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="cart.html#cb560-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(PASWR)</span>
+<span id="cb560-2"><a href="cart.html#cb560-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(titanic3)</span>
+<span id="cb560-3"><a href="cart.html#cb560-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(titanic3)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    1309 obs. of  14 variables:
 ##  $ pclass   : Factor w/ 3 levels &quot;1st&quot;,&quot;2nd&quot;,&quot;3rd&quot;: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ survived : int  1 1 0 0 0 1 1 0 1 0 ...
@@ -907,28 +911,28 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 <code>sibsp</code> - the number of siblings/spouses aboard;<br />
 <code>parch</code> - the number of parents/children aboard.</p>
 <p>What predictors are associated with those who perished compared to those who survived?</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="cart.html#cb560-1" aria-hidden="true" tabindex="-1"></a>titan <span class="ot">&lt;-</span></span>
-<span id="cb560-2"><a href="cart.html#cb560-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(survived <span class="sc">~</span> sex <span class="sc">+</span> age <span class="sc">+</span> pclass <span class="sc">+</span> sibsp <span class="sc">+</span> parch,</span>
-<span id="cb560-3"><a href="cart.html#cb560-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> titanic3,</span>
-<span id="cb560-4"><a href="cart.html#cb560-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
-<span id="cb560-5"><a href="cart.html#cb560-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb560-6"><a href="cart.html#cb560-6" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(</span>
-<span id="cb560-7"><a href="cart.html#cb560-7" aria-hidden="true" tabindex="-1"></a>  titan,</span>
-<span id="cb560-8"><a href="cart.html#cb560-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">extra =</span> <span class="dv">1</span>,</span>
-<span id="cb560-9"><a href="cart.html#cb560-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">faclen =</span> <span class="dv">5</span>,</span>
-<span id="cb560-10"><a href="cart.html#cb560-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">box.col =</span> <span class="fu">c</span>(<span class="st">&quot;indianred1&quot;</span>, <span class="st">&quot;aquamarine&quot;</span>)[tree<span class="sc">$</span>frame<span class="sc">$</span>yval]</span>
-<span id="cb560-11"><a href="cart.html#cb560-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb562-1"><a href="cart.html#cb562-1" aria-hidden="true" tabindex="-1"></a>titan <span class="ot">&lt;-</span></span>
+<span id="cb562-2"><a href="cart.html#cb562-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(survived <span class="sc">~</span> sex <span class="sc">+</span> age <span class="sc">+</span> pclass <span class="sc">+</span> sibsp <span class="sc">+</span> parch,</span>
+<span id="cb562-3"><a href="cart.html#cb562-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> titanic3,</span>
+<span id="cb562-4"><a href="cart.html#cb562-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb562-5"><a href="cart.html#cb562-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb562-6"><a href="cart.html#cb562-6" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(</span>
+<span id="cb562-7"><a href="cart.html#cb562-7" aria-hidden="true" tabindex="-1"></a>  titan,</span>
+<span id="cb562-8"><a href="cart.html#cb562-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">extra =</span> <span class="dv">1</span>,</span>
+<span id="cb562-9"><a href="cart.html#cb562-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">faclen =</span> <span class="dv">5</span>,</span>
+<span id="cb562-10"><a href="cart.html#cb562-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">box.col =</span> <span class="fu">c</span>(<span class="st">&quot;indianred1&quot;</span>, <span class="st">&quot;aquamarine&quot;</span>)[tree<span class="sc">$</span>frame<span class="sc">$</span>yval]</span>
+<span id="cb562-11"><a href="cart.html#cb562-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr25-1.png" width="672" /></p>
-<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb561-1"><a href="cart.html#cb561-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
-<span id="cb561-2"><a href="cart.html#cb561-2" aria-hidden="true" tabindex="-1"></a>  titan<span class="sc">$</span>variable.importance,</span>
-<span id="cb561-3"><a href="cart.html#cb561-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb561-4"><a href="cart.html#cb561-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;yellow3&quot;</span>,</span>
-<span id="cb561-5"><a href="cart.html#cb561-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.7</span>,</span>
-<span id="cb561-6"><a href="cart.html#cb561-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.names =</span> <span class="fl">0.7</span></span>
-<span id="cb561-7"><a href="cart.html#cb561-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb563-1"><a href="cart.html#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb563-2"><a href="cart.html#cb563-2" aria-hidden="true" tabindex="-1"></a>  titan<span class="sc">$</span>variable.importance,</span>
+<span id="cb563-3"><a href="cart.html#cb563-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb563-4"><a href="cart.html#cb563-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;yellow3&quot;</span>,</span>
+<span id="cb563-5"><a href="cart.html#cb563-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> <span class="fl">0.7</span>,</span>
+<span id="cb563-6"><a href="cart.html#cb563-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.names =</span> <span class="fl">0.7</span></span>
+<span id="cb563-7"><a href="cart.html#cb563-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr25-2.png" width="672" /></p>
 <p>If we want to see the cross-validation error and the <code>cp</code> table:</p>
-<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb562-1"><a href="cart.html#cb562-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(titan)</span></code></pre></div>
+<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="cart.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(titan)</span></code></pre></div>
 <pre><code>## 
 ## Classification tree:
 ## rpart(formula = survived ~ sex + age + pclass + sibsp + parch, 
@@ -944,31 +948,31 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.568 0.029825
-## 4 0.011333      5     0.504  0.564 0.029749
-## 5 0.010000      9     0.458  0.548 0.029438</code></pre>
-<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="cart.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
+## 3 0.015000      3     0.534  0.538 0.029238
+## 4 0.011333      5     0.504  0.530 0.029076
+## 5 0.010000      9     0.458  0.530 0.029076</code></pre>
+<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb566-1"><a href="cart.html#cb566-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr26-1.png" width="672" /></p>
 <p>Of course, we would like to see the tree’s prediction accuracy by using a test dataset and the confusion table metrics.</p>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb565-1"><a href="cart.html#cb565-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
-<span id="cb565-2"><a href="cart.html#cb565-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb565-3"><a href="cart.html#cb565-3" aria-hidden="true" tabindex="-1"></a><span class="co">#test/train split</span></span>
-<span id="cb565-4"><a href="cart.html#cb565-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb565-5"><a href="cart.html#cb565-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(titanic3), <span class="fu">nrow</span>(titanic3) <span class="sc">*</span> <span class="fl">0.7</span>)</span>
-<span id="cb565-6"><a href="cart.html#cb565-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> titanic3[ind,]</span>
-<span id="cb565-7"><a href="cart.html#cb565-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> titanic3[<span class="sc">-</span>ind,]</span>
-<span id="cb565-8"><a href="cart.html#cb565-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb565-9"><a href="cart.html#cb565-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Tree on train</span></span>
-<span id="cb565-10"><a href="cart.html#cb565-10" aria-hidden="true" tabindex="-1"></a>titan2 <span class="ot">&lt;-</span></span>
-<span id="cb565-11"><a href="cart.html#cb565-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(survived <span class="sc">~</span> sex <span class="sc">+</span> age <span class="sc">+</span> pclass <span class="sc">+</span> sibsp <span class="sc">+</span> parch,</span>
-<span id="cb565-12"><a href="cart.html#cb565-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
-<span id="cb565-13"><a href="cart.html#cb565-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
-<span id="cb565-14"><a href="cart.html#cb565-14" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(titan2, test, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb565-15"><a href="cart.html#cb565-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb565-16"><a href="cart.html#cb565-16" aria-hidden="true" tabindex="-1"></a><span class="co">#AUC</span></span>
-<span id="cb565-17"><a href="cart.html#cb565-17" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[, <span class="dv">2</span>], test<span class="sc">$</span>survived)</span>
-<span id="cb565-18"><a href="cart.html#cb565-18" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
-<span id="cb565-19"><a href="cart.html#cb565-19" aria-hidden="true" tabindex="-1"></a>auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb567-1"><a href="cart.html#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb567-2"><a href="cart.html#cb567-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb567-3"><a href="cart.html#cb567-3" aria-hidden="true" tabindex="-1"></a><span class="co">#test/train split</span></span>
+<span id="cb567-4"><a href="cart.html#cb567-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb567-5"><a href="cart.html#cb567-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(titanic3), <span class="fu">nrow</span>(titanic3) <span class="sc">*</span> <span class="fl">0.7</span>)</span>
+<span id="cb567-6"><a href="cart.html#cb567-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> titanic3[ind,]</span>
+<span id="cb567-7"><a href="cart.html#cb567-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> titanic3[<span class="sc">-</span>ind,]</span>
+<span id="cb567-8"><a href="cart.html#cb567-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb567-9"><a href="cart.html#cb567-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Tree on train</span></span>
+<span id="cb567-10"><a href="cart.html#cb567-10" aria-hidden="true" tabindex="-1"></a>titan2 <span class="ot">&lt;-</span></span>
+<span id="cb567-11"><a href="cart.html#cb567-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart</span>(survived <span class="sc">~</span> sex <span class="sc">+</span> age <span class="sc">+</span> pclass <span class="sc">+</span> sibsp <span class="sc">+</span> parch,</span>
+<span id="cb567-12"><a href="cart.html#cb567-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
+<span id="cb567-13"><a href="cart.html#cb567-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb567-14"><a href="cart.html#cb567-14" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> <span class="fu">predict</span>(titan2, test, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb567-15"><a href="cart.html#cb567-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb567-16"><a href="cart.html#cb567-16" aria-hidden="true" tabindex="-1"></a><span class="co">#AUC</span></span>
+<span id="cb567-17"><a href="cart.html#cb567-17" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat[, <span class="dv">2</span>], test<span class="sc">$</span>survived)</span>
+<span id="cb567-18"><a href="cart.html#cb567-18" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb567-19"><a href="cart.html#cb567-19" aria-hidden="true" tabindex="-1"></a>auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span></code></pre></div>
 <pre><code>## [1] 0.814118</code></pre>
 <p>Here, we report only AUC in this simple example. We can use Moreover, we can reweigh variables so that the loss or the cost of a wrong split would be more or less important (see cost argument in <code>rpart</code>). Finally, as in every classification, we can put a different weight on the correct classifications than the wrong classifications (or vise verse). This can easily be done in <code>rpart</code> by the loss matrix.</p>
 <p>Before commenting on the strengths and weaknesses of CART, let’s see a regression tree.</p>
@@ -991,42 +995,42 @@ SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2}=\sum y_{i}^2 -n\bar{y}^2=\sum y_{i} -n
 \]</span></p>
 <p>Hence, we can show that the <strong>relative gain</strong> would be the same in regression trees using <span class="math inline">\(SS_T\)</span> or Gini when <span class="math inline">\(y_i \in (0,1)\)</span>.</p>
 <p>It is not hard to write a simple loop similar to our earlier algorithm, but it would be redundant. We will use <code>rpart</code> in an example:</p>
-<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb567-1"><a href="cart.html#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated data</span></span>
-<span id="cb567-2"><a href="cart.html#cb567-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb567-3"><a href="cart.html#cb567-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb567-4"><a href="cart.html#cb567-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">I</span>(x <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">I</span>(x <span class="sc">^</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">6</span>)</span>
-<span id="cb567-5"><a href="cart.html#cb567-5" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;y&quot;</span> <span class="ot">=</span> y, <span class="st">&quot;x&quot;</span> <span class="ot">=</span> x)</span>
-<span id="cb567-6"><a href="cart.html#cb567-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb569-1"><a href="cart.html#cb569-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated data</span></span>
+<span id="cb569-2"><a href="cart.html#cb569-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb569-3"><a href="cart.html#cb569-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb569-4"><a href="cart.html#cb569-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">I</span>(x <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">I</span>(x <span class="sc">^</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">6</span>)</span>
+<span id="cb569-5"><a href="cart.html#cb569-5" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;y&quot;</span> <span class="ot">=</span> y, <span class="st">&quot;x&quot;</span> <span class="ot">=</span> x)</span>
+<span id="cb569-6"><a href="cart.html#cb569-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr28-1.png" width="672" /></p>
-<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb568-1"><a href="cart.html#cb568-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
-<span id="cb568-2"><a href="cart.html#cb568-2" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit =</span> <span class="dv">83</span>, dt) <span class="co"># we want to have 1 split</span></span>
-<span id="cb568-3"><a href="cart.html#cb568-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit1)</span></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb570-1"><a href="cart.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
+<span id="cb570-2"><a href="cart.html#cb570-2" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit =</span> <span class="dv">83</span>, dt) <span class="co"># we want to have 1 split</span></span>
+<span id="cb570-3"><a href="cart.html#cb570-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit1)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr28-2.png" width="672" /></p>
 <p>When we have split at <span class="math inline">\(x=-0.65\)</span>, <code>rpart</code> calculates two constant <span class="math inline">\(\hat{f}(x_i)\)</span>’s both for the left and right splits:</p>
-<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb569-1"><a href="cart.html#cb569-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb571-1"><a href="cart.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
 <pre><code>## [1] 15.33681</code></pre>
-<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb571-1"><a href="cart.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&gt;</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="cart.html#cb573-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y[x <span class="sc">&gt;</span> <span class="sc">-</span><span class="fl">0.65</span>])</span></code></pre></div>
 <pre><code>## [1] 0.9205211</code></pre>
 <p>Here, we see them on the plot:</p>
-<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="cart.html#cb573-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
-<span id="cb573-2"><a href="cart.html#cb573-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
-<span id="cb573-3"><a href="cart.html#cb573-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit1, <span class="fu">data.frame</span>(<span class="at">x =</span> z)), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb573-4"><a href="cart.html#cb573-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span><span class="fl">0.65</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="cart.html#cb575-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb575-2"><a href="cart.html#cb575-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb575-3"><a href="cart.html#cb575-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit1, <span class="fu">data.frame</span>(<span class="at">x =</span> z)), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb575-4"><a href="cart.html#cb575-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span><span class="fl">0.65</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr30-1.png" width="672" /></p>
 <p>If we reduce the <code>minsplit</code>,</p>
-<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb574-1"><a href="cart.html#cb574-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
-<span id="cb574-2"><a href="cart.html#cb574-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit =</span> <span class="dv">6</span>, dt)</span>
-<span id="cb574-3"><a href="cart.html#cb574-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit2)</span></code></pre></div>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="cart.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree</span></span>
+<span id="cb576-2"><a href="cart.html#cb576-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">minsplit =</span> <span class="dv">6</span>, dt)</span>
+<span id="cb576-3"><a href="cart.html#cb576-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(fit2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr31-1.png" width="672" /></p>
-<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="cart.html#cb575-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the plot</span></span>
-<span id="cb575-2"><a href="cart.html#cb575-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
-<span id="cb575-3"><a href="cart.html#cb575-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit2, <span class="fu">data.frame</span>(<span class="at">x =</span> z)), <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb577-1"><a href="cart.html#cb577-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On the plot</span></span>
+<span id="cb577-2"><a href="cart.html#cb577-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb577-3"><a href="cart.html#cb577-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(z, <span class="fu">predict</span>(fit2, <span class="fu">data.frame</span>(<span class="at">x =</span> z)), <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr31-2.png" width="672" /></p>
 <p>We will use an example of predicting Baseball players’ salaries from the ISLR package <span class="citation">(<a href="#ref-ISLR_2021" role="doc-biblioref"><strong>ISLR_2021?</strong></a>)</span>. This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of <code>Errors</code>, <code>Putouts</code> and <code>Assists</code> made by each player.</p>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="cart.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hitters data</span></span>
-<span id="cb576-2"><a href="cart.html#cb576-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
-<span id="cb576-3"><a href="cart.html#cb576-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Hitters&quot;</span>)</span>
-<span id="cb576-4"><a href="cart.html#cb576-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Hitters)</span></code></pre></div>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="cart.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hitters data</span></span>
+<span id="cb578-2"><a href="cart.html#cb578-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb578-3"><a href="cart.html#cb578-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Hitters&quot;</span>)</span>
+<span id="cb578-4"><a href="cart.html#cb578-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Hitters)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    322 obs. of  20 variables:
 ##  $ AtBat    : int  293 315 479 496 321 594 185 298 323 401 ...
 ##  $ Hits     : int  66 81 130 141 87 169 37 73 81 92 ...
@@ -1050,38 +1054,38 @@ SS_{T}=\sum\left(y_{i}-\bar{y}\right)^{2}=\sum y_{i}^2 -n\bar{y}^2=\sum y_{i} -n
 ##  $ NewLeague: Factor w/ 2 levels &quot;A&quot;,&quot;N&quot;: 1 2 1 2 2 1 1 1 2 1 ...</code></pre>
 <p>What predictors are associated with baseball player’s Salary (1987 annual salary on opening day in thousands of dollars)?</p>
 <p>Let’s consider 3 covariates for the sake of simplicity: <code>Years</code> (Number of years in the major leagues); <code>Hits</code> (Number of hits in 1986); <code>Atbat</code> (Number of times at bat in 1986).</p>
-<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="cart.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA&#39;s</span></span>
-<span id="cb578-2"><a href="cart.html#cb578-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary),]</span>
-<span id="cb578-3"><a href="cart.html#cb578-3" aria-hidden="true" tabindex="-1"></a>dfshort <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">19</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">1</span>)]</span>
-<span id="cb578-4"><a href="cart.html#cb578-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb578-5"><a href="cart.html#cb578-5" aria-hidden="true" tabindex="-1"></a><span class="co"># cp=0, so it&#39;s fully grown</span></span>
-<span id="cb578-6"><a href="cart.html#cb578-6" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort, <span class="at">cp =</span> <span class="dv">0</span>)</span>
-<span id="cb578-7"><a href="cart.html#cb578-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb578-8"><a href="cart.html#cb578-8" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(tree, <span class="at">extra =</span> <span class="dv">1</span>, <span class="at">faclen =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="cart.html#cb580-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA&#39;s</span></span>
+<span id="cb580-2"><a href="cart.html#cb580-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary),]</span>
+<span id="cb580-3"><a href="cart.html#cb580-3" aria-hidden="true" tabindex="-1"></a>dfshort <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">19</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">1</span>)]</span>
+<span id="cb580-4"><a href="cart.html#cb580-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb580-5"><a href="cart.html#cb580-5" aria-hidden="true" tabindex="-1"></a><span class="co"># cp=0, so it&#39;s fully grown</span></span>
+<span id="cb580-6"><a href="cart.html#cb580-6" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort, <span class="at">cp =</span> <span class="dv">0</span>)</span>
+<span id="cb580-7"><a href="cart.html#cb580-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb580-8"><a href="cart.html#cb580-8" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(tree, <span class="at">extra =</span> <span class="dv">1</span>, <span class="at">faclen =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr33-1.png" width="672" /></p>
 <p>It works on the same principle as we described before: find terminal nodes that minimize the sum of squares. This process may give us a good prediction on the training set but not on the test set, as it overfits the data. Hence, we use a pruned tree found by <code>rpart</code> by cross-validation:</p>
-<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb579-1"><a href="cart.html#cb579-1" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort)</span>
-<span id="cb579-2"><a href="cart.html#cb579-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(ptree, <span class="at">extra=</span><span class="dv">1</span>, <span class="at">faclen=</span><span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb581-1"><a href="cart.html#cb581-1" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort)</span>
+<span id="cb581-2"><a href="cart.html#cb581-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(ptree, <span class="at">extra=</span><span class="dv">1</span>, <span class="at">faclen=</span><span class="dv">5</span>)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr34-1.png" width="672" /></p>
 <p>We can see its prediction power similar to what we did in the Titanic data example. Since this is a regression, we can ask which one is better, a tree or a linear model? If the relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(X\)</span> is linear, a linear model should perform better. We can test this:</p>
-<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="cart.html#cb580-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test/train split</span></span>
-<span id="cb580-2"><a href="cart.html#cb580-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb580-3"><a href="cart.html#cb580-3" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(dfshort), <span class="fu">nrow</span>(dfshort) <span class="sc">*</span> <span class="fl">0.7</span>)</span>
-<span id="cb580-4"><a href="cart.html#cb580-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> dfshort[ind,]</span>
-<span id="cb580-5"><a href="cart.html#cb580-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> dfshort[<span class="sc">-</span>ind,]</span>
-<span id="cb580-6"><a href="cart.html#cb580-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb580-7"><a href="cart.html#cb580-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree and lm() on train</span></span>
-<span id="cb580-8"><a href="cart.html#cb580-8" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort)</span>
-<span id="cb580-9"><a href="cart.html#cb580-9" aria-hidden="true" tabindex="-1"></a>predtree <span class="ot">&lt;-</span> <span class="fu">predict</span>(ptree, test)</span>
-<span id="cb580-10"><a href="cart.html#cb580-10" aria-hidden="true" tabindex="-1"></a>lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> ., <span class="at">data =</span> dfshort)</span>
-<span id="cb580-11"><a href="cart.html#cb580-11" aria-hidden="true" tabindex="-1"></a>predlin <span class="ot">&lt;-</span> <span class="fu">predict</span>(lin, test)</span>
-<span id="cb580-12"><a href="cart.html#cb580-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb580-13"><a href="cart.html#cb580-13" aria-hidden="true" tabindex="-1"></a><span class="co"># RMSPE</span></span>
-<span id="cb580-14"><a href="cart.html#cb580-14" aria-hidden="true" tabindex="-1"></a>rmspe_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predtree) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb580-15"><a href="cart.html#cb580-15" aria-hidden="true" tabindex="-1"></a>rmspe_tree</span></code></pre></div>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="cart.html#cb582-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test/train split</span></span>
+<span id="cb582-2"><a href="cart.html#cb582-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb582-3"><a href="cart.html#cb582-3" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(dfshort), <span class="fu">nrow</span>(dfshort) <span class="sc">*</span> <span class="fl">0.7</span>)</span>
+<span id="cb582-4"><a href="cart.html#cb582-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> dfshort[ind,]</span>
+<span id="cb582-5"><a href="cart.html#cb582-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> dfshort[<span class="sc">-</span>ind,]</span>
+<span id="cb582-6"><a href="cart.html#cb582-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb582-7"><a href="cart.html#cb582-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Tree and lm() on train</span></span>
+<span id="cb582-8"><a href="cart.html#cb582-8" aria-hidden="true" tabindex="-1"></a>ptree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> Years <span class="sc">+</span> Hits <span class="sc">+</span> AtBat, <span class="at">data =</span> dfshort)</span>
+<span id="cb582-9"><a href="cart.html#cb582-9" aria-hidden="true" tabindex="-1"></a>predtree <span class="ot">&lt;-</span> <span class="fu">predict</span>(ptree, test)</span>
+<span id="cb582-10"><a href="cart.html#cb582-10" aria-hidden="true" tabindex="-1"></a>lin <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(Salary) <span class="sc">~</span> ., <span class="at">data =</span> dfshort)</span>
+<span id="cb582-11"><a href="cart.html#cb582-11" aria-hidden="true" tabindex="-1"></a>predlin <span class="ot">&lt;-</span> <span class="fu">predict</span>(lin, test)</span>
+<span id="cb582-12"><a href="cart.html#cb582-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb582-13"><a href="cart.html#cb582-13" aria-hidden="true" tabindex="-1"></a><span class="co"># RMSPE</span></span>
+<span id="cb582-14"><a href="cart.html#cb582-14" aria-hidden="true" tabindex="-1"></a>rmspe_tree <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predtree) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb582-15"><a href="cart.html#cb582-15" aria-hidden="true" tabindex="-1"></a>rmspe_tree</span></code></pre></div>
 <pre><code>## [1] 0.4601892</code></pre>
-<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="cart.html#cb582-1" aria-hidden="true" tabindex="-1"></a>rmspe_lin <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predlin) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb582-2"><a href="cart.html#cb582-2" aria-hidden="true" tabindex="-1"></a>rmspe_lin</span></code></pre></div>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="cart.html#cb584-1" aria-hidden="true" tabindex="-1"></a>rmspe_lin <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((<span class="fu">log</span>(test<span class="sc">$</span>Salary) <span class="sc">-</span> predlin) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb584-2"><a href="cart.html#cb584-2" aria-hidden="true" tabindex="-1"></a>rmspe_lin</span></code></pre></div>
 <pre><code>## [1] 0.6026888</code></pre>
 <p>In this simple example, our the tree would do a better job.</p>
 <p>Trees tend to work well for problems where there are important nonlinearities and interactions. Yet, they are known to be quite sensitive to the original sample. Therefore, the models trained in one sample may have poor predictive accuracy on another sample. These problems motivate Random Forest and Boosting methods, as we will describe in following chapters.</p>

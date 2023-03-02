@@ -575,82 +575,82 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 \]</span></p>
 <p>Again, in simpler terms, <span class="math inline">\(n \log |\mathbf{\Sigma}|\)</span> takes the spot of <span class="math inline">\(n \log \left(\sigma^{2}\right)\)</span> which was there in the univariate case. These terms account for corresponding change of variable adjustments in each scenario.</p>
 <p>Let’s start with a data matrix of 10x6, where no need for regularization.</p>
-<div class="sourceCode" id="cb1145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1145-1"><a href="regularized-covariance-matrix.html#cb1145-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb1145-2"><a href="regularized-covariance-matrix.html#cb1145-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">6</span></span>
-<span id="cb1145-3"><a href="regularized-covariance-matrix.html#cb1145-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
-<span id="cb1145-4"><a href="regularized-covariance-matrix.html#cb1145-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1145-5"><a href="regularized-covariance-matrix.html#cb1145-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
-<span id="cb1145-6"><a href="regularized-covariance-matrix.html#cb1145-6" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
-<span id="cb1145-7"><a href="regularized-covariance-matrix.html#cb1145-7" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">solve</span>(S) <span class="co"># precision</span></span>
-<span id="cb1145-8"><a href="regularized-covariance-matrix.html#cb1145-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1145-9"><a href="regularized-covariance-matrix.html#cb1145-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>pm[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(pm[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(pm[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
-<pre><code>## [1] 0.7435154</code></pre>
-<div class="sourceCode" id="cb1147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1147-1"><a href="regularized-covariance-matrix.html#cb1147-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(pm)</span></code></pre></div>
-<pre><code>##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
-## [1,] -1.0000000  0.7435154  0.6966969  0.1582348  0.7385773  0.2923291
-## [2,]  0.7435154 -1.0000000 -0.6393338 -0.1815461 -0.6332128 -0.4691851
-## [3,]  0.6966969 -0.6393338 -1.0000000 -0.1143173 -0.6604050 -0.2087999
-## [4,]  0.1582348 -0.1815461 -0.1143173 -1.0000000  0.0336970  0.1913892
-## [5,]  0.7385773 -0.6332128 -0.6604050  0.0336970 -1.0000000 -0.4147941
-## [6,]  0.2923291 -0.4691851 -0.2087999  0.1913892 -0.4147941 -1.0000000</code></pre>
-<div class="sourceCode" id="cb1149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1149-1"><a href="regularized-covariance-matrix.html#cb1149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ppcor</span></span>
-<span id="cb1149-2"><a href="regularized-covariance-matrix.html#cb1149-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span>
-<span id="cb1149-3"><a href="regularized-covariance-matrix.html#cb1149-3" aria-hidden="true" tabindex="-1"></a>pc<span class="sc">$</span>estimate</span></code></pre></div>
-<pre><code>##           [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
-## [1,] 1.0000000  0.7435154  0.6966969  0.1582348  0.7385773  0.2923291
-## [2,] 0.7435154  1.0000000 -0.6393338 -0.1815461 -0.6332128 -0.4691851
-## [3,] 0.6966969 -0.6393338  1.0000000 -0.1143173 -0.6604050 -0.2087999
-## [4,] 0.1582348 -0.1815461 -0.1143173  1.0000000  0.0336970  0.1913892
-## [5,] 0.7385773 -0.6332128 -0.6604050  0.0336970  1.0000000 -0.4147941
-## [6,] 0.2923291 -0.4691851 -0.2087999  0.1913892 -0.4147941  1.0000000</code></pre>
-<div class="sourceCode" id="cb1151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1151-1"><a href="regularized-covariance-matrix.html#cb1151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glasso</span></span>
-<span id="cb1151-2"><a href="regularized-covariance-matrix.html#cb1151-2" aria-hidden="true" tabindex="-1"></a>glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1147-1"><a href="regularized-covariance-matrix.html#cb1147-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb1147-2"><a href="regularized-covariance-matrix.html#cb1147-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb1147-3"><a href="regularized-covariance-matrix.html#cb1147-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
+<span id="cb1147-4"><a href="regularized-covariance-matrix.html#cb1147-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1147-5"><a href="regularized-covariance-matrix.html#cb1147-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
+<span id="cb1147-6"><a href="regularized-covariance-matrix.html#cb1147-6" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
+<span id="cb1147-7"><a href="regularized-covariance-matrix.html#cb1147-7" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">solve</span>(S) <span class="co"># precision</span></span>
+<span id="cb1147-8"><a href="regularized-covariance-matrix.html#cb1147-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1147-9"><a href="regularized-covariance-matrix.html#cb1147-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>pm[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(pm[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(pm[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
+<pre><code>## [1] 0.06035027</code></pre>
+<div class="sourceCode" id="cb1149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1149-1"><a href="regularized-covariance-matrix.html#cb1149-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(pm)</span></code></pre></div>
+<pre><code>##             [,1]         [,2]         [,3]       [,4]        [,5]       [,6]
+## [1,] -1.00000000  0.060350270  0.358442046 -0.4900364  0.54014959  0.5489364
+## [2,]  0.06035027 -1.000000000 -0.007830691  0.3503528  0.09733298  0.2571035
+## [3,]  0.35844205 -0.007830691 -1.000000000  0.2519094 -0.46427329 -0.3988389
+## [4,] -0.49003644  0.350352811  0.251909378 -1.0000000  0.18146970  0.3141610
+## [5,]  0.54014959  0.097332975 -0.464273288  0.1814697 -1.00000000 -0.3613369
+## [6,]  0.54893640  0.257103511 -0.398838854  0.3141610 -0.36133690 -1.0000000</code></pre>
+<div class="sourceCode" id="cb1151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1151-1"><a href="regularized-covariance-matrix.html#cb1151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ppcor</span></span>
+<span id="cb1151-2"><a href="regularized-covariance-matrix.html#cb1151-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span>
+<span id="cb1151-3"><a href="regularized-covariance-matrix.html#cb1151-3" aria-hidden="true" tabindex="-1"></a>pc<span class="sc">$</span>estimate</span></code></pre></div>
+<pre><code>##             [,1]         [,2]         [,3]       [,4]        [,5]       [,6]
+## [1,]  1.00000000  0.060350270  0.358442046 -0.4900364  0.54014959  0.5489364
+## [2,]  0.06035027  1.000000000 -0.007830691  0.3503528  0.09733298  0.2571035
+## [3,]  0.35844205 -0.007830691  1.000000000  0.2519094 -0.46427329 -0.3988389
+## [4,] -0.49003644  0.350352811  0.251909378  1.0000000  0.18146970  0.3141610
+## [5,]  0.54014959  0.097332975 -0.464273288  0.1814697  1.00000000 -0.3613369
+## [6,]  0.54893640  0.257103511 -0.398838854  0.3141610 -0.36133690  1.0000000</code></pre>
+<div class="sourceCode" id="cb1153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1153-1"><a href="regularized-covariance-matrix.html#cb1153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glasso</span></span>
+<span id="cb1153-2"><a href="regularized-covariance-matrix.html#cb1153-2" aria-hidden="true" tabindex="-1"></a>glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $w
-##            [,1]        [,2]          [,3]          [,4]        [,5]       [,6]
-## [1,]  1.4641225  0.73176968  0.2597765348  0.1383854759  0.59624474 -0.1384850
-## [2,]  0.7317697  1.99958764 -0.3391113451 -0.3612124976 -0.04401216 -0.5190747
-## [3,]  0.2597765 -0.33911135  0.8808870430 -0.0007409402 -0.31573543  0.1448976
-## [4,]  0.1383855 -0.36121250 -0.0007409402  1.2564248534  0.21759035  0.2553944
-## [5,]  0.5962447 -0.04401216 -0.3157354263  0.2175903520  1.23930369 -0.2291602
-## [6,] -0.1384850 -0.51907474  0.1448976374  0.2553943902 -0.22916019  0.7406505
+##             [,1]        [,2]        [,3]       [,4]        [,5]        [,6]
+## [1,]  0.42466732  0.07211901 -0.03020648 -0.2640989  0.32839413  0.17603085
+## [2,]  0.07211901  0.98406387 -0.09754385  0.4848102  0.13312459  0.27691466
+## [3,] -0.03020648 -0.09754385  1.14296467  0.1067375 -0.43546117 -0.18736769
+## [4,] -0.26409891  0.48481022  0.10673745  1.5139664 -0.13619491  0.16537247
+## [5,]  0.32839413  0.13312459 -0.43546117 -0.1361949  1.32725358  0.03054188
+## [6,]  0.17603085  0.27691466 -0.18736769  0.1653725  0.03054188  0.48423522
 ## 
 ## $wi
-##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
-## [1,]  2.3373165 -1.3957255 -1.7271202 -0.23543287 -1.69211473 -0.6456065
-## [2,] -1.3957255  1.5077155  1.2729347  0.21695842  1.16514190  0.8323333
-## [3,] -1.7271202  1.2729347  2.6294799  0.18040285  1.60477665  0.4890650
-## [4,] -0.2354329  0.2169584  0.1804028  0.94756204 -0.04926789 -0.2692516
-## [5,] -1.6921147  1.1651419  1.6047766 -0.04926789  2.24591139  0.8980944
-## [6,] -0.6456065  0.8323333  0.4890650 -0.26925164  0.89809441  2.0877709
+##            [,1]        [,2]        [,3]       [,4]       [,5]       [,6]
+## [1,]  5.0803056 -0.16256958 -0.90020259  1.1419172 -1.3634807 -2.4061281
+## [2,] -0.1625696  1.42817260  0.01043876 -0.4328869 -0.1302619 -0.5975141
+## [3,] -0.9002026  0.01043876  1.24152211 -0.2901862  0.5793486  0.8642164
+## [4,]  1.1419172 -0.43288691 -0.29018615  1.0688857 -0.2101058 -0.6316250
+## [5,] -1.3634807 -0.13026194  0.57934859 -0.2101058  1.2542628  0.7869540
+## [6,] -2.4061281 -0.59751409  0.86421636 -0.6316250  0.7869540  3.7819326
 ## 
 ## $errflag
 ## [1] 0
 ## 
 ## $niter
 ## [1] 1</code></pre>
-<div class="sourceCode" id="cb1153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1153-1"><a href="regularized-covariance-matrix.html#cb1153-1" aria-hidden="true" tabindex="-1"></a>Rl <span class="ot">&lt;-</span> glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)<span class="sc">$</span>wi <span class="co">#</span></span>
-<span id="cb1153-2"><a href="regularized-covariance-matrix.html#cb1153-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Rl[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Rl[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Rl[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
-<pre><code>## [1] 0.743501</code></pre>
-<div class="sourceCode" id="cb1155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1155-1"><a href="regularized-covariance-matrix.html#cb1155-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(Rl)</span></code></pre></div>
-<pre><code>##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
-## [1,] -1.0000000  0.7435010  0.6966728  0.15819928  0.73854121  0.2922589
-## [2,]  0.7435010 -1.0000000 -0.6393100 -0.18151519 -0.63317361 -0.4691332
-## [3,]  0.6966728 -0.6393100 -1.0000000 -0.11428905 -0.66036395 -0.2087326
-## [4,]  0.1581993 -0.1815152 -0.1142891 -1.00000000  0.03377254  0.1914314
-## [5,]  0.7385412 -0.6331736 -0.6603639  0.03377254 -1.00000000 -0.4147480
-## [6,]  0.2922589 -0.4691332 -0.2087326  0.19143137 -0.41474797 -1.0000000</code></pre>
+<div class="sourceCode" id="cb1155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1155-1"><a href="regularized-covariance-matrix.html#cb1155-1" aria-hidden="true" tabindex="-1"></a>Rl <span class="ot">&lt;-</span> glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)<span class="sc">$</span>wi <span class="co">#</span></span>
+<span id="cb1155-2"><a href="regularized-covariance-matrix.html#cb1155-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Rl[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Rl[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Rl[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
+<pre><code>## [1] 0.06035372</code></pre>
+<div class="sourceCode" id="cb1157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1157-1"><a href="regularized-covariance-matrix.html#cb1157-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(Rl)</span></code></pre></div>
+<pre><code>##             [,1]         [,2]         [,3]       [,4]       [,5]       [,6]
+## [1,] -1.00000000  0.060353716  0.358441354 -0.4900316  0.5401443  0.5489300
+## [2,]  0.06035372 -1.000000000 -0.007839374  0.3503632  0.0973269  0.2570993
+## [3,]  0.35844135 -0.007839374 -1.000000000  0.2519033 -0.4642677 -0.3988305
+## [4,] -0.49003160  0.350363193  0.251903283 -1.0000000  0.1814589  0.3141498
+## [5,]  0.54014428  0.097326902 -0.464267673  0.1814589 -1.0000000 -0.3613251
+## [6,]  0.54892995  0.257099307 -0.398830498  0.3141498 -0.3613251 -1.0000000</code></pre>
 </div>
 <div id="high-dimensional-data" class="section level2 hasAnchor" number="33.2">
 <h2><span class="header-section-number">33.2</span> High-dimensional data<a href="regularized-covariance-matrix.html#high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Now with a data matrix of 6x10:</p>
-<div class="sourceCode" id="cb1157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1157-1"><a href="regularized-covariance-matrix.html#cb1157-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
-<span id="cb1157-2"><a href="regularized-covariance-matrix.html#cb1157-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb1157-3"><a href="regularized-covariance-matrix.html#cb1157-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1157-4"><a href="regularized-covariance-matrix.html#cb1157-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
-<span id="cb1157-5"><a href="regularized-covariance-matrix.html#cb1157-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1157-6"><a href="regularized-covariance-matrix.html#cb1157-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
-<span id="cb1157-7"><a href="regularized-covariance-matrix.html#cb1157-7" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
-<span id="cb1157-8"><a href="regularized-covariance-matrix.html#cb1157-8" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
+<div class="sourceCode" id="cb1159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1159-1"><a href="regularized-covariance-matrix.html#cb1159-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb1159-2"><a href="regularized-covariance-matrix.html#cb1159-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb1159-3"><a href="regularized-covariance-matrix.html#cb1159-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1159-4"><a href="regularized-covariance-matrix.html#cb1159-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
+<span id="cb1159-5"><a href="regularized-covariance-matrix.html#cb1159-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1159-6"><a href="regularized-covariance-matrix.html#cb1159-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
+<span id="cb1159-7"><a href="regularized-covariance-matrix.html#cb1159-7" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
+<span id="cb1159-8"><a href="regularized-covariance-matrix.html#cb1159-8" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]        [,4]         [,5]        [,6]
 ##  [1,]  0.889211221 -0.17223814 -0.36660043  0.35320957 -0.629545741 -0.27978848
 ##  [2,] -0.172238139  0.34416306 -0.09280183 -0.04282613  0.139236591 -0.26060435
@@ -673,7 +673,7 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 ##  [8,] -0.40476558  0.46612332 -0.026813818  0.5588965
 ##  [9,]  0.04629429 -0.02681382  0.540956259  0.5036908
 ## [10,] -0.46911465  0.55889647  0.503690786  1.3107637</code></pre>
-<div class="sourceCode" id="cb1159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1159-1"><a href="regularized-covariance-matrix.html#cb1159-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">solve</span>(S), <span class="at">silent =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1161-1"><a href="regularized-covariance-matrix.html#cb1161-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">solve</span>(S), <span class="at">silent =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## Error in solve.default(S) : 
 ##   system is computationally singular: reciprocal condition number = 3.99819e-19</code></pre>
 <p>The standard definition for the inverse of a matrix fails if the matrix is not square or singular. However, one can generalize the inverse using singular value decomposition. Any rectangular real matrix <span class="math inline">\(\mathbf{M}\)</span> can be decomposed as <span class="math inline">\(\mathbf{M=U \Sigma V^{&#39;}}\)</span>, where <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are orthogonal and <span class="math inline">\(\mathbf{D}\)</span> is a diagonal matrix containing only the positive singular values. The pseudoinverse, also known as <strong>Moore-Penrose</strong> or generalized inverse is then obtained as</p>
@@ -682,17 +682,17 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 \]</span></p>
 <p>Don’t be confused due to notation: <span class="math inline">\(\Sigma\)</span> is not the covariance matrix here</p>
 <p>With using the method of generalized inverse by <code>ppcor</code> and <code>corpcor</code><a href="https://pubmed.ncbi.nlm.nih.gov/16646851/">here</a> <span class="citation">(<a href="#ref-Schafer_2005" role="doc-biblioref"><strong>Schafer_2005?</strong></a>)</span>:</p>
-<div class="sourceCode" id="cb1161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1161-1"><a href="regularized-covariance-matrix.html#cb1161-1" aria-hidden="true" tabindex="-1"></a><span class="co">#https://rdrr.io/cran/corpcor/man/pseudoinverse.html</span></span>
-<span id="cb1161-2"><a href="regularized-covariance-matrix.html#cb1161-2" aria-hidden="true" tabindex="-1"></a>Si <span class="ot">&lt;-</span> corpcor<span class="sc">::</span><span class="fu">pseudoinverse</span>(S)</span>
-<span id="cb1161-3"><a href="regularized-covariance-matrix.html#cb1161-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Si[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Si[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Si[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
+<div class="sourceCode" id="cb1163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1163-1"><a href="regularized-covariance-matrix.html#cb1163-1" aria-hidden="true" tabindex="-1"></a><span class="co">#https://rdrr.io/cran/corpcor/man/pseudoinverse.html</span></span>
+<span id="cb1163-2"><a href="regularized-covariance-matrix.html#cb1163-2" aria-hidden="true" tabindex="-1"></a>Si <span class="ot">&lt;-</span> corpcor<span class="sc">::</span><span class="fu">pseudoinverse</span>(S)</span>
+<span id="cb1163-3"><a href="regularized-covariance-matrix.html#cb1163-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Si[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Si[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Si[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
 <pre><code>## [1] -0.4823509</code></pre>
-<div class="sourceCode" id="cb1163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1163-1"><a href="regularized-covariance-matrix.html#cb1163-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ppcor</span></span>
-<span id="cb1163-2"><a href="regularized-covariance-matrix.html#cb1163-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1165-1"><a href="regularized-covariance-matrix.html#cb1165-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ppcor</span></span>
+<span id="cb1165-2"><a href="regularized-covariance-matrix.html#cb1165-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span></code></pre></div>
 <pre><code>## Warning in ppcor::pcor(X): The inverse of variance-covariance matrix is
 ## calculated using Moore-Penrose generalized matrix invers due to its determinant
 ## of zero.</code></pre>
 <pre><code>## Warning in sqrt((n - 2 - gp)/(1 - pcor^2)): NaNs produced</code></pre>
-<div class="sourceCode" id="cb1166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1166-1"><a href="regularized-covariance-matrix.html#cb1166-1" aria-hidden="true" tabindex="-1"></a>pc<span class="sc">$</span>estimate</span></code></pre></div>
+<div class="sourceCode" id="cb1168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1168-1"><a href="regularized-covariance-matrix.html#cb1168-1" aria-hidden="true" tabindex="-1"></a>pc<span class="sc">$</span>estimate</span></code></pre></div>
 <pre><code>##              [,1]        [,2]        [,3]       [,4]        [,5]          [,6]
 ##  [1,]  1.00000000 -0.48235089 -0.43471080 -0.6132218  0.59239395 -0.1515785108
 ##  [2,] -0.48235089  1.00000000 -0.85835176 -0.7984656  0.08341783  0.1922476120
@@ -715,8 +715,8 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 ##  [8,]  0.9688803  1.00000000  0.84455999 -0.3746342510
 ##  [9,] -0.8416730  0.84455999  1.00000000 -0.0701428715
 ## [10,]  0.2703214 -0.37463425 -0.07014287  1.0000000000</code></pre>
-<div class="sourceCode" id="cb1168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1168-1"><a href="regularized-covariance-matrix.html#cb1168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># corpcor with pseudo inverse</span></span>
-<span id="cb1168-2"><a href="regularized-covariance-matrix.html#cb1168-2" aria-hidden="true" tabindex="-1"></a>corpcor<span class="sc">::</span><span class="fu">cor2pcor</span>(S)</span></code></pre></div>
+<div class="sourceCode" id="cb1170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1170-1"><a href="regularized-covariance-matrix.html#cb1170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># corpcor with pseudo inverse</span></span>
+<span id="cb1170-2"><a href="regularized-covariance-matrix.html#cb1170-2" aria-hidden="true" tabindex="-1"></a>corpcor<span class="sc">::</span><span class="fu">cor2pcor</span>(S)</span></code></pre></div>
 <pre><code>##              [,1]        [,2]        [,3]       [,4]        [,5]          [,6]
 ##  [1,]  1.00000000 -0.48235089 -0.43471080 -0.6132218  0.59239395 -0.1515785108
 ##  [2,] -0.48235089  1.00000000 -0.85835176 -0.7984656  0.08341783  0.1922476120
@@ -841,15 +841,15 @@ The derived ridge covariance estimator is positive definite, ie it’s symmetric
 \]</span>
 The penalty parameter <span class="math inline">\(\lambda\)</span> shrinks the values of <span class="math inline">\(P\)</span> such toward 0 (when <span class="math inline">\(T=0\)</span> ), i.e. very larges values of <span class="math inline">\(\lambda\)</span> makes <span class="math inline">\(P\)</span> “small” and more stable whereas smaller values of <span class="math inline">\(\lambda\)</span> makes the <span class="math inline">\(P\)</span> tend toward the (possibly nonexistent) <span class="math inline">\(S^{-1}\)</span>.</p>
 <p>Let’s try some simulations:</p>
-<div class="sourceCode" id="cb1170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1170-1"><a href="regularized-covariance-matrix.html#cb1170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We did this before</span></span>
-<span id="cb1170-2"><a href="regularized-covariance-matrix.html#cb1170-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
-<span id="cb1170-3"><a href="regularized-covariance-matrix.html#cb1170-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb1170-4"><a href="regularized-covariance-matrix.html#cb1170-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1170-5"><a href="regularized-covariance-matrix.html#cb1170-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
-<span id="cb1170-6"><a href="regularized-covariance-matrix.html#cb1170-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1170-7"><a href="regularized-covariance-matrix.html#cb1170-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
-<span id="cb1170-8"><a href="regularized-covariance-matrix.html#cb1170-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
-<span id="cb1170-9"><a href="regularized-covariance-matrix.html#cb1170-9" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
+<div class="sourceCode" id="cb1172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1172-1"><a href="regularized-covariance-matrix.html#cb1172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We did this before</span></span>
+<span id="cb1172-2"><a href="regularized-covariance-matrix.html#cb1172-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb1172-3"><a href="regularized-covariance-matrix.html#cb1172-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb1172-4"><a href="regularized-covariance-matrix.html#cb1172-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1172-5"><a href="regularized-covariance-matrix.html#cb1172-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
+<span id="cb1172-6"><a href="regularized-covariance-matrix.html#cb1172-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1172-7"><a href="regularized-covariance-matrix.html#cb1172-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cov. &amp; Precision Matrices</span></span>
+<span id="cb1172-8"><a href="regularized-covariance-matrix.html#cb1172-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
+<span id="cb1172-9"><a href="regularized-covariance-matrix.html#cb1172-9" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]        [,4]         [,5]        [,6]
 ##  [1,]  0.889211221 -0.17223814 -0.36660043  0.35320957 -0.629545741 -0.27978848
 ##  [2,] -0.172238139  0.34416306 -0.09280183 -0.04282613  0.139236591 -0.26060435
@@ -872,13 +872,13 @@ The penalty parameter <span class="math inline">\(\lambda\)</span> shrinks the v
 ##  [8,] -0.40476558  0.46612332 -0.026813818  0.5588965
 ##  [9,]  0.04629429 -0.02681382  0.540956259  0.5036908
 ## [10,] -0.46911465  0.55889647  0.503690786  1.3107637</code></pre>
-<div class="sourceCode" id="cb1172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1172-1"><a href="regularized-covariance-matrix.html#cb1172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">solve</span>(S), <span class="at">silent =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1174-1"><a href="regularized-covariance-matrix.html#cb1174-1" aria-hidden="true" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">solve</span>(S), <span class="at">silent =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## Error in solve.default(S) : 
 ##   system is computationally singular: reciprocal condition number = 3.99819e-19</code></pre>
-<div class="sourceCode" id="cb1174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1174-1"><a href="regularized-covariance-matrix.html#cb1174-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Ridge, lambda = 0</span></span>
-<span id="cb1174-2"><a href="regularized-covariance-matrix.html#cb1174-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">=</span> <span class="dv">0</span></span>
-<span id="cb1174-3"><a href="regularized-covariance-matrix.html#cb1174-3" aria-hidden="true" tabindex="-1"></a>SRidge <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>S <span class="sc">+</span> expm<span class="sc">::</span><span class="fu">sqrtm</span>(lambda<span class="sc">*</span><span class="fu">diag</span>(<span class="dv">1</span>, p)<span class="sc">+</span><span class="fl">0.25</span><span class="sc">*</span>(S<span class="sc">%*%</span>S))</span>
-<span id="cb1174-4"><a href="regularized-covariance-matrix.html#cb1174-4" aria-hidden="true" tabindex="-1"></a>SRidge</span></code></pre></div>
+<div class="sourceCode" id="cb1176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1176-1"><a href="regularized-covariance-matrix.html#cb1176-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Ridge, lambda = 0</span></span>
+<span id="cb1176-2"><a href="regularized-covariance-matrix.html#cb1176-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb1176-3"><a href="regularized-covariance-matrix.html#cb1176-3" aria-hidden="true" tabindex="-1"></a>SRidge <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>S <span class="sc">+</span> expm<span class="sc">::</span><span class="fu">sqrtm</span>(lambda<span class="sc">*</span><span class="fu">diag</span>(<span class="dv">1</span>, p)<span class="sc">+</span><span class="fl">0.25</span><span class="sc">*</span>(S<span class="sc">%*%</span>S))</span>
+<span id="cb1176-4"><a href="regularized-covariance-matrix.html#cb1176-4" aria-hidden="true" tabindex="-1"></a>SRidge</span></code></pre></div>
 <pre><code>##                  [,1]           [,2]           [,3]           [,4]
 ##  [1,]  0.889211226+0i -0.17223814+0i -0.36660042+0i  0.35320957+0i
 ##  [2,] -0.172238138+0i  0.34416307+0i -0.09280183-0i -0.04282613+0i
@@ -912,10 +912,10 @@ The penalty parameter <span class="math inline">\(\lambda\)</span> shrinks the v
 ##  [8,] -2.681382e-02-0e+00i  0.5588965+0i
 ##  [9,]  5.409563e-01+0e+00i  0.5036908-0i
 ## [10,]  5.036908e-01-0e+00i  1.3107637+0i</code></pre>
-<div class="sourceCode" id="cb1176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1176-1"><a href="regularized-covariance-matrix.html#cb1176-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Ridge, lambda = 0</span></span>
-<span id="cb1176-2"><a href="regularized-covariance-matrix.html#cb1176-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb1176-3"><a href="regularized-covariance-matrix.html#cb1176-3" aria-hidden="true" tabindex="-1"></a>SRidge <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>S <span class="sc">+</span> expm<span class="sc">::</span><span class="fu">sqrtm</span>(lambda<span class="sc">*</span><span class="fu">diag</span>(<span class="dv">1</span>, p)<span class="sc">+</span><span class="fl">0.25</span><span class="sc">*</span>(S<span class="sc">%*%</span>S))</span>
-<span id="cb1176-4"><a href="regularized-covariance-matrix.html#cb1176-4" aria-hidden="true" tabindex="-1"></a>SRidge</span></code></pre></div>
+<div class="sourceCode" id="cb1178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1178-1"><a href="regularized-covariance-matrix.html#cb1178-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Ridge, lambda = 0</span></span>
+<span id="cb1178-2"><a href="regularized-covariance-matrix.html#cb1178-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb1178-3"><a href="regularized-covariance-matrix.html#cb1178-3" aria-hidden="true" tabindex="-1"></a>SRidge <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>S <span class="sc">+</span> expm<span class="sc">::</span><span class="fu">sqrtm</span>(lambda<span class="sc">*</span><span class="fu">diag</span>(<span class="dv">1</span>, p)<span class="sc">+</span><span class="fl">0.25</span><span class="sc">*</span>(S<span class="sc">%*%</span>S))</span>
+<span id="cb1178-4"><a href="regularized-covariance-matrix.html#cb1178-4" aria-hidden="true" tabindex="-1"></a>SRidge</span></code></pre></div>
 <pre><code>##              [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
 ##  [1,]  1.37069495 -0.13010676 -0.26194680  0.29808331 -0.48369828 -0.20441616
 ##  [2,] -0.13010676  0.94030145 -0.10511356 -0.04366041  0.11696761 -0.16508806
@@ -938,7 +938,7 @@ The penalty parameter <span class="math inline">\(\lambda\)</span> shrinks the v
 ##  [8,] -0.31318783  1.0735641056 -0.0002152917  0.4596644
 ##  [9,]  0.01136719 -0.0002152917  1.1067644836  0.4153144
 ## [10,] -0.38606724  0.4596643602  0.4153143722  1.7902418</code></pre>
-<div class="sourceCode" id="cb1178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1178-1"><a href="regularized-covariance-matrix.html#cb1178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(SRidge)</span></code></pre></div>
+<div class="sourceCode" id="cb1180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1180-1"><a href="regularized-covariance-matrix.html#cb1180-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(SRidge)</span></code></pre></div>
 <pre><code>##              [,1]        [,2]        [,3]        [,4]         [,5]        [,6]
 ##  [1,]  0.96296745  0.08426275  0.20930726 -0.11025252  0.291694924  0.15074465
 ##  [2,]  0.08426275  1.19227678 -0.02462345 -0.00166857 -0.044537957  0.19103259
@@ -1036,9 +1036,9 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 <p>The <code>sparsify()</code> functions lets you select the non-zero entries of <span class="math inline">\(P\)</span> corresponding to edges. It supports a handful different approaches ranging from simple thresholding to false discovery rate based selection.</p>
 <p>After edge selection, <code>GGMnetworkStats()</code> can be utilized to get summary statistics of the resulting graph topology.</p>
 <p>Now, we will apply some packages on both glass and ridge. First LASSO:</p>
-<div class="sourceCode" id="cb1180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1180-1"><a href="regularized-covariance-matrix.html#cb1180-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glasso</span></span>
-<span id="cb1180-2"><a href="regularized-covariance-matrix.html#cb1180-2" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> glasso<span class="sc">::</span><span class="fu">glasso</span>(S,<span class="at">rho=</span><span class="fl">0.2641</span>,<span class="at">approx=</span><span class="cn">FALSE</span>)[<span class="fu">c</span>(<span class="st">&#39;w&#39;</span>,<span class="st">&#39;wi&#39;</span>)]</span>
-<span id="cb1180-3"><a href="regularized-covariance-matrix.html#cb1180-3" aria-hidden="true" tabindex="-1"></a>gl</span></code></pre></div>
+<div class="sourceCode" id="cb1182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1182-1"><a href="regularized-covariance-matrix.html#cb1182-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glasso</span></span>
+<span id="cb1182-2"><a href="regularized-covariance-matrix.html#cb1182-2" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> glasso<span class="sc">::</span><span class="fu">glasso</span>(S,<span class="at">rho=</span><span class="fl">0.2641</span>,<span class="at">approx=</span><span class="cn">FALSE</span>)[<span class="fu">c</span>(<span class="st">&#39;w&#39;</span>,<span class="st">&#39;wi&#39;</span>)]</span>
+<span id="cb1182-3"><a href="regularized-covariance-matrix.html#cb1182-3" aria-hidden="true" tabindex="-1"></a>gl</span></code></pre></div>
 <pre><code>## $w
 ##               [,1]          [,2]        [,3]         [,4]         [,5]
 ##  [1,]  1.153311221 -0.0019492424 -0.10250046  0.089115084 -0.365445494
@@ -1086,7 +1086,7 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ##  [8,]  0.24525219  1.5631718  0.00000000 -0.25070153
 ##  [9,]  0.00000000  0.0000000  1.38457190 -0.15186887
 ## [10,]  0.17451306 -0.2507014 -0.15186929  0.96965130</code></pre>
-<div class="sourceCode" id="cb1182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1182-1"><a href="regularized-covariance-matrix.html#cb1182-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(gl<span class="sc">$</span>wi)</span></code></pre></div>
+<div class="sourceCode" id="cb1184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1184-1"><a href="regularized-covariance-matrix.html#cb1184-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(gl<span class="sc">$</span>wi)</span></code></pre></div>
 <pre><code>##              [,1]       [,2]        [,3]         [,4]         [,5]        [,6]
 ##  [1,] -1.00000000  0.0000000 -0.08554877  0.047853564 -0.374188570 -0.02114429
 ##  [2,]  0.00000000 -1.0000000  0.00000000  0.000000000  0.000000000  0.00000000
@@ -1109,9 +1109,9 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ##  [8,] -0.15155077 -1.00000000  0.00000000  0.20363191
 ##  [9,]  0.00000000  0.00000000 -1.00000000  0.13106997
 ## [10,] -0.13692058  0.20363183  0.13107034 -1.00000000</code></pre>
-<div class="sourceCode" id="cb1184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1184-1"><a href="regularized-covariance-matrix.html#cb1184-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glassoFast</span></span>
-<span id="cb1184-2"><a href="regularized-covariance-matrix.html#cb1184-2" aria-hidden="true" tabindex="-1"></a>glf <span class="ot">&lt;-</span> glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="fl">0.2641</span>)</span>
-<span id="cb1184-3"><a href="regularized-covariance-matrix.html#cb1184-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(glf<span class="sc">$</span>wi)</span></code></pre></div>
+<div class="sourceCode" id="cb1186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1186-1"><a href="regularized-covariance-matrix.html#cb1186-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glassoFast</span></span>
+<span id="cb1186-2"><a href="regularized-covariance-matrix.html#cb1186-2" aria-hidden="true" tabindex="-1"></a>glf <span class="ot">&lt;-</span> glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="fl">0.2641</span>)</span>
+<span id="cb1186-3"><a href="regularized-covariance-matrix.html#cb1186-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(glf<span class="sc">$</span>wi)</span></code></pre></div>
 <pre><code>##              [,1]        [,2]        [,3]         [,4]         [,5]        [,6]
 ##  [1,] -1.00000000  0.00000000 -0.08554575  0.047851718 -0.374188717 -0.02114399
 ##  [2,]  0.00000000 -1.00000000  0.00000000  0.000000000  0.000000000  0.00000000
@@ -1135,16 +1135,16 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ##  [9,]  0.0000000  0.00000000 -1.00000000  0.13107029
 ## [10,] -0.1369205  0.20363189  0.13107029 -1.00000000</code></pre>
 <p>And Ridge:</p>
-<div class="sourceCode" id="cb1186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1186-1"><a href="regularized-covariance-matrix.html#cb1186-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
-<span id="cb1186-2"><a href="regularized-covariance-matrix.html#cb1186-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb1186-3"><a href="regularized-covariance-matrix.html#cb1186-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1186-4"><a href="regularized-covariance-matrix.html#cb1186-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
-<span id="cb1186-5"><a href="regularized-covariance-matrix.html#cb1186-5" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
-<span id="cb1186-6"><a href="regularized-covariance-matrix.html#cb1186-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1186-7"><a href="regularized-covariance-matrix.html#cb1186-7" aria-hidden="true" tabindex="-1"></a><span class="co"># corpcor</span></span>
-<span id="cb1186-8"><a href="regularized-covariance-matrix.html#cb1186-8" aria-hidden="true" tabindex="-1"></a>cpr <span class="ot">&lt;-</span> corpcor<span class="sc">::</span><span class="fu">pcor.shrink</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1188-1"><a href="regularized-covariance-matrix.html#cb1188-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb1188-2"><a href="regularized-covariance-matrix.html#cb1188-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb1188-3"><a href="regularized-covariance-matrix.html#cb1188-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1188-4"><a href="regularized-covariance-matrix.html#cb1188-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span> (<span class="fu">rnorm</span>(n<span class="sc">*</span>p), n, p)</span>
+<span id="cb1188-5"><a href="regularized-covariance-matrix.html#cb1188-5" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
+<span id="cb1188-6"><a href="regularized-covariance-matrix.html#cb1188-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1188-7"><a href="regularized-covariance-matrix.html#cb1188-7" aria-hidden="true" tabindex="-1"></a><span class="co"># corpcor</span></span>
+<span id="cb1188-8"><a href="regularized-covariance-matrix.html#cb1188-8" aria-hidden="true" tabindex="-1"></a>cpr <span class="ot">&lt;-</span> corpcor<span class="sc">::</span><span class="fu">pcor.shrink</span>(X)</span></code></pre></div>
 <pre><code>## Estimating optimal shrinkage intensity lambda (correlation matrix): 0.7365</code></pre>
-<div class="sourceCode" id="cb1188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1188-1"><a href="regularized-covariance-matrix.html#cb1188-1" aria-hidden="true" tabindex="-1"></a>cpr</span></code></pre></div>
+<div class="sourceCode" id="cb1190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1190-1"><a href="regularized-covariance-matrix.html#cb1190-1" aria-hidden="true" tabindex="-1"></a>cpr</span></code></pre></div>
 <pre><code>##              [,1]         [,2]         [,3]         [,4]         [,5]
 ##  [1,]  1.00000000 -0.063781216 -0.101406692  0.063120988 -0.194493134
 ##  [2,] -0.06378122  1.000000000  0.007994094 -0.000768278  0.045367893
@@ -1176,9 +1176,9 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## attr(,&quot;spv&quot;)
 ##  [1] 0.9163043 0.9261594 0.9159745 0.9151906 0.8824546 0.9457673 0.8900877
 ##  [8] 0.8719793 0.9159940 0.8735017</code></pre>
-<div class="sourceCode" id="cb1190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1190-1"><a href="regularized-covariance-matrix.html#cb1190-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rags2ridges</span></span>
-<span id="cb1190-2"><a href="regularized-covariance-matrix.html#cb1190-2" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">optPenalty.kCVauto</span>(X, <span class="at">lambdaMin =</span> <span class="fl">0.01</span>, <span class="at">lambdaMax =</span> <span class="dv">30</span>)</span>
-<span id="cb1190-3"><a href="regularized-covariance-matrix.html#cb1190-3" aria-hidden="true" tabindex="-1"></a>opt</span></code></pre></div>
+<div class="sourceCode" id="cb1192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1192-1"><a href="regularized-covariance-matrix.html#cb1192-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rags2ridges</span></span>
+<span id="cb1192-2"><a href="regularized-covariance-matrix.html#cb1192-2" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">optPenalty.kCVauto</span>(X, <span class="at">lambdaMin =</span> <span class="fl">0.01</span>, <span class="at">lambdaMax =</span> <span class="dv">30</span>)</span>
+<span id="cb1192-3"><a href="regularized-covariance-matrix.html#cb1192-3" aria-hidden="true" tabindex="-1"></a>opt</span></code></pre></div>
 <pre><code>## $optLambda
 ## [1] 3.670373
 ## 
@@ -1192,7 +1192,7 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## [5,]  0.13395542 -0.029391000 0.004540494  0.062008715  2.151438332 -0.05607991 …
 ## [6,]  0.05979073  0.056044183 0.023978439 -0.090909777 -0.056079908  2.09478152 …
 ## … 4 more rows and 4 more columns</code></pre>
-<div class="sourceCode" id="cb1192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1192-1"><a href="regularized-covariance-matrix.html#cb1192-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(opt<span class="sc">$</span>optPrec)</span></code></pre></div>
+<div class="sourceCode" id="cb1194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1194-1"><a href="regularized-covariance-matrix.html#cb1194-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(opt<span class="sc">$</span>optPrec)</span></code></pre></div>
 <pre><code>## A 10 x 10 ridge precision matrix estimate with lambda = 3.670373
 ##             [,1]         [,2]         [,3]         [,4]         [,5] …
 ## [1,] -1.00000000 -0.017145168 -0.038887955  0.036590854 -0.063331070 …
@@ -1209,8 +1209,8 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## [5,]  0.02641639 …
 ## [6,] -1.00000000 …
 ## … 4 more rows and 4 more columns</code></pre>
-<div class="sourceCode" id="cb1194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1194-1"><a href="regularized-covariance-matrix.html#cb1194-1" aria-hidden="true" tabindex="-1"></a>Si <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">ridgeP</span>(S, <span class="at">lambda=</span>opt<span class="sc">$</span>optLambda)</span>
-<span id="cb1194-2"><a href="regularized-covariance-matrix.html#cb1194-2" aria-hidden="true" tabindex="-1"></a>Si</span></code></pre></div>
+<div class="sourceCode" id="cb1196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1196-1"><a href="regularized-covariance-matrix.html#cb1196-1" aria-hidden="true" tabindex="-1"></a>Si <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">ridgeP</span>(S, <span class="at">lambda=</span>opt<span class="sc">$</span>optLambda)</span>
+<span id="cb1196-2"><a href="regularized-covariance-matrix.html#cb1196-2" aria-hidden="true" tabindex="-1"></a>Si</span></code></pre></div>
 <pre><code>## A 10 x 10 ridge precision matrix estimate with lambda = 3.670373
 ##             [,1]        [,2]        [,3]        [,4]         [,5]        [,6] …
 ## [1,]  1.71127936  0.04250957 0.091807414 -0.08619734  0.155561828  0.06978509 …
@@ -1220,7 +1220,7 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## [5,]  0.15556183 -0.03380044 0.004278519  0.07187876  1.795540421 -0.06533859 …
 ## [6,]  0.06978509  0.06587097 0.027119056 -0.10579068 -0.065338591  1.72817504 …
 ## … 4 more rows and 4 more columns</code></pre>
-<div class="sourceCode" id="cb1196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1196-1"><a href="regularized-covariance-matrix.html#cb1196-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(Si)</span></code></pre></div>
+<div class="sourceCode" id="cb1198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1198-1"><a href="regularized-covariance-matrix.html#cb1198-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(Si)</span></code></pre></div>
 <pre><code>## A 10 x 10 ridge precision matrix estimate with lambda = 3.670373
 ##             [,1]         [,2]         [,3]         [,4]         [,5] …
 ## [1,] -1.00000000 -0.023918013 -0.055944967  0.051686004 -0.088745223 …
@@ -1237,13 +1237,13 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## [5,]  0.03709183 …
 ## [6,] -1.00000000 …
 ## … 4 more rows and 4 more columns</code></pre>
-<div class="sourceCode" id="cb1198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1198-1"><a href="regularized-covariance-matrix.html#cb1198-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Si[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Si[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Si[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
+<div class="sourceCode" id="cb1200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1200-1"><a href="regularized-covariance-matrix.html#cb1200-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Si[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Si[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Si[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
 <pre><code>## [1] -0.02391801</code></pre>
-<div class="sourceCode" id="cb1200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1200-1"><a href="regularized-covariance-matrix.html#cb1200-1" aria-hidden="true" tabindex="-1"></a>spr <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">sparsify</span>(opt<span class="sc">$</span>optPrec, <span class="at">threshold =</span> <span class="st">&quot;connected&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1202-1"><a href="regularized-covariance-matrix.html#cb1202-1" aria-hidden="true" tabindex="-1"></a>spr <span class="ot">&lt;-</span> rags2ridges<span class="sc">::</span><span class="fu">sparsify</span>(opt<span class="sc">$</span>optPrec, <span class="at">threshold =</span> <span class="st">&quot;connected&quot;</span>)</span></code></pre></div>
 <pre><code>## - Retained elements:  16 
 ## - Corresponding to 35.56 % of possible edges 
 ## </code></pre>
-<div class="sourceCode" id="cb1202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1202-1"><a href="regularized-covariance-matrix.html#cb1202-1" aria-hidden="true" tabindex="-1"></a>spr</span></code></pre></div>
+<div class="sourceCode" id="cb1204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1204-1"><a href="regularized-covariance-matrix.html#cb1204-1" aria-hidden="true" tabindex="-1"></a>spr</span></code></pre></div>
 <pre><code>## $sparseParCor
 ## A 10 x 10 ridge precision matrix estimate with lambda = 3.670373
 ##             [,1] [,2]        [,3]        [,4]        [,5]       [,6] …
@@ -1265,7 +1265,7 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ## [5,]  0.13395542 0.000000 0.00000000  0.00000000 2.1514383  0.00000000 …
 ## [6,]  0.00000000 0.000000 0.00000000 -0.09090978 0.0000000  2.09478152 …
 ## … 4 more rows and 4 more columns</code></pre>
-<div class="sourceCode" id="cb1204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1204-1"><a href="regularized-covariance-matrix.html#cb1204-1" aria-hidden="true" tabindex="-1"></a>rags2ridges<span class="sc">::</span><span class="fu">GGMnetworkStats</span>(spr<span class="sc">$</span>sparseParCor, <span class="at">as.table =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1206-1"><a href="regularized-covariance-matrix.html#cb1206-1" aria-hidden="true" tabindex="-1"></a>rags2ridges<span class="sc">::</span><span class="fu">GGMnetworkStats</span>(spr<span class="sc">$</span>sparseParCor, <span class="at">as.table =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##       degree betweenness  closeness eigenCentrality nNeg nPos  mutualInfo
 ##  [1,]      3    1.500000 0.05882353       0.6272576    2    1 0.006771079
 ##  [2,]      1    0.000000 0.04761905       0.2661848    0    1 0.001206142
@@ -1288,8 +1288,8 @@ Let <span class="math inline">\(\mathbf{Y}_{i}, i=1, \ldots, n\)</span>, be a <s
 ##  [8,] 1.007478          1
 ##  [9,] 1.007467          1
 ## [10,] 1.025067          1</code></pre>
-<div class="sourceCode" id="cb1206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1206-1"><a href="regularized-covariance-matrix.html#cb1206-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rags2ridges::fullMontyS(X, lambdaMin = 0.01, lambdaMax = 30) - Gives an error</span></span>
-<span id="cb1206-2"><a href="regularized-covariance-matrix.html#cb1206-2" aria-hidden="true" tabindex="-1"></a>rags2ridges<span class="sc">::</span><span class="fu">Ugraph</span>(spr<span class="sc">$</span>sparseParCor, <span class="at">type =</span> <span class="st">&quot;weighted&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1208-1"><a href="regularized-covariance-matrix.html#cb1208-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rags2ridges::fullMontyS(X, lambdaMin = 0.01, lambdaMax = 30) - Gives an error</span></span>
+<span id="cb1208-2"><a href="regularized-covariance-matrix.html#cb1208-2" aria-hidden="true" tabindex="-1"></a>rags2ridges<span class="sc">::</span><span class="fu">Ugraph</span>(spr<span class="sc">$</span>sparseParCor, <span class="at">type =</span> <span class="st">&quot;weighted&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in type.convert.default(X[[i]], ...): &#39;as.is&#39; should be specified by
 ## the caller; using TRUE
 

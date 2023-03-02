@@ -314,7 +314,15 @@ We can see the the growth of the tree by looking at its CV table:
 printcp(tree)
 ```
 
-The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
+The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
+
+```{r}
+sum(predict(tree, type="class")!=myocarde$PRONO)/nrow(myocarde)
+```
+
+The `xerror` provides the same information but when it is apply to test sets.
+
+The **relative** improvement, or gain, due to a split is given by `CP` (cost complexity pruning), which is 0.724138 in the first split on `INSYS`.  Therefore, the first split on `INSYS` reduces (improves) this error to 27.5862\% (`rel error`). 
   
 This relative gain (`CP`) can be calculated as follows:
 
