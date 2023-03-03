@@ -55,7 +55,7 @@ $$
 \end{aligned}
 $$
 
-where $\mathbf{V}$ is an $n \times n$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A^{\top}A),$ and, $\mathbf{D}$ is an $n \times n$ diagonal matrix with the eigenvalues of $\mathbf{A^{\top} A}$ on the diagonal.  The same decomposition for $\mathbf{A A^{\top}}$, now $\mathbf{U}$ is an $m \times m$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A A^{\top}}$, and $\mathbf{D^{\prime}}$ is an $m \times m$ diagonal matrix with the eigenvalues of $\mathbf{A A^{\top}}$ on the diagonal.
+where $\mathbf{V}$ is an $n \times n$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A}^{\top}\mathbf{A},$ and, $\mathbf{D}$ is an $n \times n$ diagonal matrix with the eigenvalues of $\mathbf{A^{\top} A}$ on the diagonal.  The same decomposition for $\mathbf{A A^{\top}}$, now $\mathbf{U}$ is an $m \times m$ **orthogonal** matrix consisting of the eigenvectors of $\mathbf{A A^{\top}}$, and $\mathbf{D^{\prime}}$ is an $m \times m$ diagonal matrix with the eigenvalues of $\mathbf{A A^{\top}}$ on the diagonal.
   
 It turns out that $\mathbf{D}$ and $\mathbf{D^{\prime}}$ have the same non-zero diagonal entries except that the order might be different.
 

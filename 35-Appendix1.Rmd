@@ -354,8 +354,8 @@ $$
 u_0^{(t)} \\
 u_1^{(t)}
 \end{array}\right]=\left[\begin{array}{c}
-\frac{\partial \mathscr{C}\left(\beta^{(t)} \mid y ; x\right)}{\partial \beta_0} \\
-\frac{\partial \mathscr{C}\left(\beta^{(t)} \mid y ; x\right)}{\partial \beta_1}
+\frac{\partial \ell\left(\beta^{(t)} \mid y ; x\right)}{\partial \beta_0} \\
+\frac{\partial \ell\left(\beta^{(t)} \mid y ; x\right)}{\partial \beta_1}
 \end{array}\right]=\left[\begin{array}{c}
 \sum_{i=1}^n \left(y_i-p_i^{(t)}\right) \\
 \sum_{i=1}^n x_i\left(y_i-p_i^{(t)}\right)
