@@ -251,7 +251,8 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
 <li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
-<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc-curve"><i class="fa fa-check"></i><b>10.3</b> ROC Curve</a></li>
+<li class="chapter" data-level="10.4" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#auc---area-under-the-curve"><i class="fa fa-check"></i><b>10.4</b> AUC - Area Under the Curve</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
 <ul>
@@ -555,9 +556,9 @@ div.csl-indent {
 <span id="cb1061-11"><a href="moore-penrose-inverse.html#cb1061-11" aria-hidden="true" tabindex="-1"></a>betahat_OLS <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> Y</span>
 <span id="cb1061-12"><a href="moore-penrose-inverse.html#cb1061-12" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
 <pre><code>##         [,1]
-## x1 0.6984008
-## x2 1.3750748
-## x3 2.1381871</code></pre>
+## x1 0.4187644
+## x2 1.6604130
+## x3 1.3810833</code></pre>
 <div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1063-1"><a href="moore-penrose-inverse.html#cb1063-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SVD</span></span>
 <span id="cb1063-2"><a href="moore-penrose-inverse.html#cb1063-2" aria-hidden="true" tabindex="-1"></a>X.svd <span class="ot">&lt;-</span> <span class="fu">svd</span>(X)</span>
 <span id="cb1063-3"><a href="moore-penrose-inverse.html#cb1063-3" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">/</span> X.svd<span class="sc">$</span>d)</span>
@@ -582,14 +583,14 @@ div.csl-indent {
 <span id="cb1065-2"><a href="moore-penrose-inverse.html#cb1065-2" aria-hidden="true" tabindex="-1"></a>betahat_ginv <span class="ot">&lt;-</span> X.ginv <span class="sc">%*%</span> Y</span>
 <span id="cb1065-3"><a href="moore-penrose-inverse.html#cb1065-3" aria-hidden="true" tabindex="-1"></a>betahat_ginv</span></code></pre></div>
 <pre><code>##           [,1]
-## [1,] 0.6984008
-## [2,] 1.3750748
-## [3,] 2.1381871</code></pre>
+## [1,] 0.4187644
+## [2,] 1.6604130
+## [3,] 1.3810833</code></pre>
 <div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1067-1"><a href="moore-penrose-inverse.html#cb1067-1" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
 <pre><code>##         [,1]
-## x1 0.6984008
-## x2 1.3750748
-## x3 2.1381871</code></pre>
+## x1 0.4187644
+## x2 1.6604130
+## x3 1.3810833</code></pre>
 
 </div>
             </section>

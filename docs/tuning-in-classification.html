@@ -251,7 +251,8 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="10.1" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#confusion-matrix"><i class="fa fa-check"></i><b>10.1</b> Confusion matrix</a></li>
 <li class="chapter" data-level="10.2" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#performance-measures"><i class="fa fa-check"></i><b>10.2</b> Performance measures</a></li>
-<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc---reciever-operating-curve"><i class="fa fa-check"></i><b>10.3</b> ROC - Reciever Operating Curve</a></li>
+<li class="chapter" data-level="10.3" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#roc-curve"><i class="fa fa-check"></i><b>10.3</b> ROC Curve</a></li>
+<li class="chapter" data-level="10.4" data-path="tuning-in-classification.html"><a href="tuning-in-classification.html#auc---area-under-the-curve"><i class="fa fa-check"></i><b>10.4</b> AUC - Area Under the Curve</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="classification-example.html"><a href="classification-example.html"><i class="fa fa-check"></i><b>11</b> Classification Example</a>
 <ul>
@@ -527,7 +528,7 @@ div.csl-indent {
 </ul>
 <p>Here is the summary:</p>
 <p><span class="math display">\[
-\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=Cat} &amp; {Y=Dog} \\ {\hat{Y}=Cat} &amp; {\text {TPR or Sensitivity }_{}} &amp; {\text { FNR or Fall-out }_{}} \\ {\hat{Y}=Dog} &amp; {\text { FNR or Miss Rate }_{}} &amp; {\text { TNR or Specificity }_{}}\end{array}
+\begin{array}{ccc}{\text { Predicted vs. Reality}} &amp; {Y=Cat} &amp; {Y=Dog} \\ {\hat{Y}=Cat} &amp; {\text {TPR or Sensitivity }_{}} &amp; {\text { FPR or Fall-out }_{}} \\ {\hat{Y}=Dog} &amp; {\text { FNR or Miss Rate }_{}} &amp; {\text { TNR or Specificity }_{}}\end{array}
 \]</span></p>
 <p><strong>Kappa</strong> is also calculated in most cases. It is an interesting measure because it compares the actual performance of prediction with what it would be if a random prediction was carried out. For example, suppose that your model predicts <span class="math inline">\(Y\)</span> with 95% accuracy. How good your prediction power would be if a random choice would also predict 70% of <span class="math inline">\(Y\)</span>s correctly? Let’s use an example:</p>
 <p><span class="math display">\[
@@ -551,10 +552,10 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 <span class="math inline">\(OA-EA\)</span> for <span class="math inline">\(TN\)</span> = <span class="math inline">\(13/51-20 \times (21/51^2) = 0.0934\)</span></p>
 <p>And we normalize it by <span class="math inline">\(1-EA = 1- 31 \times (29/51^2) + 20 \times (21/51^2) = 0.51\)</span>, which is the value if the prediction was 100% successful.</p>
 <p>Hence, <strong>Kappa</strong>: <span class="math inline">\((0.0857+0.0934) / (1 - 0.51) = 0.3655\)</span></p>
-<p>Finally, <strong>Jouden’s J statistics</strong> also as known as <strong>Youden’s index</strong> or <strong>Informedness</strong>, is a single statistics that captures the performance of prediction. It’s simply <span class="math inline">\(J=TPR+TNR-1\)</span> and ranges between 0 and 1 indicating useless and perfect prediction performance, respectively. This metric is also related to <strong>Receiver Operating Curve (ROC)</strong> analysis, which is the subject of next section.</p>
+<p>Finally, <strong>Jouden’s J statistics</strong> also as known as <strong>Youden’s index</strong> or <strong>Informedness</strong>, is a single statistics that captures the performance of prediction. It’s simply <span class="math inline">\(J=TPR+TNR-1\)</span> and ranges between 0 and 1 indicating useless and perfect prediction performance, respectively. This metric is also related to <strong>Receiver Operating Characteristics (ROC) curve</strong> analysis, which is the subject of next section.</p>
 </div>
-<div id="roc---reciever-operating-curve" class="section level2 hasAnchor" number="10.3">
-<h2><span class="header-section-number">10.3</span> ROC - Reciever Operating Curve<a href="tuning-in-classification.html#roc---reciever-operating-curve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="roc-curve" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> ROC Curve<a href="tuning-in-classification.html#roc-curve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Our outcome variable is categorical (<span class="math inline">\(Y = 1\)</span> or <span class="math inline">\(0\)</span>). Most classification algorithms calculate the predicted probability of success (<span class="math inline">\(Y = 1\)</span>). If the probability is larger than a fixed cut-off threshold (discriminating threshold), then we assume that the model predicts success (Y = 1); otherwise, we assume that it predicts failure. As a result of such a procedure, the comparison of the observed and predicted values summarized in a confusion table depends on the threshold. The predictive accuracy of a model as a function of threshold can be summarized by Area Under Curve (AUC) of Receiver Operating Characteristics (ROC). The ROC curve, which is is a graphical plot that illustrates the diagnostic ability of a binary classifier, indicates a trade-off between True Positive Rate (TPR) and False Positive Rate (FPR). Hence, the success of a model comes with its predictions that increases TPR without raising FPR. The ROC curve was first used during World War II for the analysis of radar signals before it was employed in signal detection theory.</p>
 <p>Here is a visualization:</p>
 <p><img src="png/ROC1.png" width="140%" height="140%" /></p>
@@ -707,9 +708,11 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 <p>This simple example shows that the best (in-sample) fit can be achieved by</p>
 <p><span class="math display">\[
 \hat{Y}=\left\{\begin{array}{ll}{1,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)&gt;17.86863 \%} \\ {0,} &amp; {\hat{p}\left(x_{1}, \ldots, x_{k}\right)\leq17.86863 \%}\end{array}\right.
-\]</span>
-## AUC - Area Under the Curve
-Finally, we measure the predictive accuracy by the area under the ROC curve. An area of 1 represents a perfect performance; an area of 0.5 represents a worthless prediction. This is because an area of 0.5 suggests its performance is no better than random chance.</p>
+\]</span></p>
+</div>
+<div id="auc---area-under-the-curve" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> AUC - Area Under the Curve<a href="tuning-in-classification.html#auc---area-under-the-curve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Finally, we measure the predictive accuracy by the area under the ROC curve. An area of 1 represents a perfect performance; an area of 0.5 represents a worthless prediction. This is because an area of 0.5 suggests its performance is no better than random chance.</p>
 <p><img src="png/AUC.png" width="130%" height="130%" /></p>
 <p>For example, an accepted rough guide for classifying the accuracy of a diagnostic test in medical procedures is</p>
 <p>0.90-1.00 = Excellent (A)<br />

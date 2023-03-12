@@ -117,7 +117,8 @@ speed
 tuning-in-classification
 confusion-matrix
 performance-measures
-roc---reciever-operating-curve
+roc-curve
+auc---area-under-the-curve
 classification-example
 lpm
 logistic-regression-1
