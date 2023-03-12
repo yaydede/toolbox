@@ -1,15 +1,28 @@
-# Regularized covariance matrix
+# Regularized Covariance Matrix
 
-Why is a covariance matrix $S$ is singular when $n<p$ in the data matrix of $X$? Consider the $n \times p$ matrix of sample data, $X$. From the above, the rank of $X$ is at most $\min (n, p)$. Since
+Due an increasing availability of high-dimensional data sets, graphical models have become powerful tools to discover conditional dependencies over a graph structure.
+
+However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional.  
+
+Why is a covariance matrix $S$ singular when $n<p$ in $X$? Consider the $n \times p$ matrix of sample data, $X$. Since we know that the rank of $X$ is at most $\min (n, p)$. Hence, in 
 
 $$
-\mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c}
+\mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c},
 $$
-$\operatorname{rank}(X_c)$ will be $n$ ($n<p$).  Since $\operatorname{rank}(A B) \leq \min (\operatorname{rank}(A), \operatorname{rank}(B))$.  Clearly the rank of $S$ won't be larger than the rank of $X_c$.  Since $S$ is $p \times p$ and its rank is $n$, $S$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(X)<p$ in which case $\operatorname{rank}(S)<p$. 
+
+$\operatorname{rank}(X_c)$ will be $n$.  It is clear that the rank of $S$ won't be larger than the rank of $X_c$.  Since $S$ is $p \times p$ and its rank is $n$, $S$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(X)<p$ in which case $\operatorname{rank}(S)<p$. 
+
+This brought several novel precision estimators. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large (in some sense) values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
+
+To solve the problem, as we have seen before in Section 6, penalized estimators adds a so-called penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
+
+In this chapter we will see several methods that will provide sparse precision matrices in case of $n<p$ using Gaussian Graphical Models.    
 
 ## MLE  
 
-Before understanding L1 or L2 regularization, we need to see the multivariate Gaussian distribution, its parameterization and MLE solutions.  The multivariate Gaussian distribution of a random vector $X \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function (the Wishart distribution arises as the distribution of the sample covariance matrix for a sample from a multivariate normal distribution - [See Wishard Distribution](https://en.wikipedia.org/wiki/Wishart_distribution)):
+Before understanding $\ell_1$ or$\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
+  
+The multivariate Gaussian distribution of a random vector $X \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
 
 $$
 f(x \mid \mu, \Sigma)=\frac{1}{(2 \pi)^{p / 2}|\Sigma|^{1 / 2}} \exp \left\{-\frac{1}{2}(x-\mu)^{T} \Sigma^{-1}(x-\mu)\right\},
@@ -19,13 +32,13 @@ where $|\Sigma|$ is the determinant of the covariance matrix. The likelihood fun
 $$
 \mathcal{L}(\mu, \Sigma)=(2 \pi)^{-\frac{n p}{2}} \prod_{i=1}^{n} \operatorname{det}(\Sigma)^{-\frac{1}{2}} \exp \left(-\frac{1}{2}\left(x_{i}-\mu\right)^{\mathrm{T}} \Sigma^{-1}\left(x_{i}-\mu\right)\right)
 $$
-Since the estimate $\bar{x}$ does not depend on $\Sigma$, we can just substitute it for $\mu$ in the likelihood function, getting
+Since the estimate $\bar{x}$ does not depend on $\Sigma$, we can just substitute it for $\mu$ in the likelihood function, 
 
 $$
 \mathcal{L}(\bar{x}, \Sigma) \propto \operatorname{det}(\Sigma)^{-\frac{n}{2}} \exp \left(-\frac{1}{2} \sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{\mathrm{T}} \Sigma^{-1}\left(x_{i}-\bar{x}\right)\right)
 $$
   
-and then seek the value of $\Sigma$ that maximizes the likelihood of the data (in practice it is easier to work with $\log \mathcal{L}$ ). Regard the scalar $\left(x_{i}-\bar{x}\right)^{\mathrm{T}} \Sigma^{-1}\left(x_{i}-\bar{x}\right)$ as the trace of a $1 \times 1$ matrix. This makes it possible to use the identity $\operatorname{tr}(A B)=\operatorname{tr}(B A)$
+We seek the value of $\Sigma$ that maximizes the likelihood of the data (in practice it is easier to work with $\log \mathcal{L}$ ). With the cyclical nature of trace, 
 
 $$
 \begin{aligned}
@@ -53,65 +66,40 @@ $$
 \ell(\Omega ; S)=\ln |\Omega|-\operatorname{tr}(S \Omega)
 $$
 
-where $\Omega=\Sigma^{-1}$ is the so-called precision matrix (also sometimes called the concentration matrix). It is precisely this $\Omega$ for which we seek an estimate, which we will denote $P$. Indeed, one can naturally try to use the inverse of $S$ for this.
+where $\Omega=\Sigma^{-1}$ is the so-called precision matrix (also sometimes called the concentration matrix), which we want to estimate, which we will denote $P$. Indeed, one can naturally try to use the inverse of $S$ for this.
 
-The differential of this log-likelihood is
-
-$$
-d \ln \mathcal{L}(\mu, \Sigma)=\\-\frac{n}{2} \operatorname{tr}\left[\Sigma^{-1}\{d \Sigma\}\right]-\frac{1}{2} \operatorname{tr}\left[-\Sigma^{-1}\{d \Sigma\} \Sigma^{-1} \sum_{i=1}^{n}\left(x_{i}-\mu\right)\left(x_{i}-\mu\right)^{\mathrm{T}}-2 \Sigma^{-1} \sum_{i=1}^{n}\left(x_{i}-\mu\right)\{d \mu\}^{\mathrm{T}}\right]
-$$
-
-and
-
-$$
-\sum_{i=1}^{n}\left(x_{i}-\mu\right)\left(x_{i}-\mu\right)^{\mathrm{T}}=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{\mathrm{T}}=S
-$$
-Then the terms involving $d \Sigma$ in $d \ln \mathcal{L}$ can be combined as
-
-$$
--\frac{1}{2} \operatorname{tr}\left(\Sigma^{-1}\{d \Sigma\}\left[n I_{p}-\Sigma^{-1} S\right]\right)
-$$
-See the rest from <https://en.wikipedia.org/wiki/Estimation_of_covariance_matrices>. For $n < p$, the empirical estimate of the covariance matrix becomes singular, i.e. it cannot be inverted to compute the precision matrix.
-
-There is also another intuitive way to see the whole algebra ([see the post here](https://stats.stackexchange.com/questions/151315/what-is-the-intuitive-geometric-meaning-of-minimizing-the-log-determinant-of)) [@Intui_Cross]:
-
-Let's start with the univariate standard normal density (parameter free) which is
-$$
-\frac{1}{\sqrt{2 \pi}} \exp \left(-\frac{1}{2} t^{2}\right)
-$$
-When we extend (parameterize) it to $x=\sigma t+\mu$, the change of variable requires $d t=\frac{1}{\sigma} d x$ making the general normal density
+For an intuitive way to see the whole algebra, let's start with the general normal density
+  
 $$
 \frac{1}{\sqrt{2 \pi}} \frac{1}{\sigma} \exp \left(-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}\right)
 $$
 The log-likelihood is
 $$
-\text { A constant }-\frac{n}{2} \log \left(\sigma^{2}\right)-\frac{1}{2} \sum_{i=1}^{n}\left(\frac{x_{i}-\mu}{\sigma}\right)^{2},
+\mathcal{L}(\mu, \sigma)=\text { A constant }-\frac{n}{2} \log \left(\sigma^{2}\right)-\frac{1}{2} \sum_{i=1}^{n}\left(\frac{x_{i}-\mu}{\sigma}\right)^{2},
 $$
 maximization of which is equivalent to minimizing
+
 $$
-n \log \left(\sigma^{2}\right)+\sum_{i=1}^{n}\left(\frac{x_{i}-\mu}{\sigma}\right)^{2}
+\mathcal{L}(\mu, \sigma)=n \log \left(\sigma^{2}\right)+\sum_{i=1}^{n}\left(\frac{x_{i}-\mu}{\sigma}\right)^{2}
 $$
   
-Multivariate (say number of dimensions $=d$ ) counterpart behaves the similar way. Starting with the generating (standard) density
-$$
-(\sqrt{2 \pi})^{-d} \exp \left(-\frac{1}{2} \mathbf{z}^{t} \mathbf{z}\right)
-$$
-and the general multivariate normal (MVN) density is
+We can look at the general multivariate normal (MVN) density 
+
 $$
 (\sqrt{2 \pi})^{-d}|\boldsymbol{\Sigma}|^{-1 / 2} \exp \left(-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^{t} \mathbf{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})\right)
 $$
 
-Observe that $|\boldsymbol{\Sigma}|^{-1 / 2}$ (which is the reciprocal of the square root of the determinant of the covariance matrix $\boldsymbol{\Sigma}$ ) in the multivariate case does what $1 / \sigma$ does in the univariate case and $\boldsymbol{\Sigma}^{-1}$ does what $1 / \sigma^{2}$ does in the univariate case. In simpler terms, $|\boldsymbol{\Sigma}|^{-1 / 2}$ is the change of variable "adjustment".
+Note that $|\boldsymbol{\Sigma}|^{-1 / 2}$, which is the reciprocal of the square root of the determinant of the covariance matrix $\boldsymbol{\Sigma}$, does what $1 / \sigma$ does in the univariate case.  Moreover, $\boldsymbol{\Sigma}^{-1}$ does what $1 / \sigma^{2}$ does in the univariate case. 
+
 The maximization of likelihood would lead to minimizing (analogous to the univariate case)
 
 $$
 n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})
 $$
 
-Again, in simpler terms, $n \log |\mathbf{\Sigma}|$ takes the spot of $n \log \left(\sigma^{2}\right)$ which was there in the univariate case. These terms account for corresponding change of variable adjustments in each scenario.
-  
+Again, $n \log |\mathbf{\Sigma}|$ takes the spot of $n \log \left(\sigma^{2}\right)$ which was there in the univariate case. 
 
-Let's start with a data matrix of 10x6, where no need for regularization.  
+If the data is not high-dimensional, the estimations are simple.  Let's start with a data matrix of 10x6, where no need for regularization.  
 
 ```{r rn1}
 n = 10
@@ -160,10 +148,9 @@ $$
 
 Don't be confused due to notation: $\Sigma$ is not the covariance matrix here
 
-With using the method of generalized inverse by `ppcor` and `corpcor`[here](https://pubmed.ncbi.nlm.nih.gov/16646851/) [@Schafer_2005]:  
+With using the method of generalized inverse by `ppcor` and `corpcor`:  
 
 ```{r rn3}
-#https://rdrr.io/cran/corpcor/man/pseudoinverse.html
 Si <- corpcor::pseudoinverse(S)
 -Si[1,2]/(sqrt(Si[1,1])*sqrt(Si[2,2])) 
 
@@ -175,76 +162,11 @@ pc$estimate
 corpcor::cor2pcor(S)
 ```
 
+However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix for a network analysis that differentiates the significant edges from insignificant ones. 
 
 ## Ridge ($\ell_{2}$) and glasso ($\ell_{1}$)
 
-The effect of the ridge penalty is also studied from the perspective of singular values.
-
-When $\mathbf{X}$ is high-dimensional the regression parameter $\beta$ cannot be estimated.  This is only the practical consequence of high-dimensionality: the expression $\left(\mathbf{X}^{\top} \mathbf{X}\right)^{-1} \mathbf{X}^{\top} \mathbf{Y}$ cannot be evaluated numerically. But the problem arising from the high-dimensionality of the data is more fundamental. To appreciate this, consider the normal equations: $\mathbf{X}^{\top} \mathbf{X} \boldsymbol{\beta}=\mathbf{X}^{\top} \mathbf{Y}$. The matrix $\mathbf{X}^{\top} \mathbf{X}$ is of rank $n$, while $\boldsymbol{\beta}$ is a vector of length $p$. Hence, while there are $p$ unknowns, the system of linear equations from which these are to be solved effectively comprises $n$ degrees of freedom. If $p>n$, the vector $\boldsymbol{\beta}$ cannot uniquely be determined from this system of equations. 
-
-We can express the effect of the ridge penalty from the perspective of singular values.  
-
-In case of singular $\mathbf{X}^{T} \mathbf{X}$ its inverse $\left(\mathbf{X}^{T} \mathbf{X}\right)^{-1}$ is not defined. Consequently, the OLS estimator
-$$
-\hat{\boldsymbol{\beta}}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{-1} \mathbf{X}^{\top} \mathbf{Y}
-$$
-does not exist. This happens in high-dimensional data. An ad-hoc solution adds $\lambda \mathbf{I}$ to $\mathbf{X}^{T} \mathbf{X}$, leading to:
-$$
-\hat{\boldsymbol{\beta}}(\lambda)=\left(\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}_{p p}\right)^{-1} \mathbf{X}^{\top} \mathbf{Y}
-$$
-
-This is called the ridge estimator.
-
-Let the columns of $X$ be standardized, as well as $y$ itself. (This means we no longer need a constant column in $X$). The ad-hoc ridge estimator minimizes the loss function:
-
-$$
-\mathcal{L}(\boldsymbol{\beta} ; \lambda)=\|\mathbf{Y}-\mathbf{X} \boldsymbol{\beta}\|_{2}^{2}+\lambda\|\boldsymbol{\beta}\|_{2}^{2}
-$$
-Or constrained optimization problem
-
-$$
-\arg \min _{\beta}\|\mathbf{y}-\mathbf{X} \beta\|^{2}+\lambda\|\beta\|^{2} \quad \lambda>0
-$$
-
-Take the derivative of the loss function:
-$$
-\frac{\partial}{\partial \boldsymbol{\beta}} \mathcal{L}(\boldsymbol{\beta} ; \lambda)=-2 \mathbf{X}^{\top} \mathbf{y}+2\left(\mathbf{X}^{\top} \mathbf{X}+\lambda \mathbf{I}_{p}\right) \boldsymbol{\beta}
-$$
-Hence:
-
-$$
-\begin{aligned}
-\hat{\beta}_{R} &=\left(X^{\prime} X+\lambda I_{p}\right)^{-1} X^{\prime} y \\
-&=\left(V \Sigma^{2} V^{\prime}+\lambda I_{p}\right)^{-1} V \Sigma U^{\prime} y \\
-&=\left(V \Sigma^{2} V^{\prime}+\lambda V V^{\prime}\right)^{-1} V \Sigma U^{\prime} y \\
-&=\left(V\left(\Sigma^{2}+\lambda I_p\right) V^{\prime}\right)^{-1} V \Sigma U^{\prime} y \\
-&=V\left(\Sigma^{2}+\lambda I_p\right)^{-1} V^{\prime} V \Sigma U^{\prime} y \\
-&=V\left(\Sigma^{2}+\lambda I_p\right)^{-1} \Sigma U^{\prime} y .
-\end{aligned}
-$$
-
-The columns of $\mathbf{U}_{x}$ and $\mathbf{V}_{x}$ are orthogonal: $\mathbf{U}_{x}^{\top} \mathbf{U}_{x}=\mathbf{I}_{n n}=\mathbf{U}_{x} \mathbf{U}_{x}^{\top}$ and $\mathbf{V}_{x}^{\top} \mathbf{V}_{x}=\mathbf{I}_{p p}=\mathbf{V}_{x} \mathbf{V}_{x}^{\top}$. The difference with OLS?
-
-$$
-V\Sigma^{-1}U'y =  \beta_{OLS}\\
-V\Sigma^{-2}\Sigma U'y =  \beta_{OLS}
-$$
-
-The difference between this and $\beta_{OLS}$ and $\beta_{R}$ is the replacement of $\Sigma^{-1}=\Sigma^{-2} \Sigma$ by $\left(\Sigma^{2}+\lambda I_p\right)^{-1} \Sigma$. In effect, this multiplies the original by the fraction $\Sigma^{2} /\left(\Sigma^{2}+\lambda\right) .$ Because (when $\left.\lambda>0\right)$ the denominator is obviously greater than the numerator, the parameter estimates **shrink towards zero,** i.e., write $(\mathbf{\Sigma})_{j j}=d_{j j}$ to obtain $d_{i i}/\left(d_{i i}^{2}+\lambda\right)$.  So that
-
-$$
-\frac{d_{j j}^{-1}}{\text { OLS }} \geq \frac{d_{j j} /\left(d_{j j}^{2}+\lambda\right)}{\text { ridge }}
-$$
-
-As such, the rotated coefficients must shrink, but it is possible, when $\lambda$ is sufficiently small, for some of the $\hat{\beta}_{R}$ themselves actually to increase in size.
-
-Interest in graphical models that combine a probabilistic description (through a multivariate distribution) of a system with a graph that depicts the system’s structure (capturing dependence relationships), has surged in recent years^[See: [The Generalized Ridge Estimator of the Inverse Covariance Matrix](https://www.tandfonline.com/doi/epub/10.1080/10618600.2019.1604374?needAccess=true) [@Wessel_2019], [Ridge estimation of inverse covariance matrices from high-dimensional data](https://www.sciencedirect.com/science/article/abs/pii/S0167947316301141) [@Wessel_Ridge]]. In its trail this has renewed the attention to the estimation of precision matrices as they harbor the conditional (in)dependencies among jointly distributed variates. In particular, with the advent of high-dimensional data, for which traditional precision estimators are not well-defined, this brought about several novel precision estimators.
-
-Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty.  A penalty discourages large (in some sense) values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator. 
-
-Datasets where $p>n$ are starting to be common, so what now?
-
-To solve the problem, penalized estimators, like `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), adds a so-called ridge penalty to the likelihood above (this method is also called $\ell_{2}$ shrinkage and works by "shrinking" the eigenvalues of $S$ in a particular manner to combat that they "explode" when $p \geq n$. "Shrinking" is a “biased estimation" as a means of variance reduction of S.
+Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation
 
 Their algorithm solves the following:
 
@@ -254,230 +176,85 @@ $$
    
 where $\lambda>0$ is the ridge penalty parameter, $T$ is a $p \times p$ known target matrix and $\|\cdot\|_{2}$ is the $\ell_{2}$-norm. Assume for now the target matrix is an all zero matrix and thus out of the equation. The core function of `rags2ridges` is `ridgeP` which computes this estimate in a fast manner.
 
-The ridge precision estimation can be summarized with the following steps [See](http://www.few.vu.nl/~wvanwie/presentations/WNvanWieringen_RidgeEstimationOfGGM.pdf):
-
-The ridge penalty:
-$$
-\frac{1}{2} \lambda_{2}\left\|\boldsymbol{\Sigma}^{-1}\right\|_{2}^{2}
-$$
-
-When writing $\Omega=\Sigma^{-1}$ the ridge penalty is:
-$$
-\|\boldsymbol{\Omega}\|_{2}^{2}=\sum_{j_{1}, j_{2}=1}^{p}\left[(\boldsymbol{\Omega})_{j_{1}, j_{2}}\right]^{2}
-$$
-For a 2x2 precision matrix this penalized estimation problems can be viewed as constrained optimization problem:
-
-$$
-\begin{aligned}
-&{\left[\Omega_{11}\right]^{2}+2\left[\Omega_{12}\right]^{2}} +\left[\Omega_{22}\right]^{2} \leq c\left(\lambda_{2}\right)
-\end{aligned}
-$$
-Consider the ridge loss function:
-
-$$
-\log (|\boldsymbol{\Omega}|)-\operatorname{tr}(\mathbf{S} \boldsymbol{\Omega})-\frac{1}{2} \lambda_{2} \operatorname{tr}\left(\boldsymbol{\Omega} \boldsymbol{\Omega}^{\mathrm{T}}\right)
-$$
-
-Equation of the derivative w.r.t. the precision matrix to zero yields the estimating equation:
-
-$$
-\boldsymbol{\Omega}^{-1}-\mathbf{S}-\lambda_{2} \boldsymbol{\Omega}=\mathbf{0}_{p \times p}
-$$
-Matrix algebra then yields:
-
-$$
-\widehat{\boldsymbol{\Omega}}\left(\lambda_{2}\right)=\left[\frac{1}{2} \mathbf{S}+\left(\lambda_{2} \mathbf{I}_{p \times p}+\frac{1}{4} \mathbf{S}^{2}\right)^{1 / 2}\right]^{-1}
-$$
-Thus,
-
-$$
-\widehat{\boldsymbol{\Sigma}}\left(\lambda_{2}\right)=\frac{1}{2} \mathbf{S}+\left(\lambda_{2} \mathbf{I}_{p \times p}+\frac{1}{4} \mathbf{S}^{2}\right)^{1 / 2}
-$$
-The derived ridge covariance estimator is positive definite, ie it’s symmetric and all its eigenvalues are positive. (Remember, when the matrix is symmetric, its trace is the sum of eigenvalues.  Since the diagonal entries are all positive - variances - the trace of this covariance matrix is positive - [see](https://www.robots.ox.ac.uk/~davidc/pubs/tt2015_dac1.pdf))
-
-For $\lambda_{2}=0$, we obtain:
-
-$$
-\begin{aligned}
-\widehat{\boldsymbol{\Sigma}}(0) &=\frac{1}{2} \mathbf{S}+\left(\frac{1}{4} \mathbf{S}^{2}\right)^{1 / 2} \\
-&=\frac{1}{2} \mathbf{S}+\frac{1}{2} \mathbf{S}=\mathbf{S}
-\end{aligned}
-$$
-
-For large enough $\lambda_{2}$:
-
-$$
-\widehat{\boldsymbol{\Sigma}}\left(\lambda_{2}\right) \approx \lambda_{2} \mathbf{I}_{p \times p}
-$$
-The penalty parameter $\lambda$ shrinks the values of $P$ such toward 0 (when $T=0$ ), i.e. very larges values of $\lambda$ makes $P$ "small" and more stable whereas smaller values of $\lambda$ makes the $P$ tend toward the (possibly nonexistent) $S^{-1}$.
-
 Let's try some simulations:
 
 ```{r rn4}
-# We did this before
-n = 6
-p = 10
-set.seed(1)
-X <- matrix (rnorm(n*p), n, p)
+library(rags2ridges)
+p <- 6
+n <- 20
+X <- createS(n = n, p = p, dataset = TRUE)
 
 # Cov. & Precision Matrices
 S <- cov(X)
 S
 try(solve(S), silent = FALSE)
 
-# With Ridge, lambda = 0
-lambda = 0
-SRidge <- 0.5*S + expm::sqrtm(lambda*diag(1, p)+0.25*(S%*%S))
-SRidge
 
-# With Ridge, lambda = 0
-lambda = 0.5
-SRidge <- 0.5*S + expm::sqrtm(lambda*diag(1, p)+0.25*(S%*%S))
-SRidge
-solve(SRidge)
+P <- rags2ridges::ridgeP(S, lambda = 0.0001)
+P
 ```
-  
-There are many ways to regularize covariance estimation. Some of these "ad-hoc" estimators are often referred to as “ridge" estimates:
 
-$$
-\mathbf{S}+\lambda_{a} \mathbf{I}_{p \times p} \quad \text { for } \quad \lambda_{a}>0
-$$
-and:
-$$
-\left(1-\lambda_{a}\right) \mathbf{S}+\lambda_{a} \mathbf{T} \quad \text { for } \quad \lambda_{a} \in(0,1)
-$$
+```{r rn5, warning=FALSE, message=FALSE}
+library(rags2ridges)
+p <- 25
+n <- 20
+X <- createS(n = n, p = p, dataset = TRUE)
 
-where $\mathrm{T}$ is some nonrandom, positive definite matrix.  Both are not derived from a penalized loss function, but are simply ad-hoc fixes to resolve the singularity of the estimate. To evaluate ad-hoc and Ridge estimators, we compare the eigenvalues of the ad-hoc and ridge estimator of the covariance matrix.
+# Cov. & Precision Matrices
+S <- cov(X)
+try(solve(S), silent = FALSE)
 
-Consider the eigen-decomposition: $\mathbf{S}=\mathbf{V D V}^{\mathrm{T}}$ with $\mathbf{V}$ and $\mathrm{D}$ the eigenvalue and -vector matrices. The eigenvalues of $\widehat{\mathbf{\Sigma}}\left(\lambda_{2}\right)$ are then:
-  
-$$
-d_{j}\left[\widehat{\boldsymbol{\Sigma}}\left(\lambda_{2}\right)\right]=\frac{1}{2} d_{j}+\left(\lambda_{2}+\frac{1}{4} d_{j}^{2}\right)^{1 / 2}
-$$
-
-Writing $d_{j}=(\mathbf{D})_{j j}$ it is easily seen that:
-
-$$
-\lambda_{a}+d_{j} \geq \frac{1}{2} d_{j}+\sqrt{\lambda_{a}^{2}+\frac{1}{4} d_{j}^{2}}
-$$
-  
-Thus, **the ad-hoc estimator shrinks the eigenvalues of the sample covariance matrix more than the ridge estimator**.
-
-Why a target $T$? 
-  
- 1. Both the ad-hoc and ridge covariance estimator converge to: 
-$$
-\widehat{\boldsymbol{\Sigma}}\left(\lambda_{2}\right) \approx \lambda_{2} \mathbf{I}_{p \times p} \quad \text {for large enough} \quad\lambda_{2}
-$$
-Its inverse (the precision matrix) converges to the zero matrix including the diagonal elements! Consequently, the partial correlation of this matrix are undefined.  
- 2. If signal-to-noise ratio is poor, why not provide a hint.  
-
-The target matrix $T$ is a matrix the same size as $P$ which the estimate is "shrunken" toward, i.e. for large values of $\lambda$ the estimate goes toward $T$. The choice of the target is another subject. While one might first think that the all-zeros $T=[0]$ would be a default it is intuitively not a good target. This is because we'd like an estimate that is positive definite (the matrix-equivalent to at positive number) and the null-matrix is not positive definite.  
-
-If one has a very good prior estimate or some other information this might used to construct the target.  In the absence of such knowledge, the default could be a data-driven diagonal matrix. The function `default.target()` offers some different approaches to selecting this. A good choice here is often the diagonal matrix times the reciprocal mean of the eigenvalues of the sample covariance as entries. See `?default.target` for more choices.
-
-To ensure the ridge precision estimate converges to a positive definite target matrix $\mathbf{T}$ , the latter is incorporated in the penalty:
-
-$$
-\frac{1}{2} \lambda_{2} \operatorname{tr}\left[(\boldsymbol{\Omega}-\mathbf{T})(\boldsymbol{\Omega}-\mathbf{T})^{\mathrm{T}}\right]
-$$
-
-Clearly, the penalty is minimized for $\Omega=\mathbf{T}$. One expects that, for large $\lambda_{2}$, the maximization of the penalized log-likelihood requires the minimization of the penalty: the optimum moves close to $\mathbf{T}$.
-
-The log-likelihood augmented with this “target"-penalty is maximized by:
-
-$$
-\left\{\frac{1}{2}\left(\mathbf{S}-\lambda_{2} \mathbf{T}\right)+\left[\lambda_{2} \mathbf{I}_{p \times p}+\frac{1}{4}\left(\mathbf{S}-\lambda_{2} \mathbf{T}\right)^{2}\right]^{1 / 2}\right\}^{-1}
-$$
-For generalized ridge precision estimator one can show that:
-
-$$
-\lim _{\lambda_{2} \rightarrow \infty} \widehat{\boldsymbol{\Omega}}\left(\lambda_{2}\right)=\mathbf{T}
-$$
-  
-and $\widehat{\Omega}\left(\lambda_{2}\right) \succ 0$ for all $\lambda_{2}>0$
+P <- rags2ridges::ridgeP(S, lambda = 1.17)
+P[1:7, 1:7]
+```
 
 What Lambda should you choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
 
-LOOCV Simulation:
-  
-- Define a banded $p \times p$ precision matrix, $p=100$. 
-- Draw $n=10$ samples. 
-- Determine optimal lambda by LOOCV. 
-- Estimate precision matrix with and without target. Target is true precision. 
+```{r rn6}
+opt <- optPenalty.kCVauto(X, lambdaMin = 0.001, lambdaMax = 100)
+str(opt)
+op <- opt$optLambda
+```
 
-**Summary from their paper**  
+We know that Ridge will not provide a sparse solution.  Yet, we need a sparse precision matrix for network analysis. The $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after the precision matrix is estimated. The extra step is explained in their [paper](https://www.sciencedirect.com/science/article/pii/S0167947316301141) (van Wieringen, W.N. and Peeters, C.F.W., 2016):
 
-[From the paper](https://www.sciencedirect.com/science/article/abs/pii/S0167947316301141) [@Wessel_Ridge], which defines a kind of sparsity method similar to L1 (glasso) but using L2:  
-Let $\mathbf{Y}_{i}, i=1, \ldots, n$, be a $p$-dimensional random variate drawn from $\mathcal{N}_{p}(\mathbf{0}, \mathbf{\Sigma})$. The maximum likelihood (ML) estimator of the precision matrix $\boldsymbol{\Omega}=\boldsymbol{\Sigma}^{-1}$ maximizes:
+>While some may argue this as a drawback (typically due to a lack of perceived simplicity), it is often beneficial to separate the “variable selection” and estimation.
 
-$$
-\mathcal{L}(\boldsymbol{\Omega} ; \mathbf{S}) \propto \ln |\boldsymbol{\Omega}|-\operatorname{tr}(\mathbf{S} \boldsymbol{\Omega}) ~~~~~~~~~~~~~~~ (1)
-$$
+>First, a separate post-hoc selection step allows for greater flexibility. Secondly, when co-linearity is present the L1 penalty is “unstable” in the selection between the items, i.e, if 2 covariances are co-linear only one of them will typically be selected in a unpredictable way whereas the L2 will put equal weight on both and “average” their effect. Ultimately, this means that the L2 estimate is typically more stable than the L1.
 
-where $\mathbf{S}$ is the sample covariance estimate. If $n>p$, the log-likelihood achieves its maximum for $\hat{\boldsymbol{\Omega}}^{\mathrm{ML}}=\mathbf{S}^{-1}$. In the high-dimensional setting where $p>n$, the sample covariance matrix is singular and its inverse is undefined. Consequently, so is $\hat{\boldsymbol{\Omega}}^{\mathrm{ML}}$. A common workaround is the addition of a penalty to the $\log$-likelihood (1). The $\ell_{1}$-penalized estimation of the precision matrix was considered almost simultaneously. This (graphical) lasso estimate of $\Omega$ has attracted much attention due to the resulting sparse solution and has grown into an active area of research. Juxtaposed to situations in which sparsity is an asset are situations in which one is intrinsically interested in more accurate representations of the high-dimensional precision matrix. In addition, the true (graphical) model need not be (extremely) sparse in terms of containing many zero elements. In these cases we may prefer usage of a regularization method that shrinks the estimated elements of the precision matrix proportionally  
+>At last point to mention here is also that the true underlying graph might not always be very sparse (or sparse at all).
 
-Ridge estimators of the precision matrix currently in use can be roughly divided into two archetypes (cf. Ledoit and Wolf, 2004; Schäfer and Strimmer, 2005a). The first archetypal form of ridge estimator commonly is a convex combination of $\mathbf{S}$ and a positive definite (p.d.) target matrix $\boldsymbol{\Gamma}: \hat{\mathbf{\Omega}}^{\mathrm{I}}\left(\lambda_{\mathrm{I}}\right)=\left[\left(1-\lambda_{\mathrm{I}}\right) \mathbf{S}+\lambda_{\mathrm{I}} \boldsymbol{\Gamma}\right]^{-1}$, with $\lambda_{\mathrm{I}} \in(0,1]$. A common (low-dimensional) target choice is $\Gamma$ diagonal with $(\Gamma)_{j j}=(\mathbf{S})_{j j}$ for $j=1, \ldots, p .$ This estimator has the desirable property of shrinking to $\Gamma^{-}$ when $\lambda_{\mathrm{I}}=1$ (maximum penalization). The estimator can be motivated from the bias-variance tradeoff as it seeks to balance the high-variance, low-bias matrix $\mathbf{S}$ with the lower-variance, higher-bias matrix $\mathbf{\Gamma}$. It can also be viewed as resulting from the maximization of the following penalized log-likelihood:
-  
-$$
-\ln |\boldsymbol{\Omega}|-\left(1-\lambda_{\mathrm{I}}\right) \operatorname{tr}(\mathbf{S} \boldsymbol{\Omega})-\lambda_{\mathrm{I}} \operatorname{tr}(\boldsymbol{\Omega} \boldsymbol{\Gamma})
-$$
+The function `spasify()` handles the the spasification by FDR (False Discovery Rate) application:
 
-The penalized log-likelihood is obtained from the original log-likelihood (1) by the replacement of $\mathbf{S}$ by $\left(1-\lambda_{\mathrm{I}}\right) \mathbf{S}$ and the addition of a penalty. The estimate $\hat{\boldsymbol{\Omega}}^{\mathrm{I}}\left(\lambda_{\mathrm{I}}\right)$ can thus be viewed as a penalized ML estimate.
+```{r rn7}
+P <- ridgeP(S, lambda = op)
+spar <- sparsify(P, threshold = "localFDR")
+spar
+```
+After edge selection, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
+
+```{r rn8, warning=FALSE, message=FALSE}
+fc <- GGMnetworkStats(P)
+fc
+```
 
 ## What's graphical - graphical ridge or glasso?
   
-A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). Graphical modeling refers to a class of probabilistic models that uses graphs to express conditional (in)dependence relations between random variables. 
+A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
 
-In a multivariate normal model, $p_{i j}=p_{j i}=0$ if and only if $X_{i}$ and $X_{j}$ are conditionally independent when condition on all other variables. I.e. $X_{i}$ and $X_{j}$ are conditionally independent given all $X_{k}$ where $k \neq i$ and $k \neq j$ if and when the $i j$ th and $j i$ th elements of $P$ are zero. In real world applications, this means that $P$ is often relatively sparse (lots of zeros). This also points to the close relationship between $P$ and the partial correlations. **The non-zero entries of the symmetric P matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
+In a multivariate normal model, $p_{i j}=p_{j i}=0$, the entries in the precision matrix, if and only if $X_{i}$ and $X_{j}$ are independent when condition on all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
 
-The graphical lasso (`gLasso`) is the L1-equivalent to graphical ridge. A nice feature of the L1 penalty automatically induces sparsity and thus also select the edges in the underlying graph. The L2 penalty of `rags2ridges` relies on an extra step that selects the edges after $P$ is estimated. While some may argue this as a drawback (typically due to a lack of perceived simplicity), it is often beneficial to separate the “variable selection" and estimation.
+The graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and  select the edges in the underlying graph, while the $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after $P$ is estimated. 
 
-First, a separate post-hoc selection step allows for greater flexibility.  Secondly, when co-linearity is present the L1 penalty is "unstable" in the selection between the items. I.e. **if 2 covariances are co-linear only one of them will typically be selected in a unpredictable way whereas the L2 will put equal weight on both and "average" their effect**. Ultimately, this means that the L2 estimate is typically more stable than the L1.
+Now, we will apply some packages on both glass and ridge.  First glasso:  
 
-At last point to mention here is also that the true underlying graph might not always be very sparse (or sparse at all).
-
-The `sparsify()` functions lets you select the non-zero entries of $P$ corresponding to edges. It supports a handful different approaches ranging from simple thresholding to false discovery rate based selection.
-
-After edge selection, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology.
-
-Now, we will apply some packages on both glass and ridge.  First LASSO:  
-
-```{r rn5}
+```{r rn9}
 # glasso
-gl <- glasso::glasso(S,rho=0.2641,approx=FALSE)[c('w','wi')]
-gl
--cov2cor(gl$wi)
+gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
+- cov2cor(gl$wi)[1:10, 1:10]
 # glassoFast
 glf <- glassoFast::glassoFast(S,rho=0.2641)
--cov2cor(glf$wi)
+-cov2cor(glf$wi)[1:10, 1:10]
 ```
   
-And Ridge:
-
-```{r rn6}
-n = 6
-p = 10
-set.seed(1)
-X <- matrix (rnorm(n*p), n, p)
-S <- cov(X)
-
-# corpcor
-cpr <- corpcor::pcor.shrink(X)
-cpr
-
-# rags2ridges
-opt <- rags2ridges::optPenalty.kCVauto(X, lambdaMin = 0.01, lambdaMax = 30)
-opt
--cov2cor(opt$optPrec)
-Si <- rags2ridges::ridgeP(S, lambda=opt$optLambda)
-Si
--cov2cor(Si)
--Si[1,2]/(sqrt(Si[1,1])*sqrt(Si[2,2])) 
-
-spr <- rags2ridges::sparsify(opt$optPrec, threshold = "connected")
-spr
-rags2ridges::GGMnetworkStats(spr$sparseParCor, as.table = TRUE)
-#rags2ridges::fullMontyS(X, lambdaMin = 0.01, lambdaMax = 30) - Gives an error
-rags2ridges::Ugraph(spr$sparseParCor, type = "weighted")
-```
+The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  

@@ -2,19 +2,21 @@
 
 # Graphical Network Analysis {-}
   
-Following chapters are work in progress without a proper copyediting ...
+A network represents a structure of relationships between objects. Graphical modeling presents a network structure in a graph, which consists of nodes and edges, by expressing conditional (in)dependence between the nodes. If we think of these nodes (objects) as variables and their relationship with each other as edges, a graphical model represents the probabilistic relationships among a set of variables. For example, the absence of edges (partial correlations) corresponds to conditional independence. Graphical models are becoming more popular in statistics because it helps us understand a very complex structure of relationships in networks, such as the dynamic structure of biological systems or social events.  
+
+The central idea is that, since any pair of nodes may be joined by an edge, a missing edge represents some form of independency between the pair of variables. The complexity in network analysis comes from the fact that the independency may be either marginal or conditional on some or all of the other variables.  Therefore, defining a graphical model requires identification of a type of graph needed for each particular case.
+
+In general, a graphical model could be designed with directed and undirected edges. In a directed graph, an arrow indicates the direction of dependency between nodes. In undirected graphs, however, the edges do not have directions.  The field of graphical modeling is vast, hence it is beyond the scope of this book. 
+
+Yet, we will look at the precision matrix, which has been shown that its regularization captures the network connections.  Hence, the central theme of this section is the estimation of sparse standardized precision matrices, whose results can be illustrated by undirected graphs.
 
 # Fundementals
 
-Graphical modeling refers to a class of probabilistic models that uses graphs to express conditional (in)dependence relations between random variables. A graphical model represents the probabilistic relationships among a set of variables. Nodes in the graph correspond to variables, and the absence of edges (partial correlations) corresponds to conditional independence. Graphical models are becoming more popular in statistics and in its applications in many different fields for several reasons.
-
-The central idea is that each variable is represented by a node in a graph. Any pair of nodes may be joined by an edge. For most types of graph a missing edge represents some form of independency between the pair of variables. Because the independency may be either marginal or conditional on some or all of the other variables, a variety of types of graph are needed.
-
-A particularly important distinction is between directed and undirected edges. In the former an arrow indicates the direction of dependency from an explanatory variable to a response. If, however, the two variables are to be interpreted on an equal footing then an edge between them is undirected, or cyclic dependencies are permitted. 
-
-Hence, we need to cover several concept related to statistical dependece, correlations
+In this chapter we will cover several concept related to statistical dependence, correlations.
 
 ## Covariance
+
+Let's load several packages, 
 
 ```{r gna1, warning=FALSE, message=FALSE}
 library(ppcor)
@@ -24,7 +26,7 @@ library(corpcor)
 library(rags2ridges)
 ```
 
-First, the data matrix, which refers to the array of numbers:  
+And, define a data matrix, which refers to the array of numbers:  
 
 $$
 \mathbf{X}=\left(\begin{array}{cccc}
@@ -36,7 +38,7 @@ x_{n 1} & x_{n 2} & \cdots & x_{n p}
 \end{array}\right)
 $$
 
-Our data
+An example would be
 
 ```{r gna2}
 set.seed(5)
@@ -45,7 +47,7 @@ X <- matrix(x, 10)
 X
 ```
 
-The Covariation of Data
+We start with defining the covariance matrix
 
 $$
 \mathbf{S}=\left(\begin{array}{ccccc}
@@ -57,24 +59,29 @@ s_{p 1} & s_{p 2} & s_{p 3} & \cdots & s_{p}^{2}
 \end{array}\right)
 $$
 $$
-s_{j}^{2}=(1 / n) \sum_{i=1}^{n}\left(x_{i j}-\bar{x}_{j}\right)^{2} \text { is the variance of the } j \text {-th variable }
+s_{j}^{2}=(1 / n) \sum_{i=1}^{n}\left(x_{i j}-\bar{x}_{j}\right)^{2} 
 $$
+is the variance of the $j$-th variable,
+
 $$
 \begin{aligned}
-&s_{j k}=(1 / n) \sum_{i=1}^{n}\left(x_{i j}-\bar{x}_{j}\right)\left(x_{i k}-\bar{x}_{k}\right) \text { is the covariance between the } j \text {-th and } k \text {-th variables }
+&s_{j k}=(1 / n) \sum_{i=1}^{n}\left(x_{i j}-\bar{x}_{j}\right)\left(x_{i k}-\bar{x}_{k}\right) 
 \end{aligned}
 $$
+is the covariance between the $j$-th and $k$-th variables; and, 
+
 $$
-\bar{x}_{j}=(1 / n) \sum_{i=1}^{n} x_{i j} \text { is the mean of the } j \text {-th variable }
+\bar{x}_{j}=(1 / n) \sum_{i=1}^{n} x_{j i} 
 $$
+is the mean of the $j$-th variable.
 
 We can calculate the covariance matrix such as
 
 $$
-\mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c}
+\mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c},
 $$
 
-Note that the centered matrix $\mathbf{X}_{c}$
+where $\mathbf{X}_{c}$ is the centered matrix: 
 
 $$
 \mathbf{X}_{c}=\left(\begin{array}{cccc}
@@ -96,14 +103,17 @@ Xc <- X-m
 Xc
 
 # Or
-#http://users.stat.umn.edu/~helwig/notes/datamat-Notes.pdf
 C <- diag(n) - matrix(1/n, n, n)
 XC <- C %*% X
-XC
+Xc
 
-# Or 
-Xcc <- scale(X, center=TRUE, scale=FALSE)
+# We can also use `scale` 
+Xc <- scale(X, center=TRUE, scale=FALSE)
+```
 
+And, the covariance matrix
+
+```{r gna3b}
 # Covariance Matrix
 S <- t(Xc) %*% Xc / (n-1)
 S
@@ -113,6 +123,8 @@ cov(X)
 ```
 
 ## Correlation
+
+While covariance is a necessary step, we can capture the size and the direction of relationships between the variables:
 
 $$
 \mathbf{R}=\left(\begin{array}{ccccc}
@@ -131,7 +143,7 @@ r_{j k}=\frac{s_{j k}}{s_{j} s_{k}}=\frac{\sum_{i=1}^{n}\left(x_{i j}-\bar{x}_{j
 $$
 is the Pearson correlation coefficient between variables $\mathbf{X}_{j}$ and $\mathbf{X}_{k}$
 
-We can calculate the correlation matrix such as
+We can calculate the correlation matrix 
 
 $$
 \mathbf{R}=\frac{1}{n} \mathbf{X}_{s}^{\prime} \mathbf{X}_{s}
@@ -165,16 +177,15 @@ Xs <- (X-m)*sdx
 Xs
 
 # Or
-#http://users.stat.umn.edu/~helwig/notes/datamat-Notes.pdf
 C <- diag(n) - matrix(1/n, n, n)
 D <- diag(apply(X, 2, sd))
-XS <- C %*% X %*% solve(D)
-XS
+Xs <- C %*% X %*% solve(D)
+Xs
 
 # Or 
-Xss <- scale(X, center=TRUE, scale=TRUE)
+Xs <- scale(X, center=TRUE, scale=TRUE)
 
-# Covariance Matrix
+# Finally, the correlation Matrix
 R <- t(Xs) %*% Xs / (n-1)
 R
 
@@ -182,10 +193,12 @@ R
 cor(X)
 ```
 
-## Precision matrix
+The correlations above are called "zero-order" or Pearson correlations.  They only reflect pairwise correlations without controlling other variables.  
+## Partial Correlations & Precision matrix
 
-The inverse of this matrix, $\mathrm{S}_{\mathrm{XX}}^{-1}$, if it exists, is the inverse covariance matrix, also known as the concentration matrix or **precision matrix**.  
-Let us consider a 2×2 covariance matrix
+The inverse of covariance matrix, if it exists, is called the concentration matrix also knows as the **precision matrix**.  
+
+Let us consider a $2 \times 2$ covariance matrix:
 
 $$
 \left[\begin{array}{cc}
@@ -194,7 +207,7 @@ $$
 \end{array}\right]
 $$
 
-Its inverse:
+And, its inverse:
 
 $$
 \frac{1}{\sigma^{2}(x) \sigma^{2}(y)-\rho^{2} \sigma^{2}(x) \sigma^{2}(y)}\left[\begin{array}{cc}
@@ -203,7 +216,7 @@ $$
 \end{array}\right]
 $$
   
-If call the the precision matrix $D$, the correlation coefficient will be   
+If call the precision matrix $D$, the correlation coefficient will be   
   
 $$
 -\frac{d_{i j}}{\sqrt{d_{i i}} \sqrt{d_{j j}}},
@@ -213,7 +226,8 @@ Or,
 $$
 \frac{-\rho \sigma_{x} \sigma_{y}}{\sigma_{x}^{2} \sigma_{y}^{2}\left(1-e^{2}\right)} \times \sqrt{\sigma_{x}^{2}\left(1-\rho^{2}\right)} \sqrt{\sigma_{y}^{2}\left(1-\rho^{2}\right)}=-\rho
 $$
-That was for a 2x2 cov-matrix.  When we have more columns, the correlation coefficient reflects partial correlations. Here is an example:  
+
+That was for a $2 \times 2$ variance-covariance matrix.  When we have more columns, the correlation coefficient reflects partial correlations. Here is an example:  
   
 ```{r gna5}
 pm <- solve(S) # precision matrix
@@ -231,38 +245,40 @@ ppcor::pcor(X)
 
 ## Semi-partial correlation
 
-With partial correlation, we find the correlation between X and Y holding Z constant for both X and Y. Sometimes, however, we want to hold Z constant for just X or just Y. In that case, we compute a semipartial correlation. A partial correlation is computed between two residuals. A semipartial is computed between one residual and another raw or unresidualized variable. One interpretation of the semipartial is that it is the correlation between one variable and the residual of another, so that the influence of a third variable is only partialed from one of two variables (hence, semipartial). Another interpretation is that the semipartial shows the increment in correlation of one variable above and beyond another. This is seen most easily with the R2 formulation.
+With partial correlation, we find the correlation between $X$ and $Y$ after controlling for the effect of $Z$ on both $X$ and $Y$. If we want to hold $Z$ constant for just $X$ or just $Y$, we use a semipartial correlation.
+  
+While a partial correlation is computed between two residuals, a semipartial is computed between one residual and another variable. One interpretation of the semipartial is that the influence of a third variable is removed from one of two variables (hence, semipartial). This can be shown with the $R^2$ formulation.
 
-Partial
+Partial:
+
 $$
 r_{12.3}^{2}=\frac{R_{1.23}^{2}-R_{1.3}^{2}}{1-R_{1.3}^{2}}
 $$
   
-SemiPartial
+Semi-Partial:
 
 $$
 r_{1(2.3)}^{2}=R_{1.23}^{2}-R_{1.3}^{2}
 $$
 
 
-
-The difference between a slope coefficient, semi-partial and partial correlation can be seen by looking their definitions:  
+Let's see the difference between a slope coefficient, a semi-partial correlation, and a partial correlation by looking their definitions:  
   
 **Partial:**    
   
 $$
-x_{12,3}=\frac{r_{12}-r_{13} r_{23}}{\sqrt{1-r_{12}^{2}} \sqrt{1-r_{23}^{2}}}
+r_{12,3}=\frac{r_{12}-r_{13} r_{23}}{\sqrt{1-r_{12}^{2}} \sqrt{1-r_{23}^{2}}}
 $$
 
 **Regression:**
 
 $$
-x_{1}=b_{1}+b_{2} x_{2}+b_{2} X_{3}
+X_{1}=b_{1}+b_{2} X_{2}+b_{2} X_{3}
 $$
 and  
 
 $$
-b_{2}=\frac{\sum x_{3}^{2} \sum x_{1} x_{2}-\sum x_{1} x_{3} \sum x_{2} x_{3}}{\sum x_{2}^{2} \sum x_{3}^{2}-\left(\sum x_{2} x_{3}\right)^{2}}
+b_{2}=\frac{\sum X_{3}^{2} \sum X_{1} X_{2}-\sum X_{1} X_{3} \sum X_{2} X_{3}}{\sum X_{2}^{2} \sum X_{3}^{2}-\left(\sum X_{2} X_{3}\right)^{2}}
 $$
 
 With standardized variables:
@@ -277,20 +293,16 @@ $$
 r_{1(2.3)}=\frac{r_{1 2}-r_{1_{3}} r_{23}}{\sqrt{1-r_{23}^{2}}}
 $$
 
-see <http://faculty.cas.usf.edu/mbrannick/regression/Partial.html> for very nice Venn diagrams.
-
-The difference is the square root in the denominator. The regression coefficient can exceed 1.0 in absolute value; the correlation cannot.  The difference between "beta" coefficients and semipartial is that semipartial normalizes the coefficient between -1 and +1.  The function `spcor` can calculate the pairwise semi-partial (part) correlations for each pair of variables given others. In addition, it gives us the p value as well as statistic for each pair of variables.
+The difference between the regression coefficient and the semi-partial coefficient is the square root in the denominator. Thus, the regression coefficient can exceed $|1.0|$; the correlation cannot.  In other words, semi-partial normalizes the coefficient between -1 and +1.
+  
+The function `spcor` can calculate the pairwise semi-partial correlations for each pair of variables given others. 
 
 
 ```{r gna6}
-Xx <- X[,1]
-Y <- X[,2]
-Z <- X[,3]
 ppcor::spcor(X)
-lm(Xx~Y+Z)
 ```
   
-For more information and matrix solutions to partial correlations, see <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4681537/pdf/nihms740182.pdf> [@Kim_2015].  
+
 
   
 

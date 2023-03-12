@@ -191,7 +191,6 @@ factor-analysis
 fundementals
 covariance
 correlation
-precision-matrix
 semi-partial-correlation
 regularized-covariance-matrix
 mle
