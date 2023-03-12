@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-03-11"
+date: "This version: 2023-03-12"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -283,7 +283,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-03-11"
+## [1] "2023-03-12"
 ```
 
 ```r
@@ -292,7 +292,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-03-11 16:54:11 AST"
+## [1] "2023-03-12 11:09:06 ADT"
 ```
 
 ```r
@@ -301,7 +301,7 @@ now()
 ```
 
 ```
-## [1] "2023-03-11 16:54:11 AST"
+## [1] "2023-03-12 11:09:06 ADT"
 ```
 
 ```r
@@ -553,8 +553,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1] -1.4250707 11.9782028  1.9561303  0.8678903  3.9831901 -0.5221385
-##  [7] -6.9664879 11.0042354 -4.6105457 -1.0938195
+##  [1] -0.87989462  4.20483073 -5.11934311  1.60607853 -5.79734619  5.64688286
+##  [7] -0.09042209  2.20859239  0.63656448  3.37367050
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -9047,8 +9047,8 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.55172 0.12140
-## 3 0.010000      2   0.24138 0.62069 0.12640
+## 2 0.034483      1   0.27586 0.65517 0.12863
+## 3 0.010000      2   0.24138 0.58621 0.12399
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9097,10 +9097,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.03260 0.046548
-## 2 0.101694      1   0.41379 0.83204 0.162703
-## 3 0.028263      2   0.31209 0.77953 0.159488
-## 4 0.010000      3   0.28383 0.75666 0.153297
+## 1 0.586213      0   1.00000 1.02272 0.045641
+## 2 0.101694      1   0.41379 0.76416 0.156590
+## 3 0.028263      2   0.31209 0.63593 0.145782
+## 4 0.010000      3   0.28383 0.59936 0.133838
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9177,10 +9177,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.51724 0.11861
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.51724 0.11861
-## 5 0.000000      8  0.000000 0.65517 0.12863
+## 2 0.103448      1  0.275862 0.55172 0.12140
+## 3 0.034483      2  0.172414 0.41379 0.10889
+## 4 0.017241      6  0.034483 0.41379 0.10889
+## 5 0.000000      8  0.000000 0.41379 0.10889
 ```
 
 ```r
@@ -9228,8 +9228,8 @@ printcp(ptree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.51724 0.11861
-## 3 0.034483      2   0.17241 0.44828 0.11237
+## 2 0.103448      1   0.27586 0.55172 0.12140
+## 3 0.034483      2   0.17241 0.41379 0.10889
 ```
 
 ```r
@@ -9332,9 +9332,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.554 0.029556
-## 4 0.011333      5     0.504  0.550 0.029477
-## 5 0.010000      9     0.458  0.542 0.029319
+## 3 0.015000      3     0.534  0.552 0.029517
+## 4 0.011333      5     0.504  0.546 0.029398
+## 5 0.010000      9     0.458  0.510 0.028658
 ```
 
 ```r
@@ -16851,9 +16851,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   50   57   25
-## [2,]  100   42    4
-## [3,]   67   62   99
+## [1,]    8   47   28
+## [2,]   31   63    5
+## [3,]   91   65   32
 ```
 
 ```r
@@ -16863,13 +16863,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 157.35942  61.44745 -27.80687
+## [1] 107.43034 -35.12344  30.69310
 ## 
 ## $vectors
-##           [,1]       [,2]       [,3]
-## [1,] 0.3922158 -0.1174230  0.5668096
-## [2,] 0.3692086 -0.4185662 -0.8177171
-## [3,] 0.8425270  0.9005632  0.1003275
+##            [,1]       [,2]       [,3]
+## [1,] -0.4131309 -0.6612769  0.2687340
+## [2,] -0.3813167  0.1717067 -0.3939006
+## [3,] -0.8269948  0.7302257  0.8789906
 ```
 
 ```r
@@ -16914,9 +16914,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   79    3   81
-## [2,]   91   36   46
-## [3,]   41    6   28
+## [1,]   32   37   67
+## [2,]    9   91   31
+## [3,]   66   44   61
 ```
 
 ```r
@@ -16928,10 +16928,10 @@ solve(A)
 ```
 
 ```
-##             [,1]        [,2]       [,3]
-## [1,] -0.03756158 -0.02062808  0.1425493
-## [2,]  0.03396962  0.05690681 -0.1917590
-## [3,]  0.04772167  0.01801108 -0.1319273
+##              [,1]         [,2]         [,3]
+## [1,] -0.022450763 -0.003705153  0.026541982
+## [2,] -0.008026939  0.013244181  0.002085824
+## [3,]  0.030080913 -0.005544325 -0.013828641
 ```
 
 ```r
@@ -16940,10 +16940,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##             [,1]        [,2]       [,3]
-## [1,] -0.03756158 -0.02062808  0.1425493
-## [2,]  0.03396962  0.05690681 -0.1917590
-## [3,]  0.04772167  0.01801108 -0.1319273
+##              [,1]         [,2]         [,3]
+## [1,] -0.022450763 -0.003705153  0.026541982
+## [2,] -0.008026939  0.013244181  0.002085824
+## [3,]  0.030080913 -0.005544325 -0.013828641
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17363,9 +17363,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.2353534
-## x2 1.0292588
-## x3 1.7150431
+## x1 0.6984008
+## x2 1.3750748
+## x3 2.1381871
 ```
 
 ```r
@@ -17402,9 +17402,9 @@ betahat_ginv
 
 ```
 ##           [,1]
-## [1,] 0.2353534
-## [2,] 1.0292588
-## [3,] 1.7150431
+## [1,] 0.6984008
+## [2,] 1.3750748
+## [3,] 2.1381871
 ```
 
 ```r
@@ -17413,9 +17413,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.2353534
-## x2 1.0292588
-## x3 1.7150431
+## x1 0.6984008
+## x2 1.3750748
+## x3 2.1381871
 ```
   
 
@@ -18161,22 +18161,11 @@ Yet, we will look at the precision matrix, which has been shown that its regular
 
 # Fundementals
 
-In this chapter we will cover several concept related to statistical dependence, correlations.
+In this chapter, we will cover several concepts related to statistical (in)dependence measured by correlations.
 
 ## Covariance
 
-Let's load several packages, 
-
-
-```r
-library(ppcor)
-library(glasso)
-library(glassoFast)
-library(corpcor)
-library(rags2ridges)
-```
-
-And, define a data matrix, which refers to the array of numbers:  
+We start with a data matrix, which refers to the array of numbers:  
 
 $$
 \mathbf{X}=\left(\begin{array}{cccc}
@@ -18458,8 +18447,9 @@ cor(X)
 ```
 
 The correlations above are called "zero-order" or Pearson correlations.  They only reflect pairwise correlations without controlling other variables.  
-## Partial Correlations & Precision matrix
-
+  
+## Precision Matrix  
+  
 The inverse of covariance matrix, if it exists, is called the concentration matrix also knows as the **precision matrix**.  
 
 Let us consider a $2 \times 2$ covariance matrix:
@@ -18561,7 +18551,7 @@ ppcor::pcor(X)
 ## [1] "pearson"
 ```
 
-## Semi-partial correlation
+## Semi-partial Correlation
 
 With partial correlation, we find the correlation between $X$ and $Y$ after controlling for the effect of $Z$ on both $X$ and $Y$. If we want to hold $Z$ constant for just $X$ or just $Y$, we use a semipartial correlation.
   
@@ -18661,27 +18651,27 @@ ppcor::spcor(X)
 
 Due an increasing availability of high-dimensional data sets, graphical models have become powerful tools to discover conditional dependencies over a graph structure.
 
-However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional.  
+However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional data.  
 
-Why is a covariance matrix $S$ singular when $n<p$ in $X$? Consider the $n \times p$ matrix of sample data, $X$. Since we know that the rank of $X$ is at most $\min (n, p)$. Hence, in 
+Why is a covariance matrix $S$ singular when $n<p$ in $\mathbf{X}$? Consider the $n \times p$ matrix of sample data, $\mathbf{X}$. Since we know that the rank of $\mathbf{X}$ is at most $\min (n, p)$. Hence, in 
 
 $$
 \mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c},
 $$
 
-$\operatorname{rank}(X_c)$ will be $n$.  It is clear that the rank of $S$ won't be larger than the rank of $X_c$.  Since $S$ is $p \times p$ and its rank is $n$, $S$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(X)<p$ in which case $\operatorname{rank}(S)<p$. 
+$\operatorname{rank}(\mathbf{X}_c)$ will be $n$.  It is clear that the rank of $\mathbf{S}$ won't be larger than the rank of $\mathbf{X}_c$.  Since $\mathbf{S}$ is $p \times p$ and its rank is $n$, $\mathbf{S}$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(\mathbf{X})<p$ in which case $\operatorname{rank}(\mathbf{S})<p$. 
 
-This brought several novel precision estimators. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large (in some sense) values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
+This brought several novel precision estimators in applications. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
 
-To solve the problem, as we have seen before in Section 6, penalized estimators adds a so-called penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
+To solve the problem, as we have seen before in Section 6, penalized estimators adds a penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
 
-In this chapter we will see several methods that will provide sparse precision matrices in case of $n<p$ using Gaussian Graphical Models.    
+In this chapter we will see graphical ridge and lasso applications based on Gaussian graphical models that will provide sparse precision matrices in case of $n<p$.    
 
-## MLE  
+## Multivariate Gaussian Distribution 
 
-Before understanding $\ell_1$ or$\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
+Before understanding $\ell_1$ or $\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
   
-The multivariate Gaussian distribution of a random vector $X \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
+The multivariate Gaussian distribution of a random vector $\mathbf{X} \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
 
 $$
 f(x \mid \mu, \Sigma)=\frac{1}{(2 \pi)^{p / 2}|\Sigma|^{1 / 2}} \exp \left\{-\frac{1}{2}(x-\mu)^{T} \Sigma^{-1}(x-\mu)\right\},
@@ -18713,7 +18703,8 @@ where
 $$
 S=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{\mathrm{T}} \in \mathbf{R}^{p \times p}
 $$
-And finally, re-write the likelihood in the log form using the trace trick:
+
+And finally, we re-write the likelihood in the log form using the trace trick:
 
 $$
 \ln \mathcal{L}(\mu, \Sigma)=\text { const }-\frac{n}{2} \ln \operatorname{det}(\Sigma)-\frac{1}{2} \operatorname{tr}\left[\Sigma^{-1} \sum_{i=1}^{n}\left(x_{i}-\mu\right)\left(x_{i}-\mu\right)^{\mathrm{T}}\right]
@@ -18774,7 +18765,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] -0.7156653
+## [1] 0.01462532
 ```
 
 ```r
@@ -18782,13 +18773,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.71566533 -0.02725358  0.16353871  0.35363024 -0.20722828
-## [2,] -0.71566533 -1.00000000 -0.42991656  0.20960520 -0.03927366 -0.40111537
-## [3,] -0.02725358 -0.42991656 -1.00000000  0.36278095 -0.32548016 -0.27632776
-## [4,]  0.16353871  0.20960520  0.36278095 -1.00000000 -0.19444666 -0.02470048
-## [5,]  0.35363024 -0.03927366 -0.32548016 -0.19444666 -1.00000000 -0.02069030
-## [6,] -0.20722828 -0.40111537 -0.27632776 -0.02470048 -0.02069030 -1.00000000
+##             [,1]        [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,] -1.00000000  0.01462532  0.1954499 -0.10481130 -0.75738198 -0.79220264
+## [2,]  0.01462532 -1.00000000  0.1342994  0.44976234  0.24374775  0.18042754
+## [3,]  0.19544994  0.13429944 -1.0000000 -0.20912702  0.41287512  0.39531115
+## [4,] -0.10481130  0.44976234 -0.2091270 -1.00000000  0.01626636 -0.05389573
+## [5,] -0.75738198  0.24374775  0.4128751  0.01626636 -1.00000000 -0.95839972
+## [6,] -0.79220264  0.18042754  0.3953111 -0.05389573 -0.95839972 -1.00000000
 ```
 
 ```r
@@ -18798,13 +18789,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,]  1.00000000 -0.71566533 -0.02725358  0.16353871  0.35363024 -0.20722828
-## [2,] -0.71566533  1.00000000 -0.42991656  0.20960520 -0.03927366 -0.40111537
-## [3,] -0.02725358 -0.42991656  1.00000000  0.36278095 -0.32548016 -0.27632776
-## [4,]  0.16353871  0.20960520  0.36278095  1.00000000 -0.19444666 -0.02470048
-## [5,]  0.35363024 -0.03927366 -0.32548016 -0.19444666  1.00000000 -0.02069030
-## [6,] -0.20722828 -0.40111537 -0.27632776 -0.02470048 -0.02069030  1.00000000
+##             [,1]       [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,]  1.00000000 0.01462532  0.1954499 -0.10481130 -0.75738198 -0.79220264
+## [2,]  0.01462532 1.00000000  0.1342994  0.44976234  0.24374775  0.18042754
+## [3,]  0.19544994 0.13429944  1.0000000 -0.20912702  0.41287512  0.39531115
+## [4,] -0.10481130 0.44976234 -0.2091270  1.00000000  0.01626636 -0.05389573
+## [5,] -0.75738198 0.24374775  0.4128751  0.01626636  1.00000000 -0.95839972
+## [6,] -0.79220264 0.18042754  0.3953111 -0.05389573 -0.95839972  1.00000000
 ```
 
 ```r
@@ -18814,22 +18805,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##              [,1]        [,2]       [,3]         [,4]       [,5]        [,6]
-## [1,]  0.752868174 -0.69464698  0.2166940  0.001765447  0.4518166  0.09335679
-## [2,] -0.694646977  1.01655069 -0.3514547  0.035518232 -0.3784378 -0.28841904
-## [3,]  0.216693986 -0.35145466  0.7590147  0.255647540 -0.2578044 -0.14219163
-## [4,]  0.001765447  0.03551823  0.2556475  0.490455572 -0.2630931 -0.13781660
-## [5,]  0.451816581 -0.37843783 -0.2578044 -0.263093077  1.3525394  0.16876656
-## [6,]  0.093356785 -0.28841904 -0.1421916 -0.137816602  0.1687666  1.01725043
+##             [,1]       [,2]        [,3]        [,4]       [,5]        [,6]
+## [1,]  0.43096245 -0.2768659 -0.16070286 -0.14101367 -0.1214204 -0.08074651
+## [2,] -0.27686587  1.2669807  0.26674403  0.53218104  0.4887738 -0.15087652
+## [3,] -0.16070286  0.2667440  0.81542791 -0.02041317  0.1596835  0.02413882
+## [4,] -0.14101367  0.5321810 -0.02041317  0.73224829  0.3329995 -0.14710490
+## [5,] -0.12142038  0.4887738  0.15968351  0.33299953  0.8784542 -0.46041101
+## [6,] -0.08074651 -0.1508765  0.02413882 -0.14710490 -0.4604110  0.31733151
 ## 
 ## $wi
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,]  4.40445121  2.89542263  0.09049848 -0.57375984 -0.81634201 0.48705980
-## [2,]  2.89542263  3.71637200  1.31226053 -0.67555990  0.08324133 0.86604460
-## [3,]  0.09049848  1.31226053  2.50708343 -0.96038206  0.56685316 0.49002937
-## [4,] -0.57375984 -0.67555990 -0.96038206  2.79529364  0.35754230 0.04626617
-## [5,] -0.81634201  0.08324133  0.56685316  0.35754230  1.20976498 0.02548393
-## [6,]  0.48705980  0.86604460  0.49002937  0.04626617  0.02548393 1.25441921
+##             [,1]        [,2]       [,3]       [,4]      [,5]       [,6]
+## [1,]  7.60883493 -0.04890689 -0.7109297  0.4299429  9.102256 15.3726615
+## [2,] -0.04890689  1.48043267 -0.2156324 -0.8140298 -1.291980 -1.5438680
+## [3,] -0.71092972 -0.21563239  1.7402243  0.4104470 -2.372736 -3.6681401
+## [4,]  0.42994285 -0.81402979  0.4104470  2.2128090 -0.105775  0.5633783
+## [5,]  9.10225647 -1.29198015 -2.3727359 -0.1057750 18.983742 29.3765443
+## [6,] 15.37266147 -1.54386802 -3.6681401  0.5633783 29.376544 49.4911561
 ## 
 ## $errflag
 ## [1] 0
@@ -18844,7 +18835,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] -0.7156596
+## [1] 0.01457192
 ```
 
 ```r
@@ -18852,13 +18843,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.71565955 -0.02723397  0.16351987  0.35365169 -0.20721206
-## [2,] -0.71565955 -1.00000000 -0.42990855  0.20959965 -0.03925807 -0.40110615
-## [3,] -0.02723397 -0.42990855 -1.00000000  0.36278217 -0.32548852 -0.27632258
-## [4,]  0.16351987  0.20959965  0.36278217 -1.00000000 -0.19442997 -0.02470748
-## [5,]  0.35365169 -0.03925807 -0.32548852 -0.19442997 -1.00000000 -0.02068686
-## [6,] -0.20721206 -0.40110615 -0.27632258 -0.02470748 -0.02068686 -1.00000000
+##             [,1]        [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,] -1.00000000  0.01457192  0.1953732 -0.10478031 -0.75735427 -0.79218421
+## [2,]  0.01457192 -1.00000000  0.1343436  0.44975293  0.24370846  0.18036491
+## [3,]  0.19537319  0.13434362 -1.0000000 -0.20916186  0.41281539  0.39525694
+## [4,] -0.10478031  0.44975293 -0.2091619 -1.00000000  0.01631999 -0.05383495
+## [5,] -0.75735427  0.24370846  0.4128154  0.01631999 -1.00000000 -0.95839821
+## [6,] -0.79218421  0.18036491  0.3952569 -0.05383495 -0.95839821 -1.00000000
 ```
 
 ## High-dimensional data
@@ -19005,11 +18996,15 @@ corpcor::cor2pcor(S)
 ## [10,]  0.2703214 -0.37463425 -0.07014287  1.0000000000
 ```
 
-However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix for a network analysis that differentiates the significant edges from insignificant ones. 
+However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix that differentiates the significant edges from insignificant ones for a network analysis . 
 
 ## Ridge ($\ell_{2}$) and glasso ($\ell_{1}$)
 
-Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation
+A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+
+In a multivariate normal model, $p_{i j}=p_{j i}=0$ (the entries in the precision matrix) if and only if $X_{i}$ and $X_{j}$ are independent when condition ong all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
+
+Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation.  
 
 Their algorithm solves the following:
 
@@ -19114,7 +19109,7 @@ P[1:7, 1:7]
 ## G  2.61837378
 ```
 
-What Lambda should you choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
+What Lambda should we choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
 
 
 ```r
@@ -19144,7 +19139,7 @@ We know that Ridge will not provide a sparse solution.  Yet, we need a sparse pr
 
 >At last point to mention here is also that the true underlying graph might not always be very sparse (or sparse at all).
 
-The function `spasify()` handles the the spasification by FDR (False Discovery Rate) application:
+The function `spasify()` handles the the spasification by applying the FDR (False Discovery Rate) method:
 
 
 ```r
@@ -19196,7 +19191,8 @@ spar
 ## F 0.000000 0.000000 0.000000 0.000000 0.000000 2.724853 …
 ## … 19 more rows and 19 more columns
 ```
-After edge selection, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
+  
+The steps are explained in their paper.  After edge selections, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
 
 
 ```r
@@ -19270,20 +19266,17 @@ fc
 ##         Y 
 ## 0.3962399
 ```
-
-## What's graphical - graphical ridge or glasso?
   
-A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+While the $\ell_{2}$ penalty of graphical ridge relies on an extra step to select the edges after $P$ is estimated, the graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and select the edges in the underlying graph.
 
-In a multivariate normal model, $p_{i j}=p_{j i}=0$, the entries in the precision matrix, if and only if $X_{i}$ and $X_{j}$ are independent when condition on all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
-
-The graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and  select the edges in the underlying graph, while the $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after $P$ is estimated. 
-
-Now, we will apply some packages on both glass and ridge.  First glasso:  
-
+The graphical lasso aims to solve the following regularized maximum likelihood problem:
+  
+$$
+\mathcal{L}(\Omega)=\operatorname{tr}(\Omega S)-\log |\Omega|+\lambda\|\Omega\|_1
+$$
+  
 
 ```r
-# glasso
 gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
 - cov2cor(gl$wi)[1:10, 1:10]
 ```
@@ -19312,39 +19305,8 @@ gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
 ##  [9,]  0.000000000  0.000000000 -1.00000000  0.00000000
 ## [10,]  0.050183134  0.000000000  0.00000000 -1.00000000
 ```
-
-```r
-# glassoFast
-glf <- glassoFast::glassoFast(S,rho=0.2641)
--cov2cor(glf$wi)[1:10, 1:10]
-```
-
-```
-##       [,1]        [,2]        [,3]       [,4]        [,5]       [,6]
-##  [1,]   -1  0.00000000  0.00000000  0.0000000  0.00000000  0.0000000
-##  [2,]    0 -1.00000000 -0.07439142  0.0000000  0.09011203  0.1280012
-##  [3,]    0 -0.07439142 -1.00000000  0.0000000  0.00000000  0.0000000
-##  [4,]    0  0.00000000  0.00000000 -1.0000000 -0.15354161  0.0000000
-##  [5,]    0  0.09011203  0.00000000 -0.1535416 -1.00000000  0.1502231
-##  [6,]    0  0.12800124  0.00000000  0.0000000  0.15022313 -1.0000000
-##  [7,]    0  0.00000000  0.00000000  0.0000000  0.00000000  0.0000000
-##  [8,]    0  0.00000000  0.00000000  0.0000000  0.10986151  0.0000000
-##  [9,]    0  0.00000000 -0.09170577  0.0000000  0.26299718  0.0000000
-## [10,]    0  0.00000000  0.20156721  0.0000000  0.00000000  0.0000000
-##               [,7]         [,8]        [,9]       [,10]
-##  [1,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [2,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [3,]  0.000000000  0.000000000 -0.09170577  0.20156721
-##  [4,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [5,]  0.000000000  0.109861509  0.26299718  0.00000000
-##  [6,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [7,] -1.000000000 -0.007621879  0.00000000  0.05018337
-##  [8,] -0.007621879 -1.000000000  0.00000000  0.00000000
-##  [9,]  0.000000000  0.000000000 -1.00000000  0.00000000
-## [10,]  0.050183374  0.000000000  0.00000000 -1.00000000
-```
   
-The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  
+The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  There are also multiple packages and fucntion to plot the networks for a visual inspection.    
 
 <!--chapter:end:30-RegularizedCovMatrix.Rmd-->
 
@@ -19535,7 +19497,7 @@ dir()
 ## [137] "irates.dat"                     "mnist.Rdata"                   
 ## [139] "myocarde.csv"                   "packages.bib"                  
 ## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "render4dd74ee8cf09.rds"        
+## [143] "README.md"                      "render6d203179d72d.rds"        
 ## [145] "style.css"                      "table1.text"                   
 ## [147] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20529,7 +20491,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7f8cd9a45310> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fbcc70e3310> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -20957,8 +20919,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.0988 9.0976 7.3924 3.4291 8.1675 ...
-##  $ c: Factor w/ 3 levels "(-0.222,4.03]",..: 1 3 2 1 2 3 1 1 3 2
+##  $ b: num  5.97 5.87 3.23 -2.99 7.46 ...
+##  $ c: Factor w/ 3 levels "(-4.27,-0.351]",..: 3 3 2 1 3 1 2 1 1 2
 ```
 
 ```r
@@ -20970,8 +20932,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.0988 9.0976 7.3924 3.4291 8.1675 ...
-##  $ c: Factor w/ 3 levels "(-0.222,4.03]",..: 1 3 2 1 2 3 1 1 3 2
+##  $ b: num  5.97 5.87 3.23 -2.99 7.46 ...
+##  $ c: Factor w/ 3 levels "(-4.27,-0.351]",..: 3 3 2 1 3 1 2 1 1 2
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -20987,17 +20949,17 @@ my_data
 ```
 
 ```
-##     a          b             c          d          f          g         h
-## 1   1  0.0988481 (-0.222,4.03] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  9.0975741   (8.27,12.5] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  7.3924246   (4.03,8.27] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  3.4291283 (-0.222,4.03] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  8.1675462   (4.03,8.27] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 12.5122879   (8.27,12.5]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7 -0.2089059 (-0.222,4.03]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  0.1311510 (-0.222,4.03]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  9.4883630   (8.27,12.5]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  4.6752521   (4.03,8.27]  1.4863011  1.1560120         NA  0.000000
+##     a          b              c          d          f          g         h
+## 1   1  5.9677859    (3.55,7.47] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  5.8739977    (3.55,7.47] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  3.2328940  (-0.351,3.55] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4 -2.9907594 (-4.27,-0.351] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  7.4604066    (3.55,7.47] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 -2.6411840 (-4.27,-0.351]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  1.1561730  (-0.351,3.55]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8 -4.2563868 (-4.27,-0.351]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9 -0.9997816 (-4.27,-0.351]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10  0.9723056  (-0.351,3.55]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21410,7 +21372,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1] -2.3730039 -0.3865939  0.9817176 -2.1589920  0.5963779  0.6109747
+## [1]  1.99819800 -3.78418581  4.11710382  4.74014911  1.27639320 -0.09337528
 ```
 
 ```r
@@ -21456,12 +21418,12 @@ X_new
 ```
 
 ```
-##           [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 4.9258856 2.020765 2.380226 2.185610 2.409112 2.888448
-## [2,] 2.7430674 3.495654 1.340790 1.767687 4.257003 1.923696
-## [3,] 1.5244680 3.253323 4.961705 5.011500 2.401770 2.707753
-## [4,] 0.6144241 3.595288 4.457830 1.786030 2.888390 5.448223
-## [5,] 2.8191510 2.248377 2.841167 2.090181 3.640104 2.642855
+##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+## [1,] 1.893982 1.008573 3.986876 3.163923 2.732368 2.481381
+## [2,] 2.850667 2.503266 4.600296 5.638340 2.178058 5.137393
+## [3,] 4.324743 2.141159 3.944144 3.964492 1.927546 1.598136
+## [4,] 3.811632 2.232520 3.654981 4.036102 3.710830 1.981107
+## [5,] 4.117174 3.330297 2.930806 2.937291 5.727592 3.708607
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23097,7 +23059,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "T" "H" "T" "T" "T" "H" "T"
+## [1] "H" "H" "H" "T" "T" "T" "H" "T"
 ```
 
 ```r
@@ -23105,7 +23067,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 5 5
+## [1] 6 5
 ```
 
 ```r
@@ -23114,7 +23076,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "T" "T" "T" "H" "H" "H"
+## [1] "H" "H" "H" "T" "T" "T" "H" "H"
 ```
 
 ```r
@@ -23122,7 +23084,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 5 4
+## [1] 4 4
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  

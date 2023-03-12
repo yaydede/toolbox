@@ -2,27 +2,27 @@
 
 Due an increasing availability of high-dimensional data sets, graphical models have become powerful tools to discover conditional dependencies over a graph structure.
 
-However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional.  
+However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional data.  
 
-Why is a covariance matrix $S$ singular when $n<p$ in $X$? Consider the $n \times p$ matrix of sample data, $X$. Since we know that the rank of $X$ is at most $\min (n, p)$. Hence, in 
+Why is a covariance matrix $S$ singular when $n<p$ in $\mathbf{X}$? Consider the $n \times p$ matrix of sample data, $\mathbf{X}$. Since we know that the rank of $\mathbf{X}$ is at most $\min (n, p)$. Hence, in 
 
 $$
 \mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c},
 $$
 
-$\operatorname{rank}(X_c)$ will be $n$.  It is clear that the rank of $S$ won't be larger than the rank of $X_c$.  Since $S$ is $p \times p$ and its rank is $n$, $S$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(X)<p$ in which case $\operatorname{rank}(S)<p$. 
+$\operatorname{rank}(\mathbf{X}_c)$ will be $n$.  It is clear that the rank of $\mathbf{S}$ won't be larger than the rank of $\mathbf{X}_c$.  Since $\mathbf{S}$ is $p \times p$ and its rank is $n$, $\mathbf{S}$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(\mathbf{X})<p$ in which case $\operatorname{rank}(\mathbf{S})<p$. 
 
-This brought several novel precision estimators. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large (in some sense) values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
+This brought several novel precision estimators in applications. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
 
-To solve the problem, as we have seen before in Section 6, penalized estimators adds a so-called penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
+To solve the problem, as we have seen before in Section 6, penalized estimators adds a penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
 
-In this chapter we will see several methods that will provide sparse precision matrices in case of $n<p$ using Gaussian Graphical Models.    
+In this chapter we will see graphical ridge and lasso applications based on Gaussian graphical models that will provide sparse precision matrices in case of $n<p$.    
 
-## MLE  
+## Multivariate Gaussian Distribution 
 
-Before understanding $\ell_1$ or$\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
+Before understanding $\ell_1$ or $\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
   
-The multivariate Gaussian distribution of a random vector $X \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
+The multivariate Gaussian distribution of a random vector $\mathbf{X} \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
 
 $$
 f(x \mid \mu, \Sigma)=\frac{1}{(2 \pi)^{p / 2}|\Sigma|^{1 / 2}} \exp \left\{-\frac{1}{2}(x-\mu)^{T} \Sigma^{-1}(x-\mu)\right\},
@@ -54,7 +54,8 @@ where
 $$
 S=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{\mathrm{T}} \in \mathbf{R}^{p \times p}
 $$
-And finally, re-write the likelihood in the log form using the trace trick:
+
+And finally, we re-write the likelihood in the log form using the trace trick:
 
 $$
 \ln \mathcal{L}(\mu, \Sigma)=\text { const }-\frac{n}{2} \ln \operatorname{det}(\Sigma)-\frac{1}{2} \operatorname{tr}\left[\Sigma^{-1} \sum_{i=1}^{n}\left(x_{i}-\mu\right)\left(x_{i}-\mu\right)^{\mathrm{T}}\right]
@@ -162,11 +163,15 @@ pc$estimate
 corpcor::cor2pcor(S)
 ```
 
-However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix for a network analysis that differentiates the significant edges from insignificant ones. 
+However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix that differentiates the significant edges from insignificant ones for a network analysis . 
 
 ## Ridge ($\ell_{2}$) and glasso ($\ell_{1}$)
 
-Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation
+A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+
+In a multivariate normal model, $p_{i j}=p_{j i}=0$ (the entries in the precision matrix) if and only if $X_{i}$ and $X_{j}$ are independent when condition ong all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
+
+Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation.  
 
 Their algorithm solves the following:
 
@@ -208,7 +213,7 @@ P <- rags2ridges::ridgeP(S, lambda = 1.17)
 P[1:7, 1:7]
 ```
 
-What Lambda should you choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
+What Lambda should we choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
 
 ```{r rn6}
 opt <- optPenalty.kCVauto(X, lambdaMin = 0.001, lambdaMax = 100)
@@ -224,37 +229,32 @@ We know that Ridge will not provide a sparse solution.  Yet, we need a sparse pr
 
 >At last point to mention here is also that the true underlying graph might not always be very sparse (or sparse at all).
 
-The function `spasify()` handles the the spasification by FDR (False Discovery Rate) application:
+The function `spasify()` handles the the spasification by applying the FDR (False Discovery Rate) method:
 
 ```{r rn7}
 P <- ridgeP(S, lambda = op)
 spar <- sparsify(P, threshold = "localFDR")
 spar
 ```
-After edge selection, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
+  
+The steps are explained in their paper.  After edge selections, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
 
 ```{r rn8, warning=FALSE, message=FALSE}
 fc <- GGMnetworkStats(P)
 fc
 ```
-
-## What's graphical - graphical ridge or glasso?
   
-A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+While the $\ell_{2}$ penalty of graphical ridge relies on an extra step to select the edges after $P$ is estimated, the graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and select the edges in the underlying graph.
 
-In a multivariate normal model, $p_{i j}=p_{j i}=0$, the entries in the precision matrix, if and only if $X_{i}$ and $X_{j}$ are independent when condition on all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
-
-The graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and  select the edges in the underlying graph, while the $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after $P$ is estimated. 
-
-Now, we will apply some packages on both glass and ridge.  First glasso:  
-
+The graphical lasso aims to solve the following regularized maximum likelihood problem:
+  
+$$
+\mathcal{L}(\Omega)=\operatorname{tr}(\Omega S)-\log |\Omega|+\lambda\|\Omega\|_1
+$$
+  
 ```{r rn9}
-# glasso
 gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
 - cov2cor(gl$wi)[1:10, 1:10]
-# glassoFast
-glf <- glassoFast::glassoFast(S,rho=0.2641)
--cov2cor(glf$wi)[1:10, 1:10]
 ```
   
-The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  
+The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  There are also multiple packages and fucntion to plot the networks for a visual inspection.    

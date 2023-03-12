@@ -12,22 +12,11 @@ Yet, we will look at the precision matrix, which has been shown that its regular
 
 # Fundementals
 
-In this chapter we will cover several concept related to statistical dependence, correlations.
+In this chapter, we will cover several concepts related to statistical (in)dependence measured by correlations.
 
 ## Covariance
 
-Let's load several packages, 
-
-
-```r
-library(ppcor)
-library(glasso)
-library(glassoFast)
-library(corpcor)
-library(rags2ridges)
-```
-
-And, define a data matrix, which refers to the array of numbers:  
+We start with a data matrix, which refers to the array of numbers:  
 
 $$
 \mathbf{X}=\left(\begin{array}{cccc}
@@ -309,8 +298,9 @@ cor(X)
 ```
 
 The correlations above are called "zero-order" or Pearson correlations.  They only reflect pairwise correlations without controlling other variables.  
-## Partial Correlations & Precision matrix
-
+  
+## Precision Matrix  
+  
 The inverse of covariance matrix, if it exists, is called the concentration matrix also knows as the **precision matrix**.  
 
 Let us consider a $2 \times 2$ covariance matrix:
@@ -412,7 +402,7 @@ ppcor::pcor(X)
 ## [1] "pearson"
 ```
 
-## Semi-partial correlation
+## Semi-partial Correlation
 
 With partial correlation, we find the correlation between $X$ and $Y$ after controlling for the effect of $Z$ on both $X$ and $Y$. If we want to hold $Z$ constant for just $X$ or just $Y$, we use a semipartial correlation.
   

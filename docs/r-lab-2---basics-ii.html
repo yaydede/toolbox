@@ -365,14 +365,14 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
 <li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
-<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.3</b> Semi-partial correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision Matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial Correlation</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized Covariance Matrix</a>
 <ul>
-<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#multivariate-gaussian-distribution"><i class="fa fa-check"></i><b>33.1</b> Multivariate Gaussian Distribution</a></li>
 <li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
 <li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
-<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
 </ul></li>
 <li class="part"><span><b>X Labs</b></span></li>
 <li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
@@ -499,27 +499,27 @@ div.csl-indent {
 <div id="lists" class="section level3 hasAnchor" number="35.1.1">
 <h3><span class="header-section-number">35.1.1</span> Lists<a href="r-lab-2---basics-ii.html#lists" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A list is a one-dimensional heterogeneous data structure. So it is indexed like a vector with a single integer value, but each element can contain an element of any type. Lets look at some examples of working with them:</p>
-<div class="sourceCode" id="cb1351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1351-1"><a href="r-lab-2---basics-ii.html#cb1351-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creation</span></span>
-<span id="cb1351-2"><a href="r-lab-2---basics-ii.html#cb1351-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="st">&quot;Hello&quot;</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb1351-3"><a href="r-lab-2---basics-ii.html#cb1351-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb1348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1348-1"><a href="r-lab-2---basics-ii.html#cb1348-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creation</span></span>
+<span id="cb1348-2"><a href="r-lab-2---basics-ii.html#cb1348-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="st">&quot;Hello&quot;</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb1348-3"><a href="r-lab-2---basics-ii.html#cb1348-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(A)</span></code></pre></div>
 <pre><code>## NULL</code></pre>
-<div class="sourceCode" id="cb1353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1353-1"><a href="r-lab-2---basics-ii.html#cb1353-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb1350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1350-1"><a href="r-lab-2---basics-ii.html#cb1350-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(A)</span></code></pre></div>
 <pre><code>## List of 3
 ##  $ : num 42
 ##  $ : chr &quot;Hello&quot;
 ##  $ : logi TRUE</code></pre>
-<div class="sourceCode" id="cb1355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1355-1"><a href="r-lab-2---basics-ii.html#cb1355-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(A)</span></code></pre></div>
+<div class="sourceCode" id="cb1352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1352-1"><a href="r-lab-2---basics-ii.html#cb1352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(A)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
-<div class="sourceCode" id="cb1357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1357-1"><a href="r-lab-2---basics-ii.html#cb1357-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Another one</span></span>
-<span id="cb1357-2"><a href="r-lab-2---basics-ii.html#cb1357-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb1357-3"><a href="r-lab-2---basics-ii.html#cb1357-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
-<span id="cb1357-4"><a href="r-lab-2---basics-ii.html#cb1357-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">b =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1357-5"><a href="r-lab-2---basics-ii.html#cb1357-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">c =</span> <span class="st">&quot;Hello!&quot;</span>,</span>
-<span id="cb1357-6"><a href="r-lab-2---basics-ii.html#cb1357-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">d =</span> <span class="cf">function</span>(<span class="at">arg =</span> <span class="dv">1</span>) {<span class="fu">print</span>(<span class="st">&quot;Hello World!&quot;</span>)},</span>
-<span id="cb1357-7"><a href="r-lab-2---basics-ii.html#cb1357-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">X =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span> , <span class="dv">4</span>)</span>
-<span id="cb1357-8"><a href="r-lab-2---basics-ii.html#cb1357-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1357-9"><a href="r-lab-2---basics-ii.html#cb1357-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1357-10"><a href="r-lab-2---basics-ii.html#cb1357-10" aria-hidden="true" tabindex="-1"></a>B</span></code></pre></div>
+<div class="sourceCode" id="cb1354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1354-1"><a href="r-lab-2---basics-ii.html#cb1354-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Another one</span></span>
+<span id="cb1354-2"><a href="r-lab-2---basics-ii.html#cb1354-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1354-3"><a href="r-lab-2---basics-ii.html#cb1354-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
+<span id="cb1354-4"><a href="r-lab-2---basics-ii.html#cb1354-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">b =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1354-5"><a href="r-lab-2---basics-ii.html#cb1354-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">c =</span> <span class="st">&quot;Hello!&quot;</span>,</span>
+<span id="cb1354-6"><a href="r-lab-2---basics-ii.html#cb1354-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">d =</span> <span class="cf">function</span>(<span class="at">arg =</span> <span class="dv">1</span>) {<span class="fu">print</span>(<span class="st">&quot;Hello World!&quot;</span>)},</span>
+<span id="cb1354-7"><a href="r-lab-2---basics-ii.html#cb1354-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">X =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">4</span> , <span class="dv">4</span>)</span>
+<span id="cb1354-8"><a href="r-lab-2---basics-ii.html#cb1354-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1354-9"><a href="r-lab-2---basics-ii.html#cb1354-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1354-10"><a href="r-lab-2---basics-ii.html#cb1354-10" aria-hidden="true" tabindex="-1"></a>B</span></code></pre></div>
 <pre><code>## $a
 ## [1] 1 2 3 4
 ## 
@@ -538,48 +538,48 @@ div.csl-indent {
 ## [2,]    0    0    0    0
 ## [3,]    0    0    0    0
 ## [4,]    0    0    0    0</code></pre>
-<div class="sourceCode" id="cb1359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1359-1"><a href="r-lab-2---basics-ii.html#cb1359-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb1356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1356-1"><a href="r-lab-2---basics-ii.html#cb1356-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B)</span></code></pre></div>
 <pre><code>## NULL</code></pre>
-<div class="sourceCode" id="cb1361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1361-1"><a href="r-lab-2---basics-ii.html#cb1361-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B<span class="sc">$</span>X)</span></code></pre></div>
+<div class="sourceCode" id="cb1358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1358-1"><a href="r-lab-2---basics-ii.html#cb1358-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(B<span class="sc">$</span>X)</span></code></pre></div>
 <pre><code>## [1] 4 4</code></pre>
-<div class="sourceCode" id="cb1363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1363-1"><a href="r-lab-2---basics-ii.html#cb1363-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb1360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1360-1"><a href="r-lab-2---basics-ii.html#cb1360-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(B)</span></code></pre></div>
 <pre><code>## List of 5
 ##  $ a: num [1:4] 1 2 3 4
 ##  $ b: logi TRUE
 ##  $ c: chr &quot;Hello!&quot;
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, &quot;srcref&quot;)= &#39;srcref&#39; int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7f8cd9a45310&gt; 
+##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7fbcc70e3310&gt; 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb1365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1365-1"><a href="r-lab-2---basics-ii.html#cb1365-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb1362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1362-1"><a href="r-lab-2---basics-ii.html#cb1362-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(B)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <p><img src="png/List.png" width="522" /></p>
 <p>Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(27)" class="uri">https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(27)</a></p>
 <p>Lists can be subset using two syntaxes, the <code>$</code> operator, and square brackets <code>[ ]</code>. The <code>$</code> operator returns a named element of a list. The <code>[ ]</code> syntax returns a list, while the <code>[[ ]]</code> returns an element of a list.</p>
-<div class="sourceCode" id="cb1367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1367-1"><a href="r-lab-2---basics-ii.html#cb1367-1" aria-hidden="true" tabindex="-1"></a><span class="co">#For example to get the matrix in our list</span></span>
-<span id="cb1367-2"><a href="r-lab-2---basics-ii.html#cb1367-2" aria-hidden="true" tabindex="-1"></a>B<span class="sc">$</span>X</span></code></pre></div>
+<div class="sourceCode" id="cb1364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1364-1"><a href="r-lab-2---basics-ii.html#cb1364-1" aria-hidden="true" tabindex="-1"></a><span class="co">#For example to get the matrix in our list</span></span>
+<span id="cb1364-2"><a href="r-lab-2---basics-ii.html#cb1364-2" aria-hidden="true" tabindex="-1"></a>B<span class="sc">$</span>X</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]    0    0    0    0
 ## [2,]    0    0    0    0
 ## [3,]    0    0    0    0
 ## [4,]    0    0    0    0</code></pre>
-<div class="sourceCode" id="cb1369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1369-1"><a href="r-lab-2---basics-ii.html#cb1369-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
-<span id="cb1369-2"><a href="r-lab-2---basics-ii.html#cb1369-2" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1366-1"><a href="r-lab-2---basics-ii.html#cb1366-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
+<span id="cb1366-2"><a href="r-lab-2---basics-ii.html#cb1366-2" aria-hidden="true" tabindex="-1"></a>B[<span class="dv">5</span>]</span></code></pre></div>
 <pre><code>## $X
 ##      [,1] [,2] [,3] [,4]
 ## [1,]    0    0    0    0
 ## [2,]    0    0    0    0
 ## [3,]    0    0    0    0
 ## [4,]    0    0    0    0</code></pre>
-<div class="sourceCode" id="cb1371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1371-1"><a href="r-lab-2---basics-ii.html#cb1371-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
-<span id="cb1371-2"><a href="r-lab-2---basics-ii.html#cb1371-2" aria-hidden="true" tabindex="-1"></a>B[[<span class="dv">5</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb1368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1368-1"><a href="r-lab-2---basics-ii.html#cb1368-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or</span></span>
+<span id="cb1368-2"><a href="r-lab-2---basics-ii.html#cb1368-2" aria-hidden="true" tabindex="-1"></a>B[[<span class="dv">5</span>]]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]    0    0    0    0
 ## [2,]    0    0    0    0
 ## [3,]    0    0    0    0
 ## [4,]    0    0    0    0</code></pre>
-<div class="sourceCode" id="cb1373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1373-1"><a href="r-lab-2---basics-ii.html#cb1373-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And to get the (1,3) element of matrix X in list B</span></span>
-<span id="cb1373-2"><a href="r-lab-2---basics-ii.html#cb1373-2" aria-hidden="true" tabindex="-1"></a>B[[<span class="dv">5</span>]][<span class="dv">1</span>,<span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1370-1"><a href="r-lab-2---basics-ii.html#cb1370-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And to get the (1,3) element of matrix X in list B</span></span>
+<span id="cb1370-2"><a href="r-lab-2---basics-ii.html#cb1370-2" aria-hidden="true" tabindex="-1"></a>B[[<span class="dv">5</span>]][<span class="dv">1</span>,<span class="dv">3</span>]</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div id="data-frames" class="section level3 hasAnchor" number="35.1.2">
@@ -589,69 +589,69 @@ div.csl-indent {
 <p><img src="png/dataframe.png" width="488" /></p>
 <p>Data frames combine the features of matrices and lists.</p>
 <p>Like matrices, dataframes are <strong>rectangular</strong>, where the columns are variables and the rows are observations of those variables. like lists, dataframes can have elements (column vectors) of <strong>different data types</strong> (some double, some character, etc.) – but they <strong>must be equal length</strong>. Real datasets usually combine variables of different types, so data frames are well suited for storage.</p>
-<div class="sourceCode" id="cb1375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1375-1"><a href="r-lab-2---basics-ii.html#cb1375-1" aria-hidden="true" tabindex="-1"></a><span class="co">#One way to do that</span></span>
-<span id="cb1375-2"><a href="r-lab-2---basics-ii.html#cb1375-2" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">diabetic =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>), </span>
-<span id="cb1375-3"><a href="r-lab-2---basics-ii.html#cb1375-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">height =</span> <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">69</span>, <span class="dv">71</span>, <span class="dv">73</span>))</span>
-<span id="cb1375-4"><a href="r-lab-2---basics-ii.html#cb1375-4" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
+<div class="sourceCode" id="cb1372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1372-1"><a href="r-lab-2---basics-ii.html#cb1372-1" aria-hidden="true" tabindex="-1"></a><span class="co">#One way to do that</span></span>
+<span id="cb1372-2"><a href="r-lab-2---basics-ii.html#cb1372-2" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">diabetic =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>), </span>
+<span id="cb1372-3"><a href="r-lab-2---basics-ii.html#cb1372-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">height =</span> <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">69</span>, <span class="dv">71</span>, <span class="dv">73</span>))</span>
+<span id="cb1372-4"><a href="r-lab-2---basics-ii.html#cb1372-4" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
 <pre><code>##   diabetic height
 ## 1     TRUE     65
 ## 2    FALSE     69
 ## 3     TRUE     71
 ## 4    FALSE     73</code></pre>
-<div class="sourceCode" id="cb1377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1377-1"><a href="r-lab-2---basics-ii.html#cb1377-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1374-1"><a href="r-lab-2---basics-ii.html#cb1374-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mydata)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    4 obs. of  2 variables:
 ##  $ diabetic: logi  TRUE FALSE TRUE FALSE
 ##  $ height  : num  65 69 71 73</code></pre>
-<div class="sourceCode" id="cb1379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1379-1"><a href="r-lab-2---basics-ii.html#cb1379-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1376-1"><a href="r-lab-2---basics-ii.html#cb1376-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mydata)</span></code></pre></div>
 <pre><code>## [1] 4 2</code></pre>
-<div class="sourceCode" id="cb1381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1381-1"><a href="r-lab-2---basics-ii.html#cb1381-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or create vectors for each column</span></span>
-<span id="cb1381-2"><a href="r-lab-2---basics-ii.html#cb1381-2" aria-hidden="true" tabindex="-1"></a>diabetic <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
-<span id="cb1381-3"><a href="r-lab-2---basics-ii.html#cb1381-3" aria-hidden="true" tabindex="-1"></a>height <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">69</span>, <span class="dv">71</span>, <span class="dv">73</span>)</span>
-<span id="cb1381-4"><a href="r-lab-2---basics-ii.html#cb1381-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1381-5"><a href="r-lab-2---basics-ii.html#cb1381-5" aria-hidden="true" tabindex="-1"></a><span class="co">#And include them in a dataframe as follows</span></span>
-<span id="cb1381-6"><a href="r-lab-2---basics-ii.html#cb1381-6" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diabetic, height)</span>
-<span id="cb1381-7"><a href="r-lab-2---basics-ii.html#cb1381-7" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
+<div class="sourceCode" id="cb1378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1378-1"><a href="r-lab-2---basics-ii.html#cb1378-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or create vectors for each column</span></span>
+<span id="cb1378-2"><a href="r-lab-2---basics-ii.html#cb1378-2" aria-hidden="true" tabindex="-1"></a>diabetic <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb1378-3"><a href="r-lab-2---basics-ii.html#cb1378-3" aria-hidden="true" tabindex="-1"></a>height <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">69</span>, <span class="dv">71</span>, <span class="dv">73</span>)</span>
+<span id="cb1378-4"><a href="r-lab-2---basics-ii.html#cb1378-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1378-5"><a href="r-lab-2---basics-ii.html#cb1378-5" aria-hidden="true" tabindex="-1"></a><span class="co">#And include them in a dataframe as follows</span></span>
+<span id="cb1378-6"><a href="r-lab-2---basics-ii.html#cb1378-6" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(diabetic, height)</span>
+<span id="cb1378-7"><a href="r-lab-2---basics-ii.html#cb1378-7" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
 <pre><code>##   diabetic height
 ## 1     TRUE     65
 ## 2    FALSE     69
 ## 3     TRUE     71
 ## 4    FALSE     73</code></pre>
-<div class="sourceCode" id="cb1383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1383-1"><a href="r-lab-2---basics-ii.html#cb1383-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1380-1"><a href="r-lab-2---basics-ii.html#cb1380-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mydata)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    4 obs. of  2 variables:
 ##  $ diabetic: logi  TRUE FALSE TRUE FALSE
 ##  $ height  : num  65 69 71 73</code></pre>
-<div class="sourceCode" id="cb1385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1385-1"><a href="r-lab-2---basics-ii.html#cb1385-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1382-1"><a href="r-lab-2---basics-ii.html#cb1382-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mydata)</span></code></pre></div>
 <pre><code>## [1] 4 2</code></pre>
-<div class="sourceCode" id="cb1387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1387-1"><a href="r-lab-2---basics-ii.html#cb1387-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And more importantly, you can extend it by adding more columns</span></span>
-<span id="cb1387-2"><a href="r-lab-2---basics-ii.html#cb1387-2" aria-hidden="true" tabindex="-1"></a>weight <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">103</span>, <span class="dv">45</span>, <span class="fl">98.4</span>, <span class="fl">70.5</span>)</span>
-<span id="cb1387-3"><a href="r-lab-2---basics-ii.html#cb1387-3" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(mydata, weight)</span>
-<span id="cb1387-4"><a href="r-lab-2---basics-ii.html#cb1387-4" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
+<div class="sourceCode" id="cb1384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1384-1"><a href="r-lab-2---basics-ii.html#cb1384-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And more importantly, you can extend it by adding more columns</span></span>
+<span id="cb1384-2"><a href="r-lab-2---basics-ii.html#cb1384-2" aria-hidden="true" tabindex="-1"></a>weight <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">103</span>, <span class="dv">45</span>, <span class="fl">98.4</span>, <span class="fl">70.5</span>)</span>
+<span id="cb1384-3"><a href="r-lab-2---basics-ii.html#cb1384-3" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(mydata, weight)</span>
+<span id="cb1384-4"><a href="r-lab-2---basics-ii.html#cb1384-4" aria-hidden="true" tabindex="-1"></a>mydata</span></code></pre></div>
 <pre><code>##   diabetic height weight
 ## 1     TRUE     65  103.0
 ## 2    FALSE     69   45.0
 ## 3     TRUE     71   98.4
 ## 4    FALSE     73   70.5</code></pre>
 <p>You will have the following mistake a lot. Let’s see it now so you can avoid it later.</p>
-<div class="sourceCode" id="cb1389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1389-1"><a href="r-lab-2---basics-ii.html#cb1389-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Try running the code below separately without the comment # and see what happens</span></span>
-<span id="cb1389-2"><a href="r-lab-2---basics-ii.html#cb1389-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1389-3"><a href="r-lab-2---basics-ii.html#cb1389-3" aria-hidden="true" tabindex="-1"></a><span class="co">#mydata &lt;- data.frame(diabetic = c(TRUE, FALSE, TRUE, FALSE, FALSE), </span></span>
-<span id="cb1389-4"><a href="r-lab-2---basics-ii.html#cb1389-4" aria-hidden="true" tabindex="-1"></a>                     <span class="co">#height = c(65, 69, 71, 73))</span></span></code></pre></div>
+<div class="sourceCode" id="cb1386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1386-1"><a href="r-lab-2---basics-ii.html#cb1386-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Try running the code below separately without the comment # and see what happens</span></span>
+<span id="cb1386-2"><a href="r-lab-2---basics-ii.html#cb1386-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1386-3"><a href="r-lab-2---basics-ii.html#cb1386-3" aria-hidden="true" tabindex="-1"></a><span class="co">#mydata &lt;- data.frame(diabetic = c(TRUE, FALSE, TRUE, FALSE, FALSE), </span></span>
+<span id="cb1386-4"><a href="r-lab-2---basics-ii.html#cb1386-4" aria-hidden="true" tabindex="-1"></a>                     <span class="co">#height = c(65, 69, 71, 73))</span></span></code></pre></div>
 <p>The problem in the example above is that there are a different number of rows and columns. Here are some useful tools for diagnosing this problem:</p>
-<div class="sourceCode" id="cb1390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1390-1"><a href="r-lab-2---basics-ii.html#cb1390-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Number of columns</span></span>
-<span id="cb1390-2"><a href="r-lab-2---basics-ii.html#cb1390-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1387-1"><a href="r-lab-2---basics-ii.html#cb1387-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Number of columns</span></span>
+<span id="cb1387-2"><a href="r-lab-2---basics-ii.html#cb1387-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(mydata)</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
-<div class="sourceCode" id="cb1392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1392-1"><a href="r-lab-2---basics-ii.html#cb1392-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(mydata)</span></code></pre></div>
+<div class="sourceCode" id="cb1389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1389-1"><a href="r-lab-2---basics-ii.html#cb1389-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(mydata)</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>Often data you’re working with has abstract column names, such as (x1, x2, x3…).The dataset cars is data from the 1920s on “Speed and Stopping Distances of Cars”. There is only 2 columns shown below.</p>
-<div class="sourceCode" id="cb1394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1394-1"><a href="r-lab-2---basics-ii.html#cb1394-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(datasets<span class="sc">::</span>cars)</span></code></pre></div>
+<div class="sourceCode" id="cb1391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1391-1"><a href="r-lab-2---basics-ii.html#cb1391-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(datasets<span class="sc">::</span>cars)</span></code></pre></div>
 <pre><code>## [1] &quot;speed&quot; &quot;dist&quot;</code></pre>
-<div class="sourceCode" id="cb1396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1396-1"><a href="r-lab-2---basics-ii.html#cb1396-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Using Base r:</span></span>
-<span id="cb1396-2"><a href="r-lab-2---basics-ii.html#cb1396-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Speed (mph)&quot;</span>, <span class="st">&quot;Stopping Distance (ft)&quot;</span>)</span>
-<span id="cb1396-3"><a href="r-lab-2---basics-ii.html#cb1396-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)</span></code></pre></div>
+<div class="sourceCode" id="cb1393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1393-1"><a href="r-lab-2---basics-ii.html#cb1393-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Using Base r:</span></span>
+<span id="cb1393-2"><a href="r-lab-2---basics-ii.html#cb1393-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Speed (mph)&quot;</span>, <span class="st">&quot;Stopping Distance (ft)&quot;</span>)</span>
+<span id="cb1393-3"><a href="r-lab-2---basics-ii.html#cb1393-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)</span></code></pre></div>
 <pre><code>## [1] &quot;Speed (mph)&quot;            &quot;Stopping Distance (ft)&quot;</code></pre>
-<div class="sourceCode" id="cb1398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1398-1"><a href="r-lab-2---basics-ii.html#cb1398-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Using GREP:</span></span>
-<span id="cb1398-2"><a href="r-lab-2---basics-ii.html#cb1398-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)[<span class="fu">grep</span>(<span class="st">&quot;dist&quot;</span>, <span class="fu">colnames</span>(cars))] <span class="ot">&lt;-</span> <span class="st">&quot;Stopping Distance (ft)&quot;</span></span>
-<span id="cb1398-3"><a href="r-lab-2---basics-ii.html#cb1398-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)</span></code></pre></div>
+<div class="sourceCode" id="cb1395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1395-1"><a href="r-lab-2---basics-ii.html#cb1395-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Using GREP:</span></span>
+<span id="cb1395-2"><a href="r-lab-2---basics-ii.html#cb1395-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)[<span class="fu">grep</span>(<span class="st">&quot;dist&quot;</span>, <span class="fu">colnames</span>(cars))] <span class="ot">&lt;-</span> <span class="st">&quot;Stopping Distance (ft)&quot;</span></span>
+<span id="cb1395-3"><a href="r-lab-2---basics-ii.html#cb1395-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars)</span></code></pre></div>
 <pre><code>## [1] &quot;Speed (mph)&quot;            &quot;Stopping Distance (ft)&quot;</code></pre>
 </div>
 <div id="reading-importing-and-writting-exporting-data-files" class="section level3 hasAnchor" number="35.1.3">
@@ -661,28 +661,28 @@ div.csl-indent {
 <p>The simple way is here:</p>
 <p><img src="png/Import.png" width="276" /></p>
 <p>If the data is a .csv file, for example, we would also use the <code>read_csv()</code> function from the <strong>readr</strong> package. Note that R has a built in function <code>read.csv()</code> that operates very similarly. The readr function <code>read_csv()</code> has a number of advantages. For example, it is much faster reading larger data. It also uses the tibble package to read the data as a tibble.</p>
-<div class="sourceCode" id="cb1400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1400-1"><a href="r-lab-2---basics-ii.html#cb1400-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(readr)</span></span>
-<span id="cb1400-2"><a href="r-lab-2---basics-ii.html#cb1400-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(RCurl)</span></span>
-<span id="cb1400-3"><a href="r-lab-2---basics-ii.html#cb1400-3" aria-hidden="true" tabindex="-1"></a><span class="co"># x &lt;- getURL(&quot;https://raw.githubusercontent.com/tidyverse/readr/main/inst/extdata/mtcars.csv&quot;)</span></span>
-<span id="cb1400-4"><a href="r-lab-2---basics-ii.html#cb1400-4" aria-hidden="true" tabindex="-1"></a><span class="co"># example_csv = read_csv(x, show_col_types = FALSE)</span></span>
-<span id="cb1400-5"><a href="r-lab-2---basics-ii.html#cb1400-5" aria-hidden="true" tabindex="-1"></a><span class="co"># head(example_csv)</span></span>
-<span id="cb1400-6"><a href="r-lab-2---basics-ii.html#cb1400-6" aria-hidden="true" tabindex="-1"></a><span class="co"># str(example_csv)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1397-1"><a href="r-lab-2---basics-ii.html#cb1397-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(readr)</span></span>
+<span id="cb1397-2"><a href="r-lab-2---basics-ii.html#cb1397-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(RCurl)</span></span>
+<span id="cb1397-3"><a href="r-lab-2---basics-ii.html#cb1397-3" aria-hidden="true" tabindex="-1"></a><span class="co"># x &lt;- getURL(&quot;https://raw.githubusercontent.com/tidyverse/readr/main/inst/extdata/mtcars.csv&quot;)</span></span>
+<span id="cb1397-4"><a href="r-lab-2---basics-ii.html#cb1397-4" aria-hidden="true" tabindex="-1"></a><span class="co"># example_csv = read_csv(x, show_col_types = FALSE)</span></span>
+<span id="cb1397-5"><a href="r-lab-2---basics-ii.html#cb1397-5" aria-hidden="true" tabindex="-1"></a><span class="co"># head(example_csv)</span></span>
+<span id="cb1397-6"><a href="r-lab-2---basics-ii.html#cb1397-6" aria-hidden="true" tabindex="-1"></a><span class="co"># str(example_csv)</span></span></code></pre></div>
 <p>A tibble is simply a data frame that prints with sanity. Notice in the output above that we are given additional information such as dimension and variable type.</p>
 <p>The <code>as_tibble()</code> function can be used to coerce a regular data frame to a tibble.</p>
-<div class="sourceCode" id="cb1401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1401-1"><a href="r-lab-2---basics-ii.html#cb1401-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(tibble)</span></span>
-<span id="cb1401-2"><a href="r-lab-2---basics-ii.html#cb1401-2" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data = as_tibble(example_csv)</span></span>
-<span id="cb1401-3"><a href="r-lab-2---basics-ii.html#cb1401-3" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data</span></span></code></pre></div>
+<div class="sourceCode" id="cb1398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1398-1"><a href="r-lab-2---basics-ii.html#cb1398-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(tibble)</span></span>
+<span id="cb1398-2"><a href="r-lab-2---basics-ii.html#cb1398-2" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data = as_tibble(example_csv)</span></span>
+<span id="cb1398-3"><a href="r-lab-2---basics-ii.html#cb1398-3" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data</span></span></code></pre></div>
 <p>It is important to note that while matrices have rows and columns, data frames (tibbles) instead have observations and variables. When displayed in the console or viewer, each row is an observation and each column is a variable. <code>read_csv()</code> assigns the data frame to a class called tibble, a tidyverse structure that slightly alters how data frames behave, such as when they are being created or printed. Tibbles are still data frames, and will work in most functions that require data frame inputs.</p>
 <p>By default, tibbles only show the first ten rows of as many columns as will fit on screen. We also see the column types. We can create tibbles manually in a nearly identical manner to data frames with <code>tibble()</code>.</p>
 <p>To convert a tibble to a regular data frame (to print the whole data set, for example), use <code>as.data.frame()</code>.</p>
 <p>To understand more about the data set, we use the <code>?</code> operator to pull up the documentation for the data. (You can use <code>??</code> to search the Internet for more info)</p>
-<div class="sourceCode" id="cb1402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1402-1"><a href="r-lab-2---basics-ii.html#cb1402-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ?mtcars</span></span>
-<span id="cb1402-2"><a href="r-lab-2---basics-ii.html#cb1402-2" aria-hidden="true" tabindex="-1"></a><span class="co"># #Results are not shown here</span></span>
-<span id="cb1402-3"><a href="r-lab-2---basics-ii.html#cb1402-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb1402-4"><a href="r-lab-2---basics-ii.html#cb1402-4" aria-hidden="true" tabindex="-1"></a><span class="co"># #To access each column</span></span>
-<span id="cb1402-5"><a href="r-lab-2---basics-ii.html#cb1402-5" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data$mpg</span></span>
-<span id="cb1402-6"><a href="r-lab-2---basics-ii.html#cb1402-6" aria-hidden="true" tabindex="-1"></a><span class="co"># #or</span></span>
-<span id="cb1402-7"><a href="r-lab-2---basics-ii.html#cb1402-7" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data[,1]</span></span></code></pre></div>
+<div class="sourceCode" id="cb1399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1399-1"><a href="r-lab-2---basics-ii.html#cb1399-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ?mtcars</span></span>
+<span id="cb1399-2"><a href="r-lab-2---basics-ii.html#cb1399-2" aria-hidden="true" tabindex="-1"></a><span class="co"># #Results are not shown here</span></span>
+<span id="cb1399-3"><a href="r-lab-2---basics-ii.html#cb1399-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1399-4"><a href="r-lab-2---basics-ii.html#cb1399-4" aria-hidden="true" tabindex="-1"></a><span class="co"># #To access each column</span></span>
+<span id="cb1399-5"><a href="r-lab-2---basics-ii.html#cb1399-5" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data$mpg</span></span>
+<span id="cb1399-6"><a href="r-lab-2---basics-ii.html#cb1399-6" aria-hidden="true" tabindex="-1"></a><span class="co"># #or</span></span>
+<span id="cb1399-7"><a href="r-lab-2---basics-ii.html#cb1399-7" aria-hidden="true" tabindex="-1"></a><span class="co"># example_data[,1]</span></span></code></pre></div>
 <p>After importing our data, a quick glance at the dataset can often tell us if the data were read in correctly.</p>
 <p>Use <code>head()</code> and <code>tail()</code> to look at a specified number of rows at the beginning or end of a dataset, respectively.</p>
 <p>Use <code>View()</code> on a dataset to open a spreadsheet-style view of a dataset. In RStuido, clicking on a dataset in the Environment pane will <code>View()</code> it.</p>
@@ -699,8 +699,8 @@ div.csl-indent {
 <div id="subsetting-data-frames" class="section level3 hasAnchor" number="35.1.4">
 <h3><span class="header-section-number">35.1.4</span> Subsetting Data Frames<a href="r-lab-2---basics-ii.html#subsetting-data-frames" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Subsetting data frames can work much like subsetting matrices using square brackets, <code>[,]</code>. Let’s use another data given in the <strong>ggplot2</strong> library.</p>
-<div class="sourceCode" id="cb1403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1403-1"><a href="r-lab-2---basics-ii.html#cb1403-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1403-2"><a href="r-lab-2---basics-ii.html#cb1403-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mpg, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1400-1"><a href="r-lab-2---basics-ii.html#cb1400-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1400-2"><a href="r-lab-2---basics-ii.html#cb1400-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mpg, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 10 × 11
 ##    manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
 ##    &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
@@ -714,7 +714,7 @@ div.csl-indent {
 ##  8 audi         a4 quattro   1.8  1999     4 manu… 4        18    26 p     comp…
 ##  9 audi         a4 quattro   1.8  1999     4 auto… 4        16    25 p     comp…
 ## 10 audi         a4 quattro   2    2008     4 manu… 4        20    28 p     comp…</code></pre>
-<div class="sourceCode" id="cb1405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1405-1"><a href="r-lab-2---basics-ii.html#cb1405-1" aria-hidden="true" tabindex="-1"></a>mpg[mpg<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="fu">c</span>(<span class="st">&quot;manufacturer&quot;</span>, <span class="st">&quot;model&quot;</span>, <span class="st">&quot;year&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb1402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1402-1"><a href="r-lab-2---basics-ii.html#cb1402-1" aria-hidden="true" tabindex="-1"></a>mpg[mpg<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="fu">c</span>(<span class="st">&quot;manufacturer&quot;</span>, <span class="st">&quot;model&quot;</span>, <span class="st">&quot;year&quot;</span>)]</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 3
 ##   manufacturer model       year
 ##   &lt;chr&gt;        &lt;chr&gt;      &lt;int&gt;
@@ -725,7 +725,7 @@ div.csl-indent {
 ## 5 volkswagen   new beetle  1999
 ## 6 volkswagen   new beetle  1999</code></pre>
 <p>An alternative would be to use the <code>subset()</code> function, which has a much more readable syntax.</p>
-<div class="sourceCode" id="cb1407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1407-1"><a href="r-lab-2---basics-ii.html#cb1407-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(mpg, <span class="at">subset =</span> hwy <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;manufacturer&quot;</span>, <span class="st">&quot;model&quot;</span>, <span class="st">&quot;year&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1404-1"><a href="r-lab-2---basics-ii.html#cb1404-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(mpg, <span class="at">subset =</span> hwy <span class="sc">&gt;</span> <span class="dv">35</span>, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;manufacturer&quot;</span>, <span class="st">&quot;model&quot;</span>, <span class="st">&quot;year&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 3
 ##   manufacturer model       year
 ##   &lt;chr&gt;        &lt;chr&gt;      &lt;int&gt;
@@ -736,16 +736,16 @@ div.csl-indent {
 ## 5 volkswagen   new beetle  1999
 ## 6 volkswagen   new beetle  1999</code></pre>
 <p>Lastly, we could use the filter and select functions from the <code>dplyr</code> package which introduces the <code>%&gt;%</code> operator from the magrittr package. This is not necessary for this book, however the dplyr package is something you should be aware of as it is becoming a popular tool in the R world.</p>
-<div class="sourceCode" id="cb1409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1409-1"><a href="r-lab-2---basics-ii.html#cb1409-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
-<span id="cb1409-2"><a href="r-lab-2---basics-ii.html#cb1409-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mpg %&gt;% filter(hwy &gt; 35) %&gt;% select(manufacturer, model, year)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1406-1"><a href="r-lab-2---basics-ii.html#cb1406-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(dplyr)</span></span>
+<span id="cb1406-2"><a href="r-lab-2---basics-ii.html#cb1406-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mpg %&gt;% filter(hwy &gt; 35) %&gt;% select(manufacturer, model, year)</span></span></code></pre></div>
 </div>
 <div id="plotting-from-data-frame" class="section level3 hasAnchor" number="35.1.5">
 <h3><span class="header-section-number">35.1.5</span> Plotting from data frame<a href="r-lab-2---basics-ii.html#plotting-from-data-frame" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>There are many good ways and packages for plotting. I’ll show you one here. Visualizing the relationship between multiple variables can get messy very quickly. Here is the <code>ggpairs()</code> function in the <strong>GGally</strong> package <span class="citation">(<a href="#ref-Tay_2019" role="doc-biblioref"><strong>Tay_2019?</strong></a>)</span>.</p>
-<div class="sourceCode" id="cb1410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1410-1"><a href="r-lab-2---basics-ii.html#cb1410-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  <span class="co">#install.packages(&quot;fueleconomy&quot;)</span></span>
-<span id="cb1410-2"><a href="r-lab-2---basics-ii.html#cb1410-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
-<span id="cb1410-3"><a href="r-lab-2---basics-ii.html#cb1410-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vehicles[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
-<span id="cb1410-4"><a href="r-lab-2---basics-ii.html#cb1410-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1407-1"><a href="r-lab-2---basics-ii.html#cb1407-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  <span class="co">#install.packages(&quot;fueleconomy&quot;)</span></span>
+<span id="cb1407-2"><a href="r-lab-2---basics-ii.html#cb1407-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
+<span id="cb1407-3"><a href="r-lab-2---basics-ii.html#cb1407-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vehicles[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
+<span id="cb1407-4"><a href="r-lab-2---basics-ii.html#cb1407-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
 <pre><code>## tibble [100 × 12] (S3: tbl_df/tbl/data.frame)
 ##  $ id   : num [1:100] 13309 13310 13311 14038 14039 ...
 ##  $ make : chr [1:100] &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; ...
@@ -760,61 +760,61 @@ div.csl-indent {
 ##  $ hwy  : num [1:100] 26 28 26 27 29 26 27 29 26 23 ...
 ##  $ cty  : num [1:100] 20 22 18 19 21 17 20 21 17 18 ...</code></pre>
 <p>Let’s see how <code>GGally::ggpairs()</code> visualizes relationships between quantitative variables:</p>
-<div class="sourceCode" id="cb1412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1412-1"><a href="r-lab-2---basics-ii.html#cb1412-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally) <span class="co">#install.packages(&quot;GGally&quot;)</span></span>
-<span id="cb1412-2"><a href="r-lab-2---basics-ii.html#cb1412-2" aria-hidden="true" tabindex="-1"></a>new_df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;hwy&quot;</span>, <span class="st">&quot;cty&quot;</span>)]</span>
-<span id="cb1412-3"><a href="r-lab-2---basics-ii.html#cb1412-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(new_df)</span></code></pre></div>
+<div class="sourceCode" id="cb1409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1409-1"><a href="r-lab-2---basics-ii.html#cb1409-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally) <span class="co">#install.packages(&quot;GGally&quot;)</span></span>
+<span id="cb1409-2"><a href="r-lab-2---basics-ii.html#cb1409-2" aria-hidden="true" tabindex="-1"></a>new_df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;hwy&quot;</span>, <span class="st">&quot;cty&quot;</span>)]</span>
+<span id="cb1409-3"><a href="r-lab-2---basics-ii.html#cb1409-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(new_df)</span></code></pre></div>
 <p><img src="32-RLab2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>The visualization changes a little when we have a mix of quantitative and categorical variables. Below, fuel is a categorical variable while hwy is a quantitative variable.</p>
-<div class="sourceCode" id="cb1413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1413-1"><a href="r-lab-2---basics-ii.html#cb1413-1" aria-hidden="true" tabindex="-1"></a>mixed_df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">&quot;fuel&quot;</span>, <span class="st">&quot;hwy&quot;</span>)]</span>
-<span id="cb1413-2"><a href="r-lab-2---basics-ii.html#cb1413-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(mixed_df)</span></code></pre></div>
+<div class="sourceCode" id="cb1410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1410-1"><a href="r-lab-2---basics-ii.html#cb1410-1" aria-hidden="true" tabindex="-1"></a>mixed_df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">&quot;fuel&quot;</span>, <span class="st">&quot;hwy&quot;</span>)]</span>
+<span id="cb1410-2"><a href="r-lab-2---basics-ii.html#cb1410-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(mixed_df)</span></code></pre></div>
 <p><img src="32-RLab2_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 <div id="some-useful-functions" class="section level3 hasAnchor" number="35.1.6">
 <h3><span class="header-section-number">35.1.6</span> Some useful functions<a href="r-lab-2---basics-ii.html#some-useful-functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb1414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1414-1"><a href="r-lab-2---basics-ii.html#cb1414-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">b=</span><span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">5</span>))</span>
-<span id="cb1414-2"><a href="r-lab-2---basics-ii.html#cb1414-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1414-3"><a href="r-lab-2---basics-ii.html#cb1414-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut a continuous variable into intervals with new integer</span></span>
-<span id="cb1414-4"><a href="r-lab-2---basics-ii.html#cb1414-4" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>c <span class="ot">&lt;-</span> <span class="fu">cut</span>(my_data<span class="sc">$</span>b, <span class="dv">3</span>)</span>
-<span id="cb1414-5"><a href="r-lab-2---basics-ii.html#cb1414-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
+<div class="sourceCode" id="cb1411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1411-1"><a href="r-lab-2---basics-ii.html#cb1411-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">b=</span><span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">5</span>))</span>
+<span id="cb1411-2"><a href="r-lab-2---basics-ii.html#cb1411-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1411-3"><a href="r-lab-2---basics-ii.html#cb1411-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut a continuous variable into intervals with new integer</span></span>
+<span id="cb1411-4"><a href="r-lab-2---basics-ii.html#cb1411-4" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>c <span class="ot">&lt;-</span> <span class="fu">cut</span>(my_data<span class="sc">$</span>b, <span class="dv">3</span>)</span>
+<span id="cb1411-5"><a href="r-lab-2---basics-ii.html#cb1411-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.0988 9.0976 7.3924 3.4291 8.1675 ...
-##  $ c: Factor w/ 3 levels &quot;(-0.222,4.03]&quot;,..: 1 3 2 1 2 3 1 1 3 2</code></pre>
-<div class="sourceCode" id="cb1416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1416-1"><a href="r-lab-2---basics-ii.html#cb1416-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizes variable (subtracts mean and divides by standard deviation)</span></span>
-<span id="cb1416-2"><a href="r-lab-2---basics-ii.html#cb1416-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>d <span class="ot">&lt;-</span> <span class="fu">scale</span>(my_data<span class="sc">$</span>a)</span>
-<span id="cb1416-3"><a href="r-lab-2---basics-ii.html#cb1416-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
+##  $ b: num  5.97 5.87 3.23 -2.99 7.46 ...
+##  $ c: Factor w/ 3 levels &quot;(-4.27,-0.351]&quot;,..: 3 3 2 1 3 1 2 1 1 2</code></pre>
+<div class="sourceCode" id="cb1413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1413-1"><a href="r-lab-2---basics-ii.html#cb1413-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizes variable (subtracts mean and divides by standard deviation)</span></span>
+<span id="cb1413-2"><a href="r-lab-2---basics-ii.html#cb1413-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>d <span class="ot">&lt;-</span> <span class="fu">scale</span>(my_data<span class="sc">$</span>a)</span>
+<span id="cb1413-3"><a href="r-lab-2---basics-ii.html#cb1413-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.0988 9.0976 7.3924 3.4291 8.1675 ...
-##  $ c: Factor w/ 3 levels &quot;(-0.222,4.03]&quot;,..: 1 3 2 1 2 3 1 1 3 2
+##  $ b: num  5.97 5.87 3.23 -2.99 7.46 ...
+##  $ c: Factor w/ 3 levels &quot;(-4.27,-0.351]&quot;,..: 3 3 2 1 3 1 2 1 1 2
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, &quot;scaled:center&quot;)= num 5.5
 ##   ..- attr(*, &quot;scaled:scale&quot;)= num 3.03</code></pre>
-<div class="sourceCode" id="cb1418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1418-1"><a href="r-lab-2---basics-ii.html#cb1418-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lag, lead and cumulative sum a variable</span></span>
-<span id="cb1418-2"><a href="r-lab-2---basics-ii.html#cb1418-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1418-3"><a href="r-lab-2---basics-ii.html#cb1418-3" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>f <span class="ot">&lt;-</span> <span class="fu">lag</span>(my_data<span class="sc">$</span>d, <span class="at">n=</span>1L) </span>
-<span id="cb1418-4"><a href="r-lab-2---basics-ii.html#cb1418-4" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>g <span class="ot">&lt;-</span> <span class="fu">lead</span>(my_data<span class="sc">$</span>d, <span class="at">n=</span>1L) </span>
-<span id="cb1418-5"><a href="r-lab-2---basics-ii.html#cb1418-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>h <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(my_data<span class="sc">$</span>d) </span>
-<span id="cb1418-6"><a href="r-lab-2---basics-ii.html#cb1418-6" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
-<pre><code>##     a          b             c          d          f          g         h
-## 1   1  0.0988481 (-0.222,4.03] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  9.0975741   (8.27,12.5] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  7.3924246   (4.03,8.27] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  3.4291283 (-0.222,4.03] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  8.1675462   (4.03,8.27] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 12.5122879   (8.27,12.5]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7 -0.2089059 (-0.222,4.03]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  0.1311510 (-0.222,4.03]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  9.4883630   (8.27,12.5]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  4.6752521   (4.03,8.27]  1.4863011  1.1560120         NA  0.000000</code></pre>
+<div class="sourceCode" id="cb1415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1415-1"><a href="r-lab-2---basics-ii.html#cb1415-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lag, lead and cumulative sum a variable</span></span>
+<span id="cb1415-2"><a href="r-lab-2---basics-ii.html#cb1415-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1415-3"><a href="r-lab-2---basics-ii.html#cb1415-3" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>f <span class="ot">&lt;-</span> <span class="fu">lag</span>(my_data<span class="sc">$</span>d, <span class="at">n=</span>1L) </span>
+<span id="cb1415-4"><a href="r-lab-2---basics-ii.html#cb1415-4" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>g <span class="ot">&lt;-</span> <span class="fu">lead</span>(my_data<span class="sc">$</span>d, <span class="at">n=</span>1L) </span>
+<span id="cb1415-5"><a href="r-lab-2---basics-ii.html#cb1415-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>h <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(my_data<span class="sc">$</span>d) </span>
+<span id="cb1415-6"><a href="r-lab-2---basics-ii.html#cb1415-6" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
+<pre><code>##     a          b              c          d          f          g         h
+## 1   1  5.9677859    (3.55,7.47] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  5.8739977    (3.55,7.47] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  3.2328940  (-0.351,3.55] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4 -2.9907594 (-4.27,-0.351] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  7.4604066    (3.55,7.47] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 -2.6411840 (-4.27,-0.351]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  1.1561730  (-0.351,3.55]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8 -4.2563868 (-4.27,-0.351]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9 -0.9997816 (-4.27,-0.351]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10  0.9723056  (-0.351,3.55]  1.4863011  1.1560120         NA  0.000000</code></pre>
 </div>
 <div id="categorical-variables-in-data-frames" class="section level3 hasAnchor" number="35.1.7">
 <h3><span class="header-section-number">35.1.7</span> Categorical Variables in Data Frames<a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s create a very simple data frame.</p>
-<div class="sourceCode" id="cb1420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1420-1"><a href="r-lab-2---basics-ii.html#cb1420-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender=</span><span class="fu">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, </span>
-<span id="cb1420-2"><a href="r-lab-2---basics-ii.html#cb1420-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>),</span>
-<span id="cb1420-3"><a href="r-lab-2---basics-ii.html#cb1420-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">numbers=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>, <span class="fl">0.5</span>, <span class="dv">11</span>, <span class="sc">-</span><span class="dv">1</span>))</span>
-<span id="cb1420-4"><a href="r-lab-2---basics-ii.html#cb1420-4" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div>
+<div class="sourceCode" id="cb1417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1417-1"><a href="r-lab-2---basics-ii.html#cb1417-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gender=</span><span class="fu">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, </span>
+<span id="cb1417-2"><a href="r-lab-2---basics-ii.html#cb1417-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>),</span>
+<span id="cb1417-3"><a href="r-lab-2---basics-ii.html#cb1417-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">numbers=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>, <span class="fl">0.5</span>, <span class="dv">11</span>, <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb1417-4"><a href="r-lab-2---basics-ii.html#cb1417-4" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div>
 <pre><code>##   gender numbers
 ## 1   male     1.0
 ## 2 female     2.0
@@ -822,27 +822,27 @@ div.csl-indent {
 ## 4 female     0.5
 ## 5 female    11.0
 ## 6   male    -1.0</code></pre>
-<div class="sourceCode" id="cb1422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1422-1"><a href="r-lab-2---basics-ii.html#cb1422-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(b)</span></code></pre></div>
+<div class="sourceCode" id="cb1419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1419-1"><a href="r-lab-2---basics-ii.html#cb1419-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(b)</span></code></pre></div>
 <pre><code>## [1] 6 2</code></pre>
-<div class="sourceCode" id="cb1424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1424-1"><a href="r-lab-2---basics-ii.html#cb1424-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
+<div class="sourceCode" id="cb1421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1421-1"><a href="r-lab-2---basics-ii.html#cb1421-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    6 obs. of  2 variables:
 ##  $ gender : chr  &quot;male&quot; &quot;female&quot; &quot;female&quot; &quot;female&quot; ...
 ##  $ numbers: num  1 2 3 0.5 11 -1</code></pre>
 <p>Why does say “levels” in the output? Because by default, character vectors are converted to factors in <code>data.frame()</code>.
 If you want to convert them to back to characters.</p>
-<div class="sourceCode" id="cb1426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1426-1"><a href="r-lab-2---basics-ii.html#cb1426-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(b<span class="sc">$</span>gender) <span class="co"># Distribution of gender</span></span></code></pre></div>
+<div class="sourceCode" id="cb1423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1423-1"><a href="r-lab-2---basics-ii.html#cb1423-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(b<span class="sc">$</span>gender) <span class="co"># Distribution of gender</span></span></code></pre></div>
 <pre><code>## 
 ## female   male 
 ##      4      2</code></pre>
-<div class="sourceCode" id="cb1428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1428-1"><a href="r-lab-2---basics-ii.html#cb1428-1" aria-hidden="true" tabindex="-1"></a><span class="co"># back to character</span></span>
-<span id="cb1428-2"><a href="r-lab-2---basics-ii.html#cb1428-2" aria-hidden="true" tabindex="-1"></a>b<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">as.character</span>(b<span class="sc">$</span>gender)</span>
-<span id="cb1428-3"><a href="r-lab-2---basics-ii.html#cb1428-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
+<div class="sourceCode" id="cb1425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1425-1"><a href="r-lab-2---basics-ii.html#cb1425-1" aria-hidden="true" tabindex="-1"></a><span class="co"># back to character</span></span>
+<span id="cb1425-2"><a href="r-lab-2---basics-ii.html#cb1425-2" aria-hidden="true" tabindex="-1"></a>b<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">as.character</span>(b<span class="sc">$</span>gender)</span>
+<span id="cb1425-3"><a href="r-lab-2---basics-ii.html#cb1425-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    6 obs. of  2 variables:
 ##  $ gender : chr  &quot;male&quot; &quot;female&quot; &quot;female&quot; &quot;female&quot; ...
 ##  $ numbers: num  1 2 3 0.5 11 -1</code></pre>
-<div class="sourceCode" id="cb1430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1430-1"><a href="r-lab-2---basics-ii.html#cb1430-1" aria-hidden="true" tabindex="-1"></a><span class="co"># back to factor</span></span>
-<span id="cb1430-2"><a href="r-lab-2---basics-ii.html#cb1430-2" aria-hidden="true" tabindex="-1"></a>b<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(b<span class="sc">$</span>gender)</span>
-<span id="cb1430-3"><a href="r-lab-2---basics-ii.html#cb1430-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
+<div class="sourceCode" id="cb1427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1427-1"><a href="r-lab-2---basics-ii.html#cb1427-1" aria-hidden="true" tabindex="-1"></a><span class="co"># back to factor</span></span>
+<span id="cb1427-2"><a href="r-lab-2---basics-ii.html#cb1427-2" aria-hidden="true" tabindex="-1"></a>b<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(b<span class="sc">$</span>gender)</span>
+<span id="cb1427-3"><a href="r-lab-2---basics-ii.html#cb1427-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(b)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    6 obs. of  2 variables:
 ##  $ gender : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 1 1 2
 ##  $ numbers: num  1 2 3 0.5 11 -1</code></pre>
@@ -860,109 +860,109 @@ If you want to convert them to back to characters.</p>
 <strong>more R code</strong><br />
 <code>}</code></p>
 <p>Here is a simple example:</p>
-<div class="sourceCode" id="cb1432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1432-1"><a href="r-lab-2---basics-ii.html#cb1432-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;what&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;truth&quot;</span>)</span>
-<span id="cb1432-2"><a href="r-lab-2---basics-ii.html#cb1432-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1432-3"><a href="r-lab-2---basics-ii.html#cb1432-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="st">&quot;Truth&quot;</span> <span class="sc">%in%</span> x) {</span>
-<span id="cb1432-4"><a href="r-lab-2---basics-ii.html#cb1432-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">&quot;Truth is found&quot;</span>)</span>
-<span id="cb1432-5"><a href="r-lab-2---basics-ii.html#cb1432-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb1432-6"><a href="r-lab-2---basics-ii.html#cb1432-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">&quot;Truth is not found&quot;</span>)</span>
-<span id="cb1432-7"><a href="r-lab-2---basics-ii.html#cb1432-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1429-1"><a href="r-lab-2---basics-ii.html#cb1429-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;what&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;truth&quot;</span>)</span>
+<span id="cb1429-2"><a href="r-lab-2---basics-ii.html#cb1429-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1429-3"><a href="r-lab-2---basics-ii.html#cb1429-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="st">&quot;Truth&quot;</span> <span class="sc">%in%</span> x) {</span>
+<span id="cb1429-4"><a href="r-lab-2---basics-ii.html#cb1429-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">&quot;Truth is found&quot;</span>)</span>
+<span id="cb1429-5"><a href="r-lab-2---basics-ii.html#cb1429-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1429-6"><a href="r-lab-2---basics-ii.html#cb1429-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="st">&quot;Truth is not found&quot;</span>)</span>
+<span id="cb1429-7"><a href="r-lab-2---basics-ii.html#cb1429-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;Truth is not found&quot;</code></pre>
 <p>How about this:</p>
-<div class="sourceCode" id="cb1434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1434-1"><a href="r-lab-2---basics-ii.html#cb1434-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb1434-2"><a href="r-lab-2---basics-ii.html#cb1434-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1434-3"><a href="r-lab-2---basics-ii.html#cb1434-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Here is a nice if/Else</span></span>
-<span id="cb1434-4"><a href="r-lab-2---basics-ii.html#cb1434-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(x[x<span class="sc">==</span>a])<span class="sc">&gt;</span><span class="dv">0</span>) {</span>
-<span id="cb1434-5"><a href="r-lab-2---basics-ii.html#cb1434-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x has&quot;</span>, <span class="fu">length</span>(x[x<span class="sc">==</span>a]), a))</span>
-<span id="cb1434-6"><a href="r-lab-2---basics-ii.html#cb1434-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb1434-7"><a href="r-lab-2---basics-ii.html#cb1434-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x doesn&#39;t have any&quot;</span>, a))</span>
-<span id="cb1434-8"><a href="r-lab-2---basics-ii.html#cb1434-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1431-1"><a href="r-lab-2---basics-ii.html#cb1431-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb1431-2"><a href="r-lab-2---basics-ii.html#cb1431-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1431-3"><a href="r-lab-2---basics-ii.html#cb1431-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Here is a nice if/Else</span></span>
+<span id="cb1431-4"><a href="r-lab-2---basics-ii.html#cb1431-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(x[x<span class="sc">==</span>a])<span class="sc">&gt;</span><span class="dv">0</span>) {</span>
+<span id="cb1431-5"><a href="r-lab-2---basics-ii.html#cb1431-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x has&quot;</span>, <span class="fu">length</span>(x[x<span class="sc">==</span>a]), a))</span>
+<span id="cb1431-6"><a href="r-lab-2---basics-ii.html#cb1431-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1431-7"><a href="r-lab-2---basics-ii.html#cb1431-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x doesn&#39;t have any&quot;</span>, a))</span>
+<span id="cb1431-8"><a href="r-lab-2---basics-ii.html#cb1431-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;x doesn&#39;t have any 3&quot;</code></pre>
-<div class="sourceCode" id="cb1436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1436-1"><a href="r-lab-2---basics-ii.html#cb1436-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Another one with pipping</span></span>
-<span id="cb1436-2"><a href="r-lab-2---basics-ii.html#cb1436-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb1436-3"><a href="r-lab-2---basics-ii.html#cb1436-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(a <span class="sc">%in%</span> x) {</span>
-<span id="cb1436-4"><a href="r-lab-2---basics-ii.html#cb1436-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x has&quot;</span>, <span class="fu">length</span>(x[x<span class="sc">==</span>a]), a))</span>
-<span id="cb1436-5"><a href="r-lab-2---basics-ii.html#cb1436-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb1436-6"><a href="r-lab-2---basics-ii.html#cb1436-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x doesn&#39;t have any&quot;</span>, a))</span>
-<span id="cb1436-7"><a href="r-lab-2---basics-ii.html#cb1436-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1433-1"><a href="r-lab-2---basics-ii.html#cb1433-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Another one with pipping</span></span>
+<span id="cb1433-2"><a href="r-lab-2---basics-ii.html#cb1433-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb1433-3"><a href="r-lab-2---basics-ii.html#cb1433-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(a <span class="sc">%in%</span> x) {</span>
+<span id="cb1433-4"><a href="r-lab-2---basics-ii.html#cb1433-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x has&quot;</span>, <span class="fu">length</span>(x[x<span class="sc">==</span>a]), a))</span>
+<span id="cb1433-5"><a href="r-lab-2---basics-ii.html#cb1433-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1433-6"><a href="r-lab-2---basics-ii.html#cb1433-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;x doesn&#39;t have any&quot;</span>, a))</span>
+<span id="cb1433-7"><a href="r-lab-2---basics-ii.html#cb1433-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;x has 2 4&quot;</code></pre>
 <p>Nested conditions:</p>
-<div class="sourceCode" id="cb1438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1438-1"><a href="r-lab-2---basics-ii.html#cb1438-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers to see all conditions</span></span>
-<span id="cb1438-2"><a href="r-lab-2---basics-ii.html#cb1438-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1438-3"><a href="r-lab-2---basics-ii.html#cb1438-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb1438-4"><a href="r-lab-2---basics-ii.html#cb1438-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> y<span class="sc">!=</span> <span class="dv">0</span>) {</span>
-<span id="cb1438-5"><a href="r-lab-2---basics-ii.html#cb1438-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;a number cannot be divided by zero&quot;</span>)</span>
-<span id="cb1438-6"><a href="r-lab-2---basics-ii.html#cb1438-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> y <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb1438-7"><a href="r-lab-2---basics-ii.html#cb1438-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;a zero cannot be divided by zero&quot;</span>)</span>
-<span id="cb1438-8"><a href="r-lab-2---basics-ii.html#cb1438-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb1438-9"><a href="r-lab-2---basics-ii.html#cb1438-9" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> y<span class="sc">/</span>x </span>
-<span id="cb1438-10"><a href="r-lab-2---basics-ii.html#cb1438-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;y/x = &quot;</span>, a))</span>
-<span id="cb1438-11"><a href="r-lab-2---basics-ii.html#cb1438-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1435-1"><a href="r-lab-2---basics-ii.html#cb1435-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers to see all conditions</span></span>
+<span id="cb1435-2"><a href="r-lab-2---basics-ii.html#cb1435-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1435-3"><a href="r-lab-2---basics-ii.html#cb1435-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb1435-4"><a href="r-lab-2---basics-ii.html#cb1435-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> y<span class="sc">!=</span> <span class="dv">0</span>) {</span>
+<span id="cb1435-5"><a href="r-lab-2---basics-ii.html#cb1435-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;a number cannot be divided by zero&quot;</span>)</span>
+<span id="cb1435-6"><a href="r-lab-2---basics-ii.html#cb1435-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> y <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb1435-7"><a href="r-lab-2---basics-ii.html#cb1435-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;a zero cannot be divided by zero&quot;</span>)</span>
+<span id="cb1435-8"><a href="r-lab-2---basics-ii.html#cb1435-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1435-9"><a href="r-lab-2---basics-ii.html#cb1435-9" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> y<span class="sc">/</span>x </span>
+<span id="cb1435-10"><a href="r-lab-2---basics-ii.html#cb1435-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;y/x = &quot;</span>, a))</span>
+<span id="cb1435-11"><a href="r-lab-2---basics-ii.html#cb1435-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;a number cannot be divided by zero&quot;</code></pre>
 <p>A simpler, one-line <code>ifelse</code>!</p>
-<div class="sourceCode" id="cb1440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1440-1"><a href="r-lab-2---basics-ii.html#cb1440-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers</span></span>
-<span id="cb1440-2"><a href="r-lab-2---basics-ii.html#cb1440-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1440-3"><a href="r-lab-2---basics-ii.html#cb1440-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb1440-4"><a href="r-lab-2---basics-ii.html#cb1440-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span> (x <span class="sc">&gt;</span> y, <span class="st">&quot;x is bigger than y&quot;</span>, <span class="st">&quot;y is bigger than x&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1437-1"><a href="r-lab-2---basics-ii.html#cb1437-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers</span></span>
+<span id="cb1437-2"><a href="r-lab-2---basics-ii.html#cb1437-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1437-3"><a href="r-lab-2---basics-ii.html#cb1437-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb1437-4"><a href="r-lab-2---basics-ii.html#cb1437-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span> (x <span class="sc">&gt;</span> y, <span class="st">&quot;x is bigger than y&quot;</span>, <span class="st">&quot;y is bigger than x&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;y is bigger than x&quot;</code></pre>
-<div class="sourceCode" id="cb1442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1442-1"><a href="r-lab-2---basics-ii.html#cb1442-1" aria-hidden="true" tabindex="-1"></a><span class="co">#more, because the ifelse will fail if x = y.  Try it!</span></span>
-<span id="cb1442-2"><a href="r-lab-2---basics-ii.html#cb1442-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span> (x <span class="sc">==</span> y, <span class="st">&quot;x is the same as y&quot;</span>,</span>
-<span id="cb1442-3"><a href="r-lab-2---basics-ii.html#cb1442-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(x <span class="sc">&gt;</span> y, <span class="st">&quot;x is bigger than y&quot;</span>, <span class="st">&quot;y is bigger than x&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1439-1"><a href="r-lab-2---basics-ii.html#cb1439-1" aria-hidden="true" tabindex="-1"></a><span class="co">#more, because the ifelse will fail if x = y.  Try it!</span></span>
+<span id="cb1439-2"><a href="r-lab-2---basics-ii.html#cb1439-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span> (x <span class="sc">==</span> y, <span class="st">&quot;x is the same as y&quot;</span>,</span>
+<span id="cb1439-3"><a href="r-lab-2---basics-ii.html#cb1439-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(x <span class="sc">&gt;</span> y, <span class="st">&quot;x is bigger than y&quot;</span>, <span class="st">&quot;y is bigger than x&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;y is bigger than x&quot;</code></pre>
 <p>A simpler, without else!</p>
+<div class="sourceCode" id="cb1441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1441-1"><a href="r-lab-2---basics-ii.html#cb1441-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1441-2"><a href="r-lab-2---basics-ii.html#cb1441-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb1441-3"><a href="r-lab-2---basics-ii.html#cb1441-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;w is bigger than z&quot;</span>)</span>
+<span id="cb1441-4"><a href="r-lab-2---basics-ii.html#cb1441-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1441-5"><a href="r-lab-2---basics-ii.html#cb1441-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers</span></span>
+<span id="cb1441-6"><a href="r-lab-2---basics-ii.html#cb1441-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb1441-7"><a href="r-lab-2---basics-ii.html#cb1441-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1441-8"><a href="r-lab-2---basics-ii.html#cb1441-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;x is bigger than y&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;x is bigger than y&quot;</code></pre>
+<div class="sourceCode" id="cb1443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1443-1"><a href="r-lab-2---basics-ii.html#cb1443-1" aria-hidden="true" tabindex="-1"></a><span class="co">#See that both of them moves to the next line.</span></span></code></pre></div>
+<p>Building multiple conditions without else (it’s a silly example!):</p>
 <div class="sourceCode" id="cb1444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1444-1"><a href="r-lab-2---basics-ii.html#cb1444-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb1444-2"><a href="r-lab-2---basics-ii.html#cb1444-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb1444-3"><a href="r-lab-2---basics-ii.html#cb1444-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;w is bigger than z&quot;</span>)</span>
-<span id="cb1444-4"><a href="r-lab-2---basics-ii.html#cb1444-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1444-5"><a href="r-lab-2---basics-ii.html#cb1444-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Change the numbers</span></span>
-<span id="cb1444-6"><a href="r-lab-2---basics-ii.html#cb1444-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
-<span id="cb1444-7"><a href="r-lab-2---basics-ii.html#cb1444-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1444-8"><a href="r-lab-2---basics-ii.html#cb1444-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;x is bigger than y&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;x is bigger than y&quot;</code></pre>
-<div class="sourceCode" id="cb1446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1446-1"><a href="r-lab-2---basics-ii.html#cb1446-1" aria-hidden="true" tabindex="-1"></a><span class="co">#See that both of them moves to the next line.</span></span></code></pre></div>
-<p>Building multiple conditions without else (it’s a silly example!):</p>
-<div class="sourceCode" id="cb1447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1447-1"><a href="r-lab-2---basics-ii.html#cb1447-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1447-2"><a href="r-lab-2---basics-ii.html#cb1447-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb1447-3"><a href="r-lab-2---basics-ii.html#cb1447-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
-<span id="cb1447-4"><a href="r-lab-2---basics-ii.html#cb1447-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1447-5"><a href="r-lab-2---basics-ii.html#cb1447-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;z is bigger than w&quot;</span>)</span>
-<span id="cb1447-6"><a href="r-lab-2---basics-ii.html#cb1447-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(w <span class="sc">&gt;</span> z) <span class="fu">print</span>(<span class="st">&quot;w is bigger than z&quot;</span>)</span></code></pre></div>
+<span id="cb1444-3"><a href="r-lab-2---basics-ii.html#cb1444-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb1444-4"><a href="r-lab-2---basics-ii.html#cb1444-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1444-5"><a href="r-lab-2---basics-ii.html#cb1444-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;z is bigger than w&quot;</span>)</span>
+<span id="cb1444-6"><a href="r-lab-2---basics-ii.html#cb1444-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(w <span class="sc">&gt;</span> z) <span class="fu">print</span>(<span class="st">&quot;w is bigger than z&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;w is bigger than z&quot;</code></pre>
-<div class="sourceCode" id="cb1449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1449-1"><a href="r-lab-2---basics-ii.html#cb1449-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;x is bigger than y&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1446-1"><a href="r-lab-2---basics-ii.html#cb1446-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;x is bigger than y&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;x is bigger than y&quot;</code></pre>
-<div class="sourceCode" id="cb1451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1451-1"><a href="r-lab-2---basics-ii.html#cb1451-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(y <span class="sc">&gt;</span> x) <span class="fu">print</span>(<span class="st">&quot;y is bigger than x&quot;</span>)</span>
-<span id="cb1451-2"><a href="r-lab-2---basics-ii.html#cb1451-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> x) <span class="fu">print</span>(<span class="st">&quot;z is bigger than x&quot;</span>)</span>
-<span id="cb1451-3"><a href="r-lab-2---basics-ii.html#cb1451-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> z) <span class="fu">print</span>(<span class="st">&quot;x is bigger than z&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1448-1"><a href="r-lab-2---basics-ii.html#cb1448-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(y <span class="sc">&gt;</span> x) <span class="fu">print</span>(<span class="st">&quot;y is bigger than x&quot;</span>)</span>
+<span id="cb1448-2"><a href="r-lab-2---basics-ii.html#cb1448-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(z <span class="sc">&gt;</span> x) <span class="fu">print</span>(<span class="st">&quot;z is bigger than x&quot;</span>)</span>
+<span id="cb1448-3"><a href="r-lab-2---basics-ii.html#cb1448-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(x <span class="sc">&gt;</span> z) <span class="fu">print</span>(<span class="st">&quot;x is bigger than z&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;x is bigger than z&quot;</code></pre>
-<div class="sourceCode" id="cb1453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1453-1"><a href="r-lab-2---basics-ii.html#cb1453-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(w <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;w is bigger than y&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1450-1"><a href="r-lab-2---basics-ii.html#cb1450-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(w <span class="sc">&gt;</span> y) <span class="fu">print</span>(<span class="st">&quot;w is bigger than y&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;w is bigger than y&quot;</code></pre>
-<div class="sourceCode" id="cb1455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1455-1"><a href="r-lab-2---basics-ii.html#cb1455-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(y <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;y is bigger than w&quot;</span>)</span>
-<span id="cb1455-2"><a href="r-lab-2---basics-ii.html#cb1455-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1455-3"><a href="r-lab-2---basics-ii.html#cb1455-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Try it with if-else.</span></span></code></pre></div>
+<div class="sourceCode" id="cb1452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1452-1"><a href="r-lab-2---basics-ii.html#cb1452-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(y <span class="sc">&gt;</span> w) <span class="fu">print</span>(<span class="st">&quot;y is bigger than w&quot;</span>)</span>
+<span id="cb1452-2"><a href="r-lab-2---basics-ii.html#cb1452-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1452-3"><a href="r-lab-2---basics-ii.html#cb1452-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Try it with if-else.</span></span></code></pre></div>
 <p>The <code>ifelse()</code> function only allows for one “if” statement, two cases. You could add nested “if” statements, but that’s just a pain, especially if the 3+ conditions you want to use are all on the same level, conceptually. Is there a way to specify multiple conditions at the same time?</p>
 <p><code>dplyr()</code> is the most powerful library for data management. When you have time, read more about it!<br />
 Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)" class="uri">https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)</a></p>
-<div class="sourceCode" id="cb1456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1456-1"><a href="r-lab-2---basics-ii.html#cb1456-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Let&#39;s create a data frame:</span></span>
-<span id="cb1456-2"><a href="r-lab-2---basics-ii.html#cb1456-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;name&quot;</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Kaija&quot;</span>, <span class="st">&quot;Ella&quot;</span>, <span class="st">&quot;Andis&quot;</span>), <span class="st">&quot;test1&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>),</span>
-<span id="cb1456-3"><a href="r-lab-2---basics-ii.html#cb1456-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
-<span id="cb1456-4"><a href="r-lab-2---basics-ii.html#cb1456-4" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div>
+<div class="sourceCode" id="cb1453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1453-1"><a href="r-lab-2---basics-ii.html#cb1453-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Let&#39;s create a data frame:</span></span>
+<span id="cb1453-2"><a href="r-lab-2---basics-ii.html#cb1453-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;name&quot;</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Kaija&quot;</span>, <span class="st">&quot;Ella&quot;</span>, <span class="st">&quot;Andis&quot;</span>), <span class="st">&quot;test1&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>),</span>
+<span id="cb1453-3"><a href="r-lab-2---basics-ii.html#cb1453-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb1453-4"><a href="r-lab-2---basics-ii.html#cb1453-4" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div>
 <pre><code>##    name test1 test2
 ## 1 Kaija FALSE FALSE
 ## 2  Ella  TRUE FALSE
 ## 3 Andis  TRUE  TRUE</code></pre>
-<div class="sourceCode" id="cb1458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1458-1"><a href="r-lab-2---basics-ii.html#cb1458-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose we want  separate the people into three groups:</span></span>
-<span id="cb1458-2"><a href="r-lab-2---basics-ii.html#cb1458-2" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed both tests: Group A</span></span>
-<span id="cb1458-3"><a href="r-lab-2---basics-ii.html#cb1458-3" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed one test: Group B</span></span>
-<span id="cb1458-4"><a href="r-lab-2---basics-ii.html#cb1458-4" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed neither test: Group C</span></span>
-<span id="cb1458-5"><a href="r-lab-2---basics-ii.html#cb1458-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1458-6"><a href="r-lab-2---basics-ii.html#cb1458-6" aria-hidden="true" tabindex="-1"></a><span class="co">#dplyr has a function for exactly this purpose: case_when().</span></span>
-<span id="cb1458-7"><a href="r-lab-2---basics-ii.html#cb1458-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1458-8"><a href="r-lab-2---basics-ii.html#cb1458-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
-<span id="cb1458-9"><a href="r-lab-2---basics-ii.html#cb1458-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">case_when</span>(test1 <span class="sc">&amp;</span> test2 <span class="sc">~</span> <span class="st">&quot;A&quot;</span>, <span class="co"># both tests: group A</span></span>
-<span id="cb1458-10"><a href="r-lab-2---basics-ii.html#cb1458-10" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">xor</span>(test1, test2) <span class="sc">~</span> <span class="st">&quot;B&quot;</span>, <span class="co"># one test: group B</span></span>
-<span id="cb1458-11"><a href="r-lab-2---basics-ii.html#cb1458-11" aria-hidden="true" tabindex="-1"></a>                         <span class="sc">!</span>test1 <span class="sc">&amp;</span> <span class="sc">!</span>test2 <span class="sc">~</span> <span class="st">&quot;C&quot;</span> <span class="co"># neither test: group C</span></span>
-<span id="cb1458-12"><a href="r-lab-2---basics-ii.html#cb1458-12" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb1458-13"><a href="r-lab-2---basics-ii.html#cb1458-13" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div>
+<div class="sourceCode" id="cb1455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1455-1"><a href="r-lab-2---basics-ii.html#cb1455-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose we want  separate the people into three groups:</span></span>
+<span id="cb1455-2"><a href="r-lab-2---basics-ii.html#cb1455-2" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed both tests: Group A</span></span>
+<span id="cb1455-3"><a href="r-lab-2---basics-ii.html#cb1455-3" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed one test: Group B</span></span>
+<span id="cb1455-4"><a href="r-lab-2---basics-ii.html#cb1455-4" aria-hidden="true" tabindex="-1"></a><span class="co">#People who passed neither test: Group C</span></span>
+<span id="cb1455-5"><a href="r-lab-2---basics-ii.html#cb1455-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1455-6"><a href="r-lab-2---basics-ii.html#cb1455-6" aria-hidden="true" tabindex="-1"></a><span class="co">#dplyr has a function for exactly this purpose: case_when().</span></span>
+<span id="cb1455-7"><a href="r-lab-2---basics-ii.html#cb1455-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1455-8"><a href="r-lab-2---basics-ii.html#cb1455-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb1455-9"><a href="r-lab-2---basics-ii.html#cb1455-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">case_when</span>(test1 <span class="sc">&amp;</span> test2 <span class="sc">~</span> <span class="st">&quot;A&quot;</span>, <span class="co"># both tests: group A</span></span>
+<span id="cb1455-10"><a href="r-lab-2---basics-ii.html#cb1455-10" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">xor</span>(test1, test2) <span class="sc">~</span> <span class="st">&quot;B&quot;</span>, <span class="co"># one test: group B</span></span>
+<span id="cb1455-11"><a href="r-lab-2---basics-ii.html#cb1455-11" aria-hidden="true" tabindex="-1"></a>                         <span class="sc">!</span>test1 <span class="sc">&amp;</span> <span class="sc">!</span>test2 <span class="sc">~</span> <span class="st">&quot;C&quot;</span> <span class="co"># neither test: group C</span></span>
+<span id="cb1455-12"><a href="r-lab-2---basics-ii.html#cb1455-12" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1455-13"><a href="r-lab-2---basics-ii.html#cb1455-13" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div>
 <pre><code>##    name test1 test2 group
 ## 1 Kaija FALSE FALSE     C
 ## 2  Ella  TRUE FALSE     B
@@ -972,53 +972,53 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <h3><span class="header-section-number">35.2.2</span> Loops<a href="r-lab-2---basics-ii.html#loops" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>What would you do if you needed to execute a block of code multiple times? In general, statements are executed sequentially. A loop statement allows us to execute a statement or group of statements multiple times and the following is the general form of a loop statement in most programming languages. There are 3 main loop types: <code>while()</code>, <code>for()</code>, <code>repeat()</code>.</p>
 <p>Here are some examples for <code>for()</code> loop:</p>
-<div class="sourceCode" id="cb1460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1460-1"><a href="r-lab-2---basics-ii.html#cb1460-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
-<span id="cb1460-2"><a href="r-lab-2---basics-ii.html#cb1460-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1460-3"><a href="r-lab-2---basics-ii.html#cb1460-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)) {</span>
-<span id="cb1460-4"><a href="r-lab-2---basics-ii.html#cb1460-4" aria-hidden="true" tabindex="-1"></a>  x[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb1460-5"><a href="r-lab-2---basics-ii.html#cb1460-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1460-6"><a href="r-lab-2---basics-ii.html#cb1460-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1460-7"><a href="r-lab-2---basics-ii.html#cb1460-7" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1457-1"><a href="r-lab-2---basics-ii.html#cb1457-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb1457-2"><a href="r-lab-2---basics-ii.html#cb1457-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1457-3"><a href="r-lab-2---basics-ii.html#cb1457-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)) {</span>
+<span id="cb1457-4"><a href="r-lab-2---basics-ii.html#cb1457-4" aria-hidden="true" tabindex="-1"></a>  x[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb1457-5"><a href="r-lab-2---basics-ii.html#cb1457-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1457-6"><a href="r-lab-2---basics-ii.html#cb1457-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1457-7"><a href="r-lab-2---basics-ii.html#cb1457-7" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## [1]  6 -2  8  4 20 10</code></pre>
 <p>Note that this just for an example. If we want to multiply each element of a vector by 2, a loop isn’t the best way. Although it is very normal in many programming languages, we would simply use a vectorized operation in R.</p>
-<div class="sourceCode" id="cb1462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1462-1"><a href="r-lab-2---basics-ii.html#cb1462-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
-<span id="cb1462-2"><a href="r-lab-2---basics-ii.html#cb1462-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb1462-3"><a href="r-lab-2---basics-ii.html#cb1462-3" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1459-1"><a href="r-lab-2---basics-ii.html#cb1459-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb1459-2"><a href="r-lab-2---basics-ii.html#cb1459-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb1459-3"><a href="r-lab-2---basics-ii.html#cb1459-3" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## [1]  6 -2  8  4 20 10</code></pre>
 <p>But some times it would be very handy:</p>
-<div class="sourceCode" id="cb1464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1464-1"><a href="r-lab-2---basics-ii.html#cb1464-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the element in x is not zero, multiply it with the subsequent element</span></span>
-<span id="cb1464-2"><a href="r-lab-2---basics-ii.html#cb1464-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1464-3"><a href="r-lab-2---basics-ii.html#cb1464-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
-<span id="cb1464-4"><a href="r-lab-2---basics-ii.html#cb1464-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)) {</span>
-<span id="cb1464-5"><a href="r-lab-2---basics-ii.html#cb1464-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(x[i] <span class="sc">&gt;</span> <span class="dv">0</span>,  x[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> x[i <span class="sc">+</span> <span class="dv">1</span>], x[i] <span class="ot">&lt;-</span> <span class="dv">0</span>)  </span>
-<span id="cb1464-6"><a href="r-lab-2---basics-ii.html#cb1464-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1464-7"><a href="r-lab-2---basics-ii.html#cb1464-7" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1461"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1461-1"><a href="r-lab-2---basics-ii.html#cb1461-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If the element in x is not zero, multiply it with the subsequent element</span></span>
+<span id="cb1461-2"><a href="r-lab-2---basics-ii.html#cb1461-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1461-3"><a href="r-lab-2---basics-ii.html#cb1461-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb1461-4"><a href="r-lab-2---basics-ii.html#cb1461-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)) {</span>
+<span id="cb1461-5"><a href="r-lab-2---basics-ii.html#cb1461-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(x[i] <span class="sc">&gt;</span> <span class="dv">0</span>,  x[i] <span class="ot">&lt;-</span> x[i] <span class="sc">*</span> x[i <span class="sc">+</span> <span class="dv">1</span>], x[i] <span class="ot">&lt;-</span> <span class="dv">0</span>)  </span>
+<span id="cb1461-6"><a href="r-lab-2---basics-ii.html#cb1461-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1461-7"><a href="r-lab-2---basics-ii.html#cb1461-7" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## [1] -3  0  8 20 50  5</code></pre>
 <p>Here are some examples for <code>while()</code> loop:</p>
-<div class="sourceCode" id="cb1466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1466-1"><a href="r-lab-2---basics-ii.html#cb1466-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s use our first example</span></span>
-<span id="cb1466-2"><a href="r-lab-2---basics-ii.html#cb1466-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1466-3"><a href="r-lab-2---basics-ii.html#cb1466-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1466-4"><a href="r-lab-2---basics-ii.html#cb1466-4" aria-hidden="true" tabindex="-1"></a>cnt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1466-5"><a href="r-lab-2---basics-ii.html#cb1466-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1466-6"><a href="r-lab-2---basics-ii.html#cb1466-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (cnt <span class="sc">&lt;</span> <span class="dv">11</span>) {</span>
-<span id="cb1466-7"><a href="r-lab-2---basics-ii.html#cb1466-7" aria-hidden="true" tabindex="-1"></a>   x <span class="ot">=</span> x <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb1466-8"><a href="r-lab-2---basics-ii.html#cb1466-8" aria-hidden="true" tabindex="-1"></a>   cnt <span class="ot">=</span> cnt <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1466-9"><a href="r-lab-2---basics-ii.html#cb1466-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1466-10"><a href="r-lab-2---basics-ii.html#cb1466-10" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1463"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1463-1"><a href="r-lab-2---basics-ii.html#cb1463-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s use our first example</span></span>
+<span id="cb1463-2"><a href="r-lab-2---basics-ii.html#cb1463-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1463-3"><a href="r-lab-2---basics-ii.html#cb1463-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1463-4"><a href="r-lab-2---basics-ii.html#cb1463-4" aria-hidden="true" tabindex="-1"></a>cnt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1463-5"><a href="r-lab-2---basics-ii.html#cb1463-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1463-6"><a href="r-lab-2---basics-ii.html#cb1463-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (cnt <span class="sc">&lt;</span> <span class="dv">11</span>) {</span>
+<span id="cb1463-7"><a href="r-lab-2---basics-ii.html#cb1463-7" aria-hidden="true" tabindex="-1"></a>   x <span class="ot">=</span> x <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb1463-8"><a href="r-lab-2---basics-ii.html#cb1463-8" aria-hidden="true" tabindex="-1"></a>   cnt <span class="ot">=</span> cnt <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb1463-9"><a href="r-lab-2---basics-ii.html#cb1463-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1463-10"><a href="r-lab-2---basics-ii.html#cb1463-10" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## [1] 3072</code></pre>
 <p>Here are some examples for <code>repeat()</code> loop:</p>
-<div class="sourceCode" id="cb1468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1468-1"><a href="r-lab-2---basics-ii.html#cb1468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s use our first example</span></span>
-<span id="cb1468-2"><a href="r-lab-2---basics-ii.html#cb1468-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1468-3"><a href="r-lab-2---basics-ii.html#cb1468-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1468-4"><a href="r-lab-2---basics-ii.html#cb1468-4" aria-hidden="true" tabindex="-1"></a>cnt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1468-5"><a href="r-lab-2---basics-ii.html#cb1468-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1468-6"><a href="r-lab-2---basics-ii.html#cb1468-6" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
-<span id="cb1468-7"><a href="r-lab-2---basics-ii.html#cb1468-7" aria-hidden="true" tabindex="-1"></a>   x <span class="ot">=</span> x <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb1468-8"><a href="r-lab-2---basics-ii.html#cb1468-8" aria-hidden="true" tabindex="-1"></a>   cnt <span class="ot">=</span> cnt <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1468-9"><a href="r-lab-2---basics-ii.html#cb1468-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1468-10"><a href="r-lab-2---basics-ii.html#cb1468-10" aria-hidden="true" tabindex="-1"></a>   <span class="cf">if</span>(cnt <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="cf">break</span></span>
-<span id="cb1468-11"><a href="r-lab-2---basics-ii.html#cb1468-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1468-12"><a href="r-lab-2---basics-ii.html#cb1468-12" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1465-1"><a href="r-lab-2---basics-ii.html#cb1465-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s use our first example</span></span>
+<span id="cb1465-2"><a href="r-lab-2---basics-ii.html#cb1465-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1465-3"><a href="r-lab-2---basics-ii.html#cb1465-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1465-4"><a href="r-lab-2---basics-ii.html#cb1465-4" aria-hidden="true" tabindex="-1"></a>cnt <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1465-5"><a href="r-lab-2---basics-ii.html#cb1465-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1465-6"><a href="r-lab-2---basics-ii.html#cb1465-6" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
+<span id="cb1465-7"><a href="r-lab-2---basics-ii.html#cb1465-7" aria-hidden="true" tabindex="-1"></a>   x <span class="ot">=</span> x <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb1465-8"><a href="r-lab-2---basics-ii.html#cb1465-8" aria-hidden="true" tabindex="-1"></a>   cnt <span class="ot">=</span> cnt <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb1465-9"><a href="r-lab-2---basics-ii.html#cb1465-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1465-10"><a href="r-lab-2---basics-ii.html#cb1465-10" aria-hidden="true" tabindex="-1"></a>   <span class="cf">if</span>(cnt <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="cf">break</span></span>
+<span id="cb1465-11"><a href="r-lab-2---basics-ii.html#cb1465-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1465-12"><a href="r-lab-2---basics-ii.html#cb1465-12" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>## [1] 3072</code></pre>
 </div>
 <div id="the-apply-family" class="section level3 hasAnchor" number="35.2.3">
@@ -1027,43 +1027,43 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <div id="apply" class="section level4 hasAnchor" number="35.2.3.1">
 <h4><span class="header-section-number">35.2.3.1</span> <code>apply()</code><a href="r-lab-2---basics-ii.html#apply" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The R base manual tells you that it’s called as follows: <code>apply(X, MARGIN, FUN, ...)</code>, where, X is an array or a matrix if the dimension of the array is 2; MARGIN is a variable defining how the function is applied: when <code>MARGIN=1</code>, it applies over rows, whereas with <code>MARGIN=2</code>, it works over columns. Note that when you use the construct <code>MARGIN=c(1,2)</code>, it applies to both rows and columns; and FUN, which is the function that you want to apply to the data. It can be any R function, including a User Defined Function (UDF).</p>
-<div class="sourceCode" id="cb1470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1470-1"><a href="r-lab-2---basics-ii.html#cb1470-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct a 5x6 matrix</span></span>
-<span id="cb1470-2"><a href="r-lab-2---basics-ii.html#cb1470-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>), <span class="at">nrow=</span><span class="dv">5</span>, <span class="at">ncol=</span><span class="dv">6</span>)</span>
-<span id="cb1470-3"><a href="r-lab-2---basics-ii.html#cb1470-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1470-4"><a href="r-lab-2---basics-ii.html#cb1470-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum the values of each column with `apply()`</span></span>
-<span id="cb1470-5"><a href="r-lab-2---basics-ii.html#cb1470-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, sum)</span></code></pre></div>
-<pre><code>## [1] -2.3730039 -0.3865939  0.9817176 -2.1589920  0.5963779  0.6109747</code></pre>
-<div class="sourceCode" id="cb1472"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1472-1"><a href="r-lab-2---basics-ii.html#cb1472-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, length)</span></code></pre></div>
+<div class="sourceCode" id="cb1467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1467-1"><a href="r-lab-2---basics-ii.html#cb1467-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct a 5x6 matrix</span></span>
+<span id="cb1467-2"><a href="r-lab-2---basics-ii.html#cb1467-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>), <span class="at">nrow=</span><span class="dv">5</span>, <span class="at">ncol=</span><span class="dv">6</span>)</span>
+<span id="cb1467-3"><a href="r-lab-2---basics-ii.html#cb1467-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1467-4"><a href="r-lab-2---basics-ii.html#cb1467-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum the values of each column with `apply()`</span></span>
+<span id="cb1467-5"><a href="r-lab-2---basics-ii.html#cb1467-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, sum)</span></code></pre></div>
+<pre><code>## [1]  1.99819800 -3.78418581  4.11710382  4.74014911  1.27639320 -0.09337528</code></pre>
+<div class="sourceCode" id="cb1469"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1469-1"><a href="r-lab-2---basics-ii.html#cb1469-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, length)</span></code></pre></div>
 <pre><code>## [1] 5 5 5 5 5 5</code></pre>
-<div class="sourceCode" id="cb1474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1474-1"><a href="r-lab-2---basics-ii.html#cb1474-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">1</span>, length)</span></code></pre></div>
+<div class="sourceCode" id="cb1471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1471-1"><a href="r-lab-2---basics-ii.html#cb1471-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">1</span>, length)</span></code></pre></div>
 <pre><code>## [1] 6 6 6 6 6</code></pre>
-<div class="sourceCode" id="cb1476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1476-1"><a href="r-lab-2---basics-ii.html#cb1476-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, <span class="cf">function</span> (x) <span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1473"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1473-1"><a href="r-lab-2---basics-ii.html#cb1473-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, <span class="cf">function</span> (x) <span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] 4 4 4 4 4 4</code></pre>
-<div class="sourceCode" id="cb1478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1478-1"><a href="r-lab-2---basics-ii.html#cb1478-1" aria-hidden="true" tabindex="-1"></a><span class="co">#If you don’t want to write a function inside of the arguments</span></span>
-<span id="cb1478-2"><a href="r-lab-2---basics-ii.html#cb1478-2" aria-hidden="true" tabindex="-1"></a>len <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb1478-3"><a href="r-lab-2---basics-ii.html#cb1478-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span></span>
-<span id="cb1478-4"><a href="r-lab-2---basics-ii.html#cb1478-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1478-5"><a href="r-lab-2---basics-ii.html#cb1478-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X,<span class="dv">2</span>, len)</span></code></pre></div>
+<div class="sourceCode" id="cb1475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1475-1"><a href="r-lab-2---basics-ii.html#cb1475-1" aria-hidden="true" tabindex="-1"></a><span class="co">#If you don’t want to write a function inside of the arguments</span></span>
+<span id="cb1475-2"><a href="r-lab-2---basics-ii.html#cb1475-2" aria-hidden="true" tabindex="-1"></a>len <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1475-3"><a href="r-lab-2---basics-ii.html#cb1475-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">length</span>(x)<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb1475-4"><a href="r-lab-2---basics-ii.html#cb1475-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1475-5"><a href="r-lab-2---basics-ii.html#cb1475-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X,<span class="dv">2</span>, len)</span></code></pre></div>
 <pre><code>## [1] 4 4 4 4 4 4</code></pre>
-<div class="sourceCode" id="cb1480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1480-1"><a href="r-lab-2---basics-ii.html#cb1480-1" aria-hidden="true" tabindex="-1"></a><span class="co">#It can also be used to repeat a function on cells within a matrix</span></span>
-<span id="cb1480-2"><a href="r-lab-2---basics-ii.html#cb1480-2" aria-hidden="true" tabindex="-1"></a>X_new <span class="ot">&lt;-</span> <span class="fu">apply</span>(X, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">3</span>)</span>
-<span id="cb1480-3"><a href="r-lab-2---basics-ii.html#cb1480-3" aria-hidden="true" tabindex="-1"></a>X_new</span></code></pre></div>
-<pre><code>##           [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 4.9258856 2.020765 2.380226 2.185610 2.409112 2.888448
-## [2,] 2.7430674 3.495654 1.340790 1.767687 4.257003 1.923696
-## [3,] 1.5244680 3.253323 4.961705 5.011500 2.401770 2.707753
-## [4,] 0.6144241 3.595288 4.457830 1.786030 2.888390 5.448223
-## [5,] 2.8191510 2.248377 2.841167 2.090181 3.640104 2.642855</code></pre>
+<div class="sourceCode" id="cb1477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1477-1"><a href="r-lab-2---basics-ii.html#cb1477-1" aria-hidden="true" tabindex="-1"></a><span class="co">#It can also be used to repeat a function on cells within a matrix</span></span>
+<span id="cb1477-2"><a href="r-lab-2---basics-ii.html#cb1477-2" aria-hidden="true" tabindex="-1"></a>X_new <span class="ot">&lt;-</span> <span class="fu">apply</span>(X, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">3</span>)</span>
+<span id="cb1477-3"><a href="r-lab-2---basics-ii.html#cb1477-3" aria-hidden="true" tabindex="-1"></a>X_new</span></code></pre></div>
+<pre><code>##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+## [1,] 1.893982 1.008573 3.986876 3.163923 2.732368 2.481381
+## [2,] 2.850667 2.503266 4.600296 5.638340 2.178058 5.137393
+## [3,] 4.324743 2.141159 3.944144 3.964492 1.927546 1.598136
+## [4,] 3.811632 2.232520 3.654981 4.036102 3.710830 1.981107
+## [5,] 4.117174 3.330297 2.930806 2.937291 5.727592 3.708607</code></pre>
 <p>Since <code>apply()</code> is used only for matrices, if you apply <code>apply()</code> to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences. For a safer practice in data frames, we can use <code>lappy()</code> and <code>sapply()</code>:</p>
 </div>
 <div id="lapply" class="section level4 hasAnchor" number="35.2.3.2">
 <h4><span class="header-section-number">35.2.3.2</span> <code>lapply()</code><a href="r-lab-2---basics-ii.html#lapply" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>You want to apply a given function to every element of a list and obtain a list as a result. When you execute <code>?lapply</code>, you see that the syntax looks like the <code>apply()</code> function. The difference is that it can be used for other objects like data frames, lists or vectors. And the output returned is a list (which explains the “l” in the function name), which has the same number of elements as the object passed to it. <code>lapply()</code> function does not need MARGIN.</p>
-<div class="sourceCode" id="cb1482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1482-1"><a href="r-lab-2---basics-ii.html#cb1482-1" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
-<span id="cb1482-2"><a href="r-lab-2---basics-ii.html#cb1482-2" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
-<span id="cb1482-3"><a href="r-lab-2---basics-ii.html#cb1482-3" aria-hidden="true" tabindex="-1"></a>C<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>)</span>
-<span id="cb1482-4"><a href="r-lab-2---basics-ii.html#cb1482-4" aria-hidden="true" tabindex="-1"></a>my.lst<span class="ot">&lt;-</span><span class="fu">list</span>(A,B,C)</span>
-<span id="cb1482-5"><a href="r-lab-2---basics-ii.html#cb1482-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(my.lst, sum)</span></code></pre></div>
+<div class="sourceCode" id="cb1479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1479-1"><a href="r-lab-2---basics-ii.html#cb1479-1" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb1479-2"><a href="r-lab-2---basics-ii.html#cb1479-2" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
+<span id="cb1479-3"><a href="r-lab-2---basics-ii.html#cb1479-3" aria-hidden="true" tabindex="-1"></a>C<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>)</span>
+<span id="cb1479-4"><a href="r-lab-2---basics-ii.html#cb1479-4" aria-hidden="true" tabindex="-1"></a>my.lst<span class="ot">&lt;-</span><span class="fu">list</span>(A,B,C)</span>
+<span id="cb1479-5"><a href="r-lab-2---basics-ii.html#cb1479-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(my.lst, sum)</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 45
 ## 
@@ -1076,26 +1076,26 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <div id="sapply" class="section level4 hasAnchor" number="35.2.3.3">
 <h4><span class="header-section-number">35.2.3.3</span> <code>sapply()</code><a href="r-lab-2---basics-ii.html#sapply" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><code>sapply</code> works just like lapply, but will simplify the output if possible. This means that instead of returning a list like <code>lapply</code>, it will return a vector instead if the data is simplifiable.</p>
-<div class="sourceCode" id="cb1484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1484-1"><a href="r-lab-2---basics-ii.html#cb1484-1" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
-<span id="cb1484-2"><a href="r-lab-2---basics-ii.html#cb1484-2" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
-<span id="cb1484-3"><a href="r-lab-2---basics-ii.html#cb1484-3" aria-hidden="true" tabindex="-1"></a>C<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>)</span>
-<span id="cb1484-4"><a href="r-lab-2---basics-ii.html#cb1484-4" aria-hidden="true" tabindex="-1"></a>my.lst<span class="ot">&lt;-</span><span class="fu">list</span>(A,B,C)</span>
-<span id="cb1484-5"><a href="r-lab-2---basics-ii.html#cb1484-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(my.lst, sum)</span></code></pre></div>
+<div class="sourceCode" id="cb1481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1481-1"><a href="r-lab-2---basics-ii.html#cb1481-1" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb1481-2"><a href="r-lab-2---basics-ii.html#cb1481-2" aria-hidden="true" tabindex="-1"></a>B<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
+<span id="cb1481-3"><a href="r-lab-2---basics-ii.html#cb1481-3" aria-hidden="true" tabindex="-1"></a>C<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>)</span>
+<span id="cb1481-4"><a href="r-lab-2---basics-ii.html#cb1481-4" aria-hidden="true" tabindex="-1"></a>my.lst<span class="ot">&lt;-</span><span class="fu">list</span>(A,B,C)</span>
+<span id="cb1481-5"><a href="r-lab-2---basics-ii.html#cb1481-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(my.lst, sum)</span></code></pre></div>
 <pre><code>## [1]  45  78 120</code></pre>
 </div>
 <div id="tapply" class="section level4 hasAnchor" number="35.2.3.4">
 <h4><span class="header-section-number">35.2.3.4</span> <code>tapply()</code><a href="r-lab-2---basics-ii.html#tapply" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Sometimes you may want to perform the apply function on some data, but have it separated by factor. In that case, you should use <code>tapply</code>. Let’s take a look at the information for <code>tapply</code>.</p>
-<div class="sourceCode" id="cb1486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1486-1"><a href="r-lab-2---basics-ii.html#cb1486-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">30</span>), <span class="at">nrow =</span> <span class="dv">10</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb1486-2"><a href="r-lab-2---basics-ii.html#cb1486-2" aria-hidden="true" tabindex="-1"></a>tdata <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>), X))</span>
-<span id="cb1486-3"><a href="r-lab-2---basics-ii.html#cb1486-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tdata)</span></code></pre></div>
+<div class="sourceCode" id="cb1483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1483-1"><a href="r-lab-2---basics-ii.html#cb1483-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">30</span>), <span class="at">nrow =</span> <span class="dv">10</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb1483-2"><a href="r-lab-2---basics-ii.html#cb1483-2" aria-hidden="true" tabindex="-1"></a>tdata <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>), X))</span>
+<span id="cb1483-3"><a href="r-lab-2---basics-ii.html#cb1483-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tdata)</span></code></pre></div>
 <pre><code>## [1] &quot;V1&quot; &quot;V2&quot; &quot;V3&quot; &quot;V4&quot;</code></pre>
-<div class="sourceCode" id="cb1488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1488-1"><a href="r-lab-2---basics-ii.html#cb1488-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V1, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb1485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1485-1"><a href="r-lab-2---basics-ii.html#cb1485-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V1, mean)</span></code></pre></div>
 <pre><code>## 1 2 
 ## 3 8</code></pre>
 <p>What we have here is an important tool: We have a conditional mean of column 2 (V2) with respect to column 1 (V1). You can use tapply to do some quick summary statistics on a variable split by condition.</p>
-<div class="sourceCode" id="cb1490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1490-1"><a href="r-lab-2---basics-ii.html#cb1490-1" aria-hidden="true" tabindex="-1"></a>summary <span class="ot">&lt;-</span> <span class="fu">tapply</span>(tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V1, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="fu">mean</span>(x), <span class="fu">sd</span>(x)))</span>
-<span id="cb1490-2"><a href="r-lab-2---basics-ii.html#cb1490-2" aria-hidden="true" tabindex="-1"></a>summary</span></code></pre></div>
+<div class="sourceCode" id="cb1487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1487-1"><a href="r-lab-2---basics-ii.html#cb1487-1" aria-hidden="true" tabindex="-1"></a>summary <span class="ot">&lt;-</span> <span class="fu">tapply</span>(tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V1, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="fu">mean</span>(x), <span class="fu">sd</span>(x)))</span>
+<span id="cb1487-2"><a href="r-lab-2---basics-ii.html#cb1487-2" aria-hidden="true" tabindex="-1"></a>summary</span></code></pre></div>
 <pre><code>## $`1`
 ## [1] 3.000000 1.581139
 ## 
@@ -1105,8 +1105,8 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <div id="mapply" class="section level4 hasAnchor" number="35.2.3.5">
 <h4><span class="header-section-number">35.2.3.5</span> <code>mapply()</code><a href="r-lab-2---basics-ii.html#mapply" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><code>mapply()</code> would be used to create a new variable. For example, using dataset tdata, we could divide one column by another column to create a new value. This would be useful for creating a ratio of two variables as shown in the example below.</p>
-<div class="sourceCode" id="cb1492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1492-1"><a href="r-lab-2---basics-ii.html#cb1492-1" aria-hidden="true" tabindex="-1"></a>tdata<span class="sc">$</span>V5 <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(x, y) x<span class="sc">/</span>y, tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V4)</span>
-<span id="cb1492-2"><a href="r-lab-2---basics-ii.html#cb1492-2" aria-hidden="true" tabindex="-1"></a>tdata<span class="sc">$</span>V5</span></code></pre></div>
+<div class="sourceCode" id="cb1489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1489-1"><a href="r-lab-2---basics-ii.html#cb1489-1" aria-hidden="true" tabindex="-1"></a>tdata<span class="sc">$</span>V5 <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(x, y) x<span class="sc">/</span>y, tdata<span class="sc">$</span>V2, tdata<span class="sc">$</span>V4)</span>
+<span id="cb1489-2"><a href="r-lab-2---basics-ii.html#cb1489-2" aria-hidden="true" tabindex="-1"></a>tdata<span class="sc">$</span>V5</span></code></pre></div>
 <pre><code>##  [1] 0.04761905 0.09090909 0.13043478 0.16666667 0.20000000 0.23076923
 ##  [7] 0.25925926 0.28571429 0.31034483 0.33333333</code></pre>
 </div>
@@ -1115,71 +1115,71 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <h3><span class="header-section-number">35.2.4</span> Functions<a href="r-lab-2---basics-ii.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>An R function is created by using the keyword function. The basic syntax of an R function definition is as follows:</p>
 <p>To use a function, you simply type its name, followed by an open parenthesis, then specify values of its arguments, then finish with a closing parenthesis. An argument is a variable which is used in the body of the function. Specifying the values of the arguments is essentially providing the inputs to the function. Let’s write our first function:</p>
-<div class="sourceCode" id="cb1494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1494-1"><a href="r-lab-2---basics-ii.html#cb1494-1" aria-hidden="true" tabindex="-1"></a>first <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
-<span id="cb1494-2"><a href="r-lab-2---basics-ii.html#cb1494-2" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> a <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb1494-3"><a href="r-lab-2---basics-ii.html#cb1494-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(b)</span>
-<span id="cb1494-4"><a href="r-lab-2---basics-ii.html#cb1494-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1494-5"><a href="r-lab-2---basics-ii.html#cb1494-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1494-6"><a href="r-lab-2---basics-ii.html#cb1494-6" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(<span class="dv">1675</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1491-1"><a href="r-lab-2---basics-ii.html#cb1491-1" aria-hidden="true" tabindex="-1"></a>first <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
+<span id="cb1491-2"><a href="r-lab-2---basics-ii.html#cb1491-2" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> a <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb1491-3"><a href="r-lab-2---basics-ii.html#cb1491-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(b)</span>
+<span id="cb1491-4"><a href="r-lab-2---basics-ii.html#cb1491-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1491-5"><a href="r-lab-2---basics-ii.html#cb1491-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1491-6"><a href="r-lab-2---basics-ii.html#cb1491-6" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(<span class="dv">1675</span>)</span></code></pre></div>
 <pre><code>## [1] 2805625</code></pre>
 <p>Let’s have a function that find the z-score (standardization). That’s subtracting the sample mean, and dividing by the sample standard deviation.</p>
 <p><span class="math display">\[
 \frac{x-\overline{x}}{s}
 \]</span></p>
-<div class="sourceCode" id="cb1496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1496-1"><a href="r-lab-2---basics-ii.html#cb1496-1" aria-hidden="true" tabindex="-1"></a>z_score <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb1496-2"><a href="r-lab-2---basics-ii.html#cb1496-2" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
-<span id="cb1496-3"><a href="r-lab-2---basics-ii.html#cb1496-3" aria-hidden="true" tabindex="-1"></a>  std <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
-<span id="cb1496-4"><a href="r-lab-2---basics-ii.html#cb1496-4" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> (x <span class="sc">-</span> m)<span class="sc">/</span>std</span>
-<span id="cb1496-5"><a href="r-lab-2---basics-ii.html#cb1496-5" aria-hidden="true" tabindex="-1"></a>  z</span>
-<span id="cb1496-6"><a href="r-lab-2---basics-ii.html#cb1496-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1496-7"><a href="r-lab-2---basics-ii.html#cb1496-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1496-8"><a href="r-lab-2---basics-ii.html#cb1496-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1496-9"><a href="r-lab-2---basics-ii.html#cb1496-9" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">30</span>)</span>
-<span id="cb1496-10"><a href="r-lab-2---basics-ii.html#cb1496-10" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">z_score</span>(x)</span>
-<span id="cb1496-11"><a href="r-lab-2---basics-ii.html#cb1496-11" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div>
+<div class="sourceCode" id="cb1493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1493-1"><a href="r-lab-2---basics-ii.html#cb1493-1" aria-hidden="true" tabindex="-1"></a>z_score <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1493-2"><a href="r-lab-2---basics-ii.html#cb1493-2" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb1493-3"><a href="r-lab-2---basics-ii.html#cb1493-3" aria-hidden="true" tabindex="-1"></a>  std <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb1493-4"><a href="r-lab-2---basics-ii.html#cb1493-4" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> (x <span class="sc">-</span> m)<span class="sc">/</span>std</span>
+<span id="cb1493-5"><a href="r-lab-2---basics-ii.html#cb1493-5" aria-hidden="true" tabindex="-1"></a>  z</span>
+<span id="cb1493-6"><a href="r-lab-2---basics-ii.html#cb1493-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1493-7"><a href="r-lab-2---basics-ii.html#cb1493-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1493-8"><a href="r-lab-2---basics-ii.html#cb1493-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1493-9"><a href="r-lab-2---basics-ii.html#cb1493-9" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">30</span>)</span>
+<span id="cb1493-10"><a href="r-lab-2---basics-ii.html#cb1493-10" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">z_score</span>(x)</span>
+<span id="cb1493-11"><a href="r-lab-2---basics-ii.html#cb1493-11" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div>
 <pre><code>##  [1] -0.97190653  0.06589991 -1.23987805  1.87433300  0.25276523 -1.22045645
 ##  [7]  0.45507643  0.77649606  0.56826358 -0.56059319</code></pre>
-<div class="sourceCode" id="cb1498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1498-1"><a href="r-lab-2---basics-ii.html#cb1498-1" aria-hidden="true" tabindex="-1"></a><span class="co">#to check it out</span></span>
-<span id="cb1498-2"><a href="r-lab-2---basics-ii.html#cb1498-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>(z), <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1495-1"><a href="r-lab-2---basics-ii.html#cb1495-1" aria-hidden="true" tabindex="-1"></a><span class="co">#to check it out</span></span>
+<span id="cb1495-2"><a href="r-lab-2---basics-ii.html#cb1495-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>(z), <span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb1500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1500-1"><a href="r-lab-2---basics-ii.html#cb1500-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(z)</span></code></pre></div>
+<div class="sourceCode" id="cb1497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1497-1"><a href="r-lab-2---basics-ii.html#cb1497-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(z)</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>We can do a better job in writing <code>z_score()</code></p>
-<div class="sourceCode" id="cb1502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1502-1"><a href="r-lab-2---basics-ii.html#cb1502-1" aria-hidden="true" tabindex="-1"></a>z_score <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb1502-2"><a href="r-lab-2---basics-ii.html#cb1502-2" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> (x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">/</span><span class="fu">sd</span>(x)</span>
-<span id="cb1502-3"><a href="r-lab-2---basics-ii.html#cb1502-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1502-4"><a href="r-lab-2---basics-ii.html#cb1502-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1502-5"><a href="r-lab-2---basics-ii.html#cb1502-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1502-6"><a href="r-lab-2---basics-ii.html#cb1502-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">30</span>)</span>
-<span id="cb1502-7"><a href="r-lab-2---basics-ii.html#cb1502-7" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">z_score</span>(x)</span>
-<span id="cb1502-8"><a href="r-lab-2---basics-ii.html#cb1502-8" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div>
+<div class="sourceCode" id="cb1499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1499-1"><a href="r-lab-2---basics-ii.html#cb1499-1" aria-hidden="true" tabindex="-1"></a>z_score <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1499-2"><a href="r-lab-2---basics-ii.html#cb1499-2" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> (x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">/</span><span class="fu">sd</span>(x)</span>
+<span id="cb1499-3"><a href="r-lab-2---basics-ii.html#cb1499-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1499-4"><a href="r-lab-2---basics-ii.html#cb1499-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1499-5"><a href="r-lab-2---basics-ii.html#cb1499-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1499-6"><a href="r-lab-2---basics-ii.html#cb1499-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">30</span>)</span>
+<span id="cb1499-7"><a href="r-lab-2---basics-ii.html#cb1499-7" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">z_score</span>(x)</span>
+<span id="cb1499-8"><a href="r-lab-2---basics-ii.html#cb1499-8" aria-hidden="true" tabindex="-1"></a>z</span></code></pre></div>
 <pre><code>##  [1] -0.97190653  0.06589991 -1.23987805  1.87433300  0.25276523 -1.22045645
 ##  [7]  0.45507643  0.77649606  0.56826358 -0.56059319</code></pre>
 <p>Lets create a function that prints the factorials:</p>
-<div class="sourceCode" id="cb1504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1504-1"><a href="r-lab-2---basics-ii.html#cb1504-1" aria-hidden="true" tabindex="-1"></a>fact <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
-<span id="cb1504-2"><a href="r-lab-2---basics-ii.html#cb1504-2" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1504-3"><a href="r-lab-2---basics-ii.html#cb1504-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(a<span class="dv">-1</span>)) {</span>
-<span id="cb1504-4"><a href="r-lab-2---basics-ii.html#cb1504-4" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">&lt;-</span> b<span class="sc">*</span>(i<span class="sc">+</span><span class="dv">1</span>) </span>
-<span id="cb1504-5"><a href="r-lab-2---basics-ii.html#cb1504-5" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1504-6"><a href="r-lab-2---basics-ii.html#cb1504-6" aria-hidden="true" tabindex="-1"></a>  b</span>
-<span id="cb1504-7"><a href="r-lab-2---basics-ii.html#cb1504-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1504-8"><a href="r-lab-2---basics-ii.html#cb1504-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1504-9"><a href="r-lab-2---basics-ii.html#cb1504-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fact</span>(<span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1501-1"><a href="r-lab-2---basics-ii.html#cb1501-1" aria-hidden="true" tabindex="-1"></a>fact <span class="ot">&lt;-</span> <span class="cf">function</span>(a){</span>
+<span id="cb1501-2"><a href="r-lab-2---basics-ii.html#cb1501-2" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1501-3"><a href="r-lab-2---basics-ii.html#cb1501-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(a<span class="dv">-1</span>)) {</span>
+<span id="cb1501-4"><a href="r-lab-2---basics-ii.html#cb1501-4" aria-hidden="true" tabindex="-1"></a>    b <span class="ot">&lt;-</span> b<span class="sc">*</span>(i<span class="sc">+</span><span class="dv">1</span>) </span>
+<span id="cb1501-5"><a href="r-lab-2---basics-ii.html#cb1501-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1501-6"><a href="r-lab-2---basics-ii.html#cb1501-6" aria-hidden="true" tabindex="-1"></a>  b</span>
+<span id="cb1501-7"><a href="r-lab-2---basics-ii.html#cb1501-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1501-8"><a href="r-lab-2---basics-ii.html#cb1501-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1501-9"><a href="r-lab-2---basics-ii.html#cb1501-9" aria-hidden="true" tabindex="-1"></a><span class="fu">fact</span>(<span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [1] 120</code></pre>
 <p>Creating loops is an act of art and requires very careful thinking. The same loop can be done by many different structures. And it always takes more time to understand somebody else’s loop than your own!</p>
 <div id="outer" class="section level4 hasAnchor" number="35.2.4.1">
 <h4><span class="header-section-number">35.2.4.1</span> <code>outer()</code><a href="r-lab-2---basics-ii.html#outer" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><code>outer()</code> takes two vectors and a function (that itself takes two arguments) and builds a <strong>matrix</strong> by calling the given function for each combination of the elements in the two vectors.</p>
-<div class="sourceCode" id="cb1506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1506-1"><a href="r-lab-2---basics-ii.html#cb1506-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb1506-2"><a href="r-lab-2---basics-ii.html#cb1506-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
-<span id="cb1506-3"><a href="r-lab-2---basics-ii.html#cb1506-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1506-4"><a href="r-lab-2---basics-ii.html#cb1506-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span> (</span>
-<span id="cb1506-5"><a href="r-lab-2---basics-ii.html#cb1506-5" aria-hidden="true" tabindex="-1"></a>   y,     <span class="co"># First dimension:  the columns (y)</span></span>
-<span id="cb1506-6"><a href="r-lab-2---basics-ii.html#cb1506-6" aria-hidden="true" tabindex="-1"></a>   x,     <span class="co"># Second dimension: the rows    (x)</span></span>
-<span id="cb1506-7"><a href="r-lab-2---basics-ii.html#cb1506-7" aria-hidden="true" tabindex="-1"></a>   <span class="cf">function</span> (x, y)   x<span class="sc">+</span><span class="dv">2</span><span class="sc">*</span>y</span>
-<span id="cb1506-8"><a href="r-lab-2---basics-ii.html#cb1506-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1506-9"><a href="r-lab-2---basics-ii.html#cb1506-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1506-10"><a href="r-lab-2---basics-ii.html#cb1506-10" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb1503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1503-1"><a href="r-lab-2---basics-ii.html#cb1503-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb1503-2"><a href="r-lab-2---basics-ii.html#cb1503-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb1503-3"><a href="r-lab-2---basics-ii.html#cb1503-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1503-4"><a href="r-lab-2---basics-ii.html#cb1503-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span> (</span>
+<span id="cb1503-5"><a href="r-lab-2---basics-ii.html#cb1503-5" aria-hidden="true" tabindex="-1"></a>   y,     <span class="co"># First dimension:  the columns (y)</span></span>
+<span id="cb1503-6"><a href="r-lab-2---basics-ii.html#cb1503-6" aria-hidden="true" tabindex="-1"></a>   x,     <span class="co"># Second dimension: the rows    (x)</span></span>
+<span id="cb1503-7"><a href="r-lab-2---basics-ii.html#cb1503-7" aria-hidden="true" tabindex="-1"></a>   <span class="cf">function</span> (x, y)   x<span class="sc">+</span><span class="dv">2</span><span class="sc">*</span>y</span>
+<span id="cb1503-8"><a href="r-lab-2---basics-ii.html#cb1503-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1503-9"><a href="r-lab-2---basics-ii.html#cb1503-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1503-10"><a href="r-lab-2---basics-ii.html#cb1503-10" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    0    2    4
 ## [2,]    1    3    5
@@ -1187,19 +1187,19 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 ## [4,]    3    5    7
 ## [5,]    4    6    8</code></pre>
 <p>In place of the function, an operator can be given, which makes it easy to create a matrix with simple calculations (such as multiplying):</p>
-<div class="sourceCode" id="cb1508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1508-1"><a href="r-lab-2---basics-ii.html#cb1508-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="st">&quot;*&quot;</span>)</span>
-<span id="cb1508-2"><a href="r-lab-2---basics-ii.html#cb1508-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb1505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1505-1"><a href="r-lab-2---basics-ii.html#cb1505-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>), <span class="st">&quot;*&quot;</span>)</span>
+<span id="cb1505-2"><a href="r-lab-2---basics-ii.html#cb1505-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]   20   40   60
 ## [2,]   40   80  120
 ## [3,]   60  120  180
 ## [4,]   80  160  240</code></pre>
 <p>It becomes very handy when we build a polynomial model:</p>
-<div class="sourceCode" id="cb1510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1510-1"><a href="r-lab-2---basics-ii.html#cb1510-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1510-2"><a href="r-lab-2---basics-ii.html#cb1510-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<div class="sourceCode" id="cb1507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1507-1"><a href="r-lab-2---basics-ii.html#cb1507-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1507-2"><a href="r-lab-2---basics-ii.html#cb1507-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
 <pre><code>##  [1]  8 14 20  4  8 13  4  4  1  9</code></pre>
-<div class="sourceCode" id="cb1512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1512-1"><a href="r-lab-2---basics-ii.html#cb1512-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;^&quot;</span>)</span>
-<span id="cb1512-2"><a href="r-lab-2---basics-ii.html#cb1512-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb1509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1509-1"><a href="r-lab-2---basics-ii.html#cb1509-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">outer</span>(x, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;^&quot;</span>)</span>
+<span id="cb1509-2"><a href="r-lab-2---basics-ii.html#cb1509-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
 <pre><code>##       [,1] [,2] [,3]   [,4]
 ##  [1,]    8   64  512   4096
 ##  [2,]   14  196 2744  38416

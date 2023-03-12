@@ -365,14 +365,14 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="32.1" data-path="fundementals.html"><a href="fundementals.html#covariance"><i class="fa fa-check"></i><b>32.1</b> Covariance</a></li>
 <li class="chapter" data-level="32.2" data-path="fundementals.html"><a href="fundementals.html#correlation"><i class="fa fa-check"></i><b>32.2</b> Correlation</a></li>
-<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.3</b> Semi-partial correlation</a></li>
+<li class="chapter" data-level="32.3" data-path="fundementals.html"><a href="fundementals.html#precision-matrix"><i class="fa fa-check"></i><b>32.3</b> Precision Matrix</a></li>
+<li class="chapter" data-level="32.4" data-path="fundementals.html"><a href="fundementals.html#semi-partial-correlation"><i class="fa fa-check"></i><b>32.4</b> Semi-partial Correlation</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html"><i class="fa fa-check"></i><b>33</b> Regularized Covariance Matrix</a>
 <ul>
-<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#mle"><i class="fa fa-check"></i><b>33.1</b> MLE</a></li>
+<li class="chapter" data-level="33.1" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#multivariate-gaussian-distribution"><i class="fa fa-check"></i><b>33.1</b> Multivariate Gaussian Distribution</a></li>
 <li class="chapter" data-level="33.2" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#high-dimensional-data"><i class="fa fa-check"></i><b>33.2</b> High-dimensional data</a></li>
 <li class="chapter" data-level="33.3" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#ridge-ell_2-and-glasso-ell_1"><i class="fa fa-check"></i><b>33.3</b> Ridge (<span class="math inline">\(\ell_{2}\)</span>) and glasso (<span class="math inline">\(\ell_{1}\)</span>)</a></li>
-<li class="chapter" data-level="33.4" data-path="regularized-covariance-matrix.html"><a href="regularized-covariance-matrix.html#whats-graphical---graphical-ridge-or-glasso"><i class="fa fa-check"></i><b>33.4</b> What’s graphical - graphical ridge or glasso?</a></li>
 </ul></li>
 <li class="part"><span><b>X Labs</b></span></li>
 <li class="chapter" data-level="34" data-path="r-lab-1---basics-i.html"><a href="r-lab-1---basics-i.html"><i class="fa fa-check"></i><b>34</b> R Lab 1 - Basics I</a>
@@ -757,8 +757,8 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.55172 0.12140
-## 3 0.010000      2   0.24138 0.62069 0.12640</code></pre>
+## 2 0.034483      1   0.27586 0.65517 0.12863
+## 3 0.010000      2   0.24138 0.58621 0.12399</code></pre>
 <p>The <code>rel error</code> of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it’s 100% (1.00000 in the table) in the root node. In other words, <code>rel error</code> gives the percentage of misclassified labels, when it’s multiplied with the <code>Root node error</code> (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by <code>rpart</code>’s CV.</p>
 <div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="cart.html#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">predict</span>(tree, <span class="at">type=</span><span class="st">&quot;class&quot;</span>)<span class="sc">!=</span>myocarde<span class="sc">$</span>PRONO)<span class="sc">/</span><span class="fu">nrow</span>(myocarde)</span></code></pre></div>
 <pre><code>## [1] 0.09859155</code></pre>
@@ -786,10 +786,10 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.03260 0.046548
-## 2 0.101694      1   0.41379 0.83204 0.162703
-## 3 0.028263      2   0.31209 0.77953 0.159488
-## 4 0.010000      3   0.28383 0.75666 0.153297</code></pre>
+## 1 0.586213      0   1.00000 1.02272 0.045641
+## 2 0.101694      1   0.41379 0.76416 0.156590
+## 3 0.028263      2   0.31209 0.63593 0.145782
+## 4 0.010000      3   0.28383 0.59936 0.133838</code></pre>
 <p>As you see, when the outcome is not a factor variable, <code>rpart</code> applies a <strong>regression tree</strong> method, which minimizes the sum of squares, <span class="math inline">\(\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2\)</span>. However, when <span class="math inline">\(y_i\)</span> is a binary number with two values 0 and 1, the sum of squares becomes <span class="math inline">\(np(1-p)\)</span>, which gives the same relative gain as Gini. This is clear as both relative gains (our calculation and the calculation by <code>rpart</code> above) are the same.</p>
 <p>What’s the variable importance of <code>rpart()</code>?</p>
 <div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="cart.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable Importance</span></span>
@@ -843,10 +843,10 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.51724 0.11861
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.51724 0.11861
-## 5 0.000000      8  0.000000 0.65517 0.12863</code></pre>
+## 2 0.103448      1  0.275862 0.55172 0.12140
+## 3 0.034483      2  0.172414 0.41379 0.10889
+## 4 0.017241      6  0.034483 0.41379 0.10889
+## 5 0.000000      8  0.000000 0.41379 0.10889</code></pre>
 <div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="cart.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(tree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr22-1.png" width="672" /></p>
 <div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="cart.html#cb555-1" aria-hidden="true" tabindex="-1"></a>min_cp <span class="ot">=</span> tree2<span class="sc">$</span>cptable[<span class="fu">which.min</span>(tree2<span class="sc">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</span>
@@ -875,8 +875,8 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.51724 0.11861
-## 3 0.034483      2   0.17241 0.44828 0.11237</code></pre>
+## 2 0.103448      1   0.27586 0.55172 0.12140
+## 3 0.034483      2   0.17241 0.41379 0.10889</code></pre>
 <div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="cart.html#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(ptree2)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr23-1.png" width="672" /></p>
 <p>Now we have applied two approaches: limiting the tree’s growth and pruning a fully grown tree. Hence, we have two different trees: <code>tree</code> and <code>ptree2</code>. In the first case, we can use <code>cp</code> or other control parameters in <code>rpart.control</code> as hyperparameters and tune them on the test set. In the second case, we can grow the tree to its maximum capacity and tune its pruning as to maximize the prediction accuracy on the test set. We will not show the tuning of a tree here. Instead, we will see many improved tree-based models and tuned them in this section.</p>
@@ -947,9 +947,9 @@ when <span class="math inline">\(x = 60\)</span>, for example.</p>
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.554 0.029556
-## 4 0.011333      5     0.504  0.550 0.029477
-## 5 0.010000      9     0.458  0.542 0.029319</code></pre>
+## 3 0.015000      3     0.534  0.552 0.029517
+## 4 0.011333      5     0.504  0.546 0.029398
+## 5 0.010000      9     0.458  0.510 0.028658</code></pre>
 <div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb566-1"><a href="cart.html#cb566-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(titan)</span></code></pre></div>
 <p><img src="11-CART_files/figure-html/tr26-1.png" width="672" /></p>
 <p>Of course, we would like to see the tree’s prediction accuracy by using a test dataset and the confusion table metrics.</p>

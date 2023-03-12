@@ -2,27 +2,27 @@
 
 Due an increasing availability of high-dimensional data sets, graphical models have become powerful tools to discover conditional dependencies over a graph structure.
 
-However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional.  
+However, there are two main challenges in identifying the relations in a network: first, the edges (relationships) may not be identified by Pearson or Spearman correlations as they often lead to spurious associations due to missing confounding factors. Second, although, applications with partial correlations might address this issue, traditional precision estimators are not well-defined in case of high-dimensional data.  
 
-Why is a covariance matrix $S$ singular when $n<p$ in $X$? Consider the $n \times p$ matrix of sample data, $X$. Since we know that the rank of $X$ is at most $\min (n, p)$. Hence, in 
+Why is a covariance matrix $S$ singular when $n<p$ in $\mathbf{X}$? Consider the $n \times p$ matrix of sample data, $\mathbf{X}$. Since we know that the rank of $\mathbf{X}$ is at most $\min (n, p)$. Hence, in 
 
 $$
 \mathbf{S}=\frac{1}{n} \mathbf{X}_{c}^{\prime} \mathbf{X}_{c},
 $$
 
-$\operatorname{rank}(X_c)$ will be $n$.  It is clear that the rank of $S$ won't be larger than the rank of $X_c$.  Since $S$ is $p \times p$ and its rank is $n$, $S$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(X)<p$ in which case $\operatorname{rank}(S)<p$. 
+$\operatorname{rank}(\mathbf{X}_c)$ will be $n$.  It is clear that the rank of $\mathbf{S}$ won't be larger than the rank of $\mathbf{X}_c$.  Since $\mathbf{S}$ is $p \times p$ and its rank is $n$, $\mathbf{S}$ will be singular.  That's, if $n<p$ then $\operatorname{rank}(\mathbf{X})<p$ in which case $\operatorname{rank}(\mathbf{S})<p$. 
 
-This brought several novel precision estimators. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large (in some sense) values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
+This brought several novel precision estimators in applications. Generally, these novel estimators overcome the undersampling by maximization of the log-likelihood augmented with a so-called penalty. A penalty discourages large values among the elements of the precision matrix estimate. This reduces the risk of overfitting but also yields a well-defined penalized precision matrix estimator.
 
-To solve the problem, as we have seen before in Section 6, penalized estimators adds a so-called penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
+To solve the problem, as we have seen before in Section 6, penalized estimators adds a penalty to the likelihood functions ( $\ell_2$ in Ridge and $\ell_1$ in lasso) that makes the eigenvalues of $\mathbf{S}$ shrink in a particular manner to combat $p \geq n$. The graphical lasso (gLasso) is the $\ell_1$-equivalent to graphical ridge. A nice feature of the $\ell_1$ penalty automatically induces sparsity and thus also select the edges in the underlying graph. The $\ell_2$ penalty in Ridge relies on an extra step that selects the edges after the regularized precision matrix with shrunken correlations is estimated.
 
-In this chapter we will see several methods that will provide sparse precision matrices in case of $n<p$ using Gaussian Graphical Models.    
+In this chapter we will see graphical ridge and lasso applications based on Gaussian graphical models that will provide sparse precision matrices in case of $n<p$.    
 
-## MLE  
+## Multivariate Gaussian Distribution 
 
-Before understanding $\ell_1$ or$\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
+Before understanding $\ell_1$ or $\ell_2$ regularization, we need to see the multivariate Gaussian distribution, its parameterization and maximum likelihood estimation (MLE) solutions.
   
-The multivariate Gaussian distribution of a random vector $X \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
+The multivariate Gaussian distribution of a random vector $\mathbf{X} \in \mathbf{R}^{p}$ is commonly expressed in terms of the parameters $\mu$ and $\Sigma$, where $\mu$ is an $p \times 1$ vector and $\Sigma$ is an $p \times p$, a nonsingular symmetric covariance matrix. Hence, we have the following form for the density function:
 
 $$
 f(x \mid \mu, \Sigma)=\frac{1}{(2 \pi)^{p / 2}|\Sigma|^{1 / 2}} \exp \left\{-\frac{1}{2}(x-\mu)^{T} \Sigma^{-1}(x-\mu)\right\},
@@ -54,7 +54,8 @@ where
 $$
 S=\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)\left(x_{i}-\bar{x}\right)^{\mathrm{T}} \in \mathbf{R}^{p \times p}
 $$
-And finally, re-write the likelihood in the log form using the trace trick:
+
+And finally, we re-write the likelihood in the log form using the trace trick:
 
 $$
 \ln \mathcal{L}(\mu, \Sigma)=\text { const }-\frac{n}{2} \ln \operatorname{det}(\Sigma)-\frac{1}{2} \operatorname{tr}\left[\Sigma^{-1} \sum_{i=1}^{n}\left(x_{i}-\mu\right)\left(x_{i}-\mu\right)^{\mathrm{T}}\right]
@@ -115,7 +116,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] -0.7156653
+## [1] 0.01462532
 ```
 
 ```r
@@ -123,13 +124,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.71566533 -0.02725358  0.16353871  0.35363024 -0.20722828
-## [2,] -0.71566533 -1.00000000 -0.42991656  0.20960520 -0.03927366 -0.40111537
-## [3,] -0.02725358 -0.42991656 -1.00000000  0.36278095 -0.32548016 -0.27632776
-## [4,]  0.16353871  0.20960520  0.36278095 -1.00000000 -0.19444666 -0.02470048
-## [5,]  0.35363024 -0.03927366 -0.32548016 -0.19444666 -1.00000000 -0.02069030
-## [6,] -0.20722828 -0.40111537 -0.27632776 -0.02470048 -0.02069030 -1.00000000
+##             [,1]        [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,] -1.00000000  0.01462532  0.1954499 -0.10481130 -0.75738198 -0.79220264
+## [2,]  0.01462532 -1.00000000  0.1342994  0.44976234  0.24374775  0.18042754
+## [3,]  0.19544994  0.13429944 -1.0000000 -0.20912702  0.41287512  0.39531115
+## [4,] -0.10481130  0.44976234 -0.2091270 -1.00000000  0.01626636 -0.05389573
+## [5,] -0.75738198  0.24374775  0.4128751  0.01626636 -1.00000000 -0.95839972
+## [6,] -0.79220264  0.18042754  0.3953111 -0.05389573 -0.95839972 -1.00000000
 ```
 
 ```r
@@ -139,13 +140,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,]  1.00000000 -0.71566533 -0.02725358  0.16353871  0.35363024 -0.20722828
-## [2,] -0.71566533  1.00000000 -0.42991656  0.20960520 -0.03927366 -0.40111537
-## [3,] -0.02725358 -0.42991656  1.00000000  0.36278095 -0.32548016 -0.27632776
-## [4,]  0.16353871  0.20960520  0.36278095  1.00000000 -0.19444666 -0.02470048
-## [5,]  0.35363024 -0.03927366 -0.32548016 -0.19444666  1.00000000 -0.02069030
-## [6,] -0.20722828 -0.40111537 -0.27632776 -0.02470048 -0.02069030  1.00000000
+##             [,1]       [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,]  1.00000000 0.01462532  0.1954499 -0.10481130 -0.75738198 -0.79220264
+## [2,]  0.01462532 1.00000000  0.1342994  0.44976234  0.24374775  0.18042754
+## [3,]  0.19544994 0.13429944  1.0000000 -0.20912702  0.41287512  0.39531115
+## [4,] -0.10481130 0.44976234 -0.2091270  1.00000000  0.01626636 -0.05389573
+## [5,] -0.75738198 0.24374775  0.4128751  0.01626636  1.00000000 -0.95839972
+## [6,] -0.79220264 0.18042754  0.3953111 -0.05389573 -0.95839972  1.00000000
 ```
 
 ```r
@@ -155,22 +156,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##              [,1]        [,2]       [,3]         [,4]       [,5]        [,6]
-## [1,]  0.752868174 -0.69464698  0.2166940  0.001765447  0.4518166  0.09335679
-## [2,] -0.694646977  1.01655069 -0.3514547  0.035518232 -0.3784378 -0.28841904
-## [3,]  0.216693986 -0.35145466  0.7590147  0.255647540 -0.2578044 -0.14219163
-## [4,]  0.001765447  0.03551823  0.2556475  0.490455572 -0.2630931 -0.13781660
-## [5,]  0.451816581 -0.37843783 -0.2578044 -0.263093077  1.3525394  0.16876656
-## [6,]  0.093356785 -0.28841904 -0.1421916 -0.137816602  0.1687666  1.01725043
+##             [,1]       [,2]        [,3]        [,4]       [,5]        [,6]
+## [1,]  0.43096245 -0.2768659 -0.16070286 -0.14101367 -0.1214204 -0.08074651
+## [2,] -0.27686587  1.2669807  0.26674403  0.53218104  0.4887738 -0.15087652
+## [3,] -0.16070286  0.2667440  0.81542791 -0.02041317  0.1596835  0.02413882
+## [4,] -0.14101367  0.5321810 -0.02041317  0.73224829  0.3329995 -0.14710490
+## [5,] -0.12142038  0.4887738  0.15968351  0.33299953  0.8784542 -0.46041101
+## [6,] -0.08074651 -0.1508765  0.02413882 -0.14710490 -0.4604110  0.31733151
 ## 
 ## $wi
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,]  4.40445121  2.89542263  0.09049848 -0.57375984 -0.81634201 0.48705980
-## [2,]  2.89542263  3.71637200  1.31226053 -0.67555990  0.08324133 0.86604460
-## [3,]  0.09049848  1.31226053  2.50708343 -0.96038206  0.56685316 0.49002937
-## [4,] -0.57375984 -0.67555990 -0.96038206  2.79529364  0.35754230 0.04626617
-## [5,] -0.81634201  0.08324133  0.56685316  0.35754230  1.20976498 0.02548393
-## [6,]  0.48705980  0.86604460  0.49002937  0.04626617  0.02548393 1.25441921
+##             [,1]        [,2]       [,3]       [,4]      [,5]       [,6]
+## [1,]  7.60883493 -0.04890689 -0.7109297  0.4299429  9.102256 15.3726615
+## [2,] -0.04890689  1.48043267 -0.2156324 -0.8140298 -1.291980 -1.5438680
+## [3,] -0.71092972 -0.21563239  1.7402243  0.4104470 -2.372736 -3.6681401
+## [4,]  0.42994285 -0.81402979  0.4104470  2.2128090 -0.105775  0.5633783
+## [5,]  9.10225647 -1.29198015 -2.3727359 -0.1057750 18.983742 29.3765443
+## [6,] 15.37266147 -1.54386802 -3.6681401  0.5633783 29.376544 49.4911561
 ## 
 ## $errflag
 ## [1] 0
@@ -185,7 +186,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] -0.7156596
+## [1] 0.01457192
 ```
 
 ```r
@@ -193,13 +194,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.71565955 -0.02723397  0.16351987  0.35365169 -0.20721206
-## [2,] -0.71565955 -1.00000000 -0.42990855  0.20959965 -0.03925807 -0.40110615
-## [3,] -0.02723397 -0.42990855 -1.00000000  0.36278217 -0.32548852 -0.27632258
-## [4,]  0.16351987  0.20959965  0.36278217 -1.00000000 -0.19442997 -0.02470748
-## [5,]  0.35365169 -0.03925807 -0.32548852 -0.19442997 -1.00000000 -0.02068686
-## [6,] -0.20721206 -0.40110615 -0.27632258 -0.02470748 -0.02068686 -1.00000000
+##             [,1]        [,2]       [,3]        [,4]        [,5]        [,6]
+## [1,] -1.00000000  0.01457192  0.1953732 -0.10478031 -0.75735427 -0.79218421
+## [2,]  0.01457192 -1.00000000  0.1343436  0.44975293  0.24370846  0.18036491
+## [3,]  0.19537319  0.13434362 -1.0000000 -0.20916186  0.41281539  0.39525694
+## [4,] -0.10478031  0.44975293 -0.2091619 -1.00000000  0.01631999 -0.05383495
+## [5,] -0.75735427  0.24370846  0.4128154  0.01631999 -1.00000000 -0.95839821
+## [6,] -0.79218421  0.18036491  0.3952569 -0.05383495 -0.95839821 -1.00000000
 ```
 
 ## High-dimensional data
@@ -346,11 +347,15 @@ corpcor::cor2pcor(S)
 ## [10,]  0.2703214 -0.37463425 -0.07014287  1.0000000000
 ```
 
-However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix for a network analysis that differentiates the significant edges from insignificant ones. 
+However, we know from Chapter 29 that these solutions are not stable.  Further, we also want to identify the sparsity in the precision matrix that differentiates the significant edges from insignificant ones for a network analysis . 
 
 ## Ridge ($\ell_{2}$) and glasso ($\ell_{1}$)
 
-Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation
+A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+
+In a multivariate normal model, $p_{i j}=p_{j i}=0$ (the entries in the precision matrix) if and only if $X_{i}$ and $X_{j}$ are independent when condition ong all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
+
+Regularization helps us find the sparsified partial correlation matrix. We first start with Ridge and `rags2ridges` (see, [Introduction to rags2ridges](https://cran.r-project.org/web/packages/rags2ridges/vignettes/rags2ridges.html)), which is an R-package for fast and proper $\ell_{2}$-penalized estimation of precision (and covariance) matrices also called ridge estimation.  
 
 Their algorithm solves the following:
 
@@ -455,7 +460,7 @@ P[1:7, 1:7]
 ## G  2.61837378
 ```
 
-What Lambda should you choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
+What Lambda should we choose? One strategy for choosing $\lambda$ is selecting it to be stable yet precise (a bias-variance trade-off). Automatic k-fold cross-validation can be done with `optPenalty.kCVauto()` is well suited for this.
 
 
 ```r
@@ -485,7 +490,7 @@ We know that Ridge will not provide a sparse solution.  Yet, we need a sparse pr
 
 >At last point to mention here is also that the true underlying graph might not always be very sparse (or sparse at all).
 
-The function `spasify()` handles the the spasification by FDR (False Discovery Rate) application:
+The function `spasify()` handles the the spasification by applying the FDR (False Discovery Rate) method:
 
 
 ```r
@@ -537,7 +542,8 @@ spar
 ## F 0.000000 0.000000 0.000000 0.000000 0.000000 2.724853 …
 ## … 19 more rows and 19 more columns
 ```
-After edge selection, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
+  
+The steps are explained in their paper.  After edge selections, `GGMnetworkStats()` can be utilized to get summary statistics of the resulting graph topology:
 
 
 ```r
@@ -611,20 +617,17 @@ fc
 ##         Y 
 ## 0.3962399
 ```
-
-## What's graphical - graphical ridge or glasso?
   
-A contemporary use for precision matrices is found in network reconstruction through graphical modeling (Network Analysis). 
+While the $\ell_{2}$ penalty of graphical ridge relies on an extra step to select the edges after $P$ is estimated, the graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and select the edges in the underlying graph.
 
-In a multivariate normal model, $p_{i j}=p_{j i}=0$, the entries in the precision matrix, if and only if $X_{i}$ and $X_{j}$ are independent when condition on all other variables. In real world applications, $P$ (the precision matrix) is often relatively sparse with lots of zeros. With the close relationship between $P$ and the partial correlations, **the non-zero entries of the precision matrix can be interpreted the edges of a graph where nodes correspond to the variables.**
-
-The graphical lasso (`gLasso`) is the $\ell_{1}$-equivalent to graphical ridge, where the $\ell_{1}$ penalty automatically induces sparsity and  select the edges in the underlying graph, while the $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after $P$ is estimated. 
-
-Now, we will apply some packages on both glass and ridge.  First glasso:  
-
+The graphical lasso aims to solve the following regularized maximum likelihood problem:
+  
+$$
+\mathcal{L}(\Omega)=\operatorname{tr}(\Omega S)-\log |\Omega|+\lambda\|\Omega\|_1
+$$
+  
 
 ```r
-# glasso
 gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
 - cov2cor(gl$wi)[1:10, 1:10]
 ```
@@ -653,36 +656,5 @@ gl <- glasso::glasso(S, rho = 0.2641, approx = FALSE)[c('w', 'wi')]
 ##  [9,]  0.000000000  0.000000000 -1.00000000  0.00000000
 ## [10,]  0.050183134  0.000000000  0.00000000 -1.00000000
 ```
-
-```r
-# glassoFast
-glf <- glassoFast::glassoFast(S,rho=0.2641)
--cov2cor(glf$wi)[1:10, 1:10]
-```
-
-```
-##       [,1]        [,2]        [,3]       [,4]        [,5]       [,6]
-##  [1,]   -1  0.00000000  0.00000000  0.0000000  0.00000000  0.0000000
-##  [2,]    0 -1.00000000 -0.07439142  0.0000000  0.09011203  0.1280012
-##  [3,]    0 -0.07439142 -1.00000000  0.0000000  0.00000000  0.0000000
-##  [4,]    0  0.00000000  0.00000000 -1.0000000 -0.15354161  0.0000000
-##  [5,]    0  0.09011203  0.00000000 -0.1535416 -1.00000000  0.1502231
-##  [6,]    0  0.12800124  0.00000000  0.0000000  0.15022313 -1.0000000
-##  [7,]    0  0.00000000  0.00000000  0.0000000  0.00000000  0.0000000
-##  [8,]    0  0.00000000  0.00000000  0.0000000  0.10986151  0.0000000
-##  [9,]    0  0.00000000 -0.09170577  0.0000000  0.26299718  0.0000000
-## [10,]    0  0.00000000  0.20156721  0.0000000  0.00000000  0.0000000
-##               [,7]         [,8]        [,9]       [,10]
-##  [1,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [2,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [3,]  0.000000000  0.000000000 -0.09170577  0.20156721
-##  [4,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [5,]  0.000000000  0.109861509  0.26299718  0.00000000
-##  [6,]  0.000000000  0.000000000  0.00000000  0.00000000
-##  [7,] -1.000000000 -0.007621879  0.00000000  0.05018337
-##  [8,] -0.007621879 -1.000000000  0.00000000  0.00000000
-##  [9,]  0.000000000  0.000000000 -1.00000000  0.00000000
-## [10,]  0.050183374  0.000000000  0.00000000 -1.00000000
-```
   
-The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  
+The `glasso` package does not provide an option for tuning parameter selection.  In practice, users apply can be done by cross-validation and eBIC.  There are also multiple packages and fucntion to plot the networks for a visual inspection.    

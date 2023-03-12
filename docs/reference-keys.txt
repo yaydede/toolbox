@@ -191,12 +191,12 @@ factor-analysis
 fundementals
 covariance
 correlation
+precision-matrix
 semi-partial-correlation
 regularized-covariance-matrix
-mle
+multivariate-gaussian-distribution
 high-dimensional-data
 ridge-ell_2-and-glasso-ell_1
-whats-graphical---graphical-ridge-or-glasso
 r-lab-1---basics-i
 r-rstudio-and-r-packages
 rstudio
