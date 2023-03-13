@@ -130,7 +130,7 @@ In order to understand how we can find the margin, we will use a bit vector alge
 
 Let $\mathbf{u}=\left\langle u_{1}, u_{2}, u_{3}\right\rangle$ and $\mathbf{v}=\left\langle v_{1}, v_{2}, v_{3}\right\rangle$ be two vectors with a common initial point.  Then $\mathbf{u}, \mathbf{v}$ and $\mathbf{u}-\mathbf{v}$ form a triangle, as shown.
 
-```{r sv5, echo=FALSE, out.width = '115%', out.height='115%'}
+```{r sv5, echo=FALSE, out.width = '40%', out.height='40%'}
 knitr::include_graphics("png/triangle.png")
 ```  
 

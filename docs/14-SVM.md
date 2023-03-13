@@ -123,7 +123,7 @@ In order to understand how we can find the margin, we will use a bit vector alge
 
 Let $\mathbf{u}=\left\langle u_{1}, u_{2}, u_{3}\right\rangle$ and $\mathbf{v}=\left\langle v_{1}, v_{2}, v_{3}\right\rangle$ be two vectors with a common initial point.  Then $\mathbf{u}, \mathbf{v}$ and $\mathbf{u}-\mathbf{v}$ form a triangle, as shown.
 
-<img src="png/triangle.png" width="115%" height="115%" />
+<img src="png/triangle.png" width="40%" height="40%" />
 
 By the Law of Cosines,
   

@@ -556,9 +556,9 @@ div.csl-indent {
 <span id="cb1061-11"><a href="moore-penrose-inverse.html#cb1061-11" aria-hidden="true" tabindex="-1"></a>betahat_OLS <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> Y</span>
 <span id="cb1061-12"><a href="moore-penrose-inverse.html#cb1061-12" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
 <pre><code>##         [,1]
-## x1 0.4187644
-## x2 1.6604130
-## x3 1.3810833</code></pre>
+## x1 0.5425934
+## x2 1.6257287
+## x3 2.0542586</code></pre>
 <div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1063-1"><a href="moore-penrose-inverse.html#cb1063-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SVD</span></span>
 <span id="cb1063-2"><a href="moore-penrose-inverse.html#cb1063-2" aria-hidden="true" tabindex="-1"></a>X.svd <span class="ot">&lt;-</span> <span class="fu">svd</span>(X)</span>
 <span id="cb1063-3"><a href="moore-penrose-inverse.html#cb1063-3" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">/</span> X.svd<span class="sc">$</span>d)</span>
@@ -583,14 +583,14 @@ div.csl-indent {
 <span id="cb1065-2"><a href="moore-penrose-inverse.html#cb1065-2" aria-hidden="true" tabindex="-1"></a>betahat_ginv <span class="ot">&lt;-</span> X.ginv <span class="sc">%*%</span> Y</span>
 <span id="cb1065-3"><a href="moore-penrose-inverse.html#cb1065-3" aria-hidden="true" tabindex="-1"></a>betahat_ginv</span></code></pre></div>
 <pre><code>##           [,1]
-## [1,] 0.4187644
-## [2,] 1.6604130
-## [3,] 1.3810833</code></pre>
+## [1,] 0.5425934
+## [2,] 1.6257287
+## [3,] 2.0542586</code></pre>
 <div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1067-1"><a href="moore-penrose-inverse.html#cb1067-1" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
 <pre><code>##         [,1]
-## x1 0.4187644
-## x2 1.6604130
-## x3 1.3810833</code></pre>
+## x1 0.5425934
+## x2 1.6257287
+## x3 2.0542586</code></pre>
 
 </div>
             </section>
