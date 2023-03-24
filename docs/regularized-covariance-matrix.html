@@ -568,44 +568,44 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 <span id="cb1146-7"><a href="regularized-covariance-matrix.html#cb1146-7" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">solve</span>(S) <span class="co"># precision</span></span>
 <span id="cb1146-8"><a href="regularized-covariance-matrix.html#cb1146-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1146-9"><a href="regularized-covariance-matrix.html#cb1146-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>pm[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(pm[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(pm[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
-<pre><code>## [1] -0.2163581</code></pre>
+<pre><code>## [1] 0.5002705</code></pre>
 <div class="sourceCode" id="cb1148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1148-1"><a href="regularized-covariance-matrix.html#cb1148-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(pm)</span></code></pre></div>
-<pre><code>##             [,1]       [,2]       [,3]        [,4]       [,5]       [,6]
-## [1,] -1.00000000 -0.2163581  0.5433019 -0.02050311 -0.1540147 -0.2222873
-## [2,] -0.21635808 -1.0000000 -0.2968098  0.55329427  0.7268470 -0.8562613
-## [3,]  0.54330185 -0.2968098 -1.0000000  0.50028428  0.6303962 -0.2415846
-## [4,] -0.02050311  0.5532943  0.5002843 -1.00000000 -0.5397119  0.6209287
-## [5,] -0.15401470  0.7268470  0.6303962 -0.53971193 -1.0000000  0.7703314
-## [6,] -0.22228728 -0.8562613 -0.2415846  0.62092871  0.7703314 -1.0000000</code></pre>
+<pre><code>##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
+## [1,] -1.0000000  0.5002705  0.38013629 -0.28003540 -0.60007078  0.50557815
+## [2,]  0.5002705 -1.0000000 -0.13218266  0.46965260  0.31293053 -0.46416901
+## [3,]  0.3801363 -0.1321827 -1.00000000  0.04444115  0.16124490  0.06309003
+## [4,] -0.2800354  0.4696526  0.04444115 -1.00000000 -0.09991209  0.23951422
+## [5,] -0.6000708  0.3129305  0.16124490 -0.09991209 -1.00000000  0.81531804
+## [6,]  0.5055781 -0.4641690  0.06309003  0.23951422  0.81531804 -1.00000000</code></pre>
 <div class="sourceCode" id="cb1150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1150-1"><a href="regularized-covariance-matrix.html#cb1150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ppcor</span></span>
 <span id="cb1150-2"><a href="regularized-covariance-matrix.html#cb1150-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span>
 <span id="cb1150-3"><a href="regularized-covariance-matrix.html#cb1150-3" aria-hidden="true" tabindex="-1"></a>pc<span class="sc">$</span>estimate</span></code></pre></div>
-<pre><code>##             [,1]       [,2]       [,3]        [,4]       [,5]       [,6]
-## [1,]  1.00000000 -0.2163581  0.5433019 -0.02050311 -0.1540147 -0.2222873
-## [2,] -0.21635808  1.0000000 -0.2968098  0.55329427  0.7268470 -0.8562613
-## [3,]  0.54330185 -0.2968098  1.0000000  0.50028428  0.6303962 -0.2415846
-## [4,] -0.02050311  0.5532943  0.5002843  1.00000000 -0.5397119  0.6209287
-## [5,] -0.15401470  0.7268470  0.6303962 -0.53971193  1.0000000  0.7703314
-## [6,] -0.22228728 -0.8562613 -0.2415846  0.62092871  0.7703314  1.0000000</code></pre>
+<pre><code>##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
+## [1,]  1.0000000  0.5002705  0.38013629 -0.28003540 -0.60007078  0.50557815
+## [2,]  0.5002705  1.0000000 -0.13218266  0.46965260  0.31293053 -0.46416901
+## [3,]  0.3801363 -0.1321827  1.00000000  0.04444115  0.16124490  0.06309003
+## [4,] -0.2800354  0.4696526  0.04444115  1.00000000 -0.09991209  0.23951422
+## [5,] -0.6000708  0.3129305  0.16124490 -0.09991209  1.00000000  0.81531804
+## [6,]  0.5055781 -0.4641690  0.06309003  0.23951422  0.81531804  1.00000000</code></pre>
 <div class="sourceCode" id="cb1152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1152-1"><a href="regularized-covariance-matrix.html#cb1152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glasso</span></span>
 <span id="cb1152-2"><a href="regularized-covariance-matrix.html#cb1152-2" aria-hidden="true" tabindex="-1"></a>glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $w
-##             [,1]        [,2]       [,3]        [,4]       [,5]        [,6]
-## [1,]  0.86570842 -0.19966631  0.2857752  0.08408710 -0.1136389 -0.06111936
-## [2,] -0.19966631  0.83931911 -0.0884044 -0.01583357  0.1187352 -0.33865577
-## [3,]  0.28577517 -0.08840440  0.5221796  0.40525756  0.4434053  0.24681035
-## [4,]  0.08408710 -0.01583357  0.4052576  1.15700037  0.3446314  0.37622468
-## [5,] -0.11363895  0.11873520  0.4434053  0.34463139  0.9963837  0.45248995
-## [6,] -0.06111936 -0.33865577  0.2468104  0.37622468  0.4524900  0.52173562
+##              [,1]        [,2]         [,3]         [,4]       [,5]         [,6]
+## [1,]  0.658480662  0.23753224  0.277319887 -0.101794968 -0.3340982 -0.008766578
+## [2,]  0.237532238  0.88546395 -0.089495678  0.323522466 -0.2641969 -0.241372158
+## [3,]  0.277319887 -0.08949568  1.092961483 -0.002716858  0.3053400  0.300426388
+## [4,] -0.101794968  0.32352247 -0.002716858  1.103489402  0.2080822  0.100021878
+## [5,] -0.334098186 -0.26419689  0.305339965  0.208082186  1.4264583  0.710508404
+## [6,] -0.008766578 -0.24137216  0.300426388  0.100021878  0.7105084  0.572485881
 ## 
 ## $wi
-##             [,1]       [,2]      [,3]        [,4]       [,5]      [,6]
-## [1,]  2.18793636  0.7112847 -2.161494  0.04320886  0.5534339  1.229522
-## [2,]  0.71128473  4.9412794  1.774098 -1.75101518 -3.9235317  7.116725
-## [3,] -2.16149381  1.7740978  7.232841 -1.91539846 -4.1169593  2.428140
-## [4,]  0.04320886 -1.7510152 -1.915398  2.02711126  1.8658353 -3.305243
-## [5,]  0.55343393 -3.9235317 -4.116959  1.86583534  5.8974217 -6.994191
-## [6,]  1.22952247  7.1167254  2.428140 -3.30524343 -6.9941912 13.980519
+##            [,1]       [,2]        [,3]        [,4]       [,5]       [,6]
+## [1,]  3.3175857 -1.2982278 -0.78037320  0.55920940  1.8701717 -2.5057916
+## [2,] -1.2982278  2.0300709  0.21224856 -0.73368310 -0.7628180  1.7995680
+## [3,] -0.7803732  0.2122486  1.27026828 -0.05491121 -0.3109813 -0.1935162
+## [4,]  0.5592094 -0.7336831 -0.05491121  1.20219762  0.1873655 -0.7145332
+## [5,]  1.8701717 -0.7628180 -0.31098135  0.18736546  2.9280065 -3.7964613
+## [6,] -2.5057916  1.7995680 -0.19351623 -0.71453324 -3.7964613  7.4052878
 ## 
 ## $errflag
 ## [1] 0
@@ -614,15 +614,15 @@ n \log |\boldsymbol{\Sigma}|+\sum_{i=1}^{n}(\mathbf{x}-\boldsymbol{\mu})^{t} \bo
 ## [1] 1</code></pre>
 <div class="sourceCode" id="cb1154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1154-1"><a href="regularized-covariance-matrix.html#cb1154-1" aria-hidden="true" tabindex="-1"></a>Rl <span class="ot">&lt;-</span> glassoFast<span class="sc">::</span><span class="fu">glassoFast</span>(S,<span class="at">rho=</span><span class="dv">0</span>)<span class="sc">$</span>wi <span class="co">#</span></span>
 <span id="cb1154-2"><a href="regularized-covariance-matrix.html#cb1154-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>Rl[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(Rl[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(Rl[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
-<pre><code>## [1] -0.2163249</code></pre>
+<pre><code>## [1] 0.5002467</code></pre>
 <div class="sourceCode" id="cb1156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1156-1"><a href="regularized-covariance-matrix.html#cb1156-1" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(Rl)</span></code></pre></div>
-<pre><code>##             [,1]       [,2]       [,3]        [,4]       [,5]       [,6]
-## [1,] -1.00000000 -0.2163249  0.5433531 -0.02051713 -0.1540697 -0.2223092
-## [2,] -0.21632487 -1.0000000 -0.2967587  0.55326273  0.7268192 -0.8562466
-## [3,]  0.54335314 -0.2967587 -1.0000000  0.50022555  0.6303634 -0.2414669
-## [4,] -0.02051713  0.5532627  0.5002255 -1.00000000 -0.5396391  0.6208733
-## [5,] -0.15406974  0.7268192  0.6303634 -0.53963913 -1.0000000  0.7702732
-## [6,] -0.22230922 -0.8562466 -0.2414669  0.62087334  0.7702732 -1.0000000</code></pre>
+<pre><code>##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
+## [1,] -1.0000000  0.5002467  0.38013998 -0.28001124 -0.60004578  0.50554860
+## [2,]  0.5002467 -1.0000000 -0.13217259  0.46963989  0.31288110 -0.46413217
+## [3,]  0.3801400 -0.1321726 -1.00000000  0.04443502  0.16125032  0.06309554
+## [4,] -0.2800112  0.4696399  0.04443502 -1.00000000 -0.09986552  0.23947685
+## [5,] -0.6000458  0.3128811  0.16125032 -0.09986552 -1.00000000  0.81530854
+## [6,]  0.5055486 -0.4641322  0.06309554  0.23947685  0.81530854 -1.00000000</code></pre>
 </div>
 <div id="high-dimensional-data" class="section level2 hasAnchor" number="33.2">
 <h2><span class="header-section-number">33.2</span> High-dimensional data<a href="regularized-covariance-matrix.html#high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>

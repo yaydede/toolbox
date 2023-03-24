@@ -2,8 +2,6 @@
 
 The models we see in the previous chapters are parametric, which means that they have to assume a certain structure on the regression function $m$ controlled by parameters before the estimations. Therefore, the results from parametric models are the best if the specification of $m$ is correct.  Avoiding this assumption is the strongest point of nonparametric methods, which do not require any hard-to-satisfy pre-determined regression functions.  
 
-Before talking about a nonparametric estimator for the regression function $m$, we should first look at a simple nonparametric density estimation of $X$. We aim to estimate $f(x)$ from a sample and without assuming any specific form for $f$. 
-
 <img src="png/progressive_plot4.gif" style="display: block; margin: auto;" />
 
 <img src="png/progressive_plot2.gif" style="display: block; margin: auto;" />
@@ -47,7 +45,8 @@ colnames(new_line) <- c("time", "y")
 # }
 ```
 
-
+Before talking about a nonparametric estimator for the regression function $m$, we should first look at a simple nonparametric density estimation of $X$. We aim to estimate $f(x)$ from a sample and without assuming any specific form for $f$. 
+  
 ## Density Estimations
 
 We will only look at one-variable Kernel density estimations.  Let's assume that a sample of $n$ observations, $y_1,...,y_n$, is drawn from a parametric distribution $f(y,\theta)$. If the data are i.i.d., the joint density function is:  
