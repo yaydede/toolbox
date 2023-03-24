@@ -56,8 +56,16 @@ From this simple rule, we have two misclassified balls.  We can add a new rule i
 plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
 abline(
   h = 0.62,
-  v = 0.2,
   col = c("blue", "darkgreen"),
+  lty = 5,
+  lwd = 2
+)
+segments(
+  x0 = 0.2,
+  y0 = 0,
+  x1 = 0.2,
+  y1 = 0.62,
+  col = "darkgreen",
   lty = 5,
   lwd = 2
 )
@@ -419,7 +427,7 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.58621 0.12399
+## 2 0.034483      1   0.27586 0.55172 0.12140
 ## 3 0.010000      2   0.24138 0.55172 0.12140
 ```
 
@@ -469,10 +477,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01569 0.045386
-## 2 0.101694      1   0.41379 0.83847 0.167099
-## 3 0.028263      2   0.31209 0.79994 0.165206
-## 4 0.010000      3   0.28383 0.74223 0.152415
+## 1 0.586213      0   1.00000 1.01339 0.045234
+## 2 0.101694      1   0.41379 0.78936 0.162179
+## 3 0.028263      2   0.31209 0.70186 0.155816
+## 4 0.010000      3   0.28383 0.62074 0.137473
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -550,9 +558,9 @@ printcp(tree2)
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
 ## 2 0.103448      1  0.275862 0.51724 0.11861
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.44828 0.11237
-## 5 0.000000      8  0.000000 0.48276 0.11560
+## 3 0.034483      2  0.172414 0.48276 0.11560
+## 4 0.017241      6  0.034483 0.55172 0.12140
+## 5 0.000000      8  0.000000 0.55172 0.12140
 ```
 
 ```r
@@ -601,7 +609,7 @@ printcp(ptree2)
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
 ## 2 0.103448      1   0.27586 0.51724 0.11861
-## 3 0.034483      2   0.17241 0.44828 0.11237
+## 3 0.034483      2   0.17241 0.48276 0.11560
 ```
 
 ```r
@@ -704,9 +712,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.558 0.029633
-## 4 0.011333      5     0.504  0.550 0.029477
-## 5 0.010000      9     0.458  0.546 0.029398
+## 3 0.015000      3     0.534  0.552 0.029517
+## 4 0.011333      5     0.504  0.554 0.029556
+## 5 0.010000      9     0.458  0.552 0.029517
 ```
 
 ```r

@@ -53,8 +53,16 @@ From this simple rule, we have two misclassified balls.  We can add a new rule i
 plot(data$x1, data$x2, col = (data$y + 1), lwd = 4)
 abline(
   h = 0.62,
-  v = 0.2,
   col = c("blue", "darkgreen"),
+  lty = 5,
+  lwd = 2
+)
+segments(
+  x0 = 0.2,
+  y0 = 0,
+  x1 = 0.2,
+  y1 = 0.62,
+  col = "darkgreen",
   lty = 5,
   lwd = 2
 )

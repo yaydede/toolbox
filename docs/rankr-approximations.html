@@ -495,83 +495,83 @@ div.csl-indent {
 =\sigma_{1} u_{1} v_{1}^{\top}+\sigma_{2} u_{2} v_{2}^{\top}+\ldots+\sigma_{n} u_{n} v_{n}^{\top}+ 0.
 \]</span>
 Each term in this equation is a Rank(1) matrix: <span class="math inline">\(u_1\)</span> is <span class="math inline">\(n \times 1\)</span> column vector and <span class="math inline">\(v_1\)</span> is <span class="math inline">\(1 \times n\)</span> row vector. Since these are the only orthogonal entries in the resulting matrix, the first term with <span class="math inline">\(\sigma_1\)</span> is a Rank(1) <span class="math inline">\(n \times n\)</span> matrix. All other terms have the same dimension. Since <span class="math inline">\(\sigma\)</span>’s are ordered, the first term is the carries the most information. So, Rank(1) approximation is taking only the first term and ignoring the others. Here is a simple example:</p>
-<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1049-1"><a href="rankr-approximations.html#cb1049-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rank-one approximation</span></span>
-<span id="cb1049-2"><a href="rankr-approximations.html#cb1049-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>), <span class="dv">2</span> , <span class="dv">2</span>)</span>
-<span id="cb1049-3"><a href="rankr-approximations.html#cb1049-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1050-1"><a href="rankr-approximations.html#cb1050-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rank-one approximation</span></span>
+<span id="cb1050-2"><a href="rankr-approximations.html#cb1050-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">2</span>), <span class="dv">2</span> , <span class="dv">2</span>)</span>
+<span id="cb1050-3"><a href="rankr-approximations.html#cb1050-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
 <pre><code>##      [,1] [,2]
 ## [1,]    1    4
 ## [2,]    5    2</code></pre>
-<div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1051-1"><a href="rankr-approximations.html#cb1051-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> (A))<span class="sc">$</span>vector[, <span class="dv">1</span>], <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb1051-2"><a href="rankr-approximations.html#cb1051-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> (A))<span class="sc">$</span>values[<span class="dv">1</span>])</span>
-<span id="cb1051-3"><a href="rankr-approximations.html#cb1051-3" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">eigen</span>(A <span class="sc">%*%</span> <span class="fu">t</span>(A))<span class="sc">$</span>vector[, <span class="dv">1</span>], <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb1051-4"><a href="rankr-approximations.html#cb1051-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1051-5"><a href="rankr-approximations.html#cb1051-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank(1) approximation of A</span></span>
-<span id="cb1051-6"><a href="rankr-approximations.html#cb1051-6" aria-hidden="true" tabindex="-1"></a>Atilde <span class="ot">&lt;-</span> sigma <span class="sc">*</span> u1 <span class="sc">%*%</span> v1</span>
-<span id="cb1051-7"><a href="rankr-approximations.html#cb1051-7" aria-hidden="true" tabindex="-1"></a>Atilde</span></code></pre></div>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1052-1"><a href="rankr-approximations.html#cb1052-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> (A))<span class="sc">$</span>vector[, <span class="dv">1</span>], <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb1052-2"><a href="rankr-approximations.html#cb1052-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> (A))<span class="sc">$</span>values[<span class="dv">1</span>])</span>
+<span id="cb1052-3"><a href="rankr-approximations.html#cb1052-3" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">eigen</span>(A <span class="sc">%*%</span> <span class="fu">t</span>(A))<span class="sc">$</span>vector[, <span class="dv">1</span>], <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb1052-4"><a href="rankr-approximations.html#cb1052-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1052-5"><a href="rankr-approximations.html#cb1052-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank(1) approximation of A</span></span>
+<span id="cb1052-6"><a href="rankr-approximations.html#cb1052-6" aria-hidden="true" tabindex="-1"></a>Atilde <span class="ot">&lt;-</span> sigma <span class="sc">*</span> u1 <span class="sc">%*%</span> v1</span>
+<span id="cb1052-7"><a href="rankr-approximations.html#cb1052-7" aria-hidden="true" tabindex="-1"></a>Atilde</span></code></pre></div>
 <pre><code>##           [,1]      [,2]
 ## [1,] -2.560369 -2.069843
 ## [2,] -4.001625 -3.234977</code></pre>
 <p>And, Rank(2) approximation can be obtained by adding the first 2 terms. As we add more terms, we can get the full information in the data. But often times, we truncate the ranks at <span class="math inline">\(r\)</span> by removing the terms with small <span class="math inline">\(sigma\)</span>. This is also called noise reduction.</p>
 <p>There are many examples on the Internet for real image compression, but we apply rank approximation to a heatmap from our own work. The heatmap shows moving-window partial correlations between daily positivity rates (Covid-19) and mobility restrictions for different time delays (days, “lags”)</p>
-<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1053-1"><a href="rankr-approximations.html#cb1053-1" aria-hidden="true" tabindex="-1"></a>comt <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;comt.rds&quot;</span>)</span>
-<span id="cb1053-2"><a href="rankr-approximations.html#cb1053-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1053-3"><a href="rankr-approximations.html#cb1053-3" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
-<span id="cb1053-4"><a href="rankr-approximations.html#cb1053-4" aria-hidden="true" tabindex="-1"></a>  comt,</span>
-<span id="cb1053-5"><a href="rankr-approximations.html#cb1053-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1053-6"><a href="rankr-approximations.html#cb1053-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1053-7"><a href="rankr-approximations.html#cb1053-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap - Original&quot;</span>,</span>
-<span id="cb1053-8"><a href="rankr-approximations.html#cb1053-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
-<span id="cb1053-9"><a href="rankr-approximations.html#cb1053-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Starting days of 7-day rolling windows&quot;</span></span>
-<span id="cb1053-10"><a href="rankr-approximations.html#cb1053-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1054-1"><a href="rankr-approximations.html#cb1054-1" aria-hidden="true" tabindex="-1"></a>comt <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;comt.rds&quot;</span>)</span>
+<span id="cb1054-2"><a href="rankr-approximations.html#cb1054-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1054-3"><a href="rankr-approximations.html#cb1054-3" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
+<span id="cb1054-4"><a href="rankr-approximations.html#cb1054-4" aria-hidden="true" tabindex="-1"></a>  comt,</span>
+<span id="cb1054-5"><a href="rankr-approximations.html#cb1054-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1054-6"><a href="rankr-approximations.html#cb1054-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1054-7"><a href="rankr-approximations.html#cb1054-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap - Original&quot;</span>,</span>
+<span id="cb1054-8"><a href="rankr-approximations.html#cb1054-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
+<span id="cb1054-9"><a href="rankr-approximations.html#cb1054-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Starting days of 7-day rolling windows&quot;</span></span>
+<span id="cb1054-10"><a href="rankr-approximations.html#cb1054-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="25-RankrApprox_files/figure-html/ra2-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1054-1"><a href="rankr-approximations.html#cb1054-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank(2) with SVD</span></span>
-<span id="cb1054-2"><a href="rankr-approximations.html#cb1054-2" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(comt)</span>
-<span id="cb1054-3"><a href="rankr-approximations.html#cb1054-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb1054-4"><a href="rankr-approximations.html#cb1054-4" aria-hidden="true" tabindex="-1"></a>comt.re <span class="ot">&lt;-</span></span>
-<span id="cb1054-5"><a href="rankr-approximations.html#cb1054-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
-<span id="cb1054-6"><a href="rankr-approximations.html#cb1054-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1054-7"><a href="rankr-approximations.html#cb1054-7" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
-<span id="cb1054-8"><a href="rankr-approximations.html#cb1054-8" aria-hidden="true" tabindex="-1"></a>  comt.re,</span>
-<span id="cb1054-9"><a href="rankr-approximations.html#cb1054-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1054-10"><a href="rankr-approximations.html#cb1054-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1054-11"><a href="rankr-approximations.html#cb1054-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap Matrix - Rank(2) Approx&quot;</span>,</span>
-<span id="cb1054-12"><a href="rankr-approximations.html#cb1054-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
-<span id="cb1054-13"><a href="rankr-approximations.html#cb1054-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span></span>
-<span id="cb1054-14"><a href="rankr-approximations.html#cb1054-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1055"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1055-1"><a href="rankr-approximations.html#cb1055-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank(2) with SVD</span></span>
+<span id="cb1055-2"><a href="rankr-approximations.html#cb1055-2" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(comt)</span>
+<span id="cb1055-3"><a href="rankr-approximations.html#cb1055-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb1055-4"><a href="rankr-approximations.html#cb1055-4" aria-hidden="true" tabindex="-1"></a>comt.re <span class="ot">&lt;-</span></span>
+<span id="cb1055-5"><a href="rankr-approximations.html#cb1055-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
+<span id="cb1055-6"><a href="rankr-approximations.html#cb1055-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1055-7"><a href="rankr-approximations.html#cb1055-7" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
+<span id="cb1055-8"><a href="rankr-approximations.html#cb1055-8" aria-hidden="true" tabindex="-1"></a>  comt.re,</span>
+<span id="cb1055-9"><a href="rankr-approximations.html#cb1055-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1055-10"><a href="rankr-approximations.html#cb1055-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1055-11"><a href="rankr-approximations.html#cb1055-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Heatmap Matrix - Rank(2) Approx&quot;</span>,</span>
+<span id="cb1055-12"><a href="rankr-approximations.html#cb1055-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
+<span id="cb1055-13"><a href="rankr-approximations.html#cb1055-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span></span>
+<span id="cb1055-14"><a href="rankr-approximations.html#cb1055-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="25-RankrApprox_files/figure-html/ra2-2.png" width="672" /></p>
 <p>This Rank(2) approximation reduces the noise in the moving-window partial correlations so that we can see the clear trend about the delay in the effect of mobility restrictions on the spread.</p>
 <p>We change the order of correlations in the original heatmap, and make it row-wise correlations:</p>
-<div class="sourceCode" id="cb1055"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1055-1"><a href="rankr-approximations.html#cb1055-1" aria-hidden="true" tabindex="-1"></a><span class="co">#XX&#39; and X&#39;X SVD</span></span>
-<span id="cb1055-2"><a href="rankr-approximations.html#cb1055-2" aria-hidden="true" tabindex="-1"></a>wtf <span class="ot">&lt;-</span> comt <span class="sc">%*%</span> <span class="fu">t</span>(comt)</span>
-<span id="cb1055-3"><a href="rankr-approximations.html#cb1055-3" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(wtf)</span>
-<span id="cb1055-4"><a href="rankr-approximations.html#cb1055-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb1055-5"><a href="rankr-approximations.html#cb1055-5" aria-hidden="true" tabindex="-1"></a>comt.re2 <span class="ot">&lt;-</span></span>
-<span id="cb1055-6"><a href="rankr-approximations.html#cb1055-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
-<span id="cb1055-7"><a href="rankr-approximations.html#cb1055-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1055-8"><a href="rankr-approximations.html#cb1055-8" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
-<span id="cb1055-9"><a href="rankr-approximations.html#cb1055-9" aria-hidden="true" tabindex="-1"></a>  comt.re2,</span>
-<span id="cb1055-10"><a href="rankr-approximations.html#cb1055-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1055-11"><a href="rankr-approximations.html#cb1055-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1055-12"><a href="rankr-approximations.html#cb1055-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Row Corr. - Rank(2)&quot;</span>,</span>
-<span id="cb1055-13"><a href="rankr-approximations.html#cb1055-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span>,</span>
-<span id="cb1055-14"><a href="rankr-approximations.html#cb1055-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span></span>
-<span id="cb1055-15"><a href="rankr-approximations.html#cb1055-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1056-1"><a href="rankr-approximations.html#cb1056-1" aria-hidden="true" tabindex="-1"></a><span class="co">#XX&#39; and X&#39;X SVD</span></span>
+<span id="cb1056-2"><a href="rankr-approximations.html#cb1056-2" aria-hidden="true" tabindex="-1"></a>wtf <span class="ot">&lt;-</span> comt <span class="sc">%*%</span> <span class="fu">t</span>(comt)</span>
+<span id="cb1056-3"><a href="rankr-approximations.html#cb1056-3" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(wtf)</span>
+<span id="cb1056-4"><a href="rankr-approximations.html#cb1056-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb1056-5"><a href="rankr-approximations.html#cb1056-5" aria-hidden="true" tabindex="-1"></a>comt.re2 <span class="ot">&lt;-</span></span>
+<span id="cb1056-6"><a href="rankr-approximations.html#cb1056-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
+<span id="cb1056-7"><a href="rankr-approximations.html#cb1056-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1056-8"><a href="rankr-approximations.html#cb1056-8" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
+<span id="cb1056-9"><a href="rankr-approximations.html#cb1056-9" aria-hidden="true" tabindex="-1"></a>  comt.re2,</span>
+<span id="cb1056-10"><a href="rankr-approximations.html#cb1056-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1056-11"><a href="rankr-approximations.html#cb1056-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1056-12"><a href="rankr-approximations.html#cb1056-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Row Corr. - Rank(2)&quot;</span>,</span>
+<span id="cb1056-13"><a href="rankr-approximations.html#cb1056-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span>,</span>
+<span id="cb1056-14"><a href="rankr-approximations.html#cb1056-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Startting days of 7-day rolling windows&quot;</span></span>
+<span id="cb1056-15"><a href="rankr-approximations.html#cb1056-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="25-RankrApprox_files/figure-html/ra3-1.png" width="672" /></p>
 <p>This is now worse than the original heatmap we had ealier. When we apply a Rank(2) approximation, however, we have a very clear picture:</p>
-<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1056-1"><a href="rankr-approximations.html#cb1056-1" aria-hidden="true" tabindex="-1"></a>wtf <span class="ot">&lt;-</span> <span class="fu">t</span>(comt) <span class="sc">%*%</span> comt</span>
-<span id="cb1056-2"><a href="rankr-approximations.html#cb1056-2" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(wtf)</span>
-<span id="cb1056-3"><a href="rankr-approximations.html#cb1056-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb1056-4"><a href="rankr-approximations.html#cb1056-4" aria-hidden="true" tabindex="-1"></a>comt.re3 <span class="ot">&lt;-</span></span>
-<span id="cb1056-5"><a href="rankr-approximations.html#cb1056-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
-<span id="cb1056-6"><a href="rankr-approximations.html#cb1056-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1056-7"><a href="rankr-approximations.html#cb1056-7" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
-<span id="cb1056-8"><a href="rankr-approximations.html#cb1056-8" aria-hidden="true" tabindex="-1"></a>  comt.re3,</span>
-<span id="cb1056-9"><a href="rankr-approximations.html#cb1056-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1056-10"><a href="rankr-approximations.html#cb1056-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
-<span id="cb1056-11"><a href="rankr-approximations.html#cb1056-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Column Corr. - Rank(2)&quot;</span>,</span>
-<span id="cb1056-12"><a href="rankr-approximations.html#cb1056-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
-<span id="cb1056-13"><a href="rankr-approximations.html#cb1056-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Lags&quot;</span></span>
-<span id="cb1056-14"><a href="rankr-approximations.html#cb1056-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1057"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1057-1"><a href="rankr-approximations.html#cb1057-1" aria-hidden="true" tabindex="-1"></a>wtf <span class="ot">&lt;-</span> <span class="fu">t</span>(comt) <span class="sc">%*%</span> comt</span>
+<span id="cb1057-2"><a href="rankr-approximations.html#cb1057-2" aria-hidden="true" tabindex="-1"></a>fck <span class="ot">&lt;-</span> <span class="fu">svd</span>(wtf)</span>
+<span id="cb1057-3"><a href="rankr-approximations.html#cb1057-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb1057-4"><a href="rankr-approximations.html#cb1057-4" aria-hidden="true" tabindex="-1"></a>comt.re3 <span class="ot">&lt;-</span></span>
+<span id="cb1057-5"><a href="rankr-approximations.html#cb1057-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(fck<span class="sc">$</span>u[, <span class="dv">1</span><span class="sc">:</span>r]) <span class="sc">%*%</span> <span class="fu">diag</span>(fck<span class="sc">$</span>d)[<span class="dv">1</span><span class="sc">:</span>r, <span class="dv">1</span><span class="sc">:</span>r] <span class="sc">%*%</span> <span class="fu">t</span>(fck<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>r])</span>
+<span id="cb1057-6"><a href="rankr-approximations.html#cb1057-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1057-7"><a href="rankr-approximations.html#cb1057-7" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
+<span id="cb1057-8"><a href="rankr-approximations.html#cb1057-8" aria-hidden="true" tabindex="-1"></a>  comt.re3,</span>
+<span id="cb1057-9"><a href="rankr-approximations.html#cb1057-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Colv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1057-10"><a href="rankr-approximations.html#cb1057-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Rowv =</span> <span class="cn">NA</span>,</span>
+<span id="cb1057-11"><a href="rankr-approximations.html#cb1057-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Column Corr. - Rank(2)&quot;</span>,</span>
+<span id="cb1057-12"><a href="rankr-approximations.html#cb1057-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Lags&quot;</span>,</span>
+<span id="cb1057-13"><a href="rankr-approximations.html#cb1057-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Lags&quot;</span></span>
+<span id="cb1057-14"><a href="rankr-approximations.html#cb1057-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="25-RankrApprox_files/figure-html/ra2c-1.png" width="672" /></p>
 <p>There is a series of great lectures on SVD and other matrix approximations by Steve Brunton at YouTube <a href="https://www.youtube.com/watch?v=nbBvuuNVfco" class="uri">https://www.youtube.com/watch?v=nbBvuuNVfco</a>.</p>
 
