@@ -555,10 +555,10 @@ div.csl-indent {
 <span id="cb1062-10"><a href="moore-penrose-inverse.html#cb1062-10" aria-hidden="true" tabindex="-1"></a><span class="co">#OLS</span></span>
 <span id="cb1062-11"><a href="moore-penrose-inverse.html#cb1062-11" aria-hidden="true" tabindex="-1"></a>betahat_OLS <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> Y</span>
 <span id="cb1062-12"><a href="moore-penrose-inverse.html#cb1062-12" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
-<pre><code>##         [,1]
-## x1 0.4779897
-## x2 2.1611003
-## x3 1.8993588</code></pre>
+<pre><code>##        [,1]
+## x1 0.723315
+## x2 1.646730
+## x3 1.720129</code></pre>
 <div class="sourceCode" id="cb1064"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1064-1"><a href="moore-penrose-inverse.html#cb1064-1" aria-hidden="true" tabindex="-1"></a><span class="co">#SVD</span></span>
 <span id="cb1064-2"><a href="moore-penrose-inverse.html#cb1064-2" aria-hidden="true" tabindex="-1"></a>X.svd <span class="ot">&lt;-</span> <span class="fu">svd</span>(X)</span>
 <span id="cb1064-3"><a href="moore-penrose-inverse.html#cb1064-3" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">/</span> X.svd<span class="sc">$</span>d)</span>
@@ -582,15 +582,15 @@ div.csl-indent {
 <div class="sourceCode" id="cb1066"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1066-1"><a href="moore-penrose-inverse.html#cb1066-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now OLS</span></span>
 <span id="cb1066-2"><a href="moore-penrose-inverse.html#cb1066-2" aria-hidden="true" tabindex="-1"></a>betahat_ginv <span class="ot">&lt;-</span> X.ginv <span class="sc">%*%</span> Y</span>
 <span id="cb1066-3"><a href="moore-penrose-inverse.html#cb1066-3" aria-hidden="true" tabindex="-1"></a>betahat_ginv</span></code></pre></div>
-<pre><code>##           [,1]
-## [1,] 0.4779897
-## [2,] 2.1611003
-## [3,] 1.8993588</code></pre>
+<pre><code>##          [,1]
+## [1,] 0.723315
+## [2,] 1.646730
+## [3,] 1.720129</code></pre>
 <div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1068-1"><a href="moore-penrose-inverse.html#cb1068-1" aria-hidden="true" tabindex="-1"></a>betahat_OLS</span></code></pre></div>
-<pre><code>##         [,1]
-## x1 0.4779897
-## x2 2.1611003
-## x3 1.8993588</code></pre>
+<pre><code>##        [,1]
+## x1 0.723315
+## x2 1.646730
+## x3 1.720129</code></pre>
 
 </div>
             </section>

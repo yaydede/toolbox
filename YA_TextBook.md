@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-03-24"
+date: "This version: 2023-03-26"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -21,9 +21,9 @@ urlcolor: cyan
 
 # Preface {.unnumbered}
 
-Our lives are shaped by predictions that we make daily. The process of predicting is not static. We want to improve our predictions to avoid catastrophes in our lives ... We learn from our mistakes. We are all self-learning walking machines with a very limited processing capacity. Can we develop a self-learning algorithm for a high-capacity machine that can make prediction more efficiently and accurately for us? Yes, we can! With the well-developed statistical models programmed in very effective algorithms run by high-capacity computers.
+In today's world, our lives are constantly influenced by predictions we make on a daily basis. Our desire to improve these predictions and learn from our mistakes drives us forward. We, as humans, are self-learning entities with limited processing capacity. This raises the question: can we create self-learning algorithms for high-capacity machines that can make predictions more efficiently and accurately on our behalf? The answer is a resounding yes! With the help of well-developed statistical models, effective algorithms, and powerful computers, we can achieve this goal.
 
-This book takes on the first part, **statistical models**, without too much abstraction. It doesn't teach all aspects of **programming** but enough coding skills that you can find your way in building predictive algorithms with R. All gets into a computer. So, we also need to know enough about the "machines" with which we can facilitate a better efficiency. We have enough of it too ...
+This book delves into the first component, statistical models, without excessive abstraction. It doesn't cover every aspect of programming, but provides sufficient coding skills for you to build predictive algorithms using R. Additionally, we discuss the "machines" that can help facilitate better efficiency.
   
 ![](png/cover3.png){width=400px height=550px}
   
@@ -40,29 +40,27 @@ And he describes the current state:
 
 > ...With the insistence on data models, multivariate analysis tools in statistics are frozen at discriminant analysis and logistic regression in classification and multiple linear regression in regression. Nobody really believes that multivariate data is multivariate normal, but that data model occupies a large number of pages in every graduate text book on multivariate statistical analysis...
 
-Broadly speaking, many social scientists look at a statistical analysis from the window of causal inference. Most courses in their training have been (are) based on inferential statistics covering regression-based parametric approaches using interface-based statistical packages (like, EViews, Stata, SPSS, SAS).  Since the demand for broader, more inclusive “data analytics” courses has been rising in the last decade, most departments (Economics, Finance, and Business fields) are looking for a data analytics course, which is less foreign to their traditional curriculum.  This integration is important because of two reasons: first, “predictive” and nonparametric methods are never given the front seat in conventional curricula.  We have “forecasting” courses, but they mostly cover conventional parametric time-series using ARIMA/GARCH type applications.  Second, interface-based statistical packages are not enough anymore for unconventional nonparametric applications. R and Python are the new languages that students increasingly demand in all Business schools.  
+Broadly speaking, many social scientists tend to view statistical analysis through the lens of causal inference. Their education typically focuses on inferential statistics, which encompasses regression-based parametric methods using software packages with graphical interfaces, such as EViews, Stata, SPSS, and SAS. As the interest in wide-ranging and inclusive "data analytics" courses has surged in the last decade, departments within Economics, Finance, and Business disciplines are exploring data analytics courses that align more closely with their conventional curricula.  The significance of this integration lies in two main aspects: first, in conventional curricula, "predictive" and nonparametric methods often take a backseat. Although "forecasting" courses exist, they primarily concentrate on standard parametric time-series methodologies like ARIMA/GARCH. Second, the traditional interface-based statistical packages are no longer adequate for handling unconventional nonparametric approaches. Consequently, students across Business schools are increasingly demanding proficiency in programming languages such as R and Python.
 
-This should not be surprising: first, machine learning is new for many fields.  And not only the concept is relatively new, but its “language” is different: *hyperparameters, classification, features, variance-bias trade-off, tuning*, and so on.  Further, the culture in our quantitative courses is different.  We do not “understand” how a high prediction accuracy itself would be a focal point in data analytics: even if “ice-cream sales predict the crime rates very well, the result would be useless”. This is what many policy analysts think.
+It's understandable that machine learning is gaining attention, as it's a relatively new concept for many fields. Not only is the idea itself novel, but the terminology associated with it, such as hyperparameters, classification, features, variance-bias trade-off, and tuning, is quite distinct. Additionally, the approach taken in traditional quantitative courses differs significantly. In these courses, the emphasis on prediction accuracy as a primary goal in data analytics is often met with skepticism; for instance, even if ice-cream sales predict the crime rates very well, many policy analysts would consider such a result to be of little practical value.
 
-The structure of the book is different from many other books on machine learning.  First, it is not all about Machine Learning written mostly for practitioners.  For example, the initial chapters are positioned for a smooth transition from inferential statistics and the “parametric world” to predictive models with the help of a section that covers nonparametric methods. Even at the PhD level, we rarely teach nonparametric methods as those methods have been less applied in inferential statistics.  Nonparametric econometrics, however, makes the link between these two cultures (data modeling and algorithmic modeling) as machine learning is an extension of nonparametric econometrics. The order of chapters offers this transition to have our first nonparametric application, kNN in Chapter 8.  After traditional tree-based models, the book also covers Support Vector Machines and Neural Network.  These chapters can be skipped but they are self-contained so that even students with a weak background in linear algebra can understand the “black-box” models. 
+To bridge the gap between inferential statistics and machine learning, this book presents a distinctive structure that deviates from conventional machine learning texts.  First, it is not all about Machine Learning written mostly for practitioners.  It is designed to ease the transition from the parametric world of inferential statistics to predictive models by introducing nonparametric methods, which have been underutilized in inferential statistics but serve as a crucial link between data modeling and algorithmic modeling cultures.  Even at the PhD level, we rarely teach nonparametric methods as those methods have been less applied in inferential statistics.  Nonparametric econometrics, however, makes the link between these two cultures as machine learning is an extension of nonparametric econometrics. The book's organization allows for a gradual introduction to nonparametric applications, such as kNN in Chapter 8, and subsequently covers more advanced topics like Support Vector Machines and Neural Networks.
 
-The book covers the concepts with applications.  However, the most applications use “toy data” to make the book more generalizable for other fields with a similar curriculum in inferential statistics.  We will have supplementary books covering field specific data with applications. I do not believe that we need a book for each field (accounting, management, finance, economics, political science, sociology, and so on).  The first supplementary online book using real data (from economic and financial sources) will be ready very soon.
+The book emphasizes practical applications using "toy data" to ensure its relevance across various fields with similar curricula. Supplementary materials providing field-specific data and applications will also be made available, eliminating the need for separate texts catering to each discipline. The first supplementary online book, featuring real economic and financial data, will be released shortly.
 
-After well-known predictive algorithms collected only in two sections, the book proceeds into five new sections: Penalized Regressions, which are the well-known high-dimensional methods in economics and finance used in model selection and sparsity.  The next section gives a new look at time-series applications by showing how time series data can be used in predictions beyond traditional parametric models. The following section covers Dimension Reduction Methods.  They are important tools in “noise” reduction in almost all fields in social science.   The last section covers Network Analysis.  This concept is also very prevalent in many business fields and specially in economics and finance.  This section summarizes all new developments in Graphical Network Analysis.   
+In addition to well-known predictive algorithms, the book explores five new sections: Penalized Regressions, Time-Series Applications, Dimension Reduction Methods, and Graphical Network Analysis. These sections delve into techniques and concepts prevalent in social sciences and business. Furthermore, the appendices provide valuable information on Algorithmic Optimization and classification with imbalanced data.  
 
-Finally, the chapters in Appendix provide enough information on two important subjects: Algorithmic Optimization (including gradient descent applications) and the discussion on classification with imbalanced data. Moreover, there will be some additions to several chapters covering Conditional Inference Trees, General CV, and Causal Random Forest.  
-
-I hope that this book provides a good starting point to give predictive analytics a well-deserved place in curricula of social science and business fields.  I also hope that this book will "grow" by the time to keep up with the fast changing world.  Hence, I guess, it will always be a "draft" in a humble way ...
+It is my hope that this book will serve as a good starting point for incorporating predictive analytics into the curricula of social science and business fields, while continuously evolving to keep pace with the rapidly changing landscape of data-driven research. In this spirit, the book will always remain a humble "draft" that can be adapted and improved over time.
   
 ## Who {.unnumbered}
 
 <img src="png/cover3.png" width="60px" />
   
-This book is targeted at *motivated* students and researchers who have a background in inferential statistics using parametric models. It is applied because I skip many theoretical proofs and justifications that can easily be found elsewhere. I do not assume a previous experience with R but some familiarity with coding.
+This book is designed for *motivated* students and researchers with a background in inferential statistics using parametric models. It is applied in nature, skipping many theoretical proofs and justifications in favor of practical application. No prior experience with R is assumed, but some familiarity with coding is helpful.
 
 ## Acknowledgements {.unnumbered}
 
-This book was made possible by Mutlu Yuksel, Tolga Kaya, Mehmet Caner, Juri Marcucci, Atul Dar and, Andrea Guisto. This work is greatly inspired by following books and people:
+This book was made possible by Mutlu Yuksel, Mehmet Caner, Juri Marcucci, Atul Dar and, Andrea Guisto. This work is greatly inspired by following books and people:
 
 1.  [Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani.
 2.  [Introduction to Data Science](https://rafalab.github.io/dsbook/) by Rafael A. Irizarry.\
@@ -283,7 +281,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-03-24"
+## [1] "2023-03-26"
 ```
 
 ```r
@@ -292,7 +290,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-03-24 19:54:10 ADT"
+## [1] "2023-03-26 08:51:24 ADT"
 ```
 
 ```r
@@ -301,7 +299,7 @@ now()
 ```
 
 ```
-## [1] "2023-03-24 19:54:10 ADT"
+## [1] "2023-03-26 08:51:24 ADT"
 ```
 
 ```r
@@ -553,8 +551,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1] -1.521228  5.373604  4.026866 -3.276899  3.306032  4.753966 -0.761452
-##  [8] -3.716800 -8.679394  5.661180
+##  [1]  0.1322928  4.4907205 -6.9325373  5.1149618 -2.8317211  1.0177695
+##  [7] -2.6952973 -3.2587262 -1.0788716  2.7446627
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -9100,8 +9098,8 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.58621 0.12399
-## 3 0.010000      2   0.24138 0.58621 0.12399
+## 2 0.034483      1   0.27586 0.62069 0.12640
+## 3 0.010000      2   0.24138 0.62069 0.12640
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9150,10 +9148,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.02108 0.045717
-## 2 0.101694      1   0.41379 0.74685 0.160883
-## 3 0.028263      2   0.31209 0.69001 0.152590
-## 4 0.010000      3   0.28383 0.62459 0.140505
+## 1 0.586213      0   1.00000 1.01723 0.045506
+## 2 0.101694      1   0.41379 0.62412 0.142469
+## 3 0.028263      2   0.31209 0.56985 0.138453
+## 4 0.010000      3   0.28383 0.54650 0.130250
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9230,10 +9228,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.58621 0.12399
-## 3 0.034483      2  0.172414 0.48276 0.11560
-## 4 0.017241      6  0.034483 0.44828 0.11237
-## 5 0.000000      8  0.000000 0.44828 0.11237
+## 2 0.103448      1  0.275862 0.51724 0.11861
+## 3 0.034483      2  0.172414 0.37931 0.10513
+## 4 0.017241      6  0.034483 0.48276 0.11560
+## 5 0.000000      8  0.000000 0.55172 0.12140
 ```
 
 ```r
@@ -9248,7 +9246,7 @@ min_cp
 ```
 
 ```
-## [1] 0.01724138
+## [1] 0.03448276
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -9273,17 +9271,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INCAR INSYS PVENT
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.58621 0.12399
-## 3 0.034483      2  0.172414 0.48276 0.11560
-## 4 0.017241      6  0.034483 0.44828 0.11237
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.51724 0.11861
+## 3 0.034483      2   0.17241 0.37931 0.10513
 ```
 
 ```r
@@ -9386,9 +9383,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.550 0.029477
-## 4 0.011333      5     0.504  0.542 0.029319
-## 5 0.010000      9     0.458  0.534 0.029157
+## 3 0.015000      3     0.534  0.586 0.030161
+## 4 0.011333      5     0.504  0.570 0.029863
+## 5 0.010000      9     0.458  0.532 0.029117
 ```
 
 ```r
@@ -16913,9 +16910,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   51   20   30
-## [2,]   61   69   70
-## [3,]   83   64   96
+## [1,]   93    8   62
+## [2,]   64   15   75
+## [3,]  100   77   16
 ```
 
 ```r
@@ -16925,13 +16922,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 179.51454  24.02785  12.45760
+## [1] 170.34182 -67.96981  21.62799
 ## 
 ## $vectors
-##            [,1]        [,2]       [,3]
-## [1,] -0.2686916 -0.65611320 -0.2232370
-## [2,] -0.6168805  0.74922756 -0.6540023
-## [3,] -0.7397725  0.09040764  0.7228044
+##            [,1]       [,2]       [,3]
+## [1,] -0.5611639 -0.2866545 -0.5112343
+## [2,] -0.5357935 -0.5112663  0.7003504
+## [3,] -0.6308886  0.8102074  0.4981454
 ```
 
 ```r
@@ -16976,9 +16973,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]    2   85   49
-## [2,]   53   18   35
-## [3,]   65   50   12
+## [1,]   90   36   19
+## [2,]   30   42   22
+## [3,]   85   95   98
 ```
 
 ```r
@@ -16990,10 +16987,10 @@ solve(A)
 ```
 
 ```
-##              [,1]         [,2]        [,3]
-## [1,] -0.007347905  0.006849742  0.01002553
-## [2,]  0.007850858 -0.015141282  0.01210440
-## [3,]  0.007089243  0.025985908 -0.02140664
+##              [,1]        [,2]          [,3]
+## [1,]  0.015567850 -0.01323959 -0.0000461042
+## [2,] -0.008221915  0.05536345 -0.0108344859
+## [3,] -0.005532503 -0.04218534  0.0207468880
 ```
 
 ```r
@@ -17002,10 +16999,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##              [,1]         [,2]        [,3]
-## [1,] -0.007347905  0.006849742  0.01002553
-## [2,]  0.007850858 -0.015141282  0.01210440
-## [3,]  0.007089243  0.025985908 -0.02140664
+##              [,1]        [,2]          [,3]
+## [1,]  0.015567850 -0.01323959 -0.0000461042
+## [2,] -0.008221915  0.05536345 -0.0108344859
+## [3,] -0.005532503 -0.04218534  0.0207468880
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17424,10 +17421,10 @@ betahat_OLS
 ```
 
 ```
-##         [,1]
-## x1 0.4779897
-## x2 2.1611003
-## x3 1.8993588
+##        [,1]
+## x1 0.723315
+## x2 1.646730
+## x3 1.720129
 ```
 
 ```r
@@ -17463,10 +17460,10 @@ betahat_ginv
 ```
 
 ```
-##           [,1]
-## [1,] 0.4779897
-## [2,] 2.1611003
-## [3,] 1.8993588
+##          [,1]
+## [1,] 0.723315
+## [2,] 1.646730
+## [3,] 1.720129
 ```
 
 ```r
@@ -17474,10 +17471,10 @@ betahat_OLS
 ```
 
 ```
-##         [,1]
-## x1 0.4779897
-## x2 2.1611003
-## x3 1.8993588
+##        [,1]
+## x1 0.723315
+## x2 1.646730
+## x3 1.720129
 ```
   
 
@@ -18827,7 +18824,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] 0.5002705
+## [1] 0.4828071
 ```
 
 ```r
@@ -18835,13 +18832,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.0000000  0.5002705  0.38013629 -0.28003540 -0.60007078  0.50557815
-## [2,]  0.5002705 -1.0000000 -0.13218266  0.46965260  0.31293053 -0.46416901
-## [3,]  0.3801363 -0.1321827 -1.00000000  0.04444115  0.16124490  0.06309003
-## [4,] -0.2800354  0.4696526  0.04444115 -1.00000000 -0.09991209  0.23951422
-## [5,] -0.6000708  0.3129305  0.16124490 -0.09991209 -1.00000000  0.81531804
-## [6,]  0.5055781 -0.4641690  0.06309003  0.23951422  0.81531804 -1.00000000
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,] -1.00000000  0.4828071 -0.06901488 -0.7326618 -0.8683739  0.81056839
+## [2,]  0.48280709 -1.0000000 -0.19567548  0.6019340  0.3929661 -0.40472339
+## [3,] -0.06901488 -0.1956755 -1.00000000  0.1433451  0.1152139 -0.09004456
+## [4,] -0.73266178  0.6019340  0.14334514 -1.0000000 -0.6044178  0.66263558
+## [5,] -0.86837393  0.3929661  0.11521386 -0.6044178 -1.0000000  0.80763598
+## [6,]  0.81056839 -0.4047234 -0.09004456  0.6626356  0.8076360 -1.00000000
 ```
 
 ```r
@@ -18851,13 +18848,13 @@ pc$estimate
 ```
 
 ```
-##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,]  1.0000000  0.5002705  0.38013629 -0.28003540 -0.60007078  0.50557815
-## [2,]  0.5002705  1.0000000 -0.13218266  0.46965260  0.31293053 -0.46416901
-## [3,]  0.3801363 -0.1321827  1.00000000  0.04444115  0.16124490  0.06309003
-## [4,] -0.2800354  0.4696526  0.04444115  1.00000000 -0.09991209  0.23951422
-## [5,] -0.6000708  0.3129305  0.16124490 -0.09991209  1.00000000  0.81531804
-## [6,]  0.5055781 -0.4641690  0.06309003  0.23951422  0.81531804  1.00000000
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,]  1.00000000  0.4828071 -0.06901488 -0.7326618 -0.8683739  0.81056839
+## [2,]  0.48280709  1.0000000 -0.19567548  0.6019340  0.3929661 -0.40472339
+## [3,] -0.06901488 -0.1956755  1.00000000  0.1433451  0.1152139 -0.09004456
+## [4,] -0.73266178  0.6019340  0.14334514  1.0000000 -0.6044178  0.66263558
+## [5,] -0.86837393  0.3929661  0.11521386 -0.6044178  1.0000000  0.80763598
+## [6,]  0.81056839 -0.4047234 -0.09004456  0.6626356  0.8076360  1.00000000
 ```
 
 ```r
@@ -18867,22 +18864,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##              [,1]        [,2]         [,3]         [,4]       [,5]         [,6]
-## [1,]  0.658480662  0.23753224  0.277319887 -0.101794968 -0.3340982 -0.008766578
-## [2,]  0.237532238  0.88546395 -0.089495678  0.323522466 -0.2641969 -0.241372158
-## [3,]  0.277319887 -0.08949568  1.092961483 -0.002716858  0.3053400  0.300426388
-## [4,] -0.101794968  0.32352247 -0.002716858  1.103489402  0.2080822  0.100021878
-## [5,] -0.334098186 -0.26419689  0.305339965  0.208082186  1.4264583  0.710508404
-## [6,] -0.008766578 -0.24137216  0.300426388  0.100021878  0.7105084  0.572485881
+##            [,1]        [,2]        [,3]       [,4]        [,5]        [,6]
+## [1,]  0.7126600  0.15223930 -0.38481215 -0.4041903 -0.61278375  0.21700978
+## [2,]  0.1522393  1.31177584 -0.20963091  0.4441189 -0.08988752  0.07447502
+## [3,] -0.3848122 -0.20963091  0.89487924  0.2395557  0.36263957 -0.08305095
+## [4,] -0.4041903  0.44411890  0.23955573  1.2272598  0.26102917  0.23326343
+## [5,] -0.6127837 -0.08988752  0.36263957  0.2610292  1.14058619  0.37348968
+## [6,]  0.2170098  0.07447502 -0.08305095  0.2332634  0.37348968  1.16120739
 ## 
 ## $wi
-##            [,1]       [,2]        [,3]        [,4]       [,5]       [,6]
-## [1,]  3.3175857 -1.2982278 -0.78037320  0.55920940  1.8701717 -2.5057916
-## [2,] -1.2982278  2.0300709  0.21224856 -0.73368310 -0.7628180  1.7995680
-## [3,] -0.7803732  0.2122486  1.27026828 -0.05491121 -0.3109813 -0.1935162
-## [4,]  0.5592094 -0.7336831 -0.05491121  1.20219762  0.1873655 -0.7145332
-## [5,]  1.8701717 -0.7628180 -0.31098135  0.18736546  2.9280065 -3.7964613
-## [6,] -2.5057916  1.7995680 -0.19351623 -0.71453324 -3.7964613  7.4052878
+##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,] 10.8831919 -1.7824450  0.2808119  3.7236402  6.2947884 -4.6719031
+## [2,] -1.7824450  1.2525610  0.2698412 -1.0378311 -0.9662084  0.7912615
+## [3,]  0.2808119  0.2698412  1.5186680 -0.2720503 -0.3117991  0.1937290
+## [4,]  3.7236402 -1.0378311 -0.2720503  2.3736166  2.0459268 -1.7835346
+## [5,]  6.2947884 -0.9662084 -0.3117991  2.0459268  4.8285623 -3.1006016
+## [6,] -4.6719031  0.7912615  0.1937290 -1.7835346 -3.1006016  3.0527911
 ## 
 ## $errflag
 ## [1] 0
@@ -18897,7 +18894,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] 0.5002467
+## [1] 0.4827681
 ```
 
 ```r
@@ -18905,13 +18902,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##            [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.0000000  0.5002467  0.38013998 -0.28001124 -0.60004578  0.50554860
-## [2,]  0.5002467 -1.0000000 -0.13217259  0.46963989  0.31288110 -0.46413217
-## [3,]  0.3801400 -0.1321726 -1.00000000  0.04443502  0.16125032  0.06309554
-## [4,] -0.2800112  0.4696399  0.04443502 -1.00000000 -0.09986552  0.23947685
-## [5,] -0.6000458  0.3128811  0.16125032 -0.09986552 -1.00000000  0.81530854
-## [6,]  0.5055486 -0.4641322  0.06309554  0.23947685  0.81530854 -1.00000000
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,] -1.00000000  0.4827681 -0.06907263 -0.7326293 -0.8683485  0.81052635
+## [2,]  0.48276809 -1.0000000 -0.19564893  0.6018967  0.3928823 -0.40464304
+## [3,] -0.06907263 -0.1956489 -1.00000000  0.1432889  0.1151422 -0.08997349
+## [4,] -0.73262930  0.6018967  0.14328886 -1.0000000 -0.6043324  0.66256382
+## [5,] -0.86834853  0.3928823  0.11514221 -0.6043324 -1.0000000  0.80758548
+## [6,]  0.81052635 -0.4046430 -0.08997349  0.6625638  0.8075855 -1.00000000
 ```
 
 ## High-dimensional data
@@ -19559,7 +19556,7 @@ dir()
 ## [137] "irates.dat"                     "mnist.Rdata"                   
 ## [139] "myocarde.csv"                   "packages.bib"                  
 ## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "render1509e62a22c04.rds"       
+## [143] "README.md"                      "render472e64d327a9.rds"        
 ## [145] "style.css"                      "table1.text"                   
 ## [147] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20553,7 +20550,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7f7abfb722e0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7f9e98ce5d10> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -20981,8 +20978,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -0.372 4.221 -3.573 0.714 -5.052 ...
-##  $ c: Factor w/ 3 levels "(-5.06,-1.24]",..: 2 3 1 2 1 2 2 3 2 1
+##  $ b: num  -4.58 -3.06 6.96 6.36 -4.95 ...
+##  $ c: Factor w/ 3 levels "(-6.19,-1.33]",..: 1 1 3 3 1 1 3 3 3 3
 ```
 
 ```r
@@ -20994,8 +20991,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -0.372 4.221 -3.573 0.714 -5.052 ...
-##  $ c: Factor w/ 3 levels "(-5.06,-1.24]",..: 2 3 1 2 1 2 2 3 2 1
+##  $ b: num  -4.58 -3.06 6.96 6.36 -4.95 ...
+##  $ c: Factor w/ 3 levels "(-6.19,-1.33]",..: 1 1 3 3 1 1 3 3 3 3
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -21011,17 +21008,17 @@ my_data
 ```
 
 ```
-##     a           b             c          d          f          g         h
-## 1   1 -0.37154115  (-1.24,2.58] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  4.22129557    (2.58,6.4] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3 -3.57276914 (-5.06,-1.24] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  0.71362156  (-1.24,2.58] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5 -5.05193373 (-5.06,-1.24] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6  0.32788017  (-1.24,2.58]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  0.07214929  (-1.24,2.58]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  6.39320773    (2.58,6.4]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  1.50918603  (-1.24,2.58]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10 -2.94321678 (-5.06,-1.24]  1.4863011  1.1560120         NA  0.000000
+##     a         b             c          d          f          g         h
+## 1   1 -4.582684 (-6.19,-1.33] -1.4863011         NA -1.1560120 -1.486301
+## 2   2 -3.055641 (-6.19,-1.33] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  6.964492   (3.52,8.37] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  6.363817   (3.52,8.37] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5 -4.945616 (-6.19,-1.33] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 -6.170901 (-6.19,-1.33]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  5.559923   (3.52,8.37]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  8.359091   (3.52,8.37]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  4.256111   (3.52,8.37]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10  5.940524   (3.52,8.37]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21434,7 +21431,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1]  0.9142539  1.5908357 -0.2799456 -1.2235486  2.3973103 -1.9489700
+## [1] -2.7356987  2.7636105 -0.5749002 -0.2688978  0.4998181  1.0126627
 ```
 
 ```r
@@ -21480,12 +21477,12 @@ X_new
 ```
 
 ```
-##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 2.910907 2.001234 3.832523 2.216080 3.349413 3.430276
-## [2,] 3.677324 3.458570 3.239028 2.980394 4.568194 2.476864
-## [3,] 4.879102 2.939959 2.241100 3.856885 3.583361 1.800717
-## [4,] 2.770858 5.057442 3.510746 2.984496 3.093492 1.955614
-## [5,] 1.676063 3.133630 1.896657 1.738597 2.802849 3.387559
+##           [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+## [1,] 3.3286758 2.731466 3.156670 3.711391 2.495417 3.327056
+## [2,] 2.8951922 4.032300 3.776185 3.381401 3.306619 2.075018
+## [3,] 3.4794461 3.295503 2.521239 2.512474 2.673174 3.692483
+## [4,] 1.5750135 3.880203 2.567332 1.601725 4.596479 4.231398
+## [5,] 0.9859737 3.824139 2.403675 3.524111 2.428129 2.686707
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23121,7 +23118,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "T" "T" "T" "T" "H" "T" "T"
+## [1] "T" "T" "T" "T" "T" "T" "H" "T"
 ```
 
 ```r
@@ -23129,7 +23126,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 3 6
+## [1] 5 4
 ```
 
 ```r
@@ -23138,7 +23135,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "T" "H" "H" "T" "T" "H" "T"
+## [1] "H" "H" "T" "T" "H" "T" "H" "T"
 ```
 
 ```r
@@ -23146,7 +23143,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 3 6
+## [1] 2 3
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  

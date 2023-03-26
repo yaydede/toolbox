@@ -703,19 +703,19 @@ in general</p>
 <div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1028-1"><a href="eigenvectors-and-eigenvalues.html#cb1028-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">9</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb1028-2"><a href="eigenvectors-and-eigenvalues.html#cb1028-2" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
-## [1,]   51   20   30
-## [2,]   61   69   70
-## [3,]   83   64   96</code></pre>
+## [1,]   93    8   62
+## [2,]   64   15   75
+## [3,]  100   77   16</code></pre>
 <div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="eigenvectors-and-eigenvalues.html#cb1030-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eigen</span>(A)</span></code></pre></div>
 <pre><code>## eigen() decomposition
 ## $values
-## [1] 179.51454  24.02785  12.45760
+## [1] 170.34182 -67.96981  21.62799
 ## 
 ## $vectors
-##            [,1]        [,2]       [,3]
-## [1,] -0.2686916 -0.65611320 -0.2232370
-## [2,] -0.6168805  0.74922756 -0.6540023
-## [3,] -0.7397725  0.09040764  0.7228044</code></pre>
+##            [,1]       [,2]       [,3]
+## [1,] -0.5611639 -0.2866545 -0.5112343
+## [2,] -0.5357935 -0.5112663  0.7003504
+## [3,] -0.6308886  0.8102074  0.4981454</code></pre>
 <div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1032-1"><a href="eigenvectors-and-eigenvalues.html#cb1032-1" aria-hidden="true" tabindex="-1"></a>V <span class="ot">=</span> <span class="fu">eigen</span>(A)<span class="sc">$</span>vectors</span>
 <span id="cb1032-2"><a href="eigenvectors-and-eigenvalues.html#cb1032-2" aria-hidden="true" tabindex="-1"></a>Lam <span class="ot">=</span> <span class="fu">diag</span>(<span class="fu">eigen</span>(A)<span class="sc">$</span>values)</span>
 <span id="cb1032-3"><a href="eigenvectors-and-eigenvalues.html#cb1032-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prove that AV = VLam</span></span>
@@ -738,24 +738,24 @@ in general</p>
 <div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1036-1"><a href="eigenvectors-and-eigenvalues.html#cb1036-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">9</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb1036-2"><a href="eigenvectors-and-eigenvalues.html#cb1036-2" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
-## [1,]    2   85   49
-## [2,]   53   18   35
-## [3,]   65   50   12</code></pre>
+## [1,]   90   36   19
+## [2,]   30   42   22
+## [3,]   85   95   98</code></pre>
 <div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1038-1"><a href="eigenvectors-and-eigenvalues.html#cb1038-1" aria-hidden="true" tabindex="-1"></a>V <span class="ot">=</span> <span class="fu">eigen</span>(A)<span class="sc">$</span>vectors</span>
 <span id="cb1038-2"><a href="eigenvectors-and-eigenvalues.html#cb1038-2" aria-hidden="true" tabindex="-1"></a>Lam <span class="ot">=</span> <span class="fu">diag</span>(<span class="fu">eigen</span>(A)<span class="sc">$</span>values)</span>
 <span id="cb1038-3"><a href="eigenvectors-and-eigenvalues.html#cb1038-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1038-4"><a href="eigenvectors-and-eigenvalues.html#cb1038-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inverse of A</span></span>
 <span id="cb1038-5"><a href="eigenvectors-and-eigenvalues.html#cb1038-5" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(A)</span></code></pre></div>
-<pre><code>##              [,1]         [,2]        [,3]
-## [1,] -0.007347905  0.006849742  0.01002553
-## [2,]  0.007850858 -0.015141282  0.01210440
-## [3,]  0.007089243  0.025985908 -0.02140664</code></pre>
+<pre><code>##              [,1]        [,2]          [,3]
+## [1,]  0.015567850 -0.01323959 -0.0000461042
+## [2,] -0.008221915  0.05536345 -0.0108344859
+## [3,] -0.005532503 -0.04218534  0.0207468880</code></pre>
 <div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1040-1"><a href="eigenvectors-and-eigenvalues.html#cb1040-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And</span></span>
 <span id="cb1040-2"><a href="eigenvectors-and-eigenvalues.html#cb1040-2" aria-hidden="true" tabindex="-1"></a>V <span class="sc">%*%</span> <span class="fu">solve</span>(Lam) <span class="sc">%*%</span> <span class="fu">solve</span>(V)</span></code></pre></div>
-<pre><code>##              [,1]         [,2]        [,3]
-## [1,] -0.007347905  0.006849742  0.01002553
-## [2,]  0.007850858 -0.015141282  0.01210440
-## [3,]  0.007089243  0.025985908 -0.02140664</code></pre>
+<pre><code>##              [,1]        [,2]          [,3]
+## [1,]  0.015567850 -0.01323959 -0.0000461042
+## [2,] -0.008221915  0.05536345 -0.0108344859
+## [3,] -0.005532503 -0.04218534  0.0207468880</code></pre>
 <p>The inverse of <span class="math inline">\(\mathbf{\Lambda}\)</span> is just the inverse of each diagonal element (the eigenvalues). But, this can only be done if a matrix is diagonalizable. So if <span class="math inline">\(\mathbf{A}\)</span> is not <span class="math inline">\(n \times n\)</span>, then we can use <span class="math inline">\(\mathbf{A&#39;A}\)</span> or <span class="math inline">\(\mathbf{AA&#39;}\)</span>, both symmetric now.</p>
 <p>Example:
 <span class="math display">\[
