@@ -148,7 +148,6 @@ random-search-with-parallel-processing
 boosting-vs.-others
 classification-1
 adaboost.m1
-classification-with-xgboost
 support-vector-machines
 optimal-separating-classifier
 the-margin

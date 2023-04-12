@@ -296,7 +296,6 @@ div.csl-indent {
 <li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
 <li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
 <li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
-<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
@@ -491,20 +490,20 @@ div.csl-indent {
 <h1><span class="header-section-number">Chapter 24</span> Random Forest<a href="random-forest-1.html#random-forest-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>We will utilize embedding methods for direct forecasting with Random Forests. We choose the random forests algorithm because it does not need an explicit tuning by a grid search. In the practice, however, we can still search for the number of trees and the number of variables randomly sampled as candidates at each split.</p>
 <p>Let’s get our COVID-19 data:</p>
-<div class="sourceCode" id="cb936"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb936-1"><a href="random-forest-1.html#cb936-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
-<span id="cb936-2"><a href="random-forest-1.html#cb936-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span>
-<span id="cb936-3"><a href="random-forest-1.html#cb936-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb936-4"><a href="random-forest-1.html#cb936-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;~/Dropbox/ToolShed_draft/toronto2.rds&quot;</span>)</span>
-<span id="cb936-5"><a href="random-forest-1.html#cb936-5" aria-hidden="true" tabindex="-1"></a>day <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(</span>
-<span id="cb936-6"><a href="random-forest-1.html#cb936-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2020/03/01&quot;</span>),</span>
-<span id="cb936-7"><a href="random-forest-1.html#cb936-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2020/11/21&quot;</span>),</span>
-<span id="cb936-8"><a href="random-forest-1.html#cb936-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="dv">1</span></span>
-<span id="cb936-9"><a href="random-forest-1.html#cb936-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb936-10"><a href="random-forest-1.html#cb936-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb936-11"><a href="random-forest-1.html#cb936-11" aria-hidden="true" tabindex="-1"></a>tdata <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Day =</span> day, data[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb936-12"><a href="random-forest-1.html#cb936-12" aria-hidden="true" tabindex="-1"></a>toronto2 <span class="ot">&lt;-</span> tdata <span class="sc">%&gt;%</span></span>
-<span id="cb936-13"><a href="random-forest-1.html#cb936-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tsibble</span>(<span class="at">index =</span> Day)</span>
-<span id="cb936-14"><a href="random-forest-1.html#cb936-14" aria-hidden="true" tabindex="-1"></a>toronto2</span></code></pre></div>
+<div class="sourceCode" id="cb946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb946-1"><a href="random-forest-1.html#cb946-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb946-2"><a href="random-forest-1.html#cb946-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span>
+<span id="cb946-3"><a href="random-forest-1.html#cb946-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb946-4"><a href="random-forest-1.html#cb946-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;~/Dropbox/ToolShed_draft/toronto2.rds&quot;</span>)</span>
+<span id="cb946-5"><a href="random-forest-1.html#cb946-5" aria-hidden="true" tabindex="-1"></a>day <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(</span>
+<span id="cb946-6"><a href="random-forest-1.html#cb946-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2020/03/01&quot;</span>),</span>
+<span id="cb946-7"><a href="random-forest-1.html#cb946-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2020/11/21&quot;</span>),</span>
+<span id="cb946-8"><a href="random-forest-1.html#cb946-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="dv">1</span></span>
+<span id="cb946-9"><a href="random-forest-1.html#cb946-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb946-10"><a href="random-forest-1.html#cb946-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb946-11"><a href="random-forest-1.html#cb946-11" aria-hidden="true" tabindex="-1"></a>tdata <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Day =</span> day, data[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb946-12"><a href="random-forest-1.html#cb946-12" aria-hidden="true" tabindex="-1"></a>toronto2 <span class="ot">&lt;-</span> tdata <span class="sc">%&gt;%</span></span>
+<span id="cb946-13"><a href="random-forest-1.html#cb946-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tsibble</span>(<span class="at">index =</span> Day)</span>
+<span id="cb946-14"><a href="random-forest-1.html#cb946-14" aria-hidden="true" tabindex="-1"></a>toronto2</span></code></pre></div>
 <pre><code>## # A tsibble: 266 x 8 [1D]
 ##    Day        cases      mob delay  male   age  temp   hum
 ##    &lt;date&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -521,48 +520,48 @@ div.csl-indent {
 ## # … with 256 more rows</code></pre>
 <p>As before, the data contain the first wave and the initial part of the second wave in Toronto for 2020. It is from <a href="https://data.ontario.ca/en/dataset?groups=2019-novel-coronavirus#byPHU">Ontario Data Catalogue</a> sorted by episode dates (<code>Day</code>), which is the date when the first symptoms were started. The mobility data is from Facebook, <code>all_day_bing_tiles_visited_relative_change</code>, which is reflects positive or negative change in movement relative to baseline. The other variables related to tests are <code>delay</code>, which is the time between test results and the episode date, the gender distribution of people is given by <code>male</code>, <code>age</code> shows the average age among tested people any given day. The last two variables, <code>temp</code> and <code>hum</code>, show the daily maximum day temperature and the average outdoor humidity during the day, respectively.</p>
 <p>Except for <code>age</code> all other variables are non-stationary. We will take their first difference and make the series stationary before we proceed.</p>
-<div class="sourceCode" id="cb938"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb938-1"><a href="random-forest-1.html#cb938-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> toronto2 <span class="sc">%&gt;%</span></span>
-<span id="cb938-2"><a href="random-forest-1.html#cb938-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb938-3"><a href="random-forest-1.html#cb938-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dcases =</span> <span class="fu">difference</span>(cases),</span>
-<span id="cb938-4"><a href="random-forest-1.html#cb938-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmob =</span> <span class="fu">difference</span>(mob),</span>
-<span id="cb938-5"><a href="random-forest-1.html#cb938-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ddelay =</span> <span class="fu">difference</span>(delay),</span>
-<span id="cb938-6"><a href="random-forest-1.html#cb938-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmale =</span> <span class="fu">difference</span>(male),</span>
-<span id="cb938-7"><a href="random-forest-1.html#cb938-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">dtemp =</span> <span class="fu">difference</span>(temp),</span>
-<span id="cb938-8"><a href="random-forest-1.html#cb938-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dhum =</span> <span class="fu">difference</span>(hum)</span>
-<span id="cb938-9"><a href="random-forest-1.html#cb938-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb938-10"><a href="random-forest-1.html#cb938-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb938-11"><a href="random-forest-1.html#cb938-11" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>)] <span class="co">#removing levels</span></span>
-<span id="cb938-12"><a href="random-forest-1.html#cb938-12" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> dft[<span class="sc">-</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">2</span>)] <span class="co"># reordering the columns</span></span></code></pre></div>
+<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb948-1"><a href="random-forest-1.html#cb948-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> toronto2 <span class="sc">%&gt;%</span></span>
+<span id="cb948-2"><a href="random-forest-1.html#cb948-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb948-3"><a href="random-forest-1.html#cb948-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dcases =</span> <span class="fu">difference</span>(cases),</span>
+<span id="cb948-4"><a href="random-forest-1.html#cb948-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmob =</span> <span class="fu">difference</span>(mob),</span>
+<span id="cb948-5"><a href="random-forest-1.html#cb948-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ddelay =</span> <span class="fu">difference</span>(delay),</span>
+<span id="cb948-6"><a href="random-forest-1.html#cb948-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmale =</span> <span class="fu">difference</span>(male),</span>
+<span id="cb948-7"><a href="random-forest-1.html#cb948-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">dtemp =</span> <span class="fu">difference</span>(temp),</span>
+<span id="cb948-8"><a href="random-forest-1.html#cb948-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dhum =</span> <span class="fu">difference</span>(hum)</span>
+<span id="cb948-9"><a href="random-forest-1.html#cb948-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb948-10"><a href="random-forest-1.html#cb948-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb948-11"><a href="random-forest-1.html#cb948-11" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>)] <span class="co">#removing levels</span></span>
+<span id="cb948-12"><a href="random-forest-1.html#cb948-12" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> dft[<span class="sc">-</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">2</span>)] <span class="co"># reordering the columns</span></span></code></pre></div>
 <p>First, we will use a univariate setting for a single-window forecasting, which is the last 7 days.</p>
 <div id="univariate" class="section level2 hasAnchor" number="24.1">
 <h2><span class="header-section-number">24.1</span> Univariate<a href="random-forest-1.html#univariate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will not have a grid search on the random forest algorithm, which could be added to the following script:</p>
-<div class="sourceCode" id="cb939"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb939-1"><a href="random-forest-1.html#cb939-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
-<span id="cb939-2"><a href="random-forest-1.html#cb939-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb939-3"><a href="random-forest-1.html#cb939-3" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="dv">7</span></span>
-<span id="cb939-4"><a href="random-forest-1.html#cb939-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">21</span> <span class="co"># a grid for window size</span></span>
-<span id="cb939-5"><a href="random-forest-1.html#cb939-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb939-6"><a href="random-forest-1.html#cb939-6" aria-hidden="true" tabindex="-1"></a>fh <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(w), h)</span>
-<span id="cb939-7"><a href="random-forest-1.html#cb939-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(fh) <span class="ot">&lt;-</span> w</span>
-<span id="cb939-8"><a href="random-forest-1.html#cb939-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fh) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>h</span>
-<span id="cb939-9"><a href="random-forest-1.html#cb939-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb939-10"><a href="random-forest-1.html#cb939-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(w)) {</span>
-<span id="cb939-11"><a href="random-forest-1.html#cb939-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[, <span class="dv">2</span>]), w[s]))</span>
-<span id="cb939-12"><a href="random-forest-1.html#cb939-12" aria-hidden="true" tabindex="-1"></a>  test_ind <span class="ot">=</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> (h)</span>
-<span id="cb939-13"><a href="random-forest-1.html#cb939-13" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> dt[<span class="dv">1</span><span class="sc">:</span>test_ind,]</span>
-<span id="cb939-14"><a href="random-forest-1.html#cb939-14" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> dt[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>test_ind),]</span>
-<span id="cb939-15"><a href="random-forest-1.html#cb939-15" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> train[, <span class="dv">1</span>]</span>
-<span id="cb939-16"><a href="random-forest-1.html#cb939-16" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> train[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb939-17"><a href="random-forest-1.html#cb939-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb939-18"><a href="random-forest-1.html#cb939-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>h) {</span>
-<span id="cb939-19"><a href="random-forest-1.html#cb939-19" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(X, y)</span>
-<span id="cb939-20"><a href="random-forest-1.html#cb939-20" aria-hidden="true" tabindex="-1"></a>    fh[s,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb939-21"><a href="random-forest-1.html#cb939-21" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb939-22"><a href="random-forest-1.html#cb939-22" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[<span class="sc">-</span><span class="fu">nrow</span>(X),]</span>
-<span id="cb939-23"><a href="random-forest-1.html#cb939-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb939-24"><a href="random-forest-1.html#cb939-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb939-25"><a href="random-forest-1.html#cb939-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb939-26"><a href="random-forest-1.html#cb939-26" aria-hidden="true" tabindex="-1"></a>fh</span></code></pre></div>
+<div class="sourceCode" id="cb949"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb949-1"><a href="random-forest-1.html#cb949-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb949-2"><a href="random-forest-1.html#cb949-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb949-3"><a href="random-forest-1.html#cb949-3" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="dv">7</span></span>
+<span id="cb949-4"><a href="random-forest-1.html#cb949-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">21</span> <span class="co"># a grid for window size</span></span>
+<span id="cb949-5"><a href="random-forest-1.html#cb949-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb949-6"><a href="random-forest-1.html#cb949-6" aria-hidden="true" tabindex="-1"></a>fh <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(w), h)</span>
+<span id="cb949-7"><a href="random-forest-1.html#cb949-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(fh) <span class="ot">&lt;-</span> w</span>
+<span id="cb949-8"><a href="random-forest-1.html#cb949-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fh) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>h</span>
+<span id="cb949-9"><a href="random-forest-1.html#cb949-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb949-10"><a href="random-forest-1.html#cb949-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(w)) {</span>
+<span id="cb949-11"><a href="random-forest-1.html#cb949-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[, <span class="dv">2</span>]), w[s]))</span>
+<span id="cb949-12"><a href="random-forest-1.html#cb949-12" aria-hidden="true" tabindex="-1"></a>  test_ind <span class="ot">=</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> (h)</span>
+<span id="cb949-13"><a href="random-forest-1.html#cb949-13" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> dt[<span class="dv">1</span><span class="sc">:</span>test_ind,]</span>
+<span id="cb949-14"><a href="random-forest-1.html#cb949-14" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> dt[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>test_ind),]</span>
+<span id="cb949-15"><a href="random-forest-1.html#cb949-15" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> train[, <span class="dv">1</span>]</span>
+<span id="cb949-16"><a href="random-forest-1.html#cb949-16" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> train[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb949-17"><a href="random-forest-1.html#cb949-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb949-18"><a href="random-forest-1.html#cb949-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>h) {</span>
+<span id="cb949-19"><a href="random-forest-1.html#cb949-19" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(X, y)</span>
+<span id="cb949-20"><a href="random-forest-1.html#cb949-20" aria-hidden="true" tabindex="-1"></a>    fh[s,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb949-21"><a href="random-forest-1.html#cb949-21" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb949-22"><a href="random-forest-1.html#cb949-22" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[<span class="sc">-</span><span class="fu">nrow</span>(X),]</span>
+<span id="cb949-23"><a href="random-forest-1.html#cb949-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb949-24"><a href="random-forest-1.html#cb949-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb949-25"><a href="random-forest-1.html#cb949-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb949-26"><a href="random-forest-1.html#cb949-26" aria-hidden="true" tabindex="-1"></a>fh</span></code></pre></div>
 <pre><code>##              1          2        3          4         5          6          7
 ## 3  -15.9289667   8.210767 18.96167  -5.951248 -5.422900  15.895133 -0.1105333
 ## 4   -9.4216333  -5.586133 22.32650  -3.761310 -0.444900  -1.894233  3.0504000
@@ -584,75 +583,75 @@ div.csl-indent {
 ## 20  -7.2084667 -33.882567 60.24880 -24.806667 11.053000 -14.878267 11.8647000
 ## 21  -5.0307000 -30.680933 57.72057 -22.284033  9.395700 -12.918233 17.5600667</code></pre>
 <p>We can now see RMSPE for each row (window size):</p>
-<div class="sourceCode" id="cb941"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb941-1"><a href="random-forest-1.html#cb941-1" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> test[, <span class="dv">1</span>]</span>
-<span id="cb941-2"><a href="random-forest-1.html#cb941-2" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb941-3"><a href="random-forest-1.html#cb941-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb941-4"><a href="random-forest-1.html#cb941-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(fh)) {</span>
-<span id="cb941-5"><a href="random-forest-1.html#cb941-5" aria-hidden="true" tabindex="-1"></a>  rmspe[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((fh[i,] <span class="sc">-</span> actual) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb941-6"><a href="random-forest-1.html#cb941-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb941-7"><a href="random-forest-1.html#cb941-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb941-8"><a href="random-forest-1.html#cb941-8" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
+<div class="sourceCode" id="cb951"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb951-1"><a href="random-forest-1.html#cb951-1" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> test[, <span class="dv">1</span>]</span>
+<span id="cb951-2"><a href="random-forest-1.html#cb951-2" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb951-3"><a href="random-forest-1.html#cb951-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb951-4"><a href="random-forest-1.html#cb951-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(fh)) {</span>
+<span id="cb951-5"><a href="random-forest-1.html#cb951-5" aria-hidden="true" tabindex="-1"></a>  rmspe[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((fh[i,] <span class="sc">-</span> actual) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb951-6"><a href="random-forest-1.html#cb951-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb951-7"><a href="random-forest-1.html#cb951-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb951-8"><a href="random-forest-1.html#cb951-8" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
 <pre><code>##  [1] 42.88109 43.62019 45.10958 44.67562 44.42396 51.51704 53.69373 52.30613
 ##  [9] 50.69759 50.35036 49.64989 49.69725 49.21206 50.70492 49.04766 50.63225
 ## [17] 49.83291 50.21522 50.58987</code></pre>
-<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb943-1"><a href="random-forest-1.html#cb943-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(rmspe)</span></code></pre></div>
+<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb953-1"><a href="random-forest-1.html#cb953-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(rmspe)</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>And, if we plot several series of our forecast with different window sizes:</p>
-<div class="sourceCode" id="cb945"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb945-1"><a href="random-forest-1.html#cb945-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb945-2"><a href="random-forest-1.html#cb945-2" aria-hidden="true" tabindex="-1"></a>  actual,</span>
-<span id="cb945-3"><a href="random-forest-1.html#cb945-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb945-4"><a href="random-forest-1.html#cb945-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb945-5"><a href="random-forest-1.html#cb945-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">50</span>),</span>
-<span id="cb945-6"><a href="random-forest-1.html#cb945-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs. Forecasts&quot;</span>,</span>
-<span id="cb945-7"><a href="random-forest-1.html#cb945-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 7 days&quot;</span>,</span>
-<span id="cb945-8"><a href="random-forest-1.html#cb945-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;7-Day Foerecasts&quot;</span>,</span>
-<span id="cb945-9"><a href="random-forest-1.html#cb945-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span></span>
-<span id="cb945-10"><a href="random-forest-1.html#cb945-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb945-11"><a href="random-forest-1.html#cb945-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">1</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb945-12"><a href="random-forest-1.html#cb945-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">2</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span>
-<span id="cb945-13"><a href="random-forest-1.html#cb945-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">5</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
-<span id="cb945-14"><a href="random-forest-1.html#cb945-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">12</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
-<span id="cb945-15"><a href="random-forest-1.html#cb945-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb945-16"><a href="random-forest-1.html#cb945-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;bottomright&quot;</span>,</span>
-<span id="cb945-17"><a href="random-forest-1.html#cb945-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Lags&quot;</span>,</span>
-<span id="cb945-18"><a href="random-forest-1.html#cb945-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;3-day&quot;</span>, <span class="st">&quot;4-day&quot;</span>, <span class="st">&quot;7-day&quot;</span>, <span class="st">&quot;14-day&quot;</span>),</span>
-<span id="cb945-19"><a href="random-forest-1.html#cb945-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;orange&quot;</span>),</span>
-<span id="cb945-20"><a href="random-forest-1.html#cb945-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb945-21"><a href="random-forest-1.html#cb945-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;o&quot;</span>,</span>
-<span id="cb945-22"><a href="random-forest-1.html#cb945-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.75</span></span>
-<span id="cb945-23"><a href="random-forest-1.html#cb945-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb955"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb955-1"><a href="random-forest-1.html#cb955-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb955-2"><a href="random-forest-1.html#cb955-2" aria-hidden="true" tabindex="-1"></a>  actual,</span>
+<span id="cb955-3"><a href="random-forest-1.html#cb955-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb955-4"><a href="random-forest-1.html#cb955-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb955-5"><a href="random-forest-1.html#cb955-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">50</span>),</span>
+<span id="cb955-6"><a href="random-forest-1.html#cb955-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs. Forecasts&quot;</span>,</span>
+<span id="cb955-7"><a href="random-forest-1.html#cb955-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 7 days&quot;</span>,</span>
+<span id="cb955-8"><a href="random-forest-1.html#cb955-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;7-Day Foerecasts&quot;</span>,</span>
+<span id="cb955-9"><a href="random-forest-1.html#cb955-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span></span>
+<span id="cb955-10"><a href="random-forest-1.html#cb955-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb955-11"><a href="random-forest-1.html#cb955-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">1</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb955-12"><a href="random-forest-1.html#cb955-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">2</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb955-13"><a href="random-forest-1.html#cb955-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">5</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb955-14"><a href="random-forest-1.html#cb955-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">12</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb955-15"><a href="random-forest-1.html#cb955-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb955-16"><a href="random-forest-1.html#cb955-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;bottomright&quot;</span>,</span>
+<span id="cb955-17"><a href="random-forest-1.html#cb955-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Lags&quot;</span>,</span>
+<span id="cb955-18"><a href="random-forest-1.html#cb955-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;3-day&quot;</span>, <span class="st">&quot;4-day&quot;</span>, <span class="st">&quot;7-day&quot;</span>, <span class="st">&quot;14-day&quot;</span>),</span>
+<span id="cb955-19"><a href="random-forest-1.html#cb955-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;orange&quot;</span>),</span>
+<span id="cb955-20"><a href="random-forest-1.html#cb955-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb955-21"><a href="random-forest-1.html#cb955-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;o&quot;</span>,</span>
+<span id="cb955-22"><a href="random-forest-1.html#cb955-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.75</span></span>
+<span id="cb955-23"><a href="random-forest-1.html#cb955-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="21-TSRandomForest_files/figure-html/tsr5-1.png" width="672" /></p>
 <p>As the window size gets larger, the forecast becomes increasingly smooth missing the short term dynamics. Another observation is that, although “blue” (3-day window) has the minimum RMSPE, it is not able to capture ups and downs relative to 7-day or 14-day windows.</p>
 </div>
 <div id="multivariate" class="section level2 hasAnchor" number="24.2">
 <h2><span class="header-section-number">24.2</span> Multivariate<a href="random-forest-1.html#multivariate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Can we increase the prediction accuracy with additional predictors?</p>
-<div class="sourceCode" id="cb946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb946-1"><a href="random-forest-1.html#cb946-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
-<span id="cb946-2"><a href="random-forest-1.html#cb946-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb946-3"><a href="random-forest-1.html#cb946-3" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="dv">7</span></span>
-<span id="cb946-4"><a href="random-forest-1.html#cb946-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span> <span class="co"># a grid for window size</span></span>
-<span id="cb946-5"><a href="random-forest-1.html#cb946-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb946-6"><a href="random-forest-1.html#cb946-6" aria-hidden="true" tabindex="-1"></a>fh <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(w), h)</span>
-<span id="cb946-7"><a href="random-forest-1.html#cb946-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(fh) <span class="ot">&lt;-</span> w</span>
-<span id="cb946-8"><a href="random-forest-1.html#cb946-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fh) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>h</span>
-<span id="cb946-9"><a href="random-forest-1.html#cb946-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb946-10"><a href="random-forest-1.html#cb946-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(w)) {</span>
-<span id="cb946-11"><a href="random-forest-1.html#cb946-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[, <span class="sc">-</span><span class="dv">1</span>]), w[s]))</span>
-<span id="cb946-12"><a href="random-forest-1.html#cb946-12" aria-hidden="true" tabindex="-1"></a>  test_ind <span class="ot">=</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> (h)</span>
-<span id="cb946-13"><a href="random-forest-1.html#cb946-13" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> dt[<span class="dv">1</span><span class="sc">:</span>test_ind,]</span>
-<span id="cb946-14"><a href="random-forest-1.html#cb946-14" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> dt[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>test_ind),]</span>
-<span id="cb946-15"><a href="random-forest-1.html#cb946-15" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> train[, <span class="dv">1</span>]</span>
-<span id="cb946-16"><a href="random-forest-1.html#cb946-16" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> train[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb946-17"><a href="random-forest-1.html#cb946-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb946-18"><a href="random-forest-1.html#cb946-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>h) {</span>
-<span id="cb946-19"><a href="random-forest-1.html#cb946-19" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(X, y)</span>
-<span id="cb946-20"><a href="random-forest-1.html#cb946-20" aria-hidden="true" tabindex="-1"></a>    fh[s,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb946-21"><a href="random-forest-1.html#cb946-21" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb946-22"><a href="random-forest-1.html#cb946-22" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[<span class="sc">-</span><span class="fu">nrow</span>(X),]</span>
-<span id="cb946-23"><a href="random-forest-1.html#cb946-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb946-24"><a href="random-forest-1.html#cb946-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb946-25"><a href="random-forest-1.html#cb946-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb946-26"><a href="random-forest-1.html#cb946-26" aria-hidden="true" tabindex="-1"></a>fh</span></code></pre></div>
+<div class="sourceCode" id="cb956"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb956-1"><a href="random-forest-1.html#cb956-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb956-2"><a href="random-forest-1.html#cb956-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb956-3"><a href="random-forest-1.html#cb956-3" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="dv">7</span></span>
+<span id="cb956-4"><a href="random-forest-1.html#cb956-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span> <span class="co"># a grid for window size</span></span>
+<span id="cb956-5"><a href="random-forest-1.html#cb956-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb956-6"><a href="random-forest-1.html#cb956-6" aria-hidden="true" tabindex="-1"></a>fh <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">length</span>(w), h)</span>
+<span id="cb956-7"><a href="random-forest-1.html#cb956-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(fh) <span class="ot">&lt;-</span> w</span>
+<span id="cb956-8"><a href="random-forest-1.html#cb956-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fh) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>h</span>
+<span id="cb956-9"><a href="random-forest-1.html#cb956-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb956-10"><a href="random-forest-1.html#cb956-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(w)) {</span>
+<span id="cb956-11"><a href="random-forest-1.html#cb956-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[, <span class="sc">-</span><span class="dv">1</span>]), w[s]))</span>
+<span id="cb956-12"><a href="random-forest-1.html#cb956-12" aria-hidden="true" tabindex="-1"></a>  test_ind <span class="ot">=</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> (h)</span>
+<span id="cb956-13"><a href="random-forest-1.html#cb956-13" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> dt[<span class="dv">1</span><span class="sc">:</span>test_ind,]</span>
+<span id="cb956-14"><a href="random-forest-1.html#cb956-14" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> dt[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>test_ind),]</span>
+<span id="cb956-15"><a href="random-forest-1.html#cb956-15" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> train[, <span class="dv">1</span>]</span>
+<span id="cb956-16"><a href="random-forest-1.html#cb956-16" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> train[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb956-17"><a href="random-forest-1.html#cb956-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb956-18"><a href="random-forest-1.html#cb956-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>h) {</span>
+<span id="cb956-19"><a href="random-forest-1.html#cb956-19" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(X, y)</span>
+<span id="cb956-20"><a href="random-forest-1.html#cb956-20" aria-hidden="true" tabindex="-1"></a>    fh[s,] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb956-21"><a href="random-forest-1.html#cb956-21" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb956-22"><a href="random-forest-1.html#cb956-22" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[<span class="sc">-</span><span class="fu">nrow</span>(X),]</span>
+<span id="cb956-23"><a href="random-forest-1.html#cb956-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb956-24"><a href="random-forest-1.html#cb956-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb956-25"><a href="random-forest-1.html#cb956-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb956-26"><a href="random-forest-1.html#cb956-26" aria-hidden="true" tabindex="-1"></a>fh</span></code></pre></div>
 <pre><code>##             1           2        3          4          5          6         7
 ## 3  -20.695567  -4.5049667 14.84297  -5.690667 -17.205467   6.283600 -6.253233
 ## 4  -22.160900   0.4831333 18.89210  -9.120733 -14.048933   1.709833 -3.402200
@@ -666,103 +665,103 @@ div.csl-indent {
 ## 12  -6.625767 -18.0023667 44.87017 -23.751400  11.101867 -20.616233  7.235433
 ## 13  -5.115400 -17.9041000 41.61020 -27.285133   9.159433 -22.168267 11.793233
 ## 14  -9.258867 -19.3939667 43.32397 -24.189367   9.289267 -18.191633  8.611467</code></pre>
-<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb948-1"><a href="random-forest-1.html#cb948-1" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> test[, <span class="dv">1</span>]</span>
-<span id="cb948-2"><a href="random-forest-1.html#cb948-2" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb948-3"><a href="random-forest-1.html#cb948-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb948-4"><a href="random-forest-1.html#cb948-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(fh)) {</span>
-<span id="cb948-5"><a href="random-forest-1.html#cb948-5" aria-hidden="true" tabindex="-1"></a>  rmspe[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((fh[i, ] <span class="sc">-</span> actual) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb948-6"><a href="random-forest-1.html#cb948-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb948-7"><a href="random-forest-1.html#cb948-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb948-8"><a href="random-forest-1.html#cb948-8" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
+<div class="sourceCode" id="cb958"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb958-1"><a href="random-forest-1.html#cb958-1" aria-hidden="true" tabindex="-1"></a>actual <span class="ot">&lt;-</span> test[, <span class="dv">1</span>]</span>
+<span id="cb958-2"><a href="random-forest-1.html#cb958-2" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb958-3"><a href="random-forest-1.html#cb958-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb958-4"><a href="random-forest-1.html#cb958-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(fh)) {</span>
+<span id="cb958-5"><a href="random-forest-1.html#cb958-5" aria-hidden="true" tabindex="-1"></a>  rmspe[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((fh[i, ] <span class="sc">-</span> actual) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb958-6"><a href="random-forest-1.html#cb958-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb958-7"><a href="random-forest-1.html#cb958-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb958-8"><a href="random-forest-1.html#cb958-8" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
 <pre><code>##  [1] 42.60604 40.67165 38.58989 38.97738 38.52230 44.78534 45.82378 44.38235
 ##  [9] 44.41539 43.25450 42.76110 43.47264</code></pre>
-<div class="sourceCode" id="cb950"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb950-1"><a href="random-forest-1.html#cb950-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(rmspe)</span></code></pre></div>
+<div class="sourceCode" id="cb960"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb960-1"><a href="random-forest-1.html#cb960-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(rmspe)</span></code></pre></div>
 <pre><code>## [1] 5</code></pre>
-<div class="sourceCode" id="cb952"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb952-1"><a href="random-forest-1.html#cb952-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb952-2"><a href="random-forest-1.html#cb952-2" aria-hidden="true" tabindex="-1"></a>  actual,</span>
-<span id="cb952-3"><a href="random-forest-1.html#cb952-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb952-4"><a href="random-forest-1.html#cb952-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb952-5"><a href="random-forest-1.html#cb952-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="sc">+</span><span class="dv">50</span>),</span>
-<span id="cb952-6"><a href="random-forest-1.html#cb952-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs. Forecasts&quot;</span>,</span>
-<span id="cb952-7"><a href="random-forest-1.html#cb952-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 7 days&quot;</span>,</span>
-<span id="cb952-8"><a href="random-forest-1.html#cb952-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;7-Day Foerecasts&quot;</span>,</span>
-<span id="cb952-9"><a href="random-forest-1.html#cb952-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span></span>
-<span id="cb952-10"><a href="random-forest-1.html#cb952-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb952-11"><a href="random-forest-1.html#cb952-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">1</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb952-12"><a href="random-forest-1.html#cb952-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">3</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span>
-<span id="cb952-13"><a href="random-forest-1.html#cb952-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">5</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
-<span id="cb952-14"><a href="random-forest-1.html#cb952-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">12</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
-<span id="cb952-15"><a href="random-forest-1.html#cb952-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb952-16"><a href="random-forest-1.html#cb952-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;bottomright&quot;</span>,</span>
-<span id="cb952-17"><a href="random-forest-1.html#cb952-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Lags&quot;</span>,</span>
-<span id="cb952-18"><a href="random-forest-1.html#cb952-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;3-day&quot;</span>, <span class="st">&quot;5-day&quot;</span>, <span class="st">&quot;7-day&quot;</span>, <span class="st">&quot;14-day&quot;</span>),</span>
-<span id="cb952-19"><a href="random-forest-1.html#cb952-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;orange&quot;</span>, <span class="st">&quot;black&quot;</span>),</span>
-<span id="cb952-20"><a href="random-forest-1.html#cb952-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb952-21"><a href="random-forest-1.html#cb952-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;o&quot;</span>,</span>
-<span id="cb952-22"><a href="random-forest-1.html#cb952-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.75</span></span>
-<span id="cb952-23"><a href="random-forest-1.html#cb952-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb962"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb962-1"><a href="random-forest-1.html#cb962-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb962-2"><a href="random-forest-1.html#cb962-2" aria-hidden="true" tabindex="-1"></a>  actual,</span>
+<span id="cb962-3"><a href="random-forest-1.html#cb962-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb962-4"><a href="random-forest-1.html#cb962-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb962-5"><a href="random-forest-1.html#cb962-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="sc">+</span><span class="dv">50</span>),</span>
+<span id="cb962-6"><a href="random-forest-1.html#cb962-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs. Forecasts&quot;</span>,</span>
+<span id="cb962-7"><a href="random-forest-1.html#cb962-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 7 days&quot;</span>,</span>
+<span id="cb962-8"><a href="random-forest-1.html#cb962-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;7-Day Foerecasts&quot;</span>,</span>
+<span id="cb962-9"><a href="random-forest-1.html#cb962-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">3</span></span>
+<span id="cb962-10"><a href="random-forest-1.html#cb962-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb962-11"><a href="random-forest-1.html#cb962-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">1</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb962-12"><a href="random-forest-1.html#cb962-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">3</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb962-13"><a href="random-forest-1.html#cb962-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">5</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb962-14"><a href="random-forest-1.html#cb962-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fh[<span class="dv">12</span>,], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb962-15"><a href="random-forest-1.html#cb962-15" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb962-16"><a href="random-forest-1.html#cb962-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;bottomright&quot;</span>,</span>
+<span id="cb962-17"><a href="random-forest-1.html#cb962-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Lags&quot;</span>,</span>
+<span id="cb962-18"><a href="random-forest-1.html#cb962-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;3-day&quot;</span>, <span class="st">&quot;5-day&quot;</span>, <span class="st">&quot;7-day&quot;</span>, <span class="st">&quot;14-day&quot;</span>),</span>
+<span id="cb962-19"><a href="random-forest-1.html#cb962-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;orange&quot;</span>, <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb962-20"><a href="random-forest-1.html#cb962-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb962-21"><a href="random-forest-1.html#cb962-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">&quot;o&quot;</span>,</span>
+<span id="cb962-22"><a href="random-forest-1.html#cb962-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.75</span></span>
+<span id="cb962-23"><a href="random-forest-1.html#cb962-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="21-TSRandomForest_files/figure-html/tsr7-1.png" width="672" /></p>
 <p>It seems that additional predictors do increase the accuracy. Again, relative to the best model (5-day window) our 7-day window correctly captures most ups and downs in the forecast. Now, a visual inspection shows that all RMSPE’s are lower than the univariate forecasts. We would conclude that this is because of the new predictors, specially mobility, temperature, and humidity. As a side note, we need to test if those differences are statistical significant or not (i.e. Diebold-Mariano Test).</p>
 </div>
 <div id="rolling-and-expanding-windows" class="section level2 hasAnchor" number="24.3">
 <h2><span class="header-section-number">24.3</span> Rolling and expanding windows<a href="random-forest-1.html#rolling-and-expanding-windows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A seven-day window is not enough for a reliable judgment on the forecast accuracy. One way to deal with this issue is to use rolling or expanding windows to predict the next h days. The following example shows a 1-day-ahead forecast with varying lags for embedding.</p>
-<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb953-1"><a href="random-forest-1.html#cb953-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
-<span id="cb953-2"><a href="random-forest-1.html#cb953-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb953-3"><a href="random-forest-1.html#cb953-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">10</span> <span class="co"># lags for embedding</span></span>
-<span id="cb953-4"><a href="random-forest-1.html#cb953-4" aria-hidden="true" tabindex="-1"></a>ws <span class="ot">=</span> <span class="dv">150</span> <span class="co"># size of each rolling window</span></span>
-<span id="cb953-5"><a href="random-forest-1.html#cb953-5" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb953-6"><a href="random-forest-1.html#cb953-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb953-7"><a href="random-forest-1.html#cb953-7" aria-hidden="true" tabindex="-1"></a>all_fh <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">length</span>(l))</span>
-<span id="cb953-8"><a href="random-forest-1.html#cb953-8" aria-hidden="true" tabindex="-1"></a>all_y <span class="ot">&lt;-</span>  <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">length</span>(l))</span>
-<span id="cb953-9"><a href="random-forest-1.html#cb953-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb953-10"><a href="random-forest-1.html#cb953-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(l)) {</span>
-<span id="cb953-11"><a href="random-forest-1.html#cb953-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[,<span class="sc">-</span><span class="dv">1</span>]), l[s]))</span>
-<span id="cb953-12"><a href="random-forest-1.html#cb953-12" aria-hidden="true" tabindex="-1"></a>  nwin <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> ws <span class="co">#number of windows</span></span>
-<span id="cb953-13"><a href="random-forest-1.html#cb953-13" aria-hidden="true" tabindex="-1"></a>  fh <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb953-14"><a href="random-forest-1.html#cb953-14" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb953-15"><a href="random-forest-1.html#cb953-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb953-16"><a href="random-forest-1.html#cb953-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nwin) {</span>
-<span id="cb953-17"><a href="random-forest-1.html#cb953-17" aria-hidden="true" tabindex="-1"></a>    train <span class="ot">&lt;-</span> dt[i<span class="sc">:</span>(ws <span class="sc">+</span> i <span class="sc">-</span> <span class="dv">1</span>),] <span class="co"># each loop, window moves one day forward</span></span>
-<span id="cb953-18"><a href="random-forest-1.html#cb953-18" aria-hidden="true" tabindex="-1"></a>    test <span class="ot">&lt;-</span> dt[(ws <span class="sc">+</span> i),]</span>
-<span id="cb953-19"><a href="random-forest-1.html#cb953-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb953-20"><a href="random-forest-1.html#cb953-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i <span class="sc">+</span> s)</span>
-<span id="cb953-21"><a href="random-forest-1.html#cb953-21" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(train[,<span class="sc">-</span><span class="dv">1</span>], train[, <span class="dv">1</span>])</span>
-<span id="cb953-22"><a href="random-forest-1.html#cb953-22" aria-hidden="true" tabindex="-1"></a>    fh[i] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[,<span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb953-23"><a href="random-forest-1.html#cb953-23" aria-hidden="true" tabindex="-1"></a>    y[i] <span class="ot">&lt;-</span> test[, <span class="dv">1</span>] <span class="co"># to use later for plotting</span></span>
-<span id="cb953-24"><a href="random-forest-1.html#cb953-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb953-25"><a href="random-forest-1.html#cb953-25" aria-hidden="true" tabindex="-1"></a>  all_y[[s]] <span class="ot">&lt;-</span> y</span>
-<span id="cb953-26"><a href="random-forest-1.html#cb953-26" aria-hidden="true" tabindex="-1"></a>  all_fh[[s]] <span class="ot">&lt;-</span> fh</span>
-<span id="cb953-27"><a href="random-forest-1.html#cb953-27" aria-hidden="true" tabindex="-1"></a>  err <span class="ot">&lt;-</span> test[, <span class="dv">1</span>] <span class="sc">-</span> fh</span>
-<span id="cb953-28"><a href="random-forest-1.html#cb953-28" aria-hidden="true" tabindex="-1"></a>  rmspe[s] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(err <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb953-29"><a href="random-forest-1.html#cb953-29" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb953-30"><a href="random-forest-1.html#cb953-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb953-31"><a href="random-forest-1.html#cb953-31" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
+<div class="sourceCode" id="cb963"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb963-1"><a href="random-forest-1.html#cb963-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb963-2"><a href="random-forest-1.html#cb963-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb963-3"><a href="random-forest-1.html#cb963-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">10</span> <span class="co"># lags for embedding</span></span>
+<span id="cb963-4"><a href="random-forest-1.html#cb963-4" aria-hidden="true" tabindex="-1"></a>ws <span class="ot">=</span> <span class="dv">150</span> <span class="co"># size of each rolling window</span></span>
+<span id="cb963-5"><a href="random-forest-1.html#cb963-5" aria-hidden="true" tabindex="-1"></a>rmspe <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb963-6"><a href="random-forest-1.html#cb963-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb963-7"><a href="random-forest-1.html#cb963-7" aria-hidden="true" tabindex="-1"></a>all_fh <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">length</span>(l))</span>
+<span id="cb963-8"><a href="random-forest-1.html#cb963-8" aria-hidden="true" tabindex="-1"></a>all_y <span class="ot">&lt;-</span>  <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">length</span>(l))</span>
+<span id="cb963-9"><a href="random-forest-1.html#cb963-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb963-10"><a href="random-forest-1.html#cb963-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(l)) {</span>
+<span id="cb963-11"><a href="random-forest-1.html#cb963-11" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">embed</span>(<span class="fu">as.matrix</span>(dft[,<span class="sc">-</span><span class="dv">1</span>]), l[s]))</span>
+<span id="cb963-12"><a href="random-forest-1.html#cb963-12" aria-hidden="true" tabindex="-1"></a>  nwin <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dt) <span class="sc">-</span> ws <span class="co">#number of windows</span></span>
+<span id="cb963-13"><a href="random-forest-1.html#cb963-13" aria-hidden="true" tabindex="-1"></a>  fh <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb963-14"><a href="random-forest-1.html#cb963-14" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb963-15"><a href="random-forest-1.html#cb963-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb963-16"><a href="random-forest-1.html#cb963-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nwin) {</span>
+<span id="cb963-17"><a href="random-forest-1.html#cb963-17" aria-hidden="true" tabindex="-1"></a>    train <span class="ot">&lt;-</span> dt[i<span class="sc">:</span>(ws <span class="sc">+</span> i <span class="sc">-</span> <span class="dv">1</span>),] <span class="co"># each loop, window moves one day forward</span></span>
+<span id="cb963-18"><a href="random-forest-1.html#cb963-18" aria-hidden="true" tabindex="-1"></a>    test <span class="ot">&lt;-</span> dt[(ws <span class="sc">+</span> i),]</span>
+<span id="cb963-19"><a href="random-forest-1.html#cb963-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb963-20"><a href="random-forest-1.html#cb963-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(i <span class="sc">+</span> s)</span>
+<span id="cb963-21"><a href="random-forest-1.html#cb963-21" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(train[,<span class="sc">-</span><span class="dv">1</span>], train[, <span class="dv">1</span>])</span>
+<span id="cb963-22"><a href="random-forest-1.html#cb963-22" aria-hidden="true" tabindex="-1"></a>    fh[i] <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb963-23"><a href="random-forest-1.html#cb963-23" aria-hidden="true" tabindex="-1"></a>    y[i] <span class="ot">&lt;-</span> test[, <span class="dv">1</span>] <span class="co"># to use later for plotting</span></span>
+<span id="cb963-24"><a href="random-forest-1.html#cb963-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb963-25"><a href="random-forest-1.html#cb963-25" aria-hidden="true" tabindex="-1"></a>  all_y[[s]] <span class="ot">&lt;-</span> y</span>
+<span id="cb963-26"><a href="random-forest-1.html#cb963-26" aria-hidden="true" tabindex="-1"></a>  all_fh[[s]] <span class="ot">&lt;-</span> fh</span>
+<span id="cb963-27"><a href="random-forest-1.html#cb963-27" aria-hidden="true" tabindex="-1"></a>  err <span class="ot">&lt;-</span> test[, <span class="dv">1</span>] <span class="sc">-</span> fh</span>
+<span id="cb963-28"><a href="random-forest-1.html#cb963-28" aria-hidden="true" tabindex="-1"></a>  rmspe[s] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(err <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb963-29"><a href="random-forest-1.html#cb963-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb963-30"><a href="random-forest-1.html#cb963-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb963-31"><a href="random-forest-1.html#cb963-31" aria-hidden="true" tabindex="-1"></a>rmspe</span></code></pre></div>
 <pre><code>## [1] 45.17990 44.74564 45.36820 45.07520 45.89481 46.96887 46.98404 46.80637</code></pre>
-<div class="sourceCode" id="cb955"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb955-1"><a href="random-forest-1.html#cb955-1" aria-hidden="true" tabindex="-1"></a>bst <span class="ot">&lt;-</span> <span class="fu">which.min</span>(rmspe)</span>
-<span id="cb955-2"><a href="random-forest-1.html#cb955-2" aria-hidden="true" tabindex="-1"></a>l[bst] <span class="co"># Winning lag in embedding</span></span></code></pre></div>
+<div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb965-1"><a href="random-forest-1.html#cb965-1" aria-hidden="true" tabindex="-1"></a>bst <span class="ot">&lt;-</span> <span class="fu">which.min</span>(rmspe)</span>
+<span id="cb965-2"><a href="random-forest-1.html#cb965-2" aria-hidden="true" tabindex="-1"></a>l[bst] <span class="co"># Winning lag in embedding</span></span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>To adjust the application above to an expanding-window forecast, we just need to change <code>dt[i:(ws + i - 1), ]</code> to <code>dt[1:(ws + i - 1), ]</code> in the script.</p>
 <p>Now, we can plot the results:</p>
-<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb957-1"><a href="random-forest-1.html#cb957-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb957-2"><a href="random-forest-1.html#cb957-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb957-3"><a href="random-forest-1.html#cb957-3" aria-hidden="true" tabindex="-1"></a>  all_y[[bst]],</span>
-<span id="cb957-4"><a href="random-forest-1.html#cb957-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb957-5"><a href="random-forest-1.html#cb957-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb957-6"><a href="random-forest-1.html#cb957-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs Predicted (Blue)&quot;</span>,</span>
-<span id="cb957-7"><a href="random-forest-1.html#cb957-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb957-8"><a href="random-forest-1.html#cb957-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;1-Day-Ahead&quot;</span></span>
-<span id="cb957-9"><a href="random-forest-1.html#cb957-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb957-10"><a href="random-forest-1.html#cb957-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(all_fh[[bst]], <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb957-11"><a href="random-forest-1.html#cb957-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb957-12"><a href="random-forest-1.html#cb957-12" aria-hidden="true" tabindex="-1"></a>  all_y[[bst]][<span class="dv">60</span><span class="sc">:</span><span class="dv">110</span>],</span>
-<span id="cb957-13"><a href="random-forest-1.html#cb957-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;o&quot;</span>,</span>
-<span id="cb957-14"><a href="random-forest-1.html#cb957-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb957-15"><a href="random-forest-1.html#cb957-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs Predicted (Blue)&quot;</span>,</span>
-<span id="cb957-16"><a href="random-forest-1.html#cb957-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb957-17"><a href="random-forest-1.html#cb957-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Last 50 Days&quot;</span></span>
-<span id="cb957-18"><a href="random-forest-1.html#cb957-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb957-19"><a href="random-forest-1.html#cb957-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(all_fh[[bst]][<span class="dv">60</span><span class="sc">:</span><span class="dv">110</span>], <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb967"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb967-1"><a href="random-forest-1.html#cb967-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb967-2"><a href="random-forest-1.html#cb967-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb967-3"><a href="random-forest-1.html#cb967-3" aria-hidden="true" tabindex="-1"></a>  all_y[[bst]],</span>
+<span id="cb967-4"><a href="random-forest-1.html#cb967-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb967-5"><a href="random-forest-1.html#cb967-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb967-6"><a href="random-forest-1.html#cb967-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs Predicted (Blue)&quot;</span>,</span>
+<span id="cb967-7"><a href="random-forest-1.html#cb967-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb967-8"><a href="random-forest-1.html#cb967-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;1-Day-Ahead&quot;</span></span>
+<span id="cb967-9"><a href="random-forest-1.html#cb967-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb967-10"><a href="random-forest-1.html#cb967-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(all_fh[[bst]], <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb967-11"><a href="random-forest-1.html#cb967-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb967-12"><a href="random-forest-1.html#cb967-12" aria-hidden="true" tabindex="-1"></a>  all_y[[bst]][<span class="dv">60</span><span class="sc">:</span><span class="dv">110</span>],</span>
+<span id="cb967-13"><a href="random-forest-1.html#cb967-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;o&quot;</span>,</span>
+<span id="cb967-14"><a href="random-forest-1.html#cb967-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb967-15"><a href="random-forest-1.html#cb967-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (red) vs Predicted (Blue)&quot;</span>,</span>
+<span id="cb967-16"><a href="random-forest-1.html#cb967-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb967-17"><a href="random-forest-1.html#cb967-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Last 50 Days&quot;</span></span>
+<span id="cb967-18"><a href="random-forest-1.html#cb967-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb967-19"><a href="random-forest-1.html#cb967-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(all_fh[[bst]][<span class="dv">60</span><span class="sc">:</span><span class="dv">110</span>], <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
 <p><img src="21-TSRandomForest_files/figure-html/tsr9-1.png" width="672" /></p>
 <p>Getting the predicted values back to originals can be achieved by:</p>
 <p><span class="math display">\[
@@ -771,11 +770,11 @@ div.csl-indent {
 &amp; y_{t+2}=y_{t+1}+z_{t+2}=y_t+z_{t+1}+z_{t+2}
 \end{aligned}
 \]</span></p>
-<div class="sourceCode" id="cb958"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb958-1"><a href="random-forest-1.html#cb958-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
-<span id="cb958-2"><a href="random-forest-1.html#cb958-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
-<span id="cb958-3"><a href="random-forest-1.html#cb958-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">diff</span>(y)     <span class="co"># first differences</span></span>
-<span id="cb958-4"><a href="random-forest-1.html#cb958-4" aria-hidden="true" tabindex="-1"></a>back <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">c</span>(y[<span class="dv">1</span>], z))</span>
-<span id="cb958-5"><a href="random-forest-1.html#cb958-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(y, back)</span></code></pre></div>
+<div class="sourceCode" id="cb968"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb968-1"><a href="random-forest-1.html#cb968-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb968-2"><a href="random-forest-1.html#cb968-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb968-3"><a href="random-forest-1.html#cb968-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">diff</span>(y)     <span class="co"># first differences</span></span>
+<span id="cb968-4"><a href="random-forest-1.html#cb968-4" aria-hidden="true" tabindex="-1"></a>back <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">c</span>(y[<span class="dv">1</span>], z))</span>
+<span id="cb968-5"><a href="random-forest-1.html#cb968-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(y, back)</span></code></pre></div>
 <pre><code>##                y       back
 ##  [1,]  1.7049032  1.7049032
 ##  [2,] -0.7120386 -0.7120386
@@ -788,29 +787,29 @@ div.csl-indent {
 ##  [9,]  0.3391139  0.3391139
 ## [10,] -0.5519147 -0.5519147</code></pre>
 <p>Since our algorithm predict the changes in observations, a simple sum would do the job for back transformation. For example, as a starting point, our algorithm predicts the change in <span class="math inline">\(Y\)</span> from day 156 to 157 (window size 150 plus the best lag window, 6). When we add this predicted change to the actual <span class="math inline">\(Y\)</span> at 156, it will give us the back-transformed forecast at day 157.</p>
-<div class="sourceCode" id="cb960"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb960-1"><a href="random-forest-1.html#cb960-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>cases</span>
-<span id="cb960-2"><a href="random-forest-1.html#cb960-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb960-3"><a href="random-forest-1.html#cb960-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The first forecast is at ws (150) + l[best] (6) + 1, which is 157</span></span>
-<span id="cb960-4"><a href="random-forest-1.html#cb960-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The first actual Y should start a day earlier</span></span>
-<span id="cb960-5"><a href="random-forest-1.html#cb960-5" aria-hidden="true" tabindex="-1"></a><span class="co"># removing all Y&#39;s until ws+l[bst]</span></span>
-<span id="cb960-6"><a href="random-forest-1.html#cb960-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb960-7"><a href="random-forest-1.html#cb960-7" aria-hidden="true" tabindex="-1"></a>y_a_day_before <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>(ws <span class="sc">+</span> l[bst] <span class="sc">-</span> <span class="dv">1</span>))]</span>
-<span id="cb960-8"><a href="random-forest-1.html#cb960-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb960-9"><a href="random-forest-1.html#cb960-9" aria-hidden="true" tabindex="-1"></a><span class="co"># This adds predicted changes to observed values a day earlier</span></span>
-<span id="cb960-10"><a href="random-forest-1.html#cb960-10" aria-hidden="true" tabindex="-1"></a>back_forecast <span class="ot">&lt;-</span> <span class="fu">head</span>(y_a_day_before,<span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> all_fh[[bst]]</span>
-<span id="cb960-11"><a href="random-forest-1.html#cb960-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb960-12"><a href="random-forest-1.html#cb960-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Actual Y&#39;s in the test set starting at ws (150) + l[best] (6) + 1, which is 157</span></span>
-<span id="cb960-13"><a href="random-forest-1.html#cb960-13" aria-hidden="true" tabindex="-1"></a>ytest <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>(ws <span class="sc">+</span> l[bst]))]</span>
-<span id="cb960-14"><a href="random-forest-1.html#cb960-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb960-15"><a href="random-forest-1.html#cb960-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb960-16"><a href="random-forest-1.html#cb960-16" aria-hidden="true" tabindex="-1"></a>  ytest,</span>
-<span id="cb960-17"><a href="random-forest-1.html#cb960-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb960-18"><a href="random-forest-1.html#cb960-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb960-19"><a href="random-forest-1.html#cb960-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual Y (Blue) vs Forecast (Red)&quot;</span>,</span>
-<span id="cb960-20"><a href="random-forest-1.html#cb960-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
-<span id="cb960-21"><a href="random-forest-1.html#cb960-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Back-transformed Forecast&quot;</span></span>
-<span id="cb960-22"><a href="random-forest-1.html#cb960-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb960-23"><a href="random-forest-1.html#cb960-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(back_forecast, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb970"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb970-1"><a href="random-forest-1.html#cb970-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>cases</span>
+<span id="cb970-2"><a href="random-forest-1.html#cb970-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb970-3"><a href="random-forest-1.html#cb970-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The first forecast is at ws (150) + l[best] (6) + 1, which is 157</span></span>
+<span id="cb970-4"><a href="random-forest-1.html#cb970-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The first actual Y should start a day earlier</span></span>
+<span id="cb970-5"><a href="random-forest-1.html#cb970-5" aria-hidden="true" tabindex="-1"></a><span class="co"># removing all Y&#39;s until ws+l[bst]</span></span>
+<span id="cb970-6"><a href="random-forest-1.html#cb970-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb970-7"><a href="random-forest-1.html#cb970-7" aria-hidden="true" tabindex="-1"></a>y_a_day_before <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>(ws <span class="sc">+</span> l[bst] <span class="sc">-</span> <span class="dv">1</span>))]</span>
+<span id="cb970-8"><a href="random-forest-1.html#cb970-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb970-9"><a href="random-forest-1.html#cb970-9" aria-hidden="true" tabindex="-1"></a><span class="co"># This adds predicted changes to observed values a day earlier</span></span>
+<span id="cb970-10"><a href="random-forest-1.html#cb970-10" aria-hidden="true" tabindex="-1"></a>back_forecast <span class="ot">&lt;-</span> <span class="fu">head</span>(y_a_day_before,<span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> all_fh[[bst]]</span>
+<span id="cb970-11"><a href="random-forest-1.html#cb970-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb970-12"><a href="random-forest-1.html#cb970-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Actual Y&#39;s in the test set starting at ws (150) + l[best] (6) + 1, which is 157</span></span>
+<span id="cb970-13"><a href="random-forest-1.html#cb970-13" aria-hidden="true" tabindex="-1"></a>ytest <span class="ot">&lt;-</span> y[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>(ws <span class="sc">+</span> l[bst]))]</span>
+<span id="cb970-14"><a href="random-forest-1.html#cb970-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb970-15"><a href="random-forest-1.html#cb970-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb970-16"><a href="random-forest-1.html#cb970-16" aria-hidden="true" tabindex="-1"></a>  ytest,</span>
+<span id="cb970-17"><a href="random-forest-1.html#cb970-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb970-18"><a href="random-forest-1.html#cb970-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb970-19"><a href="random-forest-1.html#cb970-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual Y (Blue) vs Forecast (Red)&quot;</span>,</span>
+<span id="cb970-20"><a href="random-forest-1.html#cb970-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Days&quot;</span>,</span>
+<span id="cb970-21"><a href="random-forest-1.html#cb970-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Back-transformed Forecast&quot;</span></span>
+<span id="cb970-22"><a href="random-forest-1.html#cb970-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb970-23"><a href="random-forest-1.html#cb970-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(back_forecast, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="21-TSRandomForest_files/figure-html/tsr11-1.png" width="672" /></p>
 <p>It seems that, for most days, our algorithm simply forecasts the next day by using the value from the day before. If we change our algorithm to a 7-day-ahead forecast, this would be different. This is also a common problem when the predictive model has a poor forecasting power. Again, this is not due to our algorithm, but forecasting an epi curve with imperfect test data is almost impossible job, as we highlighted earlier.</p>
 <p>In practice, however, there are several ways that we can improve the scripts above. For example, we can consider the (rolling or expanding) window size as a hyperparameter. We can also have an explicit training for the Random Forest algorithm. We can have an ensemble forecasting by adding other predictive algorithms to the script, like boosting. Further, we can develop a base forecast that would give us a benchmark to see how much our algorithm improves against that base. Lastly, we could apply a transformation to the data in order to stabilize the variance in all variables.</p>

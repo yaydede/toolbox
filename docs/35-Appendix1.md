@@ -634,7 +634,7 @@ Below, we create a function, `grdescent`, to show how sensitive gradient descent
 
 
 ```r
-grdescent <- function(x, y, lr, thresh, maxiter) {
+grdescent <- function(x, y, lr, maxiter) {
   #starting points
   set.seed(234)
   b <- runif(1, 0, 1)
@@ -657,9 +657,13 @@ grdescent <- function(x, y, lr, thresh, maxiter) {
     c <- c_new
     yhat <- b * x + c
     MSE_new <- sum((y - yhat) ^ 2) / n
-    if (abs(MSE - MSE_new) <= thresh) {
+    MSE <- c(MSE, MSE_new)
+    d = tail(abs(diff(MSE)), 1)
+    if (round(d, 12) == 0) {
       converged = T
-      return(paste("Intercept:", c, "Slope:", b))
+      return(paste("Iterations: ",
+                   iterations, "Intercept: ",
+                   c, "Slope: ", b))
     }
     iterations = iterations + 1
     if (iterations > maxiter) {
@@ -674,31 +678,31 @@ grdescent <- function(x, y, lr, thresh, maxiter) {
 Note that the key part in this algorithm is `b_new <- b + (learnrate * (1 / n)) * sum((y - yhat) * x*(-1)`.
 The first $b$ that is picked randomly by  `b <- runif(1, 0, 1)` is adjusted by `learnrate * (1 / n) * (sum((y - yhat) * -x))`.  
 
-Note that `sum((y - yhat) * x)` is the first order condition of the cost function (RSS - Residual Sum of Squares) for the slope coefficient. The cost function (RSS) is a convex function where the minimum can be achieved by the optimal $b$.  It is a linear Taylor approximation of RSS at $b$ that provides the **steepest** descent, that is just a simple adjustment for identifying the direction of the adjustment of $b$ until the minimum RSS is reached.  
+Note that `sum((y - yhat) * x)` is the first order condition of the cost function (MSE - Residual Sum of Squares) for the slope coefficient. The cost function is a convex function where the minimum can be achieved by the optimal $b$.  It is a linear Taylor approximation of MSE at $b$ that provides the **steepest** descent, that is just a simple adjustment for identifying the direction of the adjustment of $b$ until the minimum MSE is reached.  
 
 Now we will see if this function will give us the same intercept and slope coefficients already calculated with `lm()` above.
 
 
 ```r
-grdescent(x1, Y, 0.003, 0.001, 1000000) # Perfect
+grdescent(x1, Y, 0.01, 100000) 
 ```
 
 ```
-## [1] "Max. iter. reached,  Intercept: 1.20959654028984 Slope: 1.97964316494708"
+## [1] "Iterations:  16389 Intercept:  1.20949479145584 Slope:  1.97965284405985"
 ```
 
 This is good.  But, if start a very low number with a small learning rate, then we need more iteration
 
 
 ```r
-grdescent(x1, Y, 0.00004, 0.001, 4000000)
+grdescent(x1, Y, 0.005, 1000000)
 ```
 
 ```
-## [1] "Max. iter. reached,  Intercept: 1.20947317953422 Slope: 1.97965489994805"
+## [1] "Iterations:  31363 Intercept:  1.20945256472045 Slope:  1.97965686098386"
 ```
 
-Yes, the main question is how do we find out what the learning rate should be?  It is an active research question and to answer it is beyond this chapter. A general suggestion, however, is to keep it small and tune it within the training process.
+Yes, the main question is how do we find out what the learning rate should be?  It is an active research question and to answer it is beyond this chapter. A general suggestion, however, is to keep it small and tune it within the training process. Obviously, we can have an adaptive learning rate that changes at each iteration depending on the change in the MSE.  If the change is positive, for example, the learning rate can be reduced to keep the descent.  
   
 ### Multivariable
 
@@ -782,7 +786,7 @@ Now the function for gradient descent:
 
 
 ```r
-grdescentM <- function(x, y, lr, thresh, maxiter) {
+grdescentM <- function(x, y, lr, maxiter) {
   set.seed(123)
   b <- runif(ncol(x), 0, 1)
   yhat <- x%*%b
@@ -791,13 +795,18 @@ grdescentM <- function(x, y, lr, thresh, maxiter) {
   converged = F
   iterations = 0
   n <- length(y)
+  
   while(converged == F) {
     b_new <- b - (lr*(1/n))*t(x)%*%(x%*%b - y)
     b <- b_new
     yhat <- x%*%b
     e <- y - yhat
+    
     RSS_new <- t(e)%*%e
-    if(RSS - RSS_new <= thresh) {
+    RSS <- c(RSS, RSS_new)
+    d = tail(abs(diff(RSS)), 1)
+    
+    if (round(d, 12) == 0) {
       converged = T
       return(b)
     }
@@ -812,18 +821,18 @@ grdescentM <- function(x, y, lr, thresh, maxiter) {
 
 
 ```r
-grdescentM(X, Y, 0.003, 0.001, 1000000) 
+grdescentM(X, Y, 0.01, 100000) 
 ```
 
 ```
 ##            [,1]
-## int   0.4953323
-## x1    1.9559022
-## x2   -0.3511182
-## x2x3 -1.9112623
-## x4x5  1.7424723
-## x4x6 -2.8323934
-## x3x7  2.1015442
+## int   0.4953843
+## x1    1.9559009
+## x2   -0.3511257
+## x2x3 -1.9112548
+## x4x5  1.7424746
+## x4x6 -2.8323944
+## x3x7  2.1015069
 ```
   
 ## Optimization with R

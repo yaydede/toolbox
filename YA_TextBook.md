@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-03-26"
+date: "This version: 2023-04-12"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -281,7 +281,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-03-26"
+## [1] "2023-04-12"
 ```
 
 ```r
@@ -290,7 +290,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-03-26 08:51:24 ADT"
+## [1] "2023-04-12 18:34:38 ADT"
 ```
 
 ```r
@@ -299,7 +299,7 @@ now()
 ```
 
 ```
-## [1] "2023-03-26 08:51:24 ADT"
+## [1] "2023-04-12 18:34:38 ADT"
 ```
 
 ```r
@@ -551,8 +551,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1]  0.1322928  4.4907205 -6.9325373  5.1149618 -2.8317211  1.0177695
-##  [7] -2.6952973 -3.2587262 -1.0788716  2.7446627
+##  [1] 10.0469307  3.1640825 -2.4064852  5.8818136  4.0966507  9.9215666
+##  [7]  0.2598171  8.9984218 -0.5482394  9.0693937
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -1094,12 +1094,12 @@ sol1
 ## [1] -0.07333445  0.81164723
 ## 
 ## $gradient
-## [1] 5.478284e-06 4.384049e-06
+## [1] 5.478284e-06 4.391154e-06
 ## 
 ## $hessian
 ##               [,1]         [,2]
 ## [1,] 123.206236680 -0.007519674
-## [2,]  -0.007519674 75.861573379
+## [2,]  -0.007519674 75.861574089
 ## 
 ## $code
 ## [1] 1
@@ -9099,7 +9099,7 @@ printcp(tree)
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
 ## 2 0.034483      1   0.27586 0.62069 0.12640
-## 3 0.010000      2   0.24138 0.62069 0.12640
+## 3 0.010000      2   0.24138 0.58621 0.12399
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9148,10 +9148,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.01723 0.045506
-## 2 0.101694      1   0.41379 0.62412 0.142469
-## 3 0.028263      2   0.31209 0.56985 0.138453
-## 4 0.010000      3   0.28383 0.54650 0.130250
+## 1 0.586213      0   1.00000 1.01953 0.045723
+## 2 0.101694      1   0.41379 0.87135 0.167358
+## 3 0.028263      2   0.31209 0.73489 0.152099
+## 4 0.010000      3   0.28383 0.69034 0.143196
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9228,10 +9228,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.51724 0.11861
-## 3 0.034483      2  0.172414 0.37931 0.10513
+## 2 0.103448      1  0.275862 0.58621 0.12399
+## 3 0.034483      2  0.172414 0.51724 0.11861
 ## 4 0.017241      6  0.034483 0.48276 0.11560
-## 5 0.000000      8  0.000000 0.55172 0.12140
+## 5 0.000000      8  0.000000 0.48276 0.11560
 ```
 
 ```r
@@ -9246,7 +9246,7 @@ min_cp
 ```
 
 ```
-## [1] 0.03448276
+## [1] 0.01724138
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -9271,16 +9271,17 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS PVENT
+## [1] INCAR INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.51724 0.11861
-## 3 0.034483      2   0.17241 0.37931 0.10513
+## 1 0.724138      0  1.000000 1.00000 0.14282
+## 2 0.103448      1  0.275862 0.58621 0.12399
+## 3 0.034483      2  0.172414 0.51724 0.11861
+## 4 0.017241      6  0.034483 0.48276 0.11560
 ```
 
 ```r
@@ -9383,9 +9384,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.586 0.030161
-## 4 0.011333      5     0.504  0.570 0.029863
-## 5 0.010000      9     0.458  0.532 0.029117
+## 3 0.015000      3     0.534  0.548 0.029438
+## 4 0.011333      5     0.504  0.528 0.029035
+## 5 0.010000      9     0.458  0.524 0.028952
 ```
 
 ```r
@@ -10129,7 +10130,7 @@ lines(df$x, predict(bo2, n.trees = t, data = df), type = "s",
 
 <img src="12-Ensemble_files/figure-html/en16-1.png" width="672" />
 
-We can also use a boosting application for classification problems, which is what we will loomk at next.
+We will have more applications with `gbm` in the next chapter.  We can also have a boosting application for classification problems. While the `gbm` function can be used for classification that requires a different distribution ("bernoulli" - logistic regression for 0-1 outcomes), there is a special boosting method for classification problems, AdaBoost.M1, which is what we will look at next.
 
 ### AdaBoost
 
@@ -10152,7 +10153,7 @@ $$
 \alpha_{b}=0.5\log \left(\frac{1-e r r_{b}}{e r r_{b}}\right)
 $$
   
-For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
+For example, suppose $err_b = 0.3$, then $\alpha_{b}=0.5\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
 
 5. If the observation $i$ is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
 
@@ -10187,7 +10188,7 @@ So, the new weight for the misclassified $i$ in the second tree (i.e., $b=2$ stu
 
 
 ```r
-# For misclassified obervations
+# For misclassified observations
 weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 ```
@@ -10197,7 +10198,7 @@ weight_miss
 ```
 
 ```r
-# For correctly classified observation
+# For correctly classified observations
 weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
@@ -10216,7 +10217,7 @@ $$
 
 We normalize all weights between 0 and 1 so that sum of the weights would be one in each iteration.  Hence, the algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until B.  We can use `rpart` in each tree with `weights` option as we will shown momentarily.  
 
-Here is an example with the `myocarde` data that we only use the first 6 observation:
+Here is an example with the `myocarde` data that we only use the first 6 observations:
 
 
 ```r
@@ -10406,6 +10407,7 @@ for(i in 1:rnd) {
   # alpha
   alpha[i] <- 0.5 * log((1 - e) / e)
   # Updating weights 
+  # Note that, for true predictions, (y * yhat) will be +, otherwise -
   whts <- whts * exp(-alpha[i] * y * yhat)
   # Normalizing weights
   whts <- whts / sum(whts)
@@ -10632,6 +10634,17 @@ We can obtain the top 10 influential features in our final model using the impur
 library(vip)
 vip(tr_model,
     aesthetics = list(color = "green", fill = "orange")) 
+```
+
+```
+## [18:35:39] WARNING: src/learner.cc:553: 
+##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
+##   older XGBoost, please export the model by calling `Booster.save_model` from that version
+##   first, then load it back in current version. See:
+## 
+##     https://xgboost.readthedocs.io/en/latest/tutorials/saving_model.html
+## 
+##   for more details about differences between saving model and serializing.
 ```
 
 <img src="12-Ensemble_files/figure-html/en33-1.png" width="672" />
@@ -11056,29 +11069,99 @@ plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
   
 ## Boosting Applications
 
-We need to tune the boosting applications with `gbm()`.  There are three tuning parameters: `h`, `B`, and `D`.  We will do the tuning with grid search and apply parallel processing.  We will have both regression and classification problems.  Finally we will compare OLS, CART, Bagging, RF and boosting.
+We need to tune the boosting applications with `gbm()`.  There are two groups of tuning parameters: boosting parameters and tree parameters.  
 
-### Regression
+- **Boosting parameters:** The number iterations (`n.trees` = 100) and learning rate (`shrinkage` = 0.1).  
+- **Tree parameters:** The maximum depth of each tree (`interaction.depth` = 1) and the minimum number of observations in the terminal nodes of the trees (`n.minobsinnode` = 10)
+
+The `gbm` algorithm offers three tuning options internally to select the best iteration: `OOB`, `test`, and `cv.fold`. The `test` uses a single holdout test set to select the optimal number of iterations.  It's regulated by `train.fraction`, which creates a test set by `train.fraction` × `nrow(data)`. This is not a cross validation but could be used with multiple loops running externally.
+
+The k-fold cross validation is regulated by `cv.fold` that canbe used to find the optimal number of iterations. For example, if `cv.folds`=5 then `gbm` fits five `gbm` models to compute the cross validation error.  The using the best (average iterations) it fits a sixth and final gbm model using all of the data. The `cv.error` reported this final model will determined the the best iteration. 
+
+Finally, there is one parameter, `bag.fraction`, the fraction of the training set observations randomly selected to propose the next tree in the expansion. This introduces randomnesses into the model fit, hence, reduces overfitting possibilities.  The "improvements" the error (prediected errors) in each iterations is reported by `oobag.improve`.
+
+Below, we show these three methods to identify the best iteration
 
 
 ```r
 library(ISLR)
+library(gbm)
+
 data(Hitters)
 df <- Hitters[complete.cases(Hitters$Salary), ]
 df$Salary <- log(df$Salary)
 
-# Test/Train Split
-set.seed(1)
-ind <- sample(nrow(df), nrow(df), replace = TRUE)
-train <- df[ind, ]
-test <- df[-ind, ]
+model_cv <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+            interaction.depth = 3, shrinkage = 0.01, data = df,
+            bag.fraction = 0.5,
+            cv.folds = 5)
+best <- which.min(model_cv$cv.error)
+sqrt(model_cv$cv.error[best])
 ```
+
+```
+## [1] 0.4659767
+```
+
+```r
+# or this can be obtained
+gbm.perf(model_cv, method="cv")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea100-1.png" width="672" />
+
+```
+## [1] 758
+```
+
+The following method can be combined with an external loops that runs several times, for example.
+  
+
+```r
+model_test <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+            interaction.depth = 3, shrinkage = 0.01, data = df,
+            bag.fraction = 0.5,
+            train.fraction = 0.8)
+gbm.perf(model_test, method="test")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea101-1.png" width="672" />
+
+```
+## [1] 899
+```
+
+```r
+which.min(model_test$valid.error)
+```
+
+```
+## [1] 899
+```
+
+```r
+min(model_test$valid.error)
+```
+
+```
+## [1] 0.3046356
+```
+
+The OOB is option is not suggested for model selection (see [A guide to the gbm package](http://127.0.0.1:17306/library/gbm/doc/gbm.pdf). The `bag.fraction`, however, can be used to reduce overfitting as the fraction of the training set observations randomly selected to propose the next tree in the expansion. This introduces randomnesses into the model fit, hence, reduces overfitting.
+
+We can also override all the internal process and apply our own grid search.  Below, we show several examples.  We should also note that the `gbm` function uses parallel processing in iterations.
+
+### Regression
 
 This will give you an idea how tuning the boosting by using `h` would be done:  
 
 
 ```r
-library(gbm)
+# Test/Train Split
+set.seed(1)
+ind <- sample(nrow(df), nrow(df), replace = TRUE)
+train <- df[ind, ]
+test <- df[-ind, ]
 
 h <- seq(0.01, 1.8, 0.01)
 
@@ -11094,7 +11177,7 @@ for(i in 1:length(h)){
 plot(h, test_mse, type = "l", col = "blue", main = "MSE - Prediction")
 ```
 
-<img src="13-EnsembleApplication_files/figure-html/ea11-1.png" width="672" />
+<img src="13-EnsembleApplication_files/figure-html/ea10-1.png" width="672" />
 
 ```r
 h[which.min(test_mse)]
@@ -11513,41 +11596,46 @@ Now, we are ready:
   
 
 ```r
-rnd = 100
-AUC <- c()
+rnd = seq(100, 500, 50)
+MAUC <- c()
 
-for (i in 1:100) {
-  set.seed(i)
-  ind <- sample(nrow(df_new), nrow(df_new), replace = TRUE)
-  train <- df_new[ind, ]
-  test <- df_new[-ind, ]
-  
-  ada <- adaboost(as.matrix(train[,-"Sales"]),
-                  train$Sales, tree_depth = 1, n_rounds = rnd)
-  phat <- predict(ada, test, type="prob")
-  
-  pred_rocr <- prediction(phat, test$Sales)
-  auc_ROCR <- performance(pred_rocr, measure = "auc")
-  AUC[i] <- auc_ROCR@y.values[[1]]
-} 
+for (r in 1:length(rnd)) {
+  AUC <- c()
+  for (i in 1:20) {
+    set.seed(i)
+    ind <- sample(nrow(df_new), nrow(df_new), replace = TRUE)
+    train <- df_new[ind,]
+    test <- df_new[-ind,]
+    
+    ada <- adaboost(as.matrix(train[, -"Sales"]),
+                    train$Sales,
+                    tree_depth = 1,
+                    n_rounds = rnd[r])
+    phat <- predict(ada, test, type = "prob")
+    
+    pred_rocr <- prediction(phat, test$Sales)
+    auc_ROCR <- performance(pred_rocr, measure = "auc")
+    AUC[i] <- auc_ROCR@y.values[[1]]
+  }
+  MAUC[r] <- mean(AUC)
+}
 
-mean(AUC)
+mean(MAUC)
 ```
 
 ```
-## [1] 0.9258234
+## [1] 0.9218254
 ```
 
 ```r
-sqrt(var(AUC)) 
+sqrt(var(MAUC)) 
 ```
 
 ```
-## [1] 0.0183194
+## [1] 0.001441398
 ```
 
-It's slightly better than the gradient boosting (`gbm`) but not much from LPM.  
-
+It's slightly better than the gradient boosting (`gbm`) but not much from LPM. We should apply a better grid for the rounds of iterations 
 ### Classification with XGBoost
 
 Before jumping into an example, let's first understand about the most frequently used hyperparameters in `xgboost`. You can refer to its [official documentation](https://xgboost.readthedocs.io/en/latest/parameter.html) for more details.
@@ -11558,11 +11646,11 @@ We will classify them in three groups:
 2. Tuning parameters (note that when `gblinear` is used, only `nround`, `lambda`, and `alpha` are used):  
   - `nrounds` = 100 (default).  It controls the maximum number of iterations (or trees for classification).  
   - `eta` = 0.3. It controls the learning rate. Typically, it lies between 0.01 - 0.3.  
-  - `gamma` = 0. It controls regularization (or prevents overfitting - a higher difference between the train and test prediction performance). It can be used as it the brings improvements when shallow (low `max_depth`) trees are employed.
+  - `gamma` = 0. It controls regularization (or prevents overfitting - a higher difference between the train and test prediction performance). It can be used as it brings improvements when shallow (low `max_depth`) trees are employed.
   - `max_depth` = 6.  It controls the depth of the tree.
   - `min_child_weight` = 1.  It blocks the potential feature interactions to prevent overfitting. (The minimum number of instances required in a child node.)
   - `subsample` = 1.  It controls the number of observations supplied to a tree. Generally, it lies between 0.01 - 0.3. (remember bagging).
-  - `subsample` = 1. It control the number of features (variables) supplied to a tree.  Both `subsample` and `subsample` can be use to build a "random forest" type learner.
+  - `colsample_bytree` = 1. It control the number of features (variables) supplied to a tree.  Both `subsample` and `colsample_bytree` can be use to build a "random forest" type learner.
   - `lambda` = 0, equivalent to Ridge regression
   - `alpha` = 1, equivalent to Lasso regression (more useful on high dimensional data sets).  When both are set different than zero, it becomes an "Elastic Net", which we will see later.
 3. Evaluation parameters:  
@@ -11778,17 +11866,13 @@ You can go back to Chapter 11.3.2 and see that XGBoost is better than kNN in thi
 
 # (PART) SVM & Neural Networks {-}
 
-The reason that these two most advance learning algorithms are put together in this section is that both methods, Support Vector Machines (SVM) and Neurol Networks (NN), have similarities in terms of their predictive power and explanatory capability (incapability, rather).  The first similarity is the fact that both algorithms are parametric but for different reasons. In this sense, the two models are similar insofar as they are both parametric, but dissimilar with regards to the type and number of parameters that they require.
-
-Both machine learning algorithms embed non-linearity. This is done, in the case of SVMs, through the usage of a kernel method. Neural networks, instead, embed non-linearity by using non-linear activation functions. Both classes of algorithms can, therefore, approximate non-linear decision functions, though with different approaches.
-
-Both SVMs and NNs can tackle the same problem of classification against the same dataset. This means that there’s no reason that derives from the characteristics of the problem for preferring one over the other.
-
-What’s more important, though, is that they both perform with comparable accuracy against the same dataset, if given comparable training. If given as much training and computational power as possible, however, NNs tend to outperform SVMs.
-
-As we’ll see in the next section, though, the time required to train the two algorithms is vastly different for the same dataset.
-
 # Support Vector Machines
+
+In this section, we will delve into two of the most advanced learning algorithms, Support Vector Machines (SVM) and Neural Networks (NN), and explore their similarities and differences in terms of predictive power and explanatory capability. Both SVM and NN are parametric algorithms, but for different reasons. SVMs use a kernel method to embed non-linearity, while NNs use non-linear activation functions. Therefore, they have different types and numbers of parameters.
+
+Despite these differences, both SVM and NN can approximate non-linear decision functions and can tackle the same classification problem using the same dataset. Their performance accuracy is comparable when given comparable training. However, when given more training and computational power, NNs tend to outperform SVMs.
+
+One key difference between SVM and NN is the time required to train them on the same dataset. This is because the kernel method used by SVMs can be computationally expensive, while the activation function used by NNs can be more efficient. Overall, understanding the similarities and differences between SVM and NN can help us determine which algorithm is best suited for a particular problem.
 
 Up to this point we have seen "probabilistic" binary classifiers, such as kNN, CART, Ensemble models, and classification regressions (logistic , LPM), where probabilistic predictions are made on observations and then converted to binary predictions based a tuned discriminating threshold.   Support-vector machines do not use probabilistic predictions to classify the outcomes, which is inspired from one of the oldest algorithms in machine learning introduced by Rosenblatt in 1958, *the perceptron algorithm*, for learning a linear classifier. Support Vector Machine (SVM) is a modern approach to linear separation.   Here is the history and little introduction to SVM by Wikipedia:
 
@@ -16910,9 +16994,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   93    8   62
-## [2,]   64   15   75
-## [3,]  100   77   16
+## [1,]   22    1   85
+## [2,]   91   13   72
+## [3,]   17   75   57
 ```
 
 ```r
@@ -16922,13 +17006,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 170.34182 -67.96981  21.62799
+## [1] 145.48669+ 0.00000i -26.74335+49.10596i -26.74335-49.10596i
 ## 
 ## $vectors
-##            [,1]       [,2]       [,3]
-## [1,] -0.5611639 -0.2866545 -0.5112343
-## [2,] -0.5357935 -0.5112663  0.7003504
-## [3,] -0.6308886  0.8102074  0.4981454
+##               [,1]                  [,2]                  [,3]
+## [1,] -0.4379894+0i  0.0161940+0.6030465i  0.0161940-0.6030465i
+## [2,] -0.6425301+0i  0.6242003+0.0000000i  0.6242003+0.0000000i
+## [3,] -0.6287451+0i -0.3650203-0.3364621i -0.3650203+0.3364621i
 ```
 
 ```r
@@ -16973,9 +17057,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   90   36   19
-## [2,]   30   42   22
-## [3,]   85   95   98
+## [1,]   29   83   17
+## [2,]   72   52   20
+## [3,]   51   54   28
 ```
 
 ```r
@@ -16987,10 +17071,10 @@ solve(A)
 ```
 
 ```
-##              [,1]        [,2]          [,3]
-## [1,]  0.015567850 -0.01323959 -0.0000461042
-## [2,] -0.008221915  0.05536345 -0.0108344859
-## [3,] -0.005532503 -0.04218534  0.0207468880
+##              [,1]         [,2]        [,3]
+## [1,] -0.007408575  0.027703342 -0.01529004
+## [2,]  0.019624842  0.001083701 -0.01268916
+## [3,] -0.024353720 -0.052549653  0.08803594
 ```
 
 ```r
@@ -16999,10 +17083,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##              [,1]        [,2]          [,3]
-## [1,]  0.015567850 -0.01323959 -0.0000461042
-## [2,] -0.008221915  0.05536345 -0.0108344859
-## [3,] -0.005532503 -0.04218534  0.0207468880
+##              [,1]         [,2]        [,3]
+## [1,] -0.007408575  0.027703342 -0.01529004
+## [2,]  0.019624842  0.001083701 -0.01268916
+## [3,] -0.024353720 -0.052549653  0.08803594
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17421,10 +17505,10 @@ betahat_OLS
 ```
 
 ```
-##        [,1]
-## x1 0.723315
-## x2 1.646730
-## x3 1.720129
+##         [,1]
+## x1 0.5011716
+## x2 1.6974940
+## x3 2.0330307
 ```
 
 ```r
@@ -17460,10 +17544,10 @@ betahat_ginv
 ```
 
 ```
-##          [,1]
-## [1,] 0.723315
-## [2,] 1.646730
-## [3,] 1.720129
+##           [,1]
+## [1,] 0.5011716
+## [2,] 1.6974940
+## [3,] 2.0330307
 ```
 
 ```r
@@ -17471,10 +17555,10 @@ betahat_OLS
 ```
 
 ```
-##        [,1]
-## x1 0.723315
-## x2 1.646730
-## x3 1.720129
+##         [,1]
+## x1 0.5011716
+## x2 1.6974940
+## x3 2.0330307
 ```
   
 
@@ -18824,7 +18908,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] 0.4828071
+## [1] 0.2192977
 ```
 
 ```r
@@ -18832,13 +18916,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
-## [1,] -1.00000000  0.4828071 -0.06901488 -0.7326618 -0.8683739  0.81056839
-## [2,]  0.48280709 -1.0000000 -0.19567548  0.6019340  0.3929661 -0.40472339
-## [3,] -0.06901488 -0.1956755 -1.00000000  0.1433451  0.1152139 -0.09004456
-## [4,] -0.73266178  0.6019340  0.14334514 -1.0000000 -0.6044178  0.66263558
-## [5,] -0.86837393  0.3929661  0.11521386 -0.6044178 -1.0000000  0.80763598
-## [6,]  0.81056839 -0.4047234 -0.09004456  0.6626356  0.8076360 -1.00000000
+##            [,1]        [,2]       [,3]        [,4]       [,5]       [,6]
+## [1,] -1.0000000  0.21929768  0.6725332 -0.63633457  0.4203018 -0.1568764
+## [2,]  0.2192977 -1.00000000 -0.1218370 -0.09640038 -0.4457410 -0.5791189
+## [3,]  0.6725332 -0.12183698 -1.0000000  0.43062735 -0.4284878  0.2350534
+## [4,] -0.6363346 -0.09640038  0.4306273 -1.00000000  0.2338676 -0.2620091
+## [5,]  0.4203018 -0.44574102 -0.4284878  0.23386756 -1.0000000 -0.4065814
+## [6,] -0.1568764 -0.57911893  0.2350534 -0.26200912 -0.4065814 -1.0000000
 ```
 
 ```r
@@ -18848,13 +18932,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
-## [1,]  1.00000000  0.4828071 -0.06901488 -0.7326618 -0.8683739  0.81056839
-## [2,]  0.48280709  1.0000000 -0.19567548  0.6019340  0.3929661 -0.40472339
-## [3,] -0.06901488 -0.1956755  1.00000000  0.1433451  0.1152139 -0.09004456
-## [4,] -0.73266178  0.6019340  0.14334514  1.0000000 -0.6044178  0.66263558
-## [5,] -0.86837393  0.3929661  0.11521386 -0.6044178  1.0000000  0.80763598
-## [6,]  0.81056839 -0.4047234 -0.09004456  0.6626356  0.8076360  1.00000000
+##            [,1]        [,2]       [,3]        [,4]       [,5]       [,6]
+## [1,]  1.0000000  0.21929768  0.6725332 -0.63633457  0.4203018 -0.1568764
+## [2,]  0.2192977  1.00000000 -0.1218370 -0.09640038 -0.4457410 -0.5791189
+## [3,]  0.6725332 -0.12183698  1.0000000  0.43062735 -0.4284878  0.2350534
+## [4,] -0.6363346 -0.09640038  0.4306273  1.00000000  0.2338676 -0.2620091
+## [5,]  0.4203018 -0.44574102 -0.4284878  0.23386756  1.0000000 -0.4065814
+## [6,] -0.1568764 -0.57911893  0.2350534 -0.26200912 -0.4065814  1.0000000
 ```
 
 ```r
@@ -18864,22 +18948,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##            [,1]        [,2]        [,3]       [,4]        [,5]        [,6]
-## [1,]  0.7126600  0.15223930 -0.38481215 -0.4041903 -0.61278375  0.21700978
-## [2,]  0.1522393  1.31177584 -0.20963091  0.4441189 -0.08988752  0.07447502
-## [3,] -0.3848122 -0.20963091  0.89487924  0.2395557  0.36263957 -0.08305095
-## [4,] -0.4041903  0.44411890  0.23955573  1.2272598  0.26102917  0.23326343
-## [5,] -0.6127837 -0.08988752  0.36263957  0.2610292  1.14058619  0.37348968
-## [6,]  0.2170098  0.07447502 -0.08305095  0.2332634  0.37348968  1.16120739
+##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
+## [1,]  0.68596260  0.22316524  0.30726928 -0.21895228  0.09027852 -0.09874599
+## [2,]  0.22316524  0.75859251 -0.04231087 -0.10319591 -0.06997030 -0.33197388
+## [3,]  0.30726928 -0.04231087  0.74363990 -0.02214381 -0.28387535  0.21963851
+## [4,] -0.21895228 -0.10319591 -0.02214381  0.23986456  0.05063147 -0.02641514
+## [5,]  0.09027852 -0.06997030 -0.28387535  0.05063147  0.79905963 -0.31450110
+## [6,] -0.09874599 -0.33197388  0.21963851 -0.02641514 -0.31450110  0.57296973
 ## 
 ## $wi
-##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
-## [1,] 10.8831919 -1.7824450  0.2808119  3.7236402  6.2947884 -4.6719031
-## [2,] -1.7824450  1.2525610  0.2698412 -1.0378311 -0.9662084  0.7912615
-## [3,]  0.2808119  0.2698412  1.5186680 -0.2720503 -0.3117991  0.1937290
-## [4,]  3.7236402 -1.0378311 -0.2720503  2.3736166  2.0459268 -1.7835346
-## [5,]  6.2947884 -0.9662084 -0.3117991  2.0459268  4.8285623 -3.1006016
-## [6,] -4.6719031  0.7912615  0.1937290 -1.7835346 -3.1006016  3.0527911
+##            [,1]       [,2]       [,3]       [,4]      [,5]       [,6]
+## [1,]  4.1881552 -0.7110381 -2.3694994  3.6553785 -1.356109  0.6422868
+## [2,] -0.7110381  2.5101155  0.3323123  0.4286745  1.113380  1.8353264
+## [3,] -2.3694994  0.3323123  2.9638231 -2.0810181  1.163030 -0.8095045
+## [4,]  3.6553785  0.4286745 -2.0810181  7.8786165 -1.035014  1.4711847
+## [5,] -1.3561087  1.1133805  1.1630297 -1.0350138  2.485579  1.2821833
+## [6,]  0.6422868  1.8353264 -0.8095045  1.4711847  1.282183  4.0013190
 ## 
 ## $errflag
 ## [1] 0
@@ -18894,7 +18978,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] 0.4827681
+## [1] 0.219298
 ```
 
 ```r
@@ -18902,13 +18986,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
-## [1,] -1.00000000  0.4827681 -0.06907263 -0.7326293 -0.8683485  0.81052635
-## [2,]  0.48276809 -1.0000000 -0.19564893  0.6018967  0.3928823 -0.40464304
-## [3,] -0.06907263 -0.1956489 -1.00000000  0.1432889  0.1151422 -0.08997349
-## [4,] -0.73262930  0.6018967  0.14328886 -1.0000000 -0.6043324  0.66256382
-## [5,] -0.86834853  0.3928823  0.11514221 -0.6043324 -1.0000000  0.80758548
-## [6,]  0.81052635 -0.4046430 -0.08997349  0.6625638  0.8075855 -1.00000000
+##            [,1]        [,2]       [,3]        [,4]       [,5]       [,6]
+## [1,] -1.0000000  0.21929799  0.6725415 -0.63634991  0.4203097 -0.1568975
+## [2,]  0.2192980 -1.00000000 -0.1218354 -0.09639528 -0.4457414 -0.5791151
+## [3,]  0.6725415 -0.12183538 -1.0000000  0.43065029 -0.4285001  0.2350669
+## [4,] -0.6363499 -0.09639528  0.4306503 -1.00000000  0.2338877 -0.2620237
+## [5,]  0.4203097 -0.44574141 -0.4285001  0.23388771 -1.0000000 -0.4065695
+## [6,] -0.1568975 -0.57911508  0.2350669 -0.26202373 -0.4065695 -1.0000000
 ```
 
 ## High-dimensional data
@@ -19556,7 +19640,7 @@ dir()
 ## [137] "irates.dat"                     "mnist.Rdata"                   
 ## [139] "myocarde.csv"                   "packages.bib"                  
 ## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "render472e64d327a9.rds"        
+## [143] "README.md"                      "render5e37c9c129a.rds"         
 ## [145] "style.css"                      "table1.text"                   
 ## [147] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20550,7 +20634,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7f9e98ce5d10> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fa935c5b140> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -20978,8 +21062,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -4.58 -3.06 6.96 6.36 -4.95 ...
-##  $ c: Factor w/ 3 levels "(-6.19,-1.33]",..: 1 1 3 3 1 1 3 3 3 3
+##  $ b: num  3.14 -4.71 2.36 3.67 7.95 ...
+##  $ c: Factor w/ 3 levels "(-4.73,-0.0164]",..: 2 1 2 2 3 1 3 3 2 2
 ```
 
 ```r
@@ -20991,8 +21075,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  -4.58 -3.06 6.96 6.36 -4.95 ...
-##  $ c: Factor w/ 3 levels "(-6.19,-1.33]",..: 1 1 3 3 1 1 3 3 3 3
+##  $ b: num  3.14 -4.71 2.36 3.67 7.95 ...
+##  $ c: Factor w/ 3 levels "(-4.73,-0.0164]",..: 2 1 2 2 3 1 3 3 2 2
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -21008,17 +21092,17 @@ my_data
 ```
 
 ```
-##     a         b             c          d          f          g         h
-## 1   1 -4.582684 (-6.19,-1.33] -1.4863011         NA -1.1560120 -1.486301
-## 2   2 -3.055641 (-6.19,-1.33] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  6.964492   (3.52,8.37] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  6.363817   (3.52,8.37] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5 -4.945616 (-6.19,-1.33] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 -6.170901 (-6.19,-1.33]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  5.559923   (3.52,8.37]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  8.359091   (3.52,8.37]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  4.256111   (3.52,8.37]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  5.940524   (3.52,8.37]  1.4863011  1.1560120         NA  0.000000
+##     a          b               c          d          f          g         h
+## 1   1  3.1423971  (-0.0164,4.68] -1.4863011         NA -1.1560120 -1.486301
+## 2   2 -4.7145919 (-4.73,-0.0164] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  2.3603188  (-0.0164,4.68] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  3.6676918  (-0.0164,4.68] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  7.9510532     (4.68,9.39] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 -0.4837721 (-4.73,-0.0164]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  9.3800119     (4.68,9.39]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  5.4241222     (4.68,9.39]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  1.4069553  (-0.0164,4.68]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10  1.2650228  (-0.0164,4.68]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21431,7 +21515,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1] -2.7356987  2.7636105 -0.5749002 -0.2688978  0.4998181  1.0126627
+## [1] -1.9351001  2.5976552 -1.3125891  1.3131058  4.4174087 -0.4759573
 ```
 
 ```r
@@ -21477,12 +21561,12 @@ X_new
 ```
 
 ```
-##           [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.3286758 2.731466 3.156670 3.711391 2.495417 3.327056
-## [2,] 2.8951922 4.032300 3.776185 3.381401 3.306619 2.075018
-## [3,] 3.4794461 3.295503 2.521239 2.512474 2.673174 3.692483
-## [4,] 1.5750135 3.880203 2.567332 1.601725 4.596479 4.231398
-## [5,] 0.9859737 3.824139 2.403675 3.524111 2.428129 2.686707
+##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+## [1,] 3.834152 3.390599 2.731623 3.237331 4.519722 3.153203
+## [2,] 1.551741 3.737056 3.266562 2.213289 3.752218 3.329688
+## [3,] 1.761745 3.305954 2.984233 4.823196 3.458301 3.493920
+## [4,] 3.483182 3.563546 2.497521 3.042726 3.482674 2.124642
+## [5,] 2.434081 3.600499 2.207472 2.996564 4.204493 2.422589
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23126,7 +23210,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 5 4
+## [1] 1 4
 ```
 
 ```r
@@ -23135,7 +23219,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "H" "T" "T" "H" "T" "H" "T"
+## [1] "T" "T" "H" "H" "T" "H" "H" "T"
 ```
 
 ```r
@@ -23143,7 +23227,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 2 3
+## [1] 5 4
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  
@@ -24651,7 +24735,7 @@ Below, we create a function, `grdescent`, to show how sensitive gradient descent
 
 
 ```r
-grdescent <- function(x, y, lr, thresh, maxiter) {
+grdescent <- function(x, y, lr, maxiter) {
   #starting points
   set.seed(234)
   b <- runif(1, 0, 1)
@@ -24674,9 +24758,13 @@ grdescent <- function(x, y, lr, thresh, maxiter) {
     c <- c_new
     yhat <- b * x + c
     MSE_new <- sum((y - yhat) ^ 2) / n
-    if (abs(MSE - MSE_new) <= thresh) {
+    MSE <- c(MSE, MSE_new)
+    d = tail(abs(diff(MSE)), 1)
+    if (round(d, 12) == 0) {
       converged = T
-      return(paste("Intercept:", c, "Slope:", b))
+      return(paste("Iterations: ",
+                   iterations, "Intercept: ",
+                   c, "Slope: ", b))
     }
     iterations = iterations + 1
     if (iterations > maxiter) {
@@ -24691,31 +24779,31 @@ grdescent <- function(x, y, lr, thresh, maxiter) {
 Note that the key part in this algorithm is `b_new <- b + (learnrate * (1 / n)) * sum((y - yhat) * x*(-1)`.
 The first $b$ that is picked randomly by  `b <- runif(1, 0, 1)` is adjusted by `learnrate * (1 / n) * (sum((y - yhat) * -x))`.  
 
-Note that `sum((y - yhat) * x)` is the first order condition of the cost function (RSS - Residual Sum of Squares) for the slope coefficient. The cost function (RSS) is a convex function where the minimum can be achieved by the optimal $b$.  It is a linear Taylor approximation of RSS at $b$ that provides the **steepest** descent, that is just a simple adjustment for identifying the direction of the adjustment of $b$ until the minimum RSS is reached.  
+Note that `sum((y - yhat) * x)` is the first order condition of the cost function (MSE - Residual Sum of Squares) for the slope coefficient. The cost function is a convex function where the minimum can be achieved by the optimal $b$.  It is a linear Taylor approximation of MSE at $b$ that provides the **steepest** descent, that is just a simple adjustment for identifying the direction of the adjustment of $b$ until the minimum MSE is reached.  
 
 Now we will see if this function will give us the same intercept and slope coefficients already calculated with `lm()` above.
 
 
 ```r
-grdescent(x1, Y, 0.003, 0.001, 1000000) # Perfect
+grdescent(x1, Y, 0.01, 100000) 
 ```
 
 ```
-## [1] "Max. iter. reached,  Intercept: 1.20959654028984 Slope: 1.97964316494708"
+## [1] "Iterations:  16389 Intercept:  1.20949479145584 Slope:  1.97965284405985"
 ```
 
 This is good.  But, if start a very low number with a small learning rate, then we need more iteration
 
 
 ```r
-grdescent(x1, Y, 0.00004, 0.001, 4000000)
+grdescent(x1, Y, 0.005, 1000000)
 ```
 
 ```
-## [1] "Max. iter. reached,  Intercept: 1.20947317953422 Slope: 1.97965489994805"
+## [1] "Iterations:  31363 Intercept:  1.20945256472045 Slope:  1.97965686098386"
 ```
 
-Yes, the main question is how do we find out what the learning rate should be?  It is an active research question and to answer it is beyond this chapter. A general suggestion, however, is to keep it small and tune it within the training process.
+Yes, the main question is how do we find out what the learning rate should be?  It is an active research question and to answer it is beyond this chapter. A general suggestion, however, is to keep it small and tune it within the training process. Obviously, we can have an adaptive learning rate that changes at each iteration depending on the change in the MSE.  If the change is positive, for example, the learning rate can be reduced to keep the descent.  
   
 ### Multivariable
 
@@ -24799,7 +24887,7 @@ Now the function for gradient descent:
 
 
 ```r
-grdescentM <- function(x, y, lr, thresh, maxiter) {
+grdescentM <- function(x, y, lr, maxiter) {
   set.seed(123)
   b <- runif(ncol(x), 0, 1)
   yhat <- x%*%b
@@ -24808,13 +24896,18 @@ grdescentM <- function(x, y, lr, thresh, maxiter) {
   converged = F
   iterations = 0
   n <- length(y)
+  
   while(converged == F) {
     b_new <- b - (lr*(1/n))*t(x)%*%(x%*%b - y)
     b <- b_new
     yhat <- x%*%b
     e <- y - yhat
+    
     RSS_new <- t(e)%*%e
-    if(RSS - RSS_new <= thresh) {
+    RSS <- c(RSS, RSS_new)
+    d = tail(abs(diff(RSS)), 1)
+    
+    if (round(d, 12) == 0) {
       converged = T
       return(b)
     }
@@ -24829,18 +24922,18 @@ grdescentM <- function(x, y, lr, thresh, maxiter) {
 
 
 ```r
-grdescentM(X, Y, 0.003, 0.001, 1000000) 
+grdescentM(X, Y, 0.01, 100000) 
 ```
 
 ```
 ##            [,1]
-## int   0.4953323
-## x1    1.9559022
-## x2   -0.3511182
-## x2x3 -1.9112623
-## x4x5  1.7424723
-## x4x6 -2.8323934
-## x3x7  2.1015442
+## int   0.4953843
+## x1    1.9559009
+## x2   -0.3511257
+## x2x3 -1.9112548
+## x4x5  1.7424746
+## x4x6 -2.8323944
+## x3x7  2.1015069
 ```
   
 ## Optimization with R

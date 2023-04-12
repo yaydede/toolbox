@@ -411,7 +411,7 @@ lines(df$x, predict(bo2, n.trees = t, data = df), type = "s",
       col = "green", lwd = 3) #line with default parameters with CV
 ```
 
-We can also use a boosting application for classification problems, which is what we will loomk at next.
+We will have more applications with `gbm` in the next chapter.  We can also have a boosting application for classification problems. While the `gbm` function can be used for classification that requires a different distribution ("bernoulli" - logistic regression for 0-1 outcomes), there is a special boosting method for classification problems, AdaBoost.M1, which is what we will look at next.
 
 ### AdaBoost
 
@@ -434,7 +434,7 @@ $$
 \alpha_{b}=0.5\log \left(\frac{1-e r r_{b}}{e r r_{b}}\right)
 $$
   
-For example, suppose $err_b = 0.3$, then $\alpha_{b}=\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
+For example, suppose $err_b = 0.3$, then $\alpha_{b}=0.5\text{log}(0.7/0.3)$, which is a log odds or $\log (\text{success}/\text{failure})$.   
 
 5. If the observation $i$ is misclassified, update its weights, if not, use $w_i$ which is $1/n$:  
 
@@ -456,11 +456,11 @@ exp(alpha)
 So, the new weight for the misclassified $i$ in the second tree (i.e., $b=2$ stump) will be
 
 ```{r en18, warning=FALSE, message=FALSE}
-# For misclassified obervations
+# For misclassified observations
 weight_miss <- (1 / n) * (exp(alpha))
 weight_miss
 
-# For correctly classified observation
+# For correctly classified observations
 weight_corr <- (1 / n) * (exp(-alpha))
 weight_corr
 ```
@@ -475,7 +475,7 @@ $$
 
 We normalize all weights between 0 and 1 so that sum of the weights would be one in each iteration.  Hence, the algorithm works in a way that it randomly replicates the observations as new data points by using the weights as their probabilities. This process also resembles to under- and oversampling at the same time so that the number of observations stays the same.  The new dataset now is used again for the next tree ($b=2$) and this iteration continues until B.  We can use `rpart` in each tree with `weights` option as we will shown momentarily.  
 
-Here is an example with the `myocarde` data that we only use the first 6 observation:
+Here is an example with the `myocarde` data that we only use the first 6 observations:
 
 ```{r en19}
 library(readr)
@@ -605,6 +605,7 @@ for(i in 1:rnd) {
   # alpha
   alpha[i] <- 0.5 * log((1 - e) / e)
   # Updating weights 
+  # Note that, for true predictions, (y * yhat) will be +, otherwise -
   whts <- whts * exp(-alpha[i] * y * yhat)
   # Normalizing weights
   whts <- whts / sum(whts)

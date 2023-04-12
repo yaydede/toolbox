@@ -398,29 +398,99 @@ plot_min_depth_distribution(min_depth_frame, mean_sample = "all_trees", k =20,
   
 ## Boosting Applications
 
-We need to tune the boosting applications with `gbm()`.  There are three tuning parameters: `h`, `B`, and `D`.  We will do the tuning with grid search and apply parallel processing.  We will have both regression and classification problems.  Finally we will compare OLS, CART, Bagging, RF and boosting.
+We need to tune the boosting applications with `gbm()`.  There are two groups of tuning parameters: boosting parameters and tree parameters.  
 
-### Regression
+- **Boosting parameters:** The number iterations (`n.trees` = 100) and learning rate (`shrinkage` = 0.1).  
+- **Tree parameters:** The maximum depth of each tree (`interaction.depth` = 1) and the minimum number of observations in the terminal nodes of the trees (`n.minobsinnode` = 10)
+
+The `gbm` algorithm offers three tuning options internally to select the best iteration: `OOB`, `test`, and `cv.fold`. The `test` uses a single holdout test set to select the optimal number of iterations.  It's regulated by `train.fraction`, which creates a test set by `train.fraction` × `nrow(data)`. This is not a cross validation but could be used with multiple loops running externally.
+
+The k-fold cross validation is regulated by `cv.fold` that canbe used to find the optimal number of iterations. For example, if `cv.folds`=5 then `gbm` fits five `gbm` models to compute the cross validation error.  The using the best (average iterations) it fits a sixth and final gbm model using all of the data. The `cv.error` reported this final model will determined the the best iteration. 
+
+Finally, there is one parameter, `bag.fraction`, the fraction of the training set observations randomly selected to propose the next tree in the expansion. This introduces randomnesses into the model fit, hence, reduces overfitting possibilities.  The "improvements" the error (prediected errors) in each iterations is reported by `oobag.improve`.
+
+Below, we show these three methods to identify the best iteration
 
 
 ```r
 library(ISLR)
+library(gbm)
+
 data(Hitters)
 df <- Hitters[complete.cases(Hitters$Salary), ]
 df$Salary <- log(df$Salary)
 
-# Test/Train Split
-set.seed(1)
-ind <- sample(nrow(df), nrow(df), replace = TRUE)
-train <- df[ind, ]
-test <- df[-ind, ]
+model_cv <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+            interaction.depth = 3, shrinkage = 0.01, data = df,
+            bag.fraction = 0.5,
+            cv.folds = 5)
+best <- which.min(model_cv$cv.error)
+sqrt(model_cv$cv.error[best])
 ```
+
+```
+## [1] 0.4659767
+```
+
+```r
+# or this can be obtained
+gbm.perf(model_cv, method="cv")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea100-1.png" width="672" />
+
+```
+## [1] 758
+```
+
+The following method can be combined with an external loops that runs several times, for example.
+  
+
+```r
+model_test <- gbm(Salary~., distribution ="gaussian", n.trees=1000,
+            interaction.depth = 3, shrinkage = 0.01, data = df,
+            bag.fraction = 0.5,
+            train.fraction = 0.8)
+gbm.perf(model_test, method="test")
+```
+
+<img src="13-EnsembleApplication_files/figure-html/ea101-1.png" width="672" />
+
+```
+## [1] 899
+```
+
+```r
+which.min(model_test$valid.error)
+```
+
+```
+## [1] 899
+```
+
+```r
+min(model_test$valid.error)
+```
+
+```
+## [1] 0.3046356
+```
+
+The OOB is option is not suggested for model selection (see [A guide to the gbm package](http://127.0.0.1:17306/library/gbm/doc/gbm.pdf). The `bag.fraction`, however, can be used to reduce overfitting as the fraction of the training set observations randomly selected to propose the next tree in the expansion. This introduces randomnesses into the model fit, hence, reduces overfitting.
+
+We can also override all the internal process and apply our own grid search.  Below, we show several examples.  We should also note that the `gbm` function uses parallel processing in iterations.
+
+### Regression
 
 This will give you an idea how tuning the boosting by using `h` would be done:  
 
 
 ```r
-library(gbm)
+# Test/Train Split
+set.seed(1)
+ind <- sample(nrow(df), nrow(df), replace = TRUE)
+train <- df[ind, ]
+test <- df[-ind, ]
 
 h <- seq(0.01, 1.8, 0.01)
 
@@ -436,7 +506,7 @@ for(i in 1:length(h)){
 plot(h, test_mse, type = "l", col = "blue", main = "MSE - Prediction")
 ```
 
-<img src="13-EnsembleApplication_files/figure-html/ea11-1.png" width="672" />
+<img src="13-EnsembleApplication_files/figure-html/ea10-1.png" width="672" />
 
 ```r
 h[which.min(test_mse)]
@@ -855,41 +925,46 @@ Now, we are ready:
   
 
 ```r
-rnd = 100
-AUC <- c()
+rnd = seq(100, 500, 50)
+MAUC <- c()
 
-for (i in 1:100) {
-  set.seed(i)
-  ind <- sample(nrow(df_new), nrow(df_new), replace = TRUE)
-  train <- df_new[ind, ]
-  test <- df_new[-ind, ]
-  
-  ada <- adaboost(as.matrix(train[,-"Sales"]),
-                  train$Sales, tree_depth = 1, n_rounds = rnd)
-  phat <- predict(ada, test, type="prob")
-  
-  pred_rocr <- prediction(phat, test$Sales)
-  auc_ROCR <- performance(pred_rocr, measure = "auc")
-  AUC[i] <- auc_ROCR@y.values[[1]]
-} 
+for (r in 1:length(rnd)) {
+  AUC <- c()
+  for (i in 1:20) {
+    set.seed(i)
+    ind <- sample(nrow(df_new), nrow(df_new), replace = TRUE)
+    train <- df_new[ind,]
+    test <- df_new[-ind,]
+    
+    ada <- adaboost(as.matrix(train[, -"Sales"]),
+                    train$Sales,
+                    tree_depth = 1,
+                    n_rounds = rnd[r])
+    phat <- predict(ada, test, type = "prob")
+    
+    pred_rocr <- prediction(phat, test$Sales)
+    auc_ROCR <- performance(pred_rocr, measure = "auc")
+    AUC[i] <- auc_ROCR@y.values[[1]]
+  }
+  MAUC[r] <- mean(AUC)
+}
 
-mean(AUC)
+mean(MAUC)
 ```
 
 ```
-## [1] 0.9258234
+## [1] 0.9218254
 ```
 
 ```r
-sqrt(var(AUC)) 
+sqrt(var(MAUC)) 
 ```
 
 ```
-## [1] 0.0183194
+## [1] 0.001441398
 ```
 
-It's slightly better than the gradient boosting (`gbm`) but not much from LPM.  
-
+It's slightly better than the gradient boosting (`gbm`) but not much from LPM. We should apply a better grid for the rounds of iterations 
 ### Classification with XGBoost
 
 Before jumping into an example, let's first understand about the most frequently used hyperparameters in `xgboost`. You can refer to its [official documentation](https://xgboost.readthedocs.io/en/latest/parameter.html) for more details.
@@ -900,11 +975,11 @@ We will classify them in three groups:
 2. Tuning parameters (note that when `gblinear` is used, only `nround`, `lambda`, and `alpha` are used):  
   - `nrounds` = 100 (default).  It controls the maximum number of iterations (or trees for classification).  
   - `eta` = 0.3. It controls the learning rate. Typically, it lies between 0.01 - 0.3.  
-  - `gamma` = 0. It controls regularization (or prevents overfitting - a higher difference between the train and test prediction performance). It can be used as it the brings improvements when shallow (low `max_depth`) trees are employed.
+  - `gamma` = 0. It controls regularization (or prevents overfitting - a higher difference between the train and test prediction performance). It can be used as it brings improvements when shallow (low `max_depth`) trees are employed.
   - `max_depth` = 6.  It controls the depth of the tree.
   - `min_child_weight` = 1.  It blocks the potential feature interactions to prevent overfitting. (The minimum number of instances required in a child node.)
   - `subsample` = 1.  It controls the number of observations supplied to a tree. Generally, it lies between 0.01 - 0.3. (remember bagging).
-  - `subsample` = 1. It control the number of features (variables) supplied to a tree.  Both `subsample` and `subsample` can be use to build a "random forest" type learner.
+  - `colsample_bytree` = 1. It control the number of features (variables) supplied to a tree.  Both `subsample` and `colsample_bytree` can be use to build a "random forest" type learner.
   - `lambda` = 0, equivalent to Ridge regression
   - `alpha` = 1, equivalent to Lasso regression (more useful on high dimensional data sets).  When both are set different than zero, it becomes an "Elastic Net", which we will see later.
 3. Evaluation parameters:  
