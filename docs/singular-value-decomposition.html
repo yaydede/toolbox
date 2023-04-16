@@ -296,6 +296,7 @@ div.csl-indent {
 <li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
 <li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
 <li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
@@ -445,7 +446,8 @@ div.csl-indent {
 <li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
 <ul>
 <li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
-<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#adjustable-lr-and-sgd"><i class="fa fa-check"></i><b>38.4.2</b> Adjustable <code>lr</code> and SGD</a></li>
+<li class="chapter" data-level="38.4.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.3</b> Multivariable</a></li>
 </ul></li>
 <li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
 </ul></li>
@@ -552,15 +554,15 @@ with <span class="math inline">\(\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \si
 <p>One important point is that, although <span class="math inline">\(\mathbf{U}\)</span> in <span class="math inline">\(\mathbf{U \Sigma V^{\top}}\)</span> is <span class="math inline">\(m \times m\)</span>, when it is multiplied by <span class="math inline">\(\mathbf{\Sigma}\)</span>, it reduces to <span class="math inline">\(n \times n\)</span> due to zeros in <span class="math inline">\(\mathbf{\Sigma}\)</span>. Hence, we can actually select only those in <span class="math inline">\(\mathbf{U}\)</span> that are not going to be zeroed out due to that multiplication. When we take only <span class="math inline">\(n \times n\)</span> from <span class="math inline">\(\mathbf{U}\)</span> matrix, it is called “Economy SVD”, <span class="math inline">\(\mathbf{\hat{U} \hat{\Sigma} V^{\top}}\)</span>, where all matrices will be <span class="math inline">\(n \times n\)</span>.</p>
 <p>The singular value decomposition is very useful when our basic goal is to “solve” the system <span class="math inline">\(\mathbf{A} x=b\)</span> for all matrices <span class="math inline">\(\mathbf{A}\)</span> and vectors <span class="math inline">\(b\)</span> with a numerically stable algorithm. Some important applications of the SVD include computing the pseudoinverse, matrix approximation, and determining the rank, range, and null space of a matrix. We will see some of them in the following chapters</p>
 <p>Here is an example:</p>
-<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1052-1"><a href="singular-value-decomposition.html#cb1052-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">104</span>)</span>
-<span id="cb1052-2"><a href="singular-value-decomposition.html#cb1052-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">100</span>, <span class="dv">12</span>), <span class="dv">3</span>, <span class="dv">4</span>)</span>
-<span id="cb1052-3"><a href="singular-value-decomposition.html#cb1052-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
+<div class="sourceCode" id="cb1059"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1059-1"><a href="singular-value-decomposition.html#cb1059-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">104</span>)</span>
+<span id="cb1059-2"><a href="singular-value-decomposition.html#cb1059-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">sample</span>(<span class="dv">100</span>, <span class="dv">12</span>), <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb1059-3"><a href="singular-value-decomposition.html#cb1059-3" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]   77   24   32   78
 ## [2,]   67   61   39   96
 ## [3,]   34   94   42   28</code></pre>
-<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1054-1"><a href="singular-value-decomposition.html#cb1054-1" aria-hidden="true" tabindex="-1"></a>svda <span class="ot">&lt;-</span> <span class="fu">svd</span>(A)</span>
-<span id="cb1054-2"><a href="singular-value-decomposition.html#cb1054-2" aria-hidden="true" tabindex="-1"></a>svda</span></code></pre></div>
+<div class="sourceCode" id="cb1061"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1061-1"><a href="singular-value-decomposition.html#cb1061-1" aria-hidden="true" tabindex="-1"></a>svda <span class="ot">&lt;-</span> <span class="fu">svd</span>(A)</span>
+<span id="cb1061-2"><a href="singular-value-decomposition.html#cb1061-2" aria-hidden="true" tabindex="-1"></a>svda</span></code></pre></div>
 <pre><code>## $d
 ## [1] 199.83933  70.03623  16.09872
 ## 
@@ -576,13 +578,13 @@ with <span class="math inline">\(\sigma_{1} \geq \sigma_{2} \geq \cdots \geq \si
 ## [2,] -0.4995577 -0.8028224  0.1427447
 ## [3,] -0.3221338 -0.1722864 -0.2726277
 ## [4,] -0.6107880  0.4694933  0.6343518</code></pre>
-<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1056-1"><a href="singular-value-decomposition.html#cb1056-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Singular values = sqrt(eigenvalues of t(A)%*%A))</span></span>
-<span id="cb1056-2"><a href="singular-value-decomposition.html#cb1056-2" aria-hidden="true" tabindex="-1"></a>ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> A)<span class="sc">$</span>values</span>
-<span id="cb1056-3"><a href="singular-value-decomposition.html#cb1056-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(ev), <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1063-1"><a href="singular-value-decomposition.html#cb1063-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Singular values = sqrt(eigenvalues of t(A)%*%A))</span></span>
+<span id="cb1063-2"><a href="singular-value-decomposition.html#cb1063-2" aria-hidden="true" tabindex="-1"></a>ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">t</span>(A) <span class="sc">%*%</span> A)<span class="sc">$</span>values</span>
+<span id="cb1063-3"><a href="singular-value-decomposition.html#cb1063-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(ev), <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [1] 199.83933  70.03623  16.09872   0.00000</code></pre>
 <p>Note that this ““Economy SVD” using only the non-zero eigenvalues and their respective eigenvectors.</p>
-<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1058-1"><a href="singular-value-decomposition.html#cb1058-1" aria-hidden="true" tabindex="-1"></a>Ar <span class="ot">&lt;-</span> svda<span class="sc">$</span>u <span class="sc">%*%</span> <span class="fu">diag</span>(svda<span class="sc">$</span>d) <span class="sc">%*%</span> <span class="fu">t</span>(svda<span class="sc">$</span>v)</span>
-<span id="cb1058-2"><a href="singular-value-decomposition.html#cb1058-2" aria-hidden="true" tabindex="-1"></a>Ar</span></code></pre></div>
+<div class="sourceCode" id="cb1065"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1065-1"><a href="singular-value-decomposition.html#cb1065-1" aria-hidden="true" tabindex="-1"></a>Ar <span class="ot">&lt;-</span> svda<span class="sc">$</span>u <span class="sc">%*%</span> <span class="fu">diag</span>(svda<span class="sc">$</span>d) <span class="sc">%*%</span> <span class="fu">t</span>(svda<span class="sc">$</span>v)</span>
+<span id="cb1065-2"><a href="singular-value-decomposition.html#cb1065-2" aria-hidden="true" tabindex="-1"></a>Ar</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]   77   24   32   78
 ## [2,]   67   61   39   96

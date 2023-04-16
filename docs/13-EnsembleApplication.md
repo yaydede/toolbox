@@ -964,7 +964,8 @@ sqrt(var(MAUC))
 ## [1] 0.001441398
 ```
 
-It's slightly better than the gradient boosting (`gbm`) but not much from LPM. We should apply a better grid for the rounds of iterations 
+It's slightly better than the gradient boosting (`gbm`) but not much from LPM. We should apply a better grid for the rounds of iterations.
+  
 ### Classification with XGBoost
 
 Before jumping into an example, let's first understand about the most frequently used hyperparameters in `xgboost`. You can refer to its [official documentation](https://xgboost.readthedocs.io/en/latest/parameter.html) for more details.

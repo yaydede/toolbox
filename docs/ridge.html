@@ -296,6 +296,7 @@ div.csl-indent {
 <li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
 <li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
 <li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
@@ -445,7 +446,8 @@ div.csl-indent {
 <li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
 <ul>
 <li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
-<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#adjustable-lr-and-sgd"><i class="fa fa-check"></i><b>38.4.2</b> Adjustable <code>lr</code> and SGD</a></li>
+<li class="chapter" data-level="38.4.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.3</b> Multivariable</a></li>
 </ul></li>
 <li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
 </ul></li>
@@ -512,36 +514,36 @@ Ridge regression is very similar to least squares, except that the coefficients 
 </ul>
 <p>The hyperparameter <span class="math inline">\(\lambda\)</span> controls the relative impact of the penalization on the regression coefficient estimates. When <span class="math inline">\(\lambda = 0\)</span>, the cost function becomes RSS (residual sum of squares), that is the cost function of OLS and the estimations, produce the least squares estimates. However, as <span class="math inline">\(\lambda\)</span> gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply the mean of the response, when all features are zero.</p>
 <p>Let’s apply this to the same data we used earlier, <code>Hitters</code> from the <a href="http://faculty.marshall.usc.edu/gareth-james/ISL/">ISLR</a> <span class="citation">(<a href="#ref-ISLR_2021" role="doc-biblioref"><strong>ISLR_2021?</strong></a>)</span> package:</p>
-<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="ridge.html#cb795-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
-<span id="cb795-2"><a href="ridge.html#cb795-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb795-3"><a href="ridge.html#cb795-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb795-4"><a href="ridge.html#cb795-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb795-5"><a href="ridge.html#cb795-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Hitters)</span>
-<span id="cb795-6"><a href="ridge.html#cb795-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary), ]</span></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="ridge.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb802-2"><a href="ridge.html#cb802-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb802-3"><a href="ridge.html#cb802-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb802-4"><a href="ridge.html#cb802-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb802-5"><a href="ridge.html#cb802-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Hitters)</span>
+<span id="cb802-6"><a href="ridge.html#cb802-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary), ]</span></code></pre></div>
 <p>We will use the <code>glmnet</code> package to fit a ridge regression. The generic function in <code>glmnet</code> is defined by</p>
 <p><span class="math display">\[
 \min _{\beta_0, \beta} \frac{1}{N} \sum_{i=1}^N w_i l\left(y_i, \beta_0+\beta^T x_i\right)+\lambda\left[(1-\alpha)\|\beta\|_2^2 / 2+\alpha\|\beta\|_1\right] \text {, }
 \]</span>
 where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the negative log-likelihood contribution for observation <span class="math inline">\(i\)</span> and <span class="math inline">\(\alpha\)</span> is the elastic net penalty. When <span class="math inline">\(\alpha=1\)</span> ( the default), the penalty term becomes <span class="math inline">\(\ell_{1}\)</span> and the resulting model is called lasso regression (least absolute shrinkage and selection operator). When <span class="math inline">\(\alpha=1\)</span>, the penalty term becomes <span class="math inline">\(\ell_{2}\)</span> and the resulting model is called ridge regression (some authors use the term Tikhonov–Phillips regularization). As before, the tuning parameter <span class="math inline">\(\lambda\)</span> controls the overall strength of the penalty. Since the penalty shrinks the coefficients of correlated variables (in Ridge) or pick one of them and discard the others (in Lasso), the variables are supposed to be standardized, which is done by <code>glmnet</code>.</p>
 <p>The <code>glmnet</code> function has a slightly different syntax from other model-fitting functions that we have used so far in this book (<code>y ~ X</code>). Therefore, before we execute the syntax, we have the prepare the model so that <code>X</code> will be a matrix and <code>y</code> will be a vector. The matrix <code>X</code> has to be prepared before we proceed, which must be free of <code>NA</code>s.</p>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb796-1"><a href="ridge.html#cb796-1" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb796-2"><a href="ridge.html#cb796-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>Salary</span></code></pre></div>
+<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="ridge.html#cb803-1" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb803-2"><a href="ridge.html#cb803-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>Salary</span></code></pre></div>
 <p>The <code>glmnet</code> package is maintained by Trevor Hastie who provides a friendly <a href="https://glmnet.stanford.edu/articles/glmnet.html">vignette</a> <span class="citation">(<a href="#ref-Hastie_glmnet" role="doc-biblioref"><strong>Hastie_glmnet?</strong></a>)</span>. They describe the importance of <code>model.matrix()</code> in <code>glmnet</code> as follows:</p>
 <blockquote>
 <p>(…)particularly useful for creating <span class="math inline">\(x\)</span>; not only does it produce a matrix corresponding to the 19 predictors but it also automatically transforms any qualitative variables into dummy variables. The latter property is important because <code>glmnet()</code> can only take numerical, quantitative inputs.</p>
 </blockquote>
 <p>Here is the example for a ridge regression:</p>
-<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="ridge.html#cb797-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
-<span id="cb797-2"><a href="ridge.html#cb797-2" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="fu">seq</span>(<span class="dv">10</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
-<span id="cb797-3"><a href="ridge.html#cb797-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid)</span></code></pre></div>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="ridge.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb804-2"><a href="ridge.html#cb804-2" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="fu">seq</span>(<span class="dv">10</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb804-3"><a href="ridge.html#cb804-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid)</span></code></pre></div>
 <p>Although we defined the grid, we did not do a grid search explicitly by cross validation. Moreover, we do not need to select a grid. By default, the <code>glmnet()</code> function performs ridge regression for an automatically selected range of <span class="math inline">\(\lambda\)</span> values. It ranges from the null model - only intercept when <span class="math inline">\(\lambda\)</span> is at the upper bound and the least squares fit when the <span class="math inline">\(\lambda\)</span> is at lower bound.</p>
 <p>The application above is to show that we can also choose to implement the function over a grid of values. Further, the <code>glmnet()</code> function standardizes the variables so that they are on the same scale. To turn off this default setting, we use the argument <code>standardize=FALSE</code>.</p>
 <p>The methods here, ridge and lasso, are parametric models. Unlike non-parametric methods, each model is defined by a set of parameters or, as in our case, coefficients. Therefore, when we do a grid search, each value of the hyperparameter (<span class="math inline">\(\lambda\)</span>) is associated with one model defined by a set of coefficients. In order to see the coefficients we need to apply another function, <code>coef()</code>. Remember, we have 100 <span class="math inline">\(\lambda&#39;s\)</span>. Hence, <code>coef()</code> produces a 20 x 100 matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of <span class="math inline">\(\lambda\)</span>).</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb798-1"><a href="ridge.html#cb798-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">coef</span>(model))</span></code></pre></div>
+<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb805-1"><a href="ridge.html#cb805-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">coef</span>(model))</span></code></pre></div>
 <pre><code>## [1]  20 100</code></pre>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="ridge.html#cb800-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>lambda[<span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb807-1"><a href="ridge.html#cb807-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>lambda[<span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>)]</span></code></pre></div>
 <pre><code>## [1] 4.977024e+07 2.656088e+00</code></pre>
-<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="ridge.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model)[, <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb809-1"><a href="ridge.html#cb809-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model)[, <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>)]</span></code></pre></div>
 <pre><code>## 20 x 2 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                       s19          s79
 ## (Intercept)  5.358880e+02  156.6073700
@@ -566,7 +568,7 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 ## NewLeagueN  -2.312257e-05  -27.9849755</code></pre>
 <p>As we see, the coefficient estimates are much smaller when a large value of <span class="math inline">\(\lambda\)</span> is used.</p>
 <p>We generally use the <code>predict()</code> function as before. But, here we can also use it to estimate the ridge regression coefficients for a new value of <span class="math inline">\(\lambda\)</span>. Hence, if we don’t want to rely on the internal grid search provided by <code>glmnet()</code>, we can do our own grid search by <code>predict()</code>. This is an example when <span class="math inline">\(\lambda = 50\)</span>, which wasn’t in the grid.</p>
-<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="ridge.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="at">s =</span> <span class="dv">50</span>, <span class="at">type =</span> <span class="st">&quot;coefficients&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="ridge.html#cb811-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model, <span class="at">s =</span> <span class="dv">50</span>, <span class="at">type =</span> <span class="st">&quot;coefficients&quot;</span>)</span></code></pre></div>
 <pre><code>## 20 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                        s1
 ## (Intercept)  4.876610e+01
@@ -595,41 +597,41 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 <li>Or, we rely on <code>'glmnet</code> internal cross-validation process.</li>
 </ul>
 <p>Here is an example for our own algorithm for training ridge regression:</p>
-<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb806-1"><a href="ridge.html#cb806-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
-<span id="cb806-2"><a href="ridge.html#cb806-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb806-3"><a href="ridge.html#cb806-3" aria-hidden="true" tabindex="-1"></a>MSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb806-4"><a href="ridge.html#cb806-4" aria-hidden="true" tabindex="-1"></a>MMSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb806-5"><a href="ridge.html#cb806-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb806-6"><a href="ridge.html#cb806-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(grid)){</span>
-<span id="cb806-7"><a href="ridge.html#cb806-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
-<span id="cb806-8"><a href="ridge.html#cb806-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(j)</span>
-<span id="cb806-9"><a href="ridge.html#cb806-9" aria-hidden="true" tabindex="-1"></a>    ind <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb806-10"><a href="ridge.html#cb806-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb806-11"><a href="ridge.html#cb806-11" aria-hidden="true" tabindex="-1"></a>    train <span class="ot">&lt;-</span> df[ind, ]</span>
-<span id="cb806-12"><a href="ridge.html#cb806-12" aria-hidden="true" tabindex="-1"></a>    xtrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., train)[,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb806-13"><a href="ridge.html#cb806-13" aria-hidden="true" tabindex="-1"></a>    ytrain <span class="ot">&lt;-</span> df[ind, <span class="st">&quot;Salary&quot;</span>]</span>
-<span id="cb806-14"><a href="ridge.html#cb806-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb806-15"><a href="ridge.html#cb806-15" aria-hidden="true" tabindex="-1"></a>    test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, ]</span>
-<span id="cb806-16"><a href="ridge.html#cb806-16" aria-hidden="true" tabindex="-1"></a>    xtest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., test)[,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb806-17"><a href="ridge.html#cb806-17" aria-hidden="true" tabindex="-1"></a>    ytest <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, <span class="st">&quot;Salary&quot;</span>]</span>
-<span id="cb806-18"><a href="ridge.html#cb806-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb806-19"><a href="ridge.html#cb806-19" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(xtrain, ytrain, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid[i], <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb806-20"><a href="ridge.html#cb806-20" aria-hidden="true" tabindex="-1"></a>    yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">s =</span> grid[i], <span class="at">newx =</span> xtest)</span>
-<span id="cb806-21"><a href="ridge.html#cb806-21" aria-hidden="true" tabindex="-1"></a>    MSPE[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb806-22"><a href="ridge.html#cb806-22" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb806-23"><a href="ridge.html#cb806-23" aria-hidden="true" tabindex="-1"></a>  MMSPE[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE)</span>
-<span id="cb806-24"><a href="ridge.html#cb806-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb806-25"><a href="ridge.html#cb806-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb806-26"><a href="ridge.html#cb806-26" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(MMSPE)</span></code></pre></div>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="ridge.html#cb813-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb813-2"><a href="ridge.html#cb813-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb813-3"><a href="ridge.html#cb813-3" aria-hidden="true" tabindex="-1"></a>MSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb813-4"><a href="ridge.html#cb813-4" aria-hidden="true" tabindex="-1"></a>MMSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb813-5"><a href="ridge.html#cb813-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb813-6"><a href="ridge.html#cb813-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(grid)){</span>
+<span id="cb813-7"><a href="ridge.html#cb813-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb813-8"><a href="ridge.html#cb813-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(j)</span>
+<span id="cb813-9"><a href="ridge.html#cb813-9" aria-hidden="true" tabindex="-1"></a>    ind <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb813-10"><a href="ridge.html#cb813-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb813-11"><a href="ridge.html#cb813-11" aria-hidden="true" tabindex="-1"></a>    train <span class="ot">&lt;-</span> df[ind, ]</span>
+<span id="cb813-12"><a href="ridge.html#cb813-12" aria-hidden="true" tabindex="-1"></a>    xtrain <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., train)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb813-13"><a href="ridge.html#cb813-13" aria-hidden="true" tabindex="-1"></a>    ytrain <span class="ot">&lt;-</span> df[ind, <span class="st">&quot;Salary&quot;</span>]</span>
+<span id="cb813-14"><a href="ridge.html#cb813-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb813-15"><a href="ridge.html#cb813-15" aria-hidden="true" tabindex="-1"></a>    test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, ]</span>
+<span id="cb813-16"><a href="ridge.html#cb813-16" aria-hidden="true" tabindex="-1"></a>    xtest <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., test)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb813-17"><a href="ridge.html#cb813-17" aria-hidden="true" tabindex="-1"></a>    ytest <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, <span class="st">&quot;Salary&quot;</span>]</span>
+<span id="cb813-18"><a href="ridge.html#cb813-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb813-19"><a href="ridge.html#cb813-19" aria-hidden="true" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(xtrain, ytrain, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid[i], <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb813-20"><a href="ridge.html#cb813-20" aria-hidden="true" tabindex="-1"></a>    yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">s =</span> grid[i], <span class="at">newx =</span> xtest)</span>
+<span id="cb813-21"><a href="ridge.html#cb813-21" aria-hidden="true" tabindex="-1"></a>    MSPE[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb813-22"><a href="ridge.html#cb813-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb813-23"><a href="ridge.html#cb813-23" aria-hidden="true" tabindex="-1"></a>  MMSPE[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(MSPE)</span>
+<span id="cb813-24"><a href="ridge.html#cb813-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb813-25"><a href="ridge.html#cb813-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb813-26"><a href="ridge.html#cb813-26" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(MMSPE)</span></code></pre></div>
 <pre><code>## [1] 119058.3</code></pre>
-<div class="sourceCode" id="cb808"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb808-1"><a href="ridge.html#cb808-1" aria-hidden="true" tabindex="-1"></a>grid[<span class="fu">which.min</span>(MMSPE)]</span></code></pre></div>
+<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb815-1"><a href="ridge.html#cb815-1" aria-hidden="true" tabindex="-1"></a>grid[<span class="fu">which.min</span>(MMSPE)]</span></code></pre></div>
 <pre><code>## [1] 14.17474</code></pre>
-<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb810-1"><a href="ridge.html#cb810-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log</span>(grid), MMSPE, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="ridge.html#cb817-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log</span>(grid), MMSPE, <span class="at">type =</span> <span class="st">&quot;o&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="16-Ridge_files/figure-html/ridge6-1.png" width="672" /></p>
 <p>What is the tuned model using the last training set with this <span class="math inline">\(\lambda\)</span>?</p>
-<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="ridge.html#cb811-1" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> grid[<span class="fu">which.min</span>(MMSPE)]</span>
-<span id="cb811-2"><a href="ridge.html#cb811-2" aria-hidden="true" tabindex="-1"></a>coeff <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">s =</span> lambda , <span class="at">type =</span> <span class="st">&quot;coefficients&quot;</span>, <span class="at">newx =</span> xtrain)</span>
-<span id="cb811-3"><a href="ridge.html#cb811-3" aria-hidden="true" tabindex="-1"></a>coeff</span></code></pre></div>
+<div class="sourceCode" id="cb818"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb818-1"><a href="ridge.html#cb818-1" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> grid[<span class="fu">which.min</span>(MMSPE)]</span>
+<span id="cb818-2"><a href="ridge.html#cb818-2" aria-hidden="true" tabindex="-1"></a>coeff <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">s =</span> lambda , <span class="at">type =</span> <span class="st">&quot;coefficients&quot;</span>, <span class="at">newx =</span> xtrain)</span>
+<span id="cb818-3"><a href="ridge.html#cb818-3" aria-hidden="true" tabindex="-1"></a>coeff</span></code></pre></div>
 <pre><code>## 20 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                        s1
 ## (Intercept)  285.78834247
@@ -653,21 +655,21 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 ## Errors        -6.97397640
 ## NewLeagueN   -54.55149894</code></pre>
 <p>We may want to compare the ridge with a simple OLS:</p>
-<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="ridge.html#cb813-1" aria-hidden="true" tabindex="-1"></a>MSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb813-2"><a href="ridge.html#cb813-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb813-3"><a href="ridge.html#cb813-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="cb813-4"><a href="ridge.html#cb813-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(j)</span>
-<span id="cb813-5"><a href="ridge.html#cb813-5" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb813-6"><a href="ridge.html#cb813-6" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> df[ind,]</span>
-<span id="cb813-7"><a href="ridge.html#cb813-7" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, ]</span>
-<span id="cb813-8"><a href="ridge.html#cb813-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb813-9"><a href="ridge.html#cb813-9" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> train)</span>
-<span id="cb813-10"><a href="ridge.html#cb813-10" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> test)</span>
-<span id="cb813-11"><a href="ridge.html#cb813-11" aria-hidden="true" tabindex="-1"></a>  MSPE[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> test<span class="sc">$</span>Salary) <span class="sc">^</span> <span class="dv">2</span>)</span>
-<span id="cb813-12"><a href="ridge.html#cb813-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb813-13"><a href="ridge.html#cb813-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(MSPE)</span></code></pre></div>
+<div class="sourceCode" id="cb820"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb820-1"><a href="ridge.html#cb820-1" aria-hidden="true" tabindex="-1"></a>MSPE <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb820-2"><a href="ridge.html#cb820-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb820-3"><a href="ridge.html#cb820-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb820-4"><a href="ridge.html#cb820-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(j)</span>
+<span id="cb820-5"><a href="ridge.html#cb820-5" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb820-6"><a href="ridge.html#cb820-6" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> df[ind,]</span>
+<span id="cb820-7"><a href="ridge.html#cb820-7" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind, ]</span>
+<span id="cb820-8"><a href="ridge.html#cb820-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb820-9"><a href="ridge.html#cb820-9" aria-hidden="true" tabindex="-1"></a>  model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> train)</span>
+<span id="cb820-10"><a href="ridge.html#cb820-10" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> test)</span>
+<span id="cb820-11"><a href="ridge.html#cb820-11" aria-hidden="true" tabindex="-1"></a>  MSPE[j] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> test<span class="sc">$</span>Salary) <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb820-12"><a href="ridge.html#cb820-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb820-13"><a href="ridge.html#cb820-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(MSPE)</span></code></pre></div>
 <pre><code>## [1] 124217.3</code></pre>
-<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb815-1"><a href="ridge.html#cb815-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb822"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb822-1"><a href="ridge.html#cb822-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Salary ~ ., data = train)
@@ -705,55 +707,55 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 ## Multiple R-squared:  0.4428, Adjusted R-squared:  0.3672 
 ## F-statistic: 5.856 on 19 and 140 DF,  p-value: 1.346e-10</code></pre>
 <p>The second way is to rely on the <code>glmnet</code> internal training process, <code>cv.glmnet</code>, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction. A part of the following scripts follows the same algorithm as the one in the book (<a href="https://www.statlearning.com">Introduction to Statistical Learning</a> - ISLR p.254). This approach uses a specific grid on <span class="math inline">\(\lambda\)</span>. We also run the same grid search 100 times to see the associated uncertainty.</p>
-<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="ridge.html#cb817-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With a defined grid on lambda</span></span>
-<span id="cb817-2"><a href="ridge.html#cb817-2" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb817-3"><a href="ridge.html#cb817-3" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb817-4"><a href="ridge.html#cb817-4" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
-<span id="cb817-5"><a href="ridge.html#cb817-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb817-6"><a href="ridge.html#cb817-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
-<span id="cb817-7"><a href="ridge.html#cb817-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
-<span id="cb817-8"><a href="ridge.html#cb817-8" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X), <span class="fu">nrow</span>(X) <span class="sc">*</span> <span class="fl">0.5</span>) <span class="co"># 50% split</span></span>
-<span id="cb817-9"><a href="ridge.html#cb817-9" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>train)</span>
-<span id="cb817-10"><a href="ridge.html#cb817-10" aria-hidden="true" tabindex="-1"></a>  ytest <span class="ot">&lt;-</span> y[test]</span>
-<span id="cb817-11"><a href="ridge.html#cb817-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb817-12"><a href="ridge.html#cb817-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#finding lambda</span></span>
-<span id="cb817-13"><a href="ridge.html#cb817-13" aria-hidden="true" tabindex="-1"></a>  cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>)</span>
-<span id="cb817-14"><a href="ridge.html#cb817-14" aria-hidden="true" tabindex="-1"></a>  bestlam[i] <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
-<span id="cb817-15"><a href="ridge.html#cb817-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb817-16"><a href="ridge.html#cb817-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Predicting with that lambda</span></span>
-<span id="cb817-17"><a href="ridge.html#cb817-17" aria-hidden="true" tabindex="-1"></a>  ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>,</span>
-<span id="cb817-18"><a href="ridge.html#cb817-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lambda =</span> grid, <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb817-19"><a href="ridge.html#cb817-19" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> bestlam[i], <span class="at">newx =</span> X[test,])</span>
-<span id="cb817-20"><a href="ridge.html#cb817-20" aria-hidden="true" tabindex="-1"></a>  mse[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb817-21"><a href="ridge.html#cb817-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb817-22"><a href="ridge.html#cb817-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb817-23"><a href="ridge.html#cb817-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bestlam)</span></code></pre></div>
+<div class="sourceCode" id="cb824"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb824-1"><a href="ridge.html#cb824-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With a defined grid on lambda</span></span>
+<span id="cb824-2"><a href="ridge.html#cb824-2" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb824-3"><a href="ridge.html#cb824-3" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb824-4"><a href="ridge.html#cb824-4" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">=</span> <span class="dv">10</span> <span class="sc">^</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb824-5"><a href="ridge.html#cb824-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb824-6"><a href="ridge.html#cb824-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb824-7"><a href="ridge.html#cb824-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb824-8"><a href="ridge.html#cb824-8" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X), <span class="fu">nrow</span>(X) <span class="sc">*</span> <span class="fl">0.5</span>) <span class="co"># 50% split</span></span>
+<span id="cb824-9"><a href="ridge.html#cb824-9" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>train)</span>
+<span id="cb824-10"><a href="ridge.html#cb824-10" aria-hidden="true" tabindex="-1"></a>  ytest <span class="ot">&lt;-</span> y[test]</span>
+<span id="cb824-11"><a href="ridge.html#cb824-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb824-12"><a href="ridge.html#cb824-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#finding lambda</span></span>
+<span id="cb824-13"><a href="ridge.html#cb824-13" aria-hidden="true" tabindex="-1"></a>  cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb824-14"><a href="ridge.html#cb824-14" aria-hidden="true" tabindex="-1"></a>  bestlam[i] <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
+<span id="cb824-15"><a href="ridge.html#cb824-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb824-16"><a href="ridge.html#cb824-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Predicting with that lambda</span></span>
+<span id="cb824-17"><a href="ridge.html#cb824-17" aria-hidden="true" tabindex="-1"></a>  ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>,</span>
+<span id="cb824-18"><a href="ridge.html#cb824-18" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lambda =</span> grid, <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb824-19"><a href="ridge.html#cb824-19" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> bestlam[i], <span class="at">newx =</span> X[test,])</span>
+<span id="cb824-20"><a href="ridge.html#cb824-20" aria-hidden="true" tabindex="-1"></a>  mse[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb824-21"><a href="ridge.html#cb824-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb824-22"><a href="ridge.html#cb824-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb824-23"><a href="ridge.html#cb824-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bestlam)</span></code></pre></div>
 <pre><code>## [1] 290.227</code></pre>
-<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb819-1"><a href="ridge.html#cb819-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mse)</span></code></pre></div>
+<div class="sourceCode" id="cb826"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb826-1"><a href="ridge.html#cb826-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mse)</span></code></pre></div>
 <pre><code>## [1] 127472.6</code></pre>
-<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb821-1"><a href="ridge.html#cb821-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bestlam, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb828-1"><a href="ridge.html#cb828-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bestlam, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
 <p><img src="16-Ridge_files/figure-html/ridge9-1.png" width="672" /></p>
-<div class="sourceCode" id="cb822"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb822-1"><a href="ridge.html#cb822-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mse, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb829"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb829-1"><a href="ridge.html#cb829-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mse, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>)</span></code></pre></div>
 <p><img src="16-Ridge_files/figure-html/ridge9-2.png" width="672" /></p>
 <p>Now the same application without a specific grid:</p>
-<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb823-1"><a href="ridge.html#cb823-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb823-2"><a href="ridge.html#cb823-2" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb823-3"><a href="ridge.html#cb823-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb823-4"><a href="ridge.html#cb823-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Without a pre-defined grid on lambda</span></span>
-<span id="cb823-5"><a href="ridge.html#cb823-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
-<span id="cb823-6"><a href="ridge.html#cb823-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
-<span id="cb823-7"><a href="ridge.html#cb823-7" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X), <span class="fu">nrow</span>(X) <span class="sc">*</span> <span class="fl">0.5</span>) <span class="co"># arbitrary split</span></span>
-<span id="cb823-8"><a href="ridge.html#cb823-8" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>train)</span>
-<span id="cb823-9"><a href="ridge.html#cb823-9" aria-hidden="true" tabindex="-1"></a>  ytest <span class="ot">&lt;-</span> y[test]</span>
-<span id="cb823-10"><a href="ridge.html#cb823-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb823-11"><a href="ridge.html#cb823-11" aria-hidden="true" tabindex="-1"></a>  cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>)</span>
-<span id="cb823-12"><a href="ridge.html#cb823-12" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv.out, <span class="at">s =</span> <span class="st">&quot;lambda.min&quot;</span>, <span class="at">newx =</span> X[test,])</span>
-<span id="cb823-13"><a href="ridge.html#cb823-13" aria-hidden="true" tabindex="-1"></a>  mse[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest) <span class="sc">^</span> <span class="dv">2</span>)</span>
-<span id="cb823-14"><a href="ridge.html#cb823-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb823-15"><a href="ridge.html#cb823-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb823-16"><a href="ridge.html#cb823-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mse)</span></code></pre></div>
+<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb830-1"><a href="ridge.html#cb830-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb830-2"><a href="ridge.html#cb830-2" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb830-3"><a href="ridge.html#cb830-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb830-4"><a href="ridge.html#cb830-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Without a pre-defined grid on lambda</span></span>
+<span id="cb830-5"><a href="ridge.html#cb830-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb830-6"><a href="ridge.html#cb830-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(i)</span>
+<span id="cb830-7"><a href="ridge.html#cb830-7" aria-hidden="true" tabindex="-1"></a>  train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X), <span class="fu">nrow</span>(X) <span class="sc">*</span> <span class="fl">0.5</span>) <span class="co"># arbitrary split</span></span>
+<span id="cb830-8"><a href="ridge.html#cb830-8" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>train)</span>
+<span id="cb830-9"><a href="ridge.html#cb830-9" aria-hidden="true" tabindex="-1"></a>  ytest <span class="ot">&lt;-</span> y[test]</span>
+<span id="cb830-10"><a href="ridge.html#cb830-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb830-11"><a href="ridge.html#cb830-11" aria-hidden="true" tabindex="-1"></a>  cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb830-12"><a href="ridge.html#cb830-12" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv.out, <span class="at">s =</span> <span class="st">&quot;lambda.min&quot;</span>, <span class="at">newx =</span> X[test,])</span>
+<span id="cb830-13"><a href="ridge.html#cb830-13" aria-hidden="true" tabindex="-1"></a>  mse[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> ytest) <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb830-14"><a href="ridge.html#cb830-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb830-15"><a href="ridge.html#cb830-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb830-16"><a href="ridge.html#cb830-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mse)</span></code></pre></div>
 <pre><code>## [1] 127481.6</code></pre>
-<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb825-1"><a href="ridge.html#cb825-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mse, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb832-1"><a href="ridge.html#cb832-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mse, <span class="at">col =</span> <span class="st">&quot;pink&quot;</span>)</span></code></pre></div>
 <p><img src="16-Ridge_files/figure-html/ridge10-1.png" width="672" /></p>
 <p>Ridge regression adds a penalty term that is the sum of the squares of the coefficients of the features in the model. This results in a penalty that is continuous and differentiable, which makes Ridge regression easy to optimize using gradient descent. Ridge regression can be useful when we have a large number of features but we still want to keep all of the features in the model. Ridge regression works best in situations where the least squares estimates have high variance.</p>
 <p>On the other hand, Lasso (Least Absolute Shrinkage and Selection Operator) adds a penalty term that is the sum of the absolute values of the coefficients in the model. This results in a penalty that is non-differentiable, which makes it more difficult to optimize using gradient descent. However, Lasso has the advantage of being able to set the coefficients of some features to exactly zero, effectively eliminating those features from the model. This can be useful when we have a large number of features, and we want to select a subset of the most important features to include in the model.</p>

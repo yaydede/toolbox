@@ -296,6 +296,7 @@ div.csl-indent {
 <li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
 <li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
 <li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
@@ -445,7 +446,8 @@ div.csl-indent {
 <li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
 <ul>
 <li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
-<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#adjustable-lr-and-sgd"><i class="fa fa-check"></i><b>38.4.2</b> Adjustable <code>lr</code> and SGD</a></li>
+<li class="chapter" data-level="38.4.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.3</b> Multivariable</a></li>
 </ul></li>
 <li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
 </ul></li>
@@ -491,13 +493,13 @@ div.csl-indent {
 <div id="preparing-the-data-for-a-regression-analysis-with-lm" class="section level2 hasAnchor" number="36.1">
 <h2><span class="header-section-number">36.1</span> Preparing the data for a regression analysis with <code>lm()</code><a href="r-lab-3---preparing-the-data.html#preparing-the-data-for-a-regression-analysis-with-lm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In chapter 2 we estimated a simple linear regression by writing a set of simple R commands to perform the necessary calculations. But we can use the <code>lm()</code> command, instead. We will use three datasets in this lab. Let’s start with the first one, <code>vehicles</code>.</p>
-<div class="sourceCode" id="cb1522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1522-1"><a href="r-lab-3---preparing-the-data.html#cb1522-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  <span class="co">#install.packages(&quot;fueleconomy&quot;)</span></span>
-<span id="cb1522-2"><a href="r-lab-3---preparing-the-data.html#cb1522-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1522-3"><a href="r-lab-3---preparing-the-data.html#cb1522-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
-<span id="cb1522-4"><a href="r-lab-3---preparing-the-data.html#cb1522-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1522-5"><a href="r-lab-3---preparing-the-data.html#cb1522-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
-<span id="cb1522-6"><a href="r-lab-3---preparing-the-data.html#cb1522-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1522-7"><a href="r-lab-3---preparing-the-data.html#cb1522-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1529-1"><a href="r-lab-3---preparing-the-data.html#cb1529-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  <span class="co">#install.packages(&quot;fueleconomy&quot;)</span></span>
+<span id="cb1529-2"><a href="r-lab-3---preparing-the-data.html#cb1529-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1529-3"><a href="r-lab-3---preparing-the-data.html#cb1529-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
+<span id="cb1529-4"><a href="r-lab-3---preparing-the-data.html#cb1529-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1529-5"><a href="r-lab-3---preparing-the-data.html#cb1529-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
+<span id="cb1529-6"><a href="r-lab-3---preparing-the-data.html#cb1529-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1529-7"><a href="r-lab-3---preparing-the-data.html#cb1529-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div>
 <pre><code>##      id  make       model year           class           trans
 ## 1 13309 Acura 2.2CL/3.0CL 1997 Subcompact Cars Automatic 4-spd
 ## 2 13310 Acura 2.2CL/3.0CL 1997 Subcompact Cars    Manual 5-spd
@@ -512,7 +514,7 @@ div.csl-indent {
 ## 4 Front-Wheel Drive   4   2.3 Regular  27  19
 ## 5 Front-Wheel Drive   4   2.3 Regular  29  21
 ## 6 Front-Wheel Drive   6   3.0 Regular  26  17</code></pre>
-<div class="sourceCode" id="cb1524"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1524-1"><a href="r-lab-3---preparing-the-data.html#cb1524-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1531-1"><a href="r-lab-3---preparing-the-data.html#cb1531-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    33442 obs. of  12 variables:
 ##  $ id   : num  13309 13310 13311 14038 14039 ...
 ##  $ make : chr  &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; ...
@@ -529,17 +531,17 @@ div.csl-indent {
 <div id="factor-variables" class="section level3 hasAnchor" number="36.1.1">
 <h3><span class="header-section-number">36.1.1</span> Factor variables<a href="r-lab-3---preparing-the-data.html#factor-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>If we want to estimate a model, we need to check the structure of the model variables in the data. For example, you can see that some of the variables are “characters”, such as <em>make</em>. It is always a good practice to transform them into <em>factor</em> variables also known as <em>indicator</em>, <em>categorical</em>, or <em>dummy</em> variables. <u>You can still use “character” variables in <code>lm()</code></u> or use them in descriptive analyses, but we will lose many features. There are many different ways to convert one type of vector to another type, here are two simple ways:</p>
-<div class="sourceCode" id="cb1526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1526-1"><a href="r-lab-3---preparing-the-data.html#cb1526-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First way:</span></span>
-<span id="cb1526-2"><a href="r-lab-3---preparing-the-data.html#cb1526-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
-<span id="cb1526-3"><a href="r-lab-3---preparing-the-data.html#cb1526-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df)) {</span>
-<span id="cb1526-4"><a href="r-lab-3---preparing-the-data.html#cb1526-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.character</span>(df[,i])) df[,i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df[,i])</span>
-<span id="cb1526-5"><a href="r-lab-3---preparing-the-data.html#cb1526-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1526-6"><a href="r-lab-3---preparing-the-data.html#cb1526-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1526-7"><a href="r-lab-3---preparing-the-data.html#cb1526-7" aria-hidden="true" tabindex="-1"></a><span class="co">#2nd way:</span></span>
-<span id="cb1526-8"><a href="r-lab-3---preparing-the-data.html#cb1526-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
-<span id="cb1526-9"><a href="r-lab-3---preparing-the-data.html#cb1526-9" aria-hidden="true" tabindex="-1"></a>colms <span class="ot">&lt;-</span> <span class="fu">sapply</span>(df, is.character)</span>
-<span id="cb1526-10"><a href="r-lab-3---preparing-the-data.html#cb1526-10" aria-hidden="true" tabindex="-1"></a>df[colms] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df[colms], as.factor)</span>
-<span id="cb1526-11"><a href="r-lab-3---preparing-the-data.html#cb1526-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1533-1"><a href="r-lab-3---preparing-the-data.html#cb1533-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First way:</span></span>
+<span id="cb1533-2"><a href="r-lab-3---preparing-the-data.html#cb1533-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
+<span id="cb1533-3"><a href="r-lab-3---preparing-the-data.html#cb1533-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df)) {</span>
+<span id="cb1533-4"><a href="r-lab-3---preparing-the-data.html#cb1533-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.character</span>(df[,i])) df[,i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df[,i])</span>
+<span id="cb1533-5"><a href="r-lab-3---preparing-the-data.html#cb1533-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1533-6"><a href="r-lab-3---preparing-the-data.html#cb1533-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1533-7"><a href="r-lab-3---preparing-the-data.html#cb1533-7" aria-hidden="true" tabindex="-1"></a><span class="co">#2nd way:</span></span>
+<span id="cb1533-8"><a href="r-lab-3---preparing-the-data.html#cb1533-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
+<span id="cb1533-9"><a href="r-lab-3---preparing-the-data.html#cb1533-9" aria-hidden="true" tabindex="-1"></a>colms <span class="ot">&lt;-</span> <span class="fu">sapply</span>(df, is.character)</span>
+<span id="cb1533-10"><a href="r-lab-3---preparing-the-data.html#cb1533-10" aria-hidden="true" tabindex="-1"></a>df[colms] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df[colms], as.factor)</span>
+<span id="cb1533-11"><a href="r-lab-3---preparing-the-data.html#cb1533-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    33442 obs. of  12 variables:
 ##  $ id   : num  13309 13310 13311 14038 14039 ...
 ##  $ make : Factor w/ 128 levels &quot;Acura&quot;,&quot;Alfa Romeo&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
@@ -553,17 +555,17 @@ div.csl-indent {
 ##  $ fuel : Factor w/ 13 levels &quot;CNG&quot;,&quot;Diesel&quot;,..: 12 12 12 12 12 12 12 12 12 8 ...
 ##  $ hwy  : num  26 28 26 27 29 26 27 29 26 23 ...
 ##  $ cty  : num  20 22 18 19 21 17 20 21 17 18 ...</code></pre>
-<div class="sourceCode" id="cb1528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1528-1"><a href="r-lab-3---preparing-the-data.html#cb1528-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We won&#39;t learn the advance use of &#39;apply&#39; family in this text.</span></span>
-<span id="cb1528-2"><a href="r-lab-3---preparing-the-data.html#cb1528-2" aria-hidden="true" tabindex="-1"></a><span class="co">#But this is a helpful line.  apply() works only with matrices.</span></span>
-<span id="cb1528-3"><a href="r-lab-3---preparing-the-data.html#cb1528-3" aria-hidden="true" tabindex="-1"></a><span class="co">#sapply() and lapply() are for lists.  But a data frame is also a list</span></span>
-<span id="cb1528-4"><a href="r-lab-3---preparing-the-data.html#cb1528-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Therefore df[2] instead of df[, 2] can work very well.</span></span>
-<span id="cb1528-5"><a href="r-lab-3---preparing-the-data.html#cb1528-5" aria-hidden="true" tabindex="-1"></a><span class="co">#How about df[1:10, 2] vs df[[2]][1:10].  Same!</span></span></code></pre></div>
+<div class="sourceCode" id="cb1535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1535-1"><a href="r-lab-3---preparing-the-data.html#cb1535-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We won&#39;t learn the advance use of &#39;apply&#39; family in this text.</span></span>
+<span id="cb1535-2"><a href="r-lab-3---preparing-the-data.html#cb1535-2" aria-hidden="true" tabindex="-1"></a><span class="co">#But this is a helpful line.  apply() works only with matrices.</span></span>
+<span id="cb1535-3"><a href="r-lab-3---preparing-the-data.html#cb1535-3" aria-hidden="true" tabindex="-1"></a><span class="co">#sapply() and lapply() are for lists.  But a data frame is also a list</span></span>
+<span id="cb1535-4"><a href="r-lab-3---preparing-the-data.html#cb1535-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Therefore df[2] instead of df[, 2] can work very well.</span></span>
+<span id="cb1535-5"><a href="r-lab-3---preparing-the-data.html#cb1535-5" aria-hidden="true" tabindex="-1"></a><span class="co">#How about df[1:10, 2] vs df[[2]][1:10].  Same!</span></span></code></pre></div>
 <p>You can also numeric or integer types for indicator variables. Again the good practice is to convert them to factor variables.</p>
 </div>
 <div id="dummy-coding" class="section level3 hasAnchor" number="36.1.2">
 <h3><span class="header-section-number">36.1.2</span> Dummy Coding<a href="r-lab-3---preparing-the-data.html#dummy-coding" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s look at drive in our data. In dummy coding, you will always have a contrast matrix with one less column than levels of the original variable. In our example, our categorical variable has 7 levels so we will have contrast matrices with 6 columns and 7 rows.</p>
-<div class="sourceCode" id="cb1529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1529-1"><a href="r-lab-3---preparing-the-data.html#cb1529-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, mean) <span class="co"># Mean hwy MPG for each drive type.</span></span></code></pre></div>
+<div class="sourceCode" id="cb1536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1536-1"><a href="r-lab-3---preparing-the-data.html#cb1536-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, mean) <span class="co"># Mean hwy MPG for each drive type.</span></span></code></pre></div>
 <pre><code>##              2-Wheel Drive              4-Wheel Drive 
 ##                   20.22091                   22.14592 
 ## 4-Wheel or All-Wheel Drive            All-Wheel Drive 
@@ -572,10 +574,10 @@ div.csl-indent {
 ##                   28.32944                   18.72917 
 ##           Rear-Wheel Drive 
 ##                   20.98899</code></pre>
-<div class="sourceCode" id="cb1531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1531-1"><a href="r-lab-3---preparing-the-data.html#cb1531-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This is also a nice function. Try this:</span></span>
-<span id="cb1531-2"><a href="r-lab-3---preparing-the-data.html#cb1531-2" aria-hidden="true" tabindex="-1"></a><span class="co">#This is similar to &quot;egen&quot; in Stata.</span></span>
-<span id="cb1531-3"><a href="r-lab-3---preparing-the-data.html#cb1531-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1531-4"><a href="r-lab-3---preparing-the-data.html#cb1531-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="fu">mean</span>(x), <span class="fu">sd</span>(x)))</span></code></pre></div>
+<div class="sourceCode" id="cb1538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1538-1"><a href="r-lab-3---preparing-the-data.html#cb1538-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This is also a nice function. Try this:</span></span>
+<span id="cb1538-2"><a href="r-lab-3---preparing-the-data.html#cb1538-2" aria-hidden="true" tabindex="-1"></a><span class="co">#This is similar to &quot;egen&quot; in Stata.</span></span>
+<span id="cb1538-3"><a href="r-lab-3---preparing-the-data.html#cb1538-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1538-4"><a href="r-lab-3---preparing-the-data.html#cb1538-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="fu">mean</span>(x), <span class="fu">sd</span>(x)))</span></code></pre></div>
 <pre><code>## $`2-Wheel Drive`
 ## [1] 20.220907  7.524566
 ## 
@@ -597,8 +599,8 @@ div.csl-indent {
 ## $`Rear-Wheel Drive`
 ## [1] 20.988994  4.949314</code></pre>
 <p>Dummy coding is a very commonly used coding scheme. It compares each level of the categorical variable to a fixed reference level. For example, we can choose <code>drive = 1</code> as the reference group and compare the mean of each level of drive to the reference level of 1. This is the default for disordered factors in R.</p>
-<div class="sourceCode" id="cb1533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1533-1"><a href="r-lab-3---preparing-the-data.html#cb1533-1" aria-hidden="true" tabindex="-1"></a><span class="co">#assigning the treatment contrasts to drive</span></span>
-<span id="cb1533-2"><a href="r-lab-3---preparing-the-data.html#cb1533-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
+<div class="sourceCode" id="cb1540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1540-1"><a href="r-lab-3---preparing-the-data.html#cb1540-1" aria-hidden="true" tabindex="-1"></a><span class="co">#assigning the treatment contrasts to drive</span></span>
+<span id="cb1540-2"><a href="r-lab-3---preparing-the-data.html#cb1540-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
 <pre><code>##                            4-Wheel Drive 4-Wheel or All-Wheel Drive
 ## 2-Wheel Drive                          0                          0
 ## 4-Wheel Drive                          1                          0
@@ -623,8 +625,8 @@ div.csl-indent {
 ## Front-Wheel Drive                                0                0
 ## Part-time 4-Wheel Drive                          1                0
 ## Rear-Wheel Drive                                 0                1</code></pre>
-<div class="sourceCode" id="cb1535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1535-1"><a href="r-lab-3---preparing-the-data.html#cb1535-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">4</span>) <span class="co">#Changing the base</span></span>
-<span id="cb1535-2"><a href="r-lab-3---preparing-the-data.html#cb1535-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
+<div class="sourceCode" id="cb1542"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1542-1"><a href="r-lab-3---preparing-the-data.html#cb1542-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">4</span>) <span class="co">#Changing the base</span></span>
+<span id="cb1542-2"><a href="r-lab-3---preparing-the-data.html#cb1542-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
 <pre><code>##                            1 2 3 5 6 7
 ## 2-Wheel Drive              1 0 0 0 0 0
 ## 4-Wheel Drive              0 1 0 0 0 0
@@ -634,7 +636,7 @@ div.csl-indent {
 ## Part-time 4-Wheel Drive    0 0 0 0 1 0
 ## Rear-Wheel Drive           0 0 0 0 0 1</code></pre>
 <p>We can make good tables as well:</p>
-<div class="sourceCode" id="cb1537"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1537-1"><a href="r-lab-3---preparing-the-data.html#cb1537-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
+<div class="sourceCode" id="cb1544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1544-1"><a href="r-lab-3---preparing-the-data.html#cb1544-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>drive)</span></code></pre></div>
 <pre><code>##              2-Wheel Drive              4-Wheel Drive 
 ##                        507                        699 
 ## 4-Wheel or All-Wheel Drive            All-Wheel Drive 
@@ -643,7 +645,7 @@ div.csl-indent {
 ##                      12233                         96 
 ##           Rear-Wheel Drive 
 ##                      11993</code></pre>
-<div class="sourceCode" id="cb1539"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1539-1"><a href="r-lab-3---preparing-the-data.html#cb1539-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>fuel, df<span class="sc">$</span>drive)</span></code></pre></div>
+<div class="sourceCode" id="cb1546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1546-1"><a href="r-lab-3---preparing-the-data.html#cb1546-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>fuel, df<span class="sc">$</span>drive)</span></code></pre></div>
 <pre><code>##                              
 ##                               2-Wheel Drive 4-Wheel Drive
 ##   CNG                                     0             0
@@ -709,17 +711,17 @@ div.csl-indent {
 <h3><span class="header-section-number">36.1.3</span> Column (Variable) names<a href="r-lab-3---preparing-the-data.html#column-variable-names" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Before any type of data analysis, we need to take care of several things. One of these is that we usually do not use the whole data, but a subset of the data. For example, you may want to remove some observations or keep only some types. And most importantly we need to take care of missing values. We will look at these now.</p>
 <p>First, look at the column (variable) names. Do they have generic names (that is, <span class="math inline">\(x_1\)</span>, $x_2$, etc)? Or do the names have typo problems, or are too long/short? In our <code>vehicles</code> data the names seem fine. Let’s use another data, <code>Autompg</code>.</p>
-<div class="sourceCode" id="cb1541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1541-1"><a href="r-lab-3---preparing-the-data.html#cb1541-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1541-2"><a href="r-lab-3---preparing-the-data.html#cb1541-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1541-3"><a href="r-lab-3---preparing-the-data.html#cb1541-3" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;auto-mpg.csv&quot;</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1541-4"><a href="r-lab-3---preparing-the-data.html#cb1541-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1541-5"><a href="r-lab-3---preparing-the-data.html#cb1541-5" aria-hidden="true" tabindex="-1"></a><span class="co">#autompg = read.table(&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data&quot;,</span></span>
-<span id="cb1541-6"><a href="r-lab-3---preparing-the-data.html#cb1541-6" aria-hidden="true" tabindex="-1"></a><span class="co">#quote = &quot;\&quot;&quot;, comment.char = &quot;&quot;, stringsAsFactors = FALSE)</span></span>
-<span id="cb1541-7"><a href="r-lab-3---preparing-the-data.html#cb1541-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1541-8"><a href="r-lab-3---preparing-the-data.html#cb1541-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1548-1"><a href="r-lab-3---preparing-the-data.html#cb1548-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1548-2"><a href="r-lab-3---preparing-the-data.html#cb1548-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1548-3"><a href="r-lab-3---preparing-the-data.html#cb1548-3" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;auto-mpg.csv&quot;</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1548-4"><a href="r-lab-3---preparing-the-data.html#cb1548-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1548-5"><a href="r-lab-3---preparing-the-data.html#cb1548-5" aria-hidden="true" tabindex="-1"></a><span class="co">#autompg = read.table(&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data&quot;,</span></span>
+<span id="cb1548-6"><a href="r-lab-3---preparing-the-data.html#cb1548-6" aria-hidden="true" tabindex="-1"></a><span class="co">#quote = &quot;\&quot;&quot;, comment.char = &quot;&quot;, stringsAsFactors = FALSE)</span></span>
+<span id="cb1548-7"><a href="r-lab-3---preparing-the-data.html#cb1548-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1548-8"><a href="r-lab-3---preparing-the-data.html#cb1548-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg)</span></code></pre></div>
 <pre><code>## [1] &quot;mpg&quot;    &quot;cyl&quot;    &quot;displ&quot;  &quot;hp&quot;     &quot;weight&quot; &quot;accel&quot;  &quot;yr&quot;     &quot;origin&quot;
 ## [9] &quot;name&quot;</code></pre>
-<div class="sourceCode" id="cb1543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1543-1"><a href="r-lab-3---preparing-the-data.html#cb1543-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1550-1"><a href="r-lab-3---preparing-the-data.html#cb1550-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
 <pre><code>## spc_tbl_ [392 × 9] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ mpg   : num [1:392] 18 15 18 16 17 15 14 14 14 15 ...
 ##  $ cyl   : num [1:392] 8 8 8 8 8 8 8 8 8 8 ...
@@ -743,12 +745,12 @@ div.csl-indent {
 ##   ..   name = col_character()
 ##   .. )
 ##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
-<div class="sourceCode" id="cb1545"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1545-1"><a href="r-lab-3---preparing-the-data.html#cb1545-1" aria-hidden="true" tabindex="-1"></a><span class="co">#I don&#39;t like them! How about this:</span></span>
-<span id="cb1545-2"><a href="r-lab-3---preparing-the-data.html#cb1545-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;acc&quot;</span>, <span class="st">&quot;year&quot;</span>, <span class="st">&quot;origin&quot;</span>, <span class="st">&quot;name&quot;</span>)</span>
-<span id="cb1545-3"><a href="r-lab-3---preparing-the-data.html#cb1545-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1552-1"><a href="r-lab-3---preparing-the-data.html#cb1552-1" aria-hidden="true" tabindex="-1"></a><span class="co">#I don&#39;t like them! How about this:</span></span>
+<span id="cb1552-2"><a href="r-lab-3---preparing-the-data.html#cb1552-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;acc&quot;</span>, <span class="st">&quot;year&quot;</span>, <span class="st">&quot;origin&quot;</span>, <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb1552-3"><a href="r-lab-3---preparing-the-data.html#cb1552-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(autompg)</span></code></pre></div>
 <pre><code>## [1] &quot;mpg&quot;    &quot;cyl&quot;    &quot;disp&quot;   &quot;hp&quot;     &quot;wt&quot;     &quot;acc&quot;    &quot;year&quot;   &quot;origin&quot;
 ## [9] &quot;name&quot;</code></pre>
-<div class="sourceCode" id="cb1547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1547-1"><a href="r-lab-3---preparing-the-data.html#cb1547-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1554-1"><a href="r-lab-3---preparing-the-data.html#cb1554-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
 <pre><code>## spc_tbl_ [392 × 9] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ mpg   : num [1:392] 18 15 18 16 17 15 14 14 14 15 ...
 ##  $ cyl   : num [1:392] 8 8 8 8 8 8 8 8 8 8 ...
@@ -776,32 +778,32 @@ div.csl-indent {
 <div id="data-subsetting-and-missing-values" class="section level3 hasAnchor" number="36.1.4">
 <h3><span class="header-section-number">36.1.4</span> Data subsetting and missing values<a href="r-lab-3---preparing-the-data.html#data-subsetting-and-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>OK, they are fine now. Let’s see if they have any missing value. Missing values are defined by <code>NA</code> in R. We’ll see later <code>NaN</code> as well.</p>
-<div class="sourceCode" id="cb1549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1549-1"><a href="r-lab-3---preparing-the-data.html#cb1549-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(autompg))</span></code></pre></div>
+<div class="sourceCode" id="cb1556"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1556-1"><a href="r-lab-3---preparing-the-data.html#cb1556-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(autompg))</span></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
-<div class="sourceCode" id="cb1551"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1551-1"><a href="r-lab-3---preparing-the-data.html#cb1551-1" aria-hidden="true" tabindex="-1"></a><span class="co">#But we have to be careful.  HP is a character vector.  Why?  Perhaps it contains a character?</span></span>
-<span id="cb1551-2"><a href="r-lab-3---preparing-the-data.html#cb1551-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(autompg<span class="sc">$</span>hp <span class="sc">==</span> <span class="st">&quot;?&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1558"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1558-1"><a href="r-lab-3---preparing-the-data.html#cb1558-1" aria-hidden="true" tabindex="-1"></a><span class="co">#But we have to be careful.  HP is a character vector.  Why?  Perhaps it contains a character?</span></span>
+<span id="cb1558-2"><a href="r-lab-3---preparing-the-data.html#cb1558-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(autompg<span class="sc">$</span>hp <span class="sc">==</span> <span class="st">&quot;?&quot;</span>)</span></code></pre></div>
 <pre><code>## integer(0)</code></pre>
-<div class="sourceCode" id="cb1553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1553-1"><a href="r-lab-3---preparing-the-data.html#cb1553-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Pay attention to subset().  This will be a time-saver</span></span>
-<span id="cb1553-2"><a href="r-lab-3---preparing-the-data.html#cb1553-2" aria-hidden="true" tabindex="-1"></a>subset_hp <span class="ot">&lt;-</span> <span class="fu">subset</span>(autompg, autompg<span class="sc">$</span>hp <span class="sc">!=</span> <span class="st">&quot;?&quot;</span>)</span>
-<span id="cb1553-3"><a href="r-lab-3---preparing-the-data.html#cb1553-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(subset_hp)</span></code></pre></div>
+<div class="sourceCode" id="cb1560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1560-1"><a href="r-lab-3---preparing-the-data.html#cb1560-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Pay attention to subset().  This will be a time-saver</span></span>
+<span id="cb1560-2"><a href="r-lab-3---preparing-the-data.html#cb1560-2" aria-hidden="true" tabindex="-1"></a>subset_hp <span class="ot">&lt;-</span> <span class="fu">subset</span>(autompg, autompg<span class="sc">$</span>hp <span class="sc">!=</span> <span class="st">&quot;?&quot;</span>)</span>
+<span id="cb1560-3"><a href="r-lab-3---preparing-the-data.html#cb1560-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(subset_hp)</span></code></pre></div>
 <pre><code>## [1] 392   9</code></pre>
-<div class="sourceCode" id="cb1555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1555-1"><a href="r-lab-3---preparing-the-data.html#cb1555-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1562"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1562-1"><a href="r-lab-3---preparing-the-data.html#cb1562-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg)</span></code></pre></div>
 <pre><code>## [1] 392   9</code></pre>
-<div class="sourceCode" id="cb1557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1557-1"><a href="r-lab-3---preparing-the-data.html#cb1557-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Those 6 observations are dropped and the new data frame is &quot;subset_hp&quot;</span></span>
-<span id="cb1557-2"><a href="r-lab-3---preparing-the-data.html#cb1557-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1557-3"><a href="r-lab-3---preparing-the-data.html#cb1557-3" aria-hidden="true" tabindex="-1"></a><span class="co">#You can drop columns (variables) as well</span></span>
-<span id="cb1557-4"><a href="r-lab-3---preparing-the-data.html#cb1557-4" aria-hidden="true" tabindex="-1"></a>autompg_less <span class="ot">=</span> <span class="fu">subset</span>(autompg, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;acc&quot;</span>, <span class="st">&quot;year&quot;</span>))</span>
-<span id="cb1557-5"><a href="r-lab-3---preparing-the-data.html#cb1557-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg_less)</span></code></pre></div>
+<div class="sourceCode" id="cb1564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1564-1"><a href="r-lab-3---preparing-the-data.html#cb1564-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Those 6 observations are dropped and the new data frame is &quot;subset_hp&quot;</span></span>
+<span id="cb1564-2"><a href="r-lab-3---preparing-the-data.html#cb1564-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1564-3"><a href="r-lab-3---preparing-the-data.html#cb1564-3" aria-hidden="true" tabindex="-1"></a><span class="co">#You can drop columns (variables) as well</span></span>
+<span id="cb1564-4"><a href="r-lab-3---preparing-the-data.html#cb1564-4" aria-hidden="true" tabindex="-1"></a>autompg_less <span class="ot">=</span> <span class="fu">subset</span>(autompg, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;acc&quot;</span>, <span class="st">&quot;year&quot;</span>))</span>
+<span id="cb1564-5"><a href="r-lab-3---preparing-the-data.html#cb1564-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg_less)</span></code></pre></div>
 <pre><code>## [1] 392   7</code></pre>
-<div class="sourceCode" id="cb1559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1559-1"><a href="r-lab-3---preparing-the-data.html#cb1559-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Traditional way to do those subselections</span></span>
-<span id="cb1559-2"><a href="r-lab-3---preparing-the-data.html#cb1559-2" aria-hidden="true" tabindex="-1"></a>subset_hp <span class="ot">&lt;-</span> autompg[autompg<span class="sc">$</span>hp <span class="sc">!=</span> <span class="st">&quot;?&quot;</span>,]</span>
-<span id="cb1559-3"><a href="r-lab-3---preparing-the-data.html#cb1559-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(subset_hp)</span></code></pre></div>
+<div class="sourceCode" id="cb1566"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1566-1"><a href="r-lab-3---preparing-the-data.html#cb1566-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Traditional way to do those subselections</span></span>
+<span id="cb1566-2"><a href="r-lab-3---preparing-the-data.html#cb1566-2" aria-hidden="true" tabindex="-1"></a>subset_hp <span class="ot">&lt;-</span> autompg[autompg<span class="sc">$</span>hp <span class="sc">!=</span> <span class="st">&quot;?&quot;</span>,]</span>
+<span id="cb1566-3"><a href="r-lab-3---preparing-the-data.html#cb1566-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(subset_hp)</span></code></pre></div>
 <pre><code>## [1] 392   9</code></pre>
-<div class="sourceCode" id="cb1561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1561-1"><a href="r-lab-3---preparing-the-data.html#cb1561-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1568-1"><a href="r-lab-3---preparing-the-data.html#cb1568-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg)</span></code></pre></div>
 <pre><code>## [1] 392   9</code></pre>
-<div class="sourceCode" id="cb1563"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1563-1"><a href="r-lab-3---preparing-the-data.html#cb1563-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And</span></span>
-<span id="cb1563-2"><a href="r-lab-3---preparing-the-data.html#cb1563-2" aria-hidden="true" tabindex="-1"></a>autompg_less <span class="ot">=</span> autompg[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)]</span>
-<span id="cb1563-3"><a href="r-lab-3---preparing-the-data.html#cb1563-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg_less)</span></code></pre></div>
+<div class="sourceCode" id="cb1570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1570-1"><a href="r-lab-3---preparing-the-data.html#cb1570-1" aria-hidden="true" tabindex="-1"></a><span class="co">#And</span></span>
+<span id="cb1570-2"><a href="r-lab-3---preparing-the-data.html#cb1570-2" aria-hidden="true" tabindex="-1"></a>autompg_less <span class="ot">=</span> autompg[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)]</span>
+<span id="cb1570-3"><a href="r-lab-3---preparing-the-data.html#cb1570-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(autompg_less)</span></code></pre></div>
 <pre><code>## [1] 392   7</code></pre>
 <p>Look at the <code>help(subset)</code>: “This is a convenience function intended for use interactively. <em>For programming it is better to use the standard subsetting functions like []</em>, and in particular the non-standard evaluation of argument subset can have unanticipated consequences”.</p>
 </div>
@@ -809,8 +811,8 @@ div.csl-indent {
 <div id="dummy-variable-models" class="section level2 hasAnchor" number="36.2">
 <h2><span class="header-section-number">36.2</span> “DUMMY” variable models<a href="r-lab-3---preparing-the-data.html#dummy-variable-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We can use our dataset, <code>df</code>, which is a cleaned version of vehicles, to try out a “dummy” variable model.</p>
-<div class="sourceCode" id="cb1565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1565-1"><a href="r-lab-3---preparing-the-data.html#cb1565-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember we had this:</span></span>
-<span id="cb1565-2"><a href="r-lab-3---preparing-the-data.html#cb1565-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb1572"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1572-1"><a href="r-lab-3---preparing-the-data.html#cb1572-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember we had this:</span></span>
+<span id="cb1572-2"><a href="r-lab-3---preparing-the-data.html#cb1572-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(df<span class="sc">$</span>hwy, df<span class="sc">$</span>drive, mean)</span></code></pre></div>
 <pre><code>##              2-Wheel Drive              4-Wheel Drive 
 ##                   20.22091                   22.14592 
 ## 4-Wheel or All-Wheel Drive            All-Wheel Drive 
@@ -819,10 +821,10 @@ div.csl-indent {
 ##                   28.32944                   18.72917 
 ##           Rear-Wheel Drive 
 ##                   20.98899</code></pre>
-<div class="sourceCode" id="cb1567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1567-1"><a href="r-lab-3---preparing-the-data.html#cb1567-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">1</span>) <span class="co">#Setting the base back to 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb1574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1574-1"><a href="r-lab-3---preparing-the-data.html#cb1574-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">1</span>) <span class="co">#Setting the base back to 1</span></span></code></pre></div>
 <p>Lets try to make a regression on highway fuel economy based upon our drive dummy variable.</p>
-<div class="sourceCode" id="cb1568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1568-1"><a href="r-lab-3---preparing-the-data.html#cb1568-1" aria-hidden="true" tabindex="-1"></a>model_nocons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> df) <span class="co"># &quot;0&quot; means no constant in lm()</span></span>
-<span id="cb1568-2"><a href="r-lab-3---preparing-the-data.html#cb1568-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_nocons)</span></code></pre></div>
+<div class="sourceCode" id="cb1575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1575-1"><a href="r-lab-3---preparing-the-data.html#cb1575-1" aria-hidden="true" tabindex="-1"></a>model_nocons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> df) <span class="co"># &quot;0&quot; means no constant in lm()</span></span>
+<span id="cb1575-2"><a href="r-lab-3---preparing-the-data.html#cb1575-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_nocons)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hwy ~ drive + 0, data = df)
@@ -847,8 +849,8 @@ div.csl-indent {
 ## Multiple R-squared:  0.9587, Adjusted R-squared:  0.9587 
 ## F-statistic: 1.11e+05 on 7 and 33435 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>We can add in an intercept now:</p>
-<div class="sourceCode" id="cb1570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1570-1"><a href="r-lab-3---preparing-the-data.html#cb1570-1" aria-hidden="true" tabindex="-1"></a>model_withcons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive, <span class="at">data =</span> df)</span>
-<span id="cb1570-2"><a href="r-lab-3---preparing-the-data.html#cb1570-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_withcons)</span></code></pre></div>
+<div class="sourceCode" id="cb1577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1577-1"><a href="r-lab-3---preparing-the-data.html#cb1577-1" aria-hidden="true" tabindex="-1"></a>model_withcons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive, <span class="at">data =</span> df)</span>
+<span id="cb1577-2"><a href="r-lab-3---preparing-the-data.html#cb1577-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_withcons)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hwy ~ drive, data = df)
@@ -873,9 +875,9 @@ div.csl-indent {
 ## Multiple R-squared:  0.3656, Adjusted R-squared:  0.3655 
 ## F-statistic:  3212 on 6 and 33435 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>You can see that the intercept is the first category, <code>2WDrive</code>. The rest of the coefficient are the difference of each drive type from <code>2wdrive</code>. Let’s change the base to 4:</p>
-<div class="sourceCode" id="cb1572"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1572-1"><a href="r-lab-3---preparing-the-data.html#cb1572-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">4</span>) <span class="co">#Changing the base</span></span>
-<span id="cb1572-2"><a href="r-lab-3---preparing-the-data.html#cb1572-2" aria-hidden="true" tabindex="-1"></a>model_withcons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive, <span class="at">data =</span> df)</span>
-<span id="cb1572-3"><a href="r-lab-3---preparing-the-data.html#cb1572-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_withcons)</span></code></pre></div>
+<div class="sourceCode" id="cb1579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1579-1"><a href="r-lab-3---preparing-the-data.html#cb1579-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(df<span class="sc">$</span>drive) <span class="ot">&lt;-</span> <span class="fu">contr.treatment</span>(<span class="dv">7</span>, <span class="at">base=</span><span class="dv">4</span>) <span class="co">#Changing the base</span></span>
+<span id="cb1579-2"><a href="r-lab-3---preparing-the-data.html#cb1579-2" aria-hidden="true" tabindex="-1"></a>model_withcons <span class="ot">&lt;-</span> <span class="fu">lm</span>(hwy <span class="sc">~</span> drive, <span class="at">data =</span> df)</span>
+<span id="cb1579-3"><a href="r-lab-3---preparing-the-data.html#cb1579-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_withcons)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = hwy ~ drive, data = df)
@@ -902,15 +904,15 @@ div.csl-indent {
 <div id="mtcars-example" class="section level3 hasAnchor" number="36.2.1">
 <h3><span class="header-section-number">36.2.1</span> <code>mtcars</code> example<a href="r-lab-3---preparing-the-data.html#mtcars-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now it’s time to estimate a model that defines <code>mpg</code> (fuel efficiency, in miles per gallon), as a function of <code>hp</code> (horsepower - in foot-pounds per second), and <code>am</code> (transmission, Automatic or Manual).</p>
-<div class="sourceCode" id="cb1574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1574-1"><a href="r-lab-3---preparing-the-data.html#cb1574-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, let&#39;s plot it (play with parameter in plot() to see the difference)</span></span>
-<span id="cb1574-2"><a href="r-lab-3---preparing-the-data.html#cb1574-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;darkgrey&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1581-1"><a href="r-lab-3---preparing-the-data.html#cb1581-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, let&#39;s plot it (play with parameter in plot() to see the difference)</span></span>
+<span id="cb1581-2"><a href="r-lab-3---preparing-the-data.html#cb1581-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;darkgrey&quot;</span>)</span></code></pre></div>
 <p><img src="33-RLab3DataPrep_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>let’s start with a simple linear regression where <span class="math inline">\(Y\)</span> is mpg and <span class="math inline">\(x_{1}\)</span> is hp. This is our first and simplest <code>lm()</code> application. For the sake of simplicity, let’s drop the index <span class="math inline">\(i\)</span> for observations.</p>
 <p><span class="math display">\[
 Y=\beta_{0}+\beta_{1} x_{1}+\epsilon
 \]</span></p>
-<div class="sourceCode" id="cb1575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1575-1"><a href="r-lab-3---preparing-the-data.html#cb1575-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars)</span>
-<span id="cb1575-2"><a href="r-lab-3---preparing-the-data.html#cb1575-2" aria-hidden="true" tabindex="-1"></a>model1</span></code></pre></div>
+<div class="sourceCode" id="cb1582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1582-1"><a href="r-lab-3---preparing-the-data.html#cb1582-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb1582-2"><a href="r-lab-3---preparing-the-data.html#cb1582-2" aria-hidden="true" tabindex="-1"></a>model1</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ hp, data = mtcars)
@@ -918,8 +920,8 @@ Y=\beta_{0}+\beta_{1} x_{1}+\epsilon
 ## Coefficients:
 ## (Intercept)           hp  
 ##    30.09886     -0.06823</code></pre>
-<div class="sourceCode" id="cb1577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1577-1"><a href="r-lab-3---preparing-the-data.html#cb1577-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">col =</span> am <span class="sc">+</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
-<span id="cb1577-2"><a href="r-lab-3---preparing-the-data.html#cb1577-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(model1, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1584-1"><a href="r-lab-3---preparing-the-data.html#cb1584-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">col =</span> am <span class="sc">+</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
+<span id="cb1584-2"><a href="r-lab-3---preparing-the-data.html#cb1584-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(model1, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span></code></pre></div>
 <p><img src="33-RLab3DataPrep_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>As you see the red, manual, observations are mostly above the line, while the black, automatic, observations are mostly below the line. This means not only our model underestimates (overestimates) the fuel efficiency of manual (automatic) transmissions, but also the effect of <code>hp</code> on <code>mpg</code> will be biased. This is because OLS tries to minimize the MSE for all observation not for manual and automatic transmissions separately. To correct for this, we add a predictor to our model, namely, <code>am</code> as <span class="math inline">\(x_{2}\)</span>, as follows:</p>
 <p><span class="math display">\[
@@ -930,8 +932,8 @@ where <span class="math inline">\(x_{1}\)</span> and <span class="math inline">\
 x_{2}=\left\{\begin{array}{ll}{1} &amp; {\text { manual transmission }} \\ {0} &amp; {\text { automatic transmission }}\end{array}\right.
 \]</span></p>
 <p>We call <span class="math inline">\(x_{2}\)</span> as a “dummy” variable, which is a numerical variable that is used in a regression analysis to “code” for a binary categorical variable. Note that <em>am</em> is already a dummy variable, since it uses the values 0 and 1 to represent automatic and manual transmissions. As we have seen earlier, often, a variable like am would be stored as a character vector. Converting them to <em>factor</em> variables will take care of creating dummy variables.</p>
-<div class="sourceCode" id="cb1578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1578-1"><a href="r-lab-3---preparing-the-data.html#cb1578-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1578-2"><a href="r-lab-3---preparing-the-data.html#cb1578-2" aria-hidden="true" tabindex="-1"></a>model2</span></code></pre></div>
+<div class="sourceCode" id="cb1585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1585-1"><a href="r-lab-3---preparing-the-data.html#cb1585-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1585-2"><a href="r-lab-3---preparing-the-data.html#cb1585-2" aria-hidden="true" tabindex="-1"></a>model2</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ hp + am, data = mtcars)
@@ -955,15 +957,15 @@ Here is our interpretations:</p>
 <li><span class="math inline">\(\hat{\beta}_{1} = −0.0588878\)</span> is the estimated change in average mpg for an increase in one hp, for either transmission types.</li>
 </ul>
 <p>To show them on a plot, we can combine the coefficients from <code>Model2</code> to calculate the estimated slope and intercepts, as we already described above</p>
-<div class="sourceCode" id="cb1580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1580-1"><a href="r-lab-3---preparing-the-data.html#cb1580-1" aria-hidden="true" tabindex="-1"></a>int_auto <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>]</span>
-<span id="cb1580-2"><a href="r-lab-3---preparing-the-data.html#cb1580-2" aria-hidden="true" tabindex="-1"></a>int_manu <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">3</span>]</span>
-<span id="cb1580-3"><a href="r-lab-3---preparing-the-data.html#cb1580-3" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>]</span>
-<span id="cb1580-4"><a href="r-lab-3---preparing-the-data.html#cb1580-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1580-5"><a href="r-lab-3---preparing-the-data.html#cb1580-5" aria-hidden="true" tabindex="-1"></a><span class="co">#And re-plot them</span></span>
-<span id="cb1580-6"><a href="r-lab-3---preparing-the-data.html#cb1580-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">col =</span> am <span class="sc">+</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
-<span id="cb1580-7"><a href="r-lab-3---preparing-the-data.html#cb1580-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_auto, slope, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for auto</span></span>
-<span id="cb1580-8"><a href="r-lab-3---preparing-the-data.html#cb1580-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_manu, slope, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for manual</span></span>
-<span id="cb1580-9"><a href="r-lab-3---preparing-the-data.html#cb1580-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Automatic&quot;</span>, <span class="st">&quot;Manual&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1587"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1587-1"><a href="r-lab-3---preparing-the-data.html#cb1587-1" aria-hidden="true" tabindex="-1"></a>int_auto <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>]</span>
+<span id="cb1587-2"><a href="r-lab-3---preparing-the-data.html#cb1587-2" aria-hidden="true" tabindex="-1"></a>int_manu <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">3</span>]</span>
+<span id="cb1587-3"><a href="r-lab-3---preparing-the-data.html#cb1587-3" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>]</span>
+<span id="cb1587-4"><a href="r-lab-3---preparing-the-data.html#cb1587-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1587-5"><a href="r-lab-3---preparing-the-data.html#cb1587-5" aria-hidden="true" tabindex="-1"></a><span class="co">#And re-plot them</span></span>
+<span id="cb1587-6"><a href="r-lab-3---preparing-the-data.html#cb1587-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> hp, <span class="at">data =</span> mtcars, <span class="at">col =</span> am <span class="sc">+</span> <span class="dv">1</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
+<span id="cb1587-7"><a href="r-lab-3---preparing-the-data.html#cb1587-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_auto, slope, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for auto</span></span>
+<span id="cb1587-8"><a href="r-lab-3---preparing-the-data.html#cb1587-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_manu, slope, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for manual</span></span>
+<span id="cb1587-9"><a href="r-lab-3---preparing-the-data.html#cb1587-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Automatic&quot;</span>, <span class="st">&quot;Manual&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
 <p><img src="33-RLab3DataPrep_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>The above picture makes it clear that <span class="math inline">\(\beta_{2}\)</span> is significant, which you can verify mathematically with a hypothesis test.</p>
 <p>In the model,</p>
@@ -995,21 +997,21 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 </div>
 <div id="model.matrix" class="section level3 hasAnchor" number="36.2.2">
 <h3><span class="header-section-number">36.2.2</span> <code>model.matrix()</code><a href="r-lab-3---preparing-the-data.html#model.matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb1581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1581-1"><a href="r-lab-3---preparing-the-data.html#cb1581-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These 2 are the same models</span></span>
-<span id="cb1581-2"><a href="r-lab-3---preparing-the-data.html#cb1581-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">:</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1581-3"><a href="r-lab-3---preparing-the-data.html#cb1581-3" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1581-4"><a href="r-lab-3---preparing-the-data.html#cb1581-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1581-5"><a href="r-lab-3---preparing-the-data.html#cb1581-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Important note: even our am is a &quot;numerical&quot; variable, 0 and 1 are</span></span>
-<span id="cb1581-6"><a href="r-lab-3---preparing-the-data.html#cb1581-6" aria-hidden="true" tabindex="-1"></a><span class="co">#indicators, not numbers.  So converting them to a factor variable is the</span></span>
-<span id="cb1581-7"><a href="r-lab-3---preparing-the-data.html#cb1581-7" aria-hidden="true" tabindex="-1"></a><span class="co">#proper way to handle categorical variables.  The reason is simple.  When you have a</span></span>
-<span id="cb1581-8"><a href="r-lab-3---preparing-the-data.html#cb1581-8" aria-hidden="true" tabindex="-1"></a><span class="co">#large dataset with many X variables, some of the indicator variables</span></span>
-<span id="cb1581-9"><a href="r-lab-3---preparing-the-data.html#cb1581-9" aria-hidden="true" tabindex="-1"></a><span class="co">#are going to be &quot;numeric&quot; not &quot;character&quot;. For example, you amy have a</span></span>
-<span id="cb1581-10"><a href="r-lab-3---preparing-the-data.html#cb1581-10" aria-hidden="true" tabindex="-1"></a><span class="co">#variable with 10 categories identified with numbers from 1 to 10.</span></span>
-<span id="cb1581-11"><a href="r-lab-3---preparing-the-data.html#cb1581-11" aria-hidden="true" tabindex="-1"></a><span class="co">#R will take it as a continuous variable. If you convert it to factor variable</span></span>
-<span id="cb1581-12"><a href="r-lab-3---preparing-the-data.html#cb1581-12" aria-hidden="true" tabindex="-1"></a><span class="co">#everything will be easy.  LET&quot;S SEE:</span></span>
-<span id="cb1581-13"><a href="r-lab-3---preparing-the-data.html#cb1581-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1581-14"><a href="r-lab-3---preparing-the-data.html#cb1581-14" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(mtcars<span class="sc">$</span>am)</span>
-<span id="cb1581-15"><a href="r-lab-3---preparing-the-data.html#cb1581-15" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars)</span></code></pre></div>
+<div class="sourceCode" id="cb1588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1588-1"><a href="r-lab-3---preparing-the-data.html#cb1588-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These 2 are the same models</span></span>
+<span id="cb1588-2"><a href="r-lab-3---preparing-the-data.html#cb1588-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">:</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1588-3"><a href="r-lab-3---preparing-the-data.html#cb1588-3" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1588-4"><a href="r-lab-3---preparing-the-data.html#cb1588-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1588-5"><a href="r-lab-3---preparing-the-data.html#cb1588-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Important note: even our am is a &quot;numerical&quot; variable, 0 and 1 are</span></span>
+<span id="cb1588-6"><a href="r-lab-3---preparing-the-data.html#cb1588-6" aria-hidden="true" tabindex="-1"></a><span class="co">#indicators, not numbers.  So converting them to a factor variable is the</span></span>
+<span id="cb1588-7"><a href="r-lab-3---preparing-the-data.html#cb1588-7" aria-hidden="true" tabindex="-1"></a><span class="co">#proper way to handle categorical variables.  The reason is simple.  When you have a</span></span>
+<span id="cb1588-8"><a href="r-lab-3---preparing-the-data.html#cb1588-8" aria-hidden="true" tabindex="-1"></a><span class="co">#large dataset with many X variables, some of the indicator variables</span></span>
+<span id="cb1588-9"><a href="r-lab-3---preparing-the-data.html#cb1588-9" aria-hidden="true" tabindex="-1"></a><span class="co">#are going to be &quot;numeric&quot; not &quot;character&quot;. For example, you amy have a</span></span>
+<span id="cb1588-10"><a href="r-lab-3---preparing-the-data.html#cb1588-10" aria-hidden="true" tabindex="-1"></a><span class="co">#variable with 10 categories identified with numbers from 1 to 10.</span></span>
+<span id="cb1588-11"><a href="r-lab-3---preparing-the-data.html#cb1588-11" aria-hidden="true" tabindex="-1"></a><span class="co">#R will take it as a continuous variable. If you convert it to factor variable</span></span>
+<span id="cb1588-12"><a href="r-lab-3---preparing-the-data.html#cb1588-12" aria-hidden="true" tabindex="-1"></a><span class="co">#everything will be easy.  LET&quot;S SEE:</span></span>
+<span id="cb1588-13"><a href="r-lab-3---preparing-the-data.html#cb1588-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1588-14"><a href="r-lab-3---preparing-the-data.html#cb1588-14" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(mtcars<span class="sc">$</span>am)</span>
+<span id="cb1588-15"><a href="r-lab-3---preparing-the-data.html#cb1588-15" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    32 obs. of  11 variables:
 ##  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
 ##  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
@@ -1022,9 +1024,9 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ##  $ am  : Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 2 1 1 1 1 1 1 1 ...
 ##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
 ##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
-<div class="sourceCode" id="cb1583"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1583-1"><a href="r-lab-3---preparing-the-data.html#cb1583-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we can use a better way to build a model, specially for larger datasets:</span></span>
-<span id="cb1583-2"><a href="r-lab-3---preparing-the-data.html#cb1583-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">:</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1583-3"><a href="r-lab-3---preparing-the-data.html#cb1583-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1590-1"><a href="r-lab-3---preparing-the-data.html#cb1590-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now we can use a better way to build a model, specially for larger datasets:</span></span>
+<span id="cb1590-2"><a href="r-lab-3---preparing-the-data.html#cb1590-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp <span class="sc">+</span> am <span class="sc">+</span> hp<span class="sc">:</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1590-3"><a href="r-lab-3---preparing-the-data.html#cb1590-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##                   (Intercept)  hp am1 hp:am1
 ## Mazda RX4                   1 110   1    110
 ## Mazda RX4 Wag               1 110   1    110
@@ -1032,9 +1034,9 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Hornet 4 Drive              1 110   0      0
 ## Hornet Sportabout           1 175   0      0
 ## Valiant                     1 105   0      0</code></pre>
-<div class="sourceCode" id="cb1585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1585-1"><a href="r-lab-3---preparing-the-data.html#cb1585-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or, even better</span></span>
-<span id="cb1585-2"><a href="r-lab-3---preparing-the-data.html#cb1585-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1585-3"><a href="r-lab-3---preparing-the-data.html#cb1585-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1592-1"><a href="r-lab-3---preparing-the-data.html#cb1592-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Or, even better</span></span>
+<span id="cb1592-2"><a href="r-lab-3---preparing-the-data.html#cb1592-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1592-3"><a href="r-lab-3---preparing-the-data.html#cb1592-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##                   (Intercept)  hp am1 hp:am1
 ## Mazda RX4                   1 110   1    110
 ## Mazda RX4 Wag               1 110   1    110
@@ -1042,11 +1044,11 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Hornet 4 Drive              1 110   0      0
 ## Hornet Sportabout           1 175   0      0
 ## Valiant                     1 105   0      0</code></pre>
-<div class="sourceCode" id="cb1587"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1587-1"><a href="r-lab-3---preparing-the-data.html#cb1587-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Here the &quot;base&quot; for am is 0.  We can make it without the intercept</span></span>
-<span id="cb1587-2"><a href="r-lab-3---preparing-the-data.html#cb1587-2" aria-hidden="true" tabindex="-1"></a><span class="co">#REMEMBER the &quot;DUMMY TRAP&quot;</span></span>
-<span id="cb1587-3"><a href="r-lab-3---preparing-the-data.html#cb1587-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1587-4"><a href="r-lab-3---preparing-the-data.html#cb1587-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb1587-5"><a href="r-lab-3---preparing-the-data.html#cb1587-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1594-1"><a href="r-lab-3---preparing-the-data.html#cb1594-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Here the &quot;base&quot; for am is 0.  We can make it without the intercept</span></span>
+<span id="cb1594-2"><a href="r-lab-3---preparing-the-data.html#cb1594-2" aria-hidden="true" tabindex="-1"></a><span class="co">#REMEMBER the &quot;DUMMY TRAP&quot;</span></span>
+<span id="cb1594-3"><a href="r-lab-3---preparing-the-data.html#cb1594-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1594-4"><a href="r-lab-3---preparing-the-data.html#cb1594-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb1594-5"><a href="r-lab-3---preparing-the-data.html#cb1594-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##                    hp am0 am1 hp:am1
 ## Mazda RX4         110   0   1    110
 ## Mazda RX4 Wag     110   0   1    110
@@ -1054,30 +1056,30 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Hornet 4 Drive    110   1   0      0
 ## Hornet Sportabout 175   1   0      0
 ## Valiant           105   1   0      0</code></pre>
-<div class="sourceCode" id="cb1589"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1589-1"><a href="r-lab-3---preparing-the-data.html#cb1589-1" aria-hidden="true" tabindex="-1"></a><span class="co">#How about changing the base for am to 1 (0, manual is the base in ma, remember)?</span></span>
-<span id="cb1589-2"><a href="r-lab-3---preparing-the-data.html#cb1589-2" aria-hidden="true" tabindex="-1"></a><span class="co">#The level which is chosen for the reference level is the level which is contrasted against.</span></span>
-<span id="cb1589-3"><a href="r-lab-3---preparing-the-data.html#cb1589-3" aria-hidden="true" tabindex="-1"></a><span class="co">#By default, this is simply the first level alphabetically.</span></span>
-<span id="cb1589-4"><a href="r-lab-3---preparing-the-data.html#cb1589-4" aria-hidden="true" tabindex="-1"></a><span class="co">#We can specify that we want to be the reference level by using the relevel function:</span></span>
-<span id="cb1589-5"><a href="r-lab-3---preparing-the-data.html#cb1589-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1596-1"><a href="r-lab-3---preparing-the-data.html#cb1596-1" aria-hidden="true" tabindex="-1"></a><span class="co">#How about changing the base for am to 1 (0, manual is the base in ma, remember)?</span></span>
+<span id="cb1596-2"><a href="r-lab-3---preparing-the-data.html#cb1596-2" aria-hidden="true" tabindex="-1"></a><span class="co">#The level which is chosen for the reference level is the level which is contrasted against.</span></span>
+<span id="cb1596-3"><a href="r-lab-3---preparing-the-data.html#cb1596-3" aria-hidden="true" tabindex="-1"></a><span class="co">#By default, this is simply the first level alphabetically.</span></span>
+<span id="cb1596-4"><a href="r-lab-3---preparing-the-data.html#cb1596-4" aria-hidden="true" tabindex="-1"></a><span class="co">#We can specify that we want to be the reference level by using the relevel function:</span></span>
+<span id="cb1596-5"><a href="r-lab-3---preparing-the-data.html#cb1596-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>## 
 ##  0  1 
 ## 19 13</code></pre>
-<div class="sourceCode" id="cb1591"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1591-1"><a href="r-lab-3---preparing-the-data.html#cb1591-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1598-1"><a href="r-lab-3---preparing-the-data.html#cb1598-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>## [1] &quot;0&quot; &quot;1&quot;</code></pre>
-<div class="sourceCode" id="cb1593"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1593-1"><a href="r-lab-3---preparing-the-data.html#cb1593-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1600-1"><a href="r-lab-3---preparing-the-data.html#cb1600-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>##  Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 2 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb1595"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1595-1"><a href="r-lab-3---preparing-the-data.html#cb1595-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Manual&quot;</span>, <span class="st">&quot;Auto&quot;</span>)</span>
-<span id="cb1595-2"><a href="r-lab-3---preparing-the-data.html#cb1595-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1602-1"><a href="r-lab-3---preparing-the-data.html#cb1602-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Manual&quot;</span>, <span class="st">&quot;Auto&quot;</span>)</span>
+<span id="cb1602-2"><a href="r-lab-3---preparing-the-data.html#cb1602-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>## 
 ## Manual   Auto 
 ##     19     13</code></pre>
-<div class="sourceCode" id="cb1597"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1597-1"><a href="r-lab-3---preparing-the-data.html#cb1597-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1604-1"><a href="r-lab-3---preparing-the-data.html#cb1604-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>## [1] &quot;Manual&quot; &quot;Auto&quot;</code></pre>
-<div class="sourceCode" id="cb1599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1599-1"><a href="r-lab-3---preparing-the-data.html#cb1599-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">relevel</span>(mtcars<span class="sc">$</span>am, <span class="st">&quot;Auto&quot;</span>) </span>
-<span id="cb1599-2"><a href="r-lab-3---preparing-the-data.html#cb1599-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1606-1"><a href="r-lab-3---preparing-the-data.html#cb1606-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">relevel</span>(mtcars<span class="sc">$</span>am, <span class="st">&quot;Auto&quot;</span>) </span>
+<span id="cb1606-2"><a href="r-lab-3---preparing-the-data.html#cb1606-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>##  Factor w/ 2 levels &quot;Auto&quot;,&quot;Manual&quot;: 1 1 1 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb1601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1601-1"><a href="r-lab-3---preparing-the-data.html#cb1601-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1601-2"><a href="r-lab-3---preparing-the-data.html#cb1601-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1608-1"><a href="r-lab-3---preparing-the-data.html#cb1608-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1608-2"><a href="r-lab-3---preparing-the-data.html#cb1608-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##                   (Intercept)  hp amManual hp:amManual
 ## Mazda RX4                   1 110        0           0
 ## Mazda RX4 Wag               1 110        0           0
@@ -1085,13 +1087,13 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Hornet 4 Drive              1 110        1         110
 ## Hornet Sportabout           1 175        1         175
 ## Valiant                     1 105        1         105</code></pre>
-<div class="sourceCode" id="cb1603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1603-1"><a href="r-lab-3---preparing-the-data.html#cb1603-1" aria-hidden="true" tabindex="-1"></a><span class="co">#More on this https://hopstat.wordpress.com/2014/06/26/be-careful-with-using-model-design-in-r/</span></span>
-<span id="cb1603-2"><a href="r-lab-3---preparing-the-data.html#cb1603-2" aria-hidden="true" tabindex="-1"></a><span class="co">#and https://genomicsclass.github.io/book/pages/expressing_design_formula.html</span></span>
-<span id="cb1603-3"><a href="r-lab-3---preparing-the-data.html#cb1603-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1603-4"><a href="r-lab-3---preparing-the-data.html#cb1603-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Final Note: if use model.matrix() for lm() you have to be careful about the X1, which is 1</span></span>
-<span id="cb1603-5"><a href="r-lab-3---preparing-the-data.html#cb1603-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> mtcars<span class="sc">$</span>mpg</span>
-<span id="cb1603-6"><a href="r-lab-3---preparing-the-data.html#cb1603-6" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
-<span id="cb1603-7"><a href="r-lab-3---preparing-the-data.html#cb1603-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)  <span class="co">#Pay attention to F, R-squared etc)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1610-1"><a href="r-lab-3---preparing-the-data.html#cb1610-1" aria-hidden="true" tabindex="-1"></a><span class="co">#More on this https://hopstat.wordpress.com/2014/06/26/be-careful-with-using-model-design-in-r/</span></span>
+<span id="cb1610-2"><a href="r-lab-3---preparing-the-data.html#cb1610-2" aria-hidden="true" tabindex="-1"></a><span class="co">#and https://genomicsclass.github.io/book/pages/expressing_design_formula.html</span></span>
+<span id="cb1610-3"><a href="r-lab-3---preparing-the-data.html#cb1610-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1610-4"><a href="r-lab-3---preparing-the-data.html#cb1610-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Final Note: if use model.matrix() for lm() you have to be careful about the X1, which is 1</span></span>
+<span id="cb1610-5"><a href="r-lab-3---preparing-the-data.html#cb1610-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> mtcars<span class="sc">$</span>mpg</span>
+<span id="cb1610-6"><a href="r-lab-3---preparing-the-data.html#cb1610-6" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
+<span id="cb1610-7"><a href="r-lab-3---preparing-the-data.html#cb1610-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)  <span class="co">#Pay attention to F, R-squared etc)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -1113,9 +1115,9 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Residual standard error: 2.961 on 28 degrees of freedom
 ## Multiple R-squared:  0.782,  Adjusted R-squared:  0.7587 
 ## F-statistic: 33.49 on 3 and 28 DF,  p-value: 2.112e-09</code></pre>
-<div class="sourceCode" id="cb1605"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1605-1"><a href="r-lab-3---preparing-the-data.html#cb1605-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Becasue X has also have 1, lm() drops one of them</span></span>
-<span id="cb1605-2"><a href="r-lab-3---preparing-the-data.html#cb1605-2" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb1605-3"><a href="r-lab-3---preparing-the-data.html#cb1605-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)  <span class="co">#Pay attention to F, R-squared etc)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1612"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1612-1"><a href="r-lab-3---preparing-the-data.html#cb1612-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Becasue X has also have 1, lm() drops one of them</span></span>
+<span id="cb1612-2"><a href="r-lab-3---preparing-the-data.html#cb1612-2" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1612-3"><a href="r-lab-3---preparing-the-data.html#cb1612-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)  <span class="co">#Pay attention to F, R-squared etc)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X - 1)
@@ -1136,12 +1138,12 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Residual standard error: 2.961 on 28 degrees of freedom
 ## Multiple R-squared:  0.9825, Adjusted R-squared:   0.98 
 ## F-statistic: 393.5 on 4 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb1607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1607-1"><a href="r-lab-3---preparing-the-data.html#cb1607-1" aria-hidden="true" tabindex="-1"></a><span class="co"># So model4 is the correct one. 1 should be removed from lm()</span></span>
-<span id="cb1607-2"><a href="r-lab-3---preparing-the-data.html#cb1607-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1607-3"><a href="r-lab-3---preparing-the-data.html#cb1607-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If you remove 1 from the &quot;design&quot; matrix</span></span>
-<span id="cb1607-4"><a href="r-lab-3---preparing-the-data.html#cb1607-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars) <span class="co">#Remove 1 from the &quot;design&quot; matrix</span></span>
-<span id="cb1607-5"><a href="r-lab-3---preparing-the-data.html#cb1607-5" aria-hidden="true" tabindex="-1"></a>model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
-<span id="cb1607-6"><a href="r-lab-3---preparing-the-data.html#cb1607-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model5)</span></code></pre></div>
+<div class="sourceCode" id="cb1614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1614-1"><a href="r-lab-3---preparing-the-data.html#cb1614-1" aria-hidden="true" tabindex="-1"></a><span class="co"># So model4 is the correct one. 1 should be removed from lm()</span></span>
+<span id="cb1614-2"><a href="r-lab-3---preparing-the-data.html#cb1614-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1614-3"><a href="r-lab-3---preparing-the-data.html#cb1614-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If you remove 1 from the &quot;design&quot; matrix</span></span>
+<span id="cb1614-4"><a href="r-lab-3---preparing-the-data.html#cb1614-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> mtcars) <span class="co">#Remove 1 from the &quot;design&quot; matrix</span></span>
+<span id="cb1614-5"><a href="r-lab-3---preparing-the-data.html#cb1614-5" aria-hidden="true" tabindex="-1"></a>model5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X)</span>
+<span id="cb1614-6"><a href="r-lab-3---preparing-the-data.html#cb1614-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model5)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -1163,17 +1165,17 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Residual standard error: 2.961 on 28 degrees of freedom
 ## Multiple R-squared:  0.782,  Adjusted R-squared:  0.7587 
 ## F-statistic: 33.49 on 3 and 28 DF,  p-value: 2.112e-09</code></pre>
-<div class="sourceCode" id="cb1609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1609-1"><a href="r-lab-3---preparing-the-data.html#cb1609-1" aria-hidden="true" tabindex="-1"></a><span class="co">#It doesn&#39;t work!</span></span></code></pre></div>
+<div class="sourceCode" id="cb1616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1616-1"><a href="r-lab-3---preparing-the-data.html#cb1616-1" aria-hidden="true" tabindex="-1"></a><span class="co">#It doesn&#39;t work!</span></span></code></pre></div>
 <p>In concluding this section, we can see the effect of <code>hp</code> on <code>mpg</code> is almost identical for both manual and auto.</p>
-<div class="sourceCode" id="cb1610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1610-1"><a href="r-lab-3---preparing-the-data.html#cb1610-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First let&#39;s use a new model with the original levels in am</span></span>
-<span id="cb1610-2"><a href="r-lab-3---preparing-the-data.html#cb1610-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1617-1"><a href="r-lab-3---preparing-the-data.html#cb1617-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First let&#39;s use a new model with the original levels in am</span></span>
+<span id="cb1617-2"><a href="r-lab-3---preparing-the-data.html#cb1617-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>##  Factor w/ 2 levels &quot;Auto&quot;,&quot;Manual&quot;: 1 1 1 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb1612"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1612-1"><a href="r-lab-3---preparing-the-data.html#cb1612-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">relevel</span>(mtcars<span class="sc">$</span>am, <span class="st">&quot;Manual&quot;</span>) </span>
-<span id="cb1612-2"><a href="r-lab-3---preparing-the-data.html#cb1612-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
+<div class="sourceCode" id="cb1619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1619-1"><a href="r-lab-3---preparing-the-data.html#cb1619-1" aria-hidden="true" tabindex="-1"></a>mtcars<span class="sc">$</span>am <span class="ot">&lt;-</span> <span class="fu">relevel</span>(mtcars<span class="sc">$</span>am, <span class="st">&quot;Manual&quot;</span>) </span>
+<span id="cb1619-2"><a href="r-lab-3---preparing-the-data.html#cb1619-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mtcars<span class="sc">$</span>am)</span></code></pre></div>
 <pre><code>##  Factor w/ 2 levels &quot;Manual&quot;,&quot;Auto&quot;: 2 2 2 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb1614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1614-1"><a href="r-lab-3---preparing-the-data.html#cb1614-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> mtcars<span class="sc">$</span>mpg</span>
-<span id="cb1614-2"><a href="r-lab-3---preparing-the-data.html#cb1614-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
-<span id="cb1614-3"><a href="r-lab-3---preparing-the-data.html#cb1614-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1621-1"><a href="r-lab-3---preparing-the-data.html#cb1621-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> mtcars<span class="sc">$</span>mpg</span>
+<span id="cb1621-2"><a href="r-lab-3---preparing-the-data.html#cb1621-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> hp<span class="sc">*</span>am, <span class="at">data =</span> mtcars)</span>
+<span id="cb1621-3"><a href="r-lab-3---preparing-the-data.html#cb1621-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##                   (Intercept)  hp amAuto hp:amAuto
 ## Mazda RX4                   1 110      1       110
 ## Mazda RX4 Wag               1 110      1       110
@@ -1181,8 +1183,8 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 ## Hornet 4 Drive              1 110      0         0
 ## Hornet Sportabout           1 175      0         0
 ## Valiant                     1 105      0         0</code></pre>
-<div class="sourceCode" id="cb1616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1616-1"><a href="r-lab-3---preparing-the-data.html#cb1616-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb1616-2"><a href="r-lab-3---preparing-the-data.html#cb1616-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb1623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1623-1"><a href="r-lab-3---preparing-the-data.html#cb1623-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1623-2"><a href="r-lab-3---preparing-the-data.html#cb1623-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X - 1)
@@ -1207,24 +1209,24 @@ Y=\left(\beta_{0}+\beta_{2}\right)+\left(\beta_{1}+\beta_{3}\right) x_{1}+\epsil
 <div id="example-with-a-bigger-data-set-autompg" class="section level3 hasAnchor" number="36.2.3">
 <h3><span class="header-section-number">36.2.3</span> Example with a bigger data set: <code>Autompg</code><a href="r-lab-3---preparing-the-data.html#example-with-a-bigger-data-set-autompg" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Our results could be different in a larger and more realistic dataset such as <code>Autompg</code>, that we downloaded and cleaned earlier. Lets give it a go:</p>
-<div class="sourceCode" id="cb1618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1618-1"><a href="r-lab-3---preparing-the-data.html#cb1618-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the plymouth reliant, as it causes some issues</span></span>
-<span id="cb1618-2"><a href="r-lab-3---preparing-the-data.html#cb1618-2" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> <span class="fu">subset</span>(autompg, autompg<span class="sc">$</span>name <span class="sc">!=</span> <span class="st">&quot;plymouth reliant&quot;</span>)</span>
-<span id="cb1618-3"><a href="r-lab-3---preparing-the-data.html#cb1618-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1618-4"><a href="r-lab-3---preparing-the-data.html#cb1618-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Change horsepower from character to numeric</span></span>
-<span id="cb1618-5"><a href="r-lab-3---preparing-the-data.html#cb1618-5" aria-hidden="true" tabindex="-1"></a><span class="co">#We should have converted it to a factor variable</span></span>
-<span id="cb1618-6"><a href="r-lab-3---preparing-the-data.html#cb1618-6" aria-hidden="true" tabindex="-1"></a><span class="co">#But for the sake of this example, we keep it as numeric.</span></span>
-<span id="cb1618-7"><a href="r-lab-3---preparing-the-data.html#cb1618-7" aria-hidden="true" tabindex="-1"></a><span class="co">#And we manually create a dummary variable for</span></span>
-<span id="cb1618-8"><a href="r-lab-3---preparing-the-data.html#cb1618-8" aria-hidden="true" tabindex="-1"></a><span class="co">#foreign vs domestic cars: domestic = 1.</span></span>
-<span id="cb1618-9"><a href="r-lab-3---preparing-the-data.html#cb1618-9" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>hp <span class="ot">=</span> <span class="fu">as.numeric</span>(autompg<span class="sc">$</span>hp)</span>
-<span id="cb1618-10"><a href="r-lab-3---preparing-the-data.html#cb1618-10" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>domestic <span class="ot">=</span> <span class="fu">as.numeric</span>(autompg<span class="sc">$</span>origin <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb1618-11"><a href="r-lab-3---preparing-the-data.html#cb1618-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1618-12"><a href="r-lab-3---preparing-the-data.html#cb1618-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove 3 and 5 cylinder cars (which are very rare.)</span></span>
-<span id="cb1618-13"><a href="r-lab-3---preparing-the-data.html#cb1618-13" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> autompg[autompg<span class="sc">$</span>cyl <span class="sc">!=</span> <span class="dv">5</span>,]</span>
-<span id="cb1618-14"><a href="r-lab-3---preparing-the-data.html#cb1618-14" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> autompg[autompg<span class="sc">$</span>cyl <span class="sc">!=</span> <span class="dv">3</span>,]</span>
-<span id="cb1618-15"><a href="r-lab-3---preparing-the-data.html#cb1618-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1618-16"><a href="r-lab-3---preparing-the-data.html#cb1618-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Change cyl to a factor variable</span></span>
-<span id="cb1618-17"><a href="r-lab-3---preparing-the-data.html#cb1618-17" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>cyl <span class="ot">=</span> <span class="fu">as.factor</span>(autompg<span class="sc">$</span>cyl)</span>
-<span id="cb1618-18"><a href="r-lab-3---preparing-the-data.html#cb1618-18" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
+<div class="sourceCode" id="cb1625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1625-1"><a href="r-lab-3---preparing-the-data.html#cb1625-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove the plymouth reliant, as it causes some issues</span></span>
+<span id="cb1625-2"><a href="r-lab-3---preparing-the-data.html#cb1625-2" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> <span class="fu">subset</span>(autompg, autompg<span class="sc">$</span>name <span class="sc">!=</span> <span class="st">&quot;plymouth reliant&quot;</span>)</span>
+<span id="cb1625-3"><a href="r-lab-3---preparing-the-data.html#cb1625-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1625-4"><a href="r-lab-3---preparing-the-data.html#cb1625-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Change horsepower from character to numeric</span></span>
+<span id="cb1625-5"><a href="r-lab-3---preparing-the-data.html#cb1625-5" aria-hidden="true" tabindex="-1"></a><span class="co">#We should have converted it to a factor variable</span></span>
+<span id="cb1625-6"><a href="r-lab-3---preparing-the-data.html#cb1625-6" aria-hidden="true" tabindex="-1"></a><span class="co">#But for the sake of this example, we keep it as numeric.</span></span>
+<span id="cb1625-7"><a href="r-lab-3---preparing-the-data.html#cb1625-7" aria-hidden="true" tabindex="-1"></a><span class="co">#And we manually create a dummary variable for</span></span>
+<span id="cb1625-8"><a href="r-lab-3---preparing-the-data.html#cb1625-8" aria-hidden="true" tabindex="-1"></a><span class="co">#foreign vs domestic cars: domestic = 1.</span></span>
+<span id="cb1625-9"><a href="r-lab-3---preparing-the-data.html#cb1625-9" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>hp <span class="ot">=</span> <span class="fu">as.numeric</span>(autompg<span class="sc">$</span>hp)</span>
+<span id="cb1625-10"><a href="r-lab-3---preparing-the-data.html#cb1625-10" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>domestic <span class="ot">=</span> <span class="fu">as.numeric</span>(autompg<span class="sc">$</span>origin <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb1625-11"><a href="r-lab-3---preparing-the-data.html#cb1625-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1625-12"><a href="r-lab-3---preparing-the-data.html#cb1625-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove 3 and 5 cylinder cars (which are very rare.)</span></span>
+<span id="cb1625-13"><a href="r-lab-3---preparing-the-data.html#cb1625-13" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> autompg[autompg<span class="sc">$</span>cyl <span class="sc">!=</span> <span class="dv">5</span>,]</span>
+<span id="cb1625-14"><a href="r-lab-3---preparing-the-data.html#cb1625-14" aria-hidden="true" tabindex="-1"></a>autompg <span class="ot">=</span> autompg[autompg<span class="sc">$</span>cyl <span class="sc">!=</span> <span class="dv">3</span>,]</span>
+<span id="cb1625-15"><a href="r-lab-3---preparing-the-data.html#cb1625-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1625-16"><a href="r-lab-3---preparing-the-data.html#cb1625-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Change cyl to a factor variable</span></span>
+<span id="cb1625-17"><a href="r-lab-3---preparing-the-data.html#cb1625-17" aria-hidden="true" tabindex="-1"></a>autompg<span class="sc">$</span>cyl <span class="ot">=</span> <span class="fu">as.factor</span>(autompg<span class="sc">$</span>cyl)</span>
+<span id="cb1625-18"><a href="r-lab-3---preparing-the-data.html#cb1625-18" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(autompg)</span></code></pre></div>
 <pre><code>## tibble [383 × 10] (S3: tbl_df/tbl/data.frame)
 ##  $ mpg     : num [1:383] 18 15 18 16 17 15 14 14 14 15 ...
 ##  $ cyl     : Factor w/ 3 levels &quot;4&quot;,&quot;6&quot;,&quot;8&quot;: 3 3 3 3 3 3 3 3 3 3 ...
@@ -1245,28 +1247,28 @@ Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\epsilon
 domestic=\left\{\begin{array}{ll}{1} &amp; {\text { Domestic }} \\ {0} &amp; {\text { Foreign }}\end{array}\right.
 \]</span></p>
 <p>We will fit this model, extract the slope and intercept for the “two lines,” plot the data and add the lines.</p>
-<div class="sourceCode" id="cb1620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1620-1"><a href="r-lab-3---preparing-the-data.html#cb1620-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lm()</span></span>
-<span id="cb1620-2"><a href="r-lab-3---preparing-the-data.html#cb1620-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> domestic, <span class="at">data =</span> autompg)</span>
-<span id="cb1620-3"><a href="r-lab-3---preparing-the-data.html#cb1620-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1620-4"><a href="r-lab-3---preparing-the-data.html#cb1620-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting slope and intercept coefficents</span></span>
-<span id="cb1620-5"><a href="r-lab-3---preparing-the-data.html#cb1620-5" aria-hidden="true" tabindex="-1"></a>int_for <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">1</span>]</span>
-<span id="cb1620-6"><a href="r-lab-3---preparing-the-data.html#cb1620-6" aria-hidden="true" tabindex="-1"></a>int_dom <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model1)[<span class="dv">3</span>]</span>
-<span id="cb1620-7"><a href="r-lab-3---preparing-the-data.html#cb1620-7" aria-hidden="true" tabindex="-1"></a>slope_for <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">2</span>]</span>
-<span id="cb1620-8"><a href="r-lab-3---preparing-the-data.html#cb1620-8" aria-hidden="true" tabindex="-1"></a>slope_dom <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">2</span>]</span>
-<span id="cb1620-9"><a href="r-lab-3---preparing-the-data.html#cb1620-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1620-10"><a href="r-lab-3---preparing-the-data.html#cb1620-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
-<span id="cb1620-11"><a href="r-lab-3---preparing-the-data.html#cb1620-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> autompg, <span class="at">col =</span> domestic <span class="sc">+</span> <span class="dv">1</span>, <span class="at">pch =</span> domestic <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb1620-12"><a href="r-lab-3---preparing-the-data.html#cb1620-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_for, slope_for, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for foreign cars</span></span>
-<span id="cb1620-13"><a href="r-lab-3---preparing-the-data.html#cb1620-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_dom, slope_dom, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for domestic cars</span></span>
-<span id="cb1620-14"><a href="r-lab-3---preparing-the-data.html#cb1620-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Foreign&quot;</span>, <span class="st">&quot;Domestic&quot;</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1627-1"><a href="r-lab-3---preparing-the-data.html#cb1627-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lm()</span></span>
+<span id="cb1627-2"><a href="r-lab-3---preparing-the-data.html#cb1627-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> domestic, <span class="at">data =</span> autompg)</span>
+<span id="cb1627-3"><a href="r-lab-3---preparing-the-data.html#cb1627-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1627-4"><a href="r-lab-3---preparing-the-data.html#cb1627-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting slope and intercept coefficents</span></span>
+<span id="cb1627-5"><a href="r-lab-3---preparing-the-data.html#cb1627-5" aria-hidden="true" tabindex="-1"></a>int_for <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">1</span>]</span>
+<span id="cb1627-6"><a href="r-lab-3---preparing-the-data.html#cb1627-6" aria-hidden="true" tabindex="-1"></a>int_dom <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model1)[<span class="dv">3</span>]</span>
+<span id="cb1627-7"><a href="r-lab-3---preparing-the-data.html#cb1627-7" aria-hidden="true" tabindex="-1"></a>slope_for <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">2</span>]</span>
+<span id="cb1627-8"><a href="r-lab-3---preparing-the-data.html#cb1627-8" aria-hidden="true" tabindex="-1"></a>slope_dom <span class="ot">=</span> <span class="fu">coef</span>(model1)[<span class="dv">2</span>]</span>
+<span id="cb1627-9"><a href="r-lab-3---preparing-the-data.html#cb1627-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1627-10"><a href="r-lab-3---preparing-the-data.html#cb1627-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
+<span id="cb1627-11"><a href="r-lab-3---preparing-the-data.html#cb1627-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> autompg, <span class="at">col =</span> domestic <span class="sc">+</span> <span class="dv">1</span>, <span class="at">pch =</span> domestic <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb1627-12"><a href="r-lab-3---preparing-the-data.html#cb1627-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_for, slope_for, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for foreign cars</span></span>
+<span id="cb1627-13"><a href="r-lab-3---preparing-the-data.html#cb1627-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_dom, slope_dom, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="co"># add line for domestic cars</span></span>
+<span id="cb1627-14"><a href="r-lab-3---preparing-the-data.html#cb1627-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Foreign&quot;</span>, <span class="st">&quot;Domestic&quot;</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
 <p><img src="33-RLab3DataPrep_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>This is a model that allows for two parallel lines, meaning the <code>mpg</code> can be different on average between foreign and domestic cars of the same engine displacement, but the change in average <code>mpg</code> for an increase in displacement is the same for both. We can see this model isn’t doing very well here. The red line fits the red points fairly well, but the black line isn’t doing very well for the black points, it should clearly have a more negative slope. Essentially, we would like a model that allows for two different slopes. Consider the following model,</p>
 <p><span class="math display">\[
 Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\beta_{3} disp*domestic+\epsilon
 \]</span></p>
 <p>Now we have added a new interaction term <span class="math inline">\(disp*domestic\)</span>, as we described earlier.</p>
-<div class="sourceCode" id="cb1621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1621-1"><a href="r-lab-3---preparing-the-data.html#cb1621-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">*</span> domestic, <span class="at">data =</span> autompg)</span>
-<span id="cb1621-2"><a href="r-lab-3---preparing-the-data.html#cb1621-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
+<div class="sourceCode" id="cb1628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1628-1"><a href="r-lab-3---preparing-the-data.html#cb1628-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">*</span> domestic, <span class="at">data =</span> autompg)</span>
+<span id="cb1628-2"><a href="r-lab-3---preparing-the-data.html#cb1628-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ disp * domestic, data = autompg)
@@ -1287,24 +1289,24 @@ Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\beta_{3} disp*domestic+\epsilon
 ## Residual standard error: 4.308 on 379 degrees of freedom
 ## Multiple R-squared:  0.7011, Adjusted R-squared:  0.6987 
 ## F-statistic: 296.3 on 3 and 379 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb1623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1623-1"><a href="r-lab-3---preparing-the-data.html#cb1623-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting slope and intercept coefficents</span></span>
-<span id="cb1623-2"><a href="r-lab-3---preparing-the-data.html#cb1623-2" aria-hidden="true" tabindex="-1"></a>int_for <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>]</span>
-<span id="cb1623-3"><a href="r-lab-3---preparing-the-data.html#cb1623-3" aria-hidden="true" tabindex="-1"></a>int_dom <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">3</span>]</span>
-<span id="cb1623-4"><a href="r-lab-3---preparing-the-data.html#cb1623-4" aria-hidden="true" tabindex="-1"></a>slope_for <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>]</span>
-<span id="cb1623-5"><a href="r-lab-3---preparing-the-data.html#cb1623-5" aria-hidden="true" tabindex="-1"></a>slope_dom <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">4</span>]</span>
-<span id="cb1623-6"><a href="r-lab-3---preparing-the-data.html#cb1623-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1623-7"><a href="r-lab-3---preparing-the-data.html#cb1623-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
-<span id="cb1623-8"><a href="r-lab-3---preparing-the-data.html#cb1623-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> autompg, <span class="at">col =</span> domestic <span class="sc">+</span> <span class="dv">1</span>, <span class="at">pch =</span> domestic <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb1623-9"><a href="r-lab-3---preparing-the-data.html#cb1623-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_for, slope_for, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
-<span id="cb1623-10"><a href="r-lab-3---preparing-the-data.html#cb1623-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_dom, slope_dom, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb1623-11"><a href="r-lab-3---preparing-the-data.html#cb1623-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Foreign&quot;</span>, <span class="st">&quot;Domestic&quot;</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1630-1"><a href="r-lab-3---preparing-the-data.html#cb1630-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting slope and intercept coefficents</span></span>
+<span id="cb1630-2"><a href="r-lab-3---preparing-the-data.html#cb1630-2" aria-hidden="true" tabindex="-1"></a>int_for <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>]</span>
+<span id="cb1630-3"><a href="r-lab-3---preparing-the-data.html#cb1630-3" aria-hidden="true" tabindex="-1"></a>int_dom <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">3</span>]</span>
+<span id="cb1630-4"><a href="r-lab-3---preparing-the-data.html#cb1630-4" aria-hidden="true" tabindex="-1"></a>slope_for <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>]</span>
+<span id="cb1630-5"><a href="r-lab-3---preparing-the-data.html#cb1630-5" aria-hidden="true" tabindex="-1"></a>slope_dom <span class="ot">=</span> <span class="fu">coef</span>(model2)[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">coef</span>(model2)[<span class="dv">4</span>]</span>
+<span id="cb1630-6"><a href="r-lab-3---preparing-the-data.html#cb1630-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1630-7"><a href="r-lab-3---preparing-the-data.html#cb1630-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
+<span id="cb1630-8"><a href="r-lab-3---preparing-the-data.html#cb1630-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> autompg, <span class="at">col =</span> domestic <span class="sc">+</span> <span class="dv">1</span>, <span class="at">pch =</span> domestic <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb1630-9"><a href="r-lab-3---preparing-the-data.html#cb1630-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_for, slope_for, <span class="at">col =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
+<span id="cb1630-10"><a href="r-lab-3---preparing-the-data.html#cb1630-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(int_dom, slope_dom, <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb1630-11"><a href="r-lab-3---preparing-the-data.html#cb1630-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Foreign&quot;</span>, <span class="st">&quot;Domestic&quot;</span>), <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
 <p><img src="33-RLab3DataPrep_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>We see that these lines fit the data much better</p>
 </div>
 <div id="some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within" class="section level3 hasAnchor" number="36.2.4">
 <h3><span class="header-section-number">36.2.4</span> Some more data management tools for subsetting: <code>complete.cases()</code>, <code>is.na()</code>, and <code>within()</code><a href="r-lab-3---preparing-the-data.html#some-more-data-management-tools-for-subsetting-complete.cases-is.na-and-within" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let’s try out some new tools using our first dataset: vehicles.</p>
-<div class="sourceCode" id="cb1624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1624-1"><a href="r-lab-3---preparing-the-data.html#cb1624-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(vehicles)</span></code></pre></div>
+<div class="sourceCode" id="cb1631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1631-1"><a href="r-lab-3---preparing-the-data.html#cb1631-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(vehicles)</span></code></pre></div>
 <pre><code>## tibble [33,442 × 12] (S3: tbl_df/tbl/data.frame)
 ##  $ id   : num [1:33442] 13309 13310 13311 14038 14039 ...
 ##  $ make : chr [1:33442] &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; &quot;Acura&quot; ...
@@ -1318,8 +1320,8 @@ Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\beta_{3} disp*domestic+\epsilon
 ##  $ fuel : chr [1:33442] &quot;Regular&quot; &quot;Regular&quot; &quot;Regular&quot; &quot;Regular&quot; ...
 ##  $ hwy  : num [1:33442] 26 28 26 27 29 26 27 29 26 23 ...
 ##  $ cty  : num [1:33442] 20 22 18 19 21 17 20 21 17 18 ...</code></pre>
-<div class="sourceCode" id="cb1626"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1626-1"><a href="r-lab-3---preparing-the-data.html#cb1626-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, let&#39;s check if there is any NA in the data</span></span>
-<span id="cb1626-2"><a href="r-lab-3---preparing-the-data.html#cb1626-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">is.na</span>(vehicles)) <span class="co"># you can see from here what is.na() does.  So:</span></span></code></pre></div>
+<div class="sourceCode" id="cb1633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1633-1"><a href="r-lab-3---preparing-the-data.html#cb1633-1" aria-hidden="true" tabindex="-1"></a><span class="co">#First, let&#39;s check if there is any NA in the data</span></span>
+<span id="cb1633-2"><a href="r-lab-3---preparing-the-data.html#cb1633-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">is.na</span>(vehicles)) <span class="co"># you can see from here what is.na() does.  So:</span></span></code></pre></div>
 <pre><code>##         id  make model  year class trans drive   cyl displ  fuel   hwy   cty
 ## [1,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [2,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
@@ -1327,41 +1329,41 @@ Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\beta_{3} disp*domestic+\epsilon
 ## [4,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [5,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [6,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
-<div class="sourceCode" id="cb1628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1628-1"><a href="r-lab-3---preparing-the-data.html#cb1628-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(vehicles))<span class="sc">&gt;</span><span class="dv">0</span>)</span>
-<span id="cb1628-2"><a href="r-lab-3---preparing-the-data.html#cb1628-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Dropping observations with NA and assigning it toa new dataset, &quot;data&quot;</span></span>
-<span id="cb1628-3"><a href="r-lab-3---preparing-the-data.html#cb1628-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> vehicles[<span class="sc">-</span>index, ]</span>
-<span id="cb1628-4"><a href="r-lab-3---preparing-the-data.html#cb1628-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1628-5"><a href="r-lab-3---preparing-the-data.html#cb1628-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1628-6"><a href="r-lab-3---preparing-the-data.html#cb1628-6" aria-hidden="true" tabindex="-1"></a><span class="co">#We can also use complete.cases to identify row index with NA</span></span>
-<span id="cb1628-7"><a href="r-lab-3---preparing-the-data.html#cb1628-7" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">complete.cases</span>(vehicles))</span>
-<span id="cb1628-8"><a href="r-lab-3---preparing-the-data.html#cb1628-8" aria-hidden="true" tabindex="-1"></a>index</span></code></pre></div>
+<div class="sourceCode" id="cb1635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1635-1"><a href="r-lab-3---preparing-the-data.html#cb1635-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(vehicles))<span class="sc">&gt;</span><span class="dv">0</span>)</span>
+<span id="cb1635-2"><a href="r-lab-3---preparing-the-data.html#cb1635-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Dropping observations with NA and assigning it toa new dataset, &quot;data&quot;</span></span>
+<span id="cb1635-3"><a href="r-lab-3---preparing-the-data.html#cb1635-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> vehicles[<span class="sc">-</span>index, ]</span>
+<span id="cb1635-4"><a href="r-lab-3---preparing-the-data.html#cb1635-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1635-5"><a href="r-lab-3---preparing-the-data.html#cb1635-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1635-6"><a href="r-lab-3---preparing-the-data.html#cb1635-6" aria-hidden="true" tabindex="-1"></a><span class="co">#We can also use complete.cases to identify row index with NA</span></span>
+<span id="cb1635-7"><a href="r-lab-3---preparing-the-data.html#cb1635-7" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span><span class="fu">complete.cases</span>(vehicles))</span>
+<span id="cb1635-8"><a href="r-lab-3---preparing-the-data.html#cb1635-8" aria-hidden="true" tabindex="-1"></a>index</span></code></pre></div>
 <pre><code>##  [1]  1232  1233  2347  3246  3247  3248  6115  6116  6533  7783  7784  8472
 ## [13] 10613 10614 11696 11697 11728 12411 12412 12413 12928 12929 12934 12935
 ## [25] 12944 13669 16429 16430 21070 23472 23473 23474 24485 24486 24487 24488
 ## [37] 24489 26150 28628 28704 28705 28706 28707 28708 28709 29314 29315 30023
 ## [49] 30024 30025 30026 30027 30028 31063 31064 31065 31066 31067 31068 31069</code></pre>
-<div class="sourceCode" id="cb1630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1630-1"><a href="r-lab-3---preparing-the-data.html#cb1630-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Much easier option. Let&#39;s used here &quot;df&quot;, since we cleaned it earlier</span></span>
-<span id="cb1630-2"><a href="r-lab-3---preparing-the-data.html#cb1630-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1637"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1637-1"><a href="r-lab-3---preparing-the-data.html#cb1637-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Much easier option. Let&#39;s used here &quot;df&quot;, since we cleaned it earlier</span></span>
+<span id="cb1637-2"><a href="r-lab-3---preparing-the-data.html#cb1637-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
 <pre><code>## [1] 33442    12</code></pre>
-<div class="sourceCode" id="cb1632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1632-1"><a href="r-lab-3---preparing-the-data.html#cb1632-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df[<span class="fu">complete.cases</span>(df), ]</span>
-<span id="cb1632-2"><a href="r-lab-3---preparing-the-data.html#cb1632-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb1639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1639-1"><a href="r-lab-3---preparing-the-data.html#cb1639-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df[<span class="fu">complete.cases</span>(df), ]</span>
+<span id="cb1639-2"><a href="r-lab-3---preparing-the-data.html#cb1639-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div>
 <pre><code>## [1] 33382    12</code></pre>
 <p>Our “cleaned” data is now ready. We would like make <code>hwy</code> an indicator variable. Let’s name the new variable mpg and if <code>hyw</code> &gt; 23, <code>mpg</code> = 1 and 0 otherwise. Let’s see how we can do it?</p>
-<div class="sourceCode" id="cb1634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1634-1"><a href="r-lab-3---preparing-the-data.html#cb1634-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1st way:</span></span>
-<span id="cb1634-2"><a href="r-lab-3---preparing-the-data.html#cb1634-2" aria-hidden="true" tabindex="-1"></a>mpg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(data))) <span class="co">#Create vector mpg</span></span>
-<span id="cb1634-3"><a href="r-lab-3---preparing-the-data.html#cb1634-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, mpg) <span class="co"># add it to data</span></span>
-<span id="cb1634-4"><a href="r-lab-3---preparing-the-data.html#cb1634-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">within</span>(data2, mpg[hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span>) <span class="co">#You can add more conditions here with &amp;</span></span>
-<span id="cb1634-5"><a href="r-lab-3---preparing-the-data.html#cb1634-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1634-6"><a href="r-lab-3---preparing-the-data.html#cb1634-6" aria-hidden="true" tabindex="-1"></a><span class="co">#2nd way</span></span>
-<span id="cb1634-7"><a href="r-lab-3---preparing-the-data.html#cb1634-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(data2)</span>
-<span id="cb1634-8"><a href="r-lab-3---preparing-the-data.html#cb1634-8" aria-hidden="true" tabindex="-1"></a>mpg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(data))) <span class="co">#Create vector mpg</span></span>
-<span id="cb1634-9"><a href="r-lab-3---preparing-the-data.html#cb1634-9" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, mpg) <span class="co"># add it to data</span></span>
-<span id="cb1634-10"><a href="r-lab-3---preparing-the-data.html#cb1634-10" aria-hidden="true" tabindex="-1"></a>data2<span class="sc">$</span>mpg[data2<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1634-11"><a href="r-lab-3---preparing-the-data.html#cb1634-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1634-12"><a href="r-lab-3---preparing-the-data.html#cb1634-12" aria-hidden="true" tabindex="-1"></a><span class="co">#3nd way</span></span>
-<span id="cb1634-13"><a href="r-lab-3---preparing-the-data.html#cb1634-13" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg[data<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1634-14"><a href="r-lab-3---preparing-the-data.html#cb1634-14" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg[<span class="fu">is.na</span>(data<span class="sc">$</span>mpg)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1634-15"><a href="r-lab-3---preparing-the-data.html#cb1634-15" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb1641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1641-1"><a href="r-lab-3---preparing-the-data.html#cb1641-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1st way:</span></span>
+<span id="cb1641-2"><a href="r-lab-3---preparing-the-data.html#cb1641-2" aria-hidden="true" tabindex="-1"></a>mpg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(data))) <span class="co">#Create vector mpg</span></span>
+<span id="cb1641-3"><a href="r-lab-3---preparing-the-data.html#cb1641-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, mpg) <span class="co"># add it to data</span></span>
+<span id="cb1641-4"><a href="r-lab-3---preparing-the-data.html#cb1641-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">within</span>(data2, mpg[hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span>) <span class="co">#You can add more conditions here with &amp;</span></span>
+<span id="cb1641-5"><a href="r-lab-3---preparing-the-data.html#cb1641-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1641-6"><a href="r-lab-3---preparing-the-data.html#cb1641-6" aria-hidden="true" tabindex="-1"></a><span class="co">#2nd way</span></span>
+<span id="cb1641-7"><a href="r-lab-3---preparing-the-data.html#cb1641-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(data2)</span>
+<span id="cb1641-8"><a href="r-lab-3---preparing-the-data.html#cb1641-8" aria-hidden="true" tabindex="-1"></a>mpg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(data))) <span class="co">#Create vector mpg</span></span>
+<span id="cb1641-9"><a href="r-lab-3---preparing-the-data.html#cb1641-9" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(data, mpg) <span class="co"># add it to data</span></span>
+<span id="cb1641-10"><a href="r-lab-3---preparing-the-data.html#cb1641-10" aria-hidden="true" tabindex="-1"></a>data2<span class="sc">$</span>mpg[data2<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1641-11"><a href="r-lab-3---preparing-the-data.html#cb1641-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1641-12"><a href="r-lab-3---preparing-the-data.html#cb1641-12" aria-hidden="true" tabindex="-1"></a><span class="co">#3nd way</span></span>
+<span id="cb1641-13"><a href="r-lab-3---preparing-the-data.html#cb1641-13" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg[data<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="dv">23</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1641-14"><a href="r-lab-3---preparing-the-data.html#cb1641-14" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg[<span class="fu">is.na</span>(data<span class="sc">$</span>mpg)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1641-15"><a href="r-lab-3---preparing-the-data.html#cb1641-15" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    33382 obs. of  13 variables:
 ##  $ id   : num  13309 13310 13311 14038 14039 ...
 ##  $ make : Factor w/ 128 levels &quot;Acura&quot;,&quot;Alfa Romeo&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
@@ -1380,13 +1382,13 @@ Y=\beta_{0}+\beta_{1} disp+\beta_{2} domestic+\beta_{3} disp*domestic+\epsilon
 ##  $ hwy  : num  26 28 26 27 29 26 27 29 26 23 ...
 ##  $ cty  : num  20 22 18 19 21 17 20 21 17 18 ...
 ##  $ mpg  : num  1 1 1 1 1 1 1 1 1 0 ...</code></pre>
-<div class="sourceCode" id="cb1636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1636-1"><a href="r-lab-3---preparing-the-data.html#cb1636-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now with():  This is more like subset()</span></span>
-<span id="cb1636-2"><a href="r-lab-3---preparing-the-data.html#cb1636-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Let&#39;s see the mean of hwy for diesel and cyl == 4</span></span>
-<span id="cb1636-3"><a href="r-lab-3---preparing-the-data.html#cb1636-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">with</span>(data, hwy[cyl <span class="sc">==</span> <span class="dv">4</span>  <span class="sc">&amp;</span>  fuel <span class="sc">==</span><span class="st">&quot;Diesel&quot;</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb1643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1643-1"><a href="r-lab-3---preparing-the-data.html#cb1643-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now with():  This is more like subset()</span></span>
+<span id="cb1643-2"><a href="r-lab-3---preparing-the-data.html#cb1643-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Let&#39;s see the mean of hwy for diesel and cyl == 4</span></span>
+<span id="cb1643-3"><a href="r-lab-3---preparing-the-data.html#cb1643-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">with</span>(data, hwy[cyl <span class="sc">==</span> <span class="dv">4</span>  <span class="sc">&amp;</span>  fuel <span class="sc">==</span><span class="st">&quot;Diesel&quot;</span>]))</span></code></pre></div>
 <pre><code>## [1] 36.17483</code></pre>
-<div class="sourceCode" id="cb1638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1638-1"><a href="r-lab-3---preparing-the-data.html#cb1638-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ofcourse you can do it with </span></span>
-<span id="cb1638-2"><a href="r-lab-3---preparing-the-data.html#cb1638-2" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(data<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">4</span>  <span class="sc">&amp;</span>  data<span class="sc">$</span>fuel <span class="sc">==</span><span class="st">&quot;Diesel&quot;</span>)</span>
-<span id="cb1638-3"><a href="r-lab-3---preparing-the-data.html#cb1638-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>hwy[index])</span></code></pre></div>
+<div class="sourceCode" id="cb1645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1645-1"><a href="r-lab-3---preparing-the-data.html#cb1645-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ofcourse you can do it with </span></span>
+<span id="cb1645-2"><a href="r-lab-3---preparing-the-data.html#cb1645-2" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(data<span class="sc">$</span>cyl <span class="sc">==</span> <span class="dv">4</span>  <span class="sc">&amp;</span>  data<span class="sc">$</span>fuel <span class="sc">==</span><span class="st">&quot;Diesel&quot;</span>)</span>
+<span id="cb1645-3"><a href="r-lab-3---preparing-the-data.html#cb1645-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>hwy[index])</span></code></pre></div>
 <pre><code>## [1] 36.17483</code></pre>
 <p>In our next lab, we will work with simulated data and see how they can give us useful insights when modelling.</p>
 

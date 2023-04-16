@@ -203,9 +203,107 @@ $$
   
 where $w$ is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network.  This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it.  
   
-However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  
+However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  The gradient descent is explained in Chapter 38 in detail.  We will use a plain gradient descent here to solve our ANN problem below as an example
 
-In a regular network, the number of parameters is usually very large and it gets larger even in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.       
+```{r nn7a, cache=TRUE}
+n <- 200
+set.seed(1)
+x <- sort(runif(n))
+Y <- sin(12*(x + 0.2))/(x + 0.2) + rnorm(n)/2
+df <- data.frame(Y, x)
+plot(x, Y, main="Simulated data",  col= "grey")
+
+#starting points
+set.seed(234)
+alpha = runif(1, 0, 1)
+beta1 = runif(1, 0, 1)
+beta2 = runif(1, 0, 1)
+beta3 = runif(1, 0, 1)
+a1 = runif(1, 0, 1)
+a2 = runif(1, 0, 1)
+a3 = runif(1, 0, 1)
+b1 = runif(1, 0, 1)
+b2 = runif(1, 0, 1)
+b3 = runif(1, 0, 1)
+
+n <- length(x)
+
+#function
+z1 = a1 + b1*x
+z2 = a2 + b2*x
+z3 = a3 + b3*x
+sig1 = 1/(1 + exp(-z1))
+sig2 = 1/(1 + exp(-z2))
+sig3 = 1/(1 + exp(-z3))
+yhat <- alpha + beta1 * sig1 + beta2 * sig2 + beta3 * sig3
+
+#gradient
+MSE <- sum((Y - yhat) ^ 2) / n
+converged = F
+iterations = 0
+
+#while loop
+while (converged == F) {
+  
+  # Gradients
+  alpha_new <- alpha - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-1))))
+  beta1_new <- beta1 - ((0.005 * (1 / n)) * (sum((Y - yhat) * sig1 * (-1))))
+  beta2_new <- beta2 - ((0.005 * (1 / n)) * (sum((Y - yhat) * sig2 * (-1))))
+  beta3_new <- beta3 - ((0.005 * (1 / n)) * (sum((Y - yhat) * sig3 * (-1))))
+  a1_new <- a1 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta1 * exp(-z1) / ((1 + exp(-z1))^2)))))
+  a2_new <- a2 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta2 * exp(-z2) / ((1 + exp(-z2))^2)))))
+  a3_new <- a3 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta3 * exp(-z3) / ((1 + exp(-z3))^2)))))
+  b1_new <- b1 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta1 * x * exp(-z1) / ((1 + exp(-z1))^2)))))
+  b2_new <- b2 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta2 * x * exp(-z2) / ((1 + exp(-z2))^2)))))
+  b3_new <- b3 - ((0.005 * (1 / n)) * (sum((Y - yhat) * (-beta3 * x * exp(-z3) / ((1 + exp(-z3))^2)))))
+  
+  alpha = alpha_new
+  beta1 = beta1_new
+  beta2 = beta2_new
+  beta3 = beta3_new
+  a1 = a1_new
+  a2 = a2_new
+  a3 = a3_new
+  b1 <- b1_new
+  b2 <- b2_new
+  b3 <- b3_new
+  
+  z1 = a1 + b1*x
+  z2 = a2 + b2*x
+  z3 = a3 + b3*x
+  sig1 = 1/(1 + exp(-z1))
+  sig2 = 1/(1 + exp(-z2))
+  sig3 = 1/(1 + exp(-z3))
+  
+  yhat <- alpha + beta1 * sig1 + beta2 * sig2 + beta3 * sig3
+  
+  MSE_new <- sum((Y - yhat) ^ 2) / n
+  MSE <- c(MSE, MSE_new)
+  d = tail(abs(diff(MSE)), 1)
+  
+  if (round(d, 12) == 0) converged = T
+  iterations = iterations + 1
+  if (iterations > 2000000) converged = T
+}
+
+c(alpha, beta1, beta2, beta3)
+c(a1, a2, a3)
+c(b1, b2, b3)
+
+z1 = a1 + b1 * x
+z2 = a2 + b2 * x
+z3 = a3 + b3 * x
+sig1 = 1 / (1 + exp(-z1))
+sig2 = 1 / (1 + exp(-z2))
+sig3 = 1 / (1 + exp(-z3))
+
+yhat <- alpha + beta1*sig1 + beta2*sig2 + beta3*sig3
+plot(x, Y, main="Simulated data",  col= "grey")
+lines(x, yhat, col="red", lwd = 3)
+```
+
+
+In a regular network, the number of parameters is usually very large and it gets even larger in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.       
 
 ## Neural Network - More inputs
 

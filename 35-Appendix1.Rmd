@@ -505,9 +505,11 @@ grdescent <- function(x, y, lr, maxiter) {
     b <- b_new
     c <- c_new
     yhat <- b * x + c
+    
     MSE_new <- sum((y - yhat) ^ 2) / n
     MSE <- c(MSE, MSE_new)
     d = tail(abs(diff(MSE)), 1)
+    
     if (round(d, 12) == 0) {
       converged = T
       return(paste("Iterations: ",
@@ -541,8 +543,133 @@ This is good.  But, if start a very low number with a small learning rate, then 
 grdescent(x1, Y, 0.005, 1000000)
 ```
 
-Yes, the main question is how do we find out what the learning rate should be?  It is an active research question and to answer it is beyond this chapter. A general suggestion, however, is to keep it small and tune it within the training process. Obviously, we can have an adaptive learning rate that changes at each iteration depending on the change in the MSE.  If the change is positive, for example, the learning rate can be reduced to keep the descent.  
+Yes, the main question is how do we find out what the learning rate should be?  A general suggestion is to keep it small and tune it within the training process. Obviously, we can have an adaptive learning rate that changes at each iteration depending on the change in the MSE.  If the change is positive, for example, the learning rate can be reduced to keep the descent.  
+
+### Adjustable `lr` and SGD
+
+An adjustable learning rate has several advantages over a fixed learning rate in gradient-based optimization algorithms like stochastic gradient descent:
   
+- Faster convergence: An adjustable learning rate can help the algorithm converge faster by starting with a larger learning rate, allowing the model to make bigger steps in the initial phase. This can help escape local minima or saddle points more quickly and reach the vicinity of the global minimum. 
+- Improved precision: As the learning rate decreases over time, the algorithm takes smaller steps, allowing for more precise updates to the model parameters. This can help the model fine-tune its parameters and potentially achieve a lower loss value compared to a fixed learning rate. 
+- Prevent oscillations: A fixed learning rate might cause oscillations around the optimal solution, whereas an adjustable learning rate can help dampen these oscillations by gradually reducing the step size. This can result in a more stable convergence. 
+- Adaptive to problem complexity: Some optimization problems might require different learning rates for different stages of the optimization process. An adjustable learning rate can adapt to the problem's complexity, allowing the model to learn at a more suitable pace for each stage. 
+- Robustness: An adjustable learning rate can make the optimization algorithm more robust to the choice of the initial learning rate. Even if the initial learning rate is not perfect, the algorithm can adapt over time and still reach a reasonable solution.  
+
+Although an adjustable learning rate can lead to faster convergence, improved precision, and better overall performance in gradient-based optimization algorithms, it also introduces additional hyperparameters (e.g., decay rate, annealing schedule) that need to be tuned for optimal performance.
+
+Below, we made some changes to earlier gradient descent to make it stochastic with an adaptive learning rate.  In this modified code, we have implemented the following changes:
+
+- Shuffled the data points using the `sample()` function. 
+- Iterated over the data points in mini-batches of size 1 (`batch_size = 1`). This makes it **stochastic gradient descent**. 
+- Re-calculated the gradients and updated the weights for each mini-batch.
+
+This should give us a simple stochastic gradient descent implementation for our linear regression problem.  To implement an adjustable learning rate, we can use a learning rate scheduler or a learning rate annealing method. The following example shows how to use a simple exponential learning rate annealing method, which will decrease the learning rate over time:
+  
+```{r opt16a, cache=TRUE}
+# Set the seed
+set.seed(1001)
+
+# Generate data
+N <- 100
+int <- rep(1, N)
+x1 <- rnorm(N, mean = 10, sd = 2)
+Y <- rnorm(N, 2*x1 + int, 1)
+model <- lm(Y ~ x1)
+b <- coef(model)
+b
+
+# Starting points
+set.seed(234)
+b <- runif(1, 0, 1)
+c <- runif(1, 0, 1)
+n <- length(x1)
+
+# Parameters
+initial_learning_rate <- 0.01
+decay_rate <- 0.99999
+batch_size <- 1
+max_iterations <- 300000
+tolerance <- 1e-12
+
+# Function
+yhat <- c + b * x1
+
+# Gradient
+MSE <- sum((Y - yhat) ^ 2) / n
+converged = F
+iterations = 0
+num_batches <- ceiling(n / batch_size)
+
+# While loop
+while (converged == F) {
+  # Shuffle data points
+  indices <- sample(n, n)
+  
+  for (i in seq(1, n, by = batch_size)) {
+    idx <- indices[i:min(i + batch_size - 1, n)]
+    x_batch <- x1[idx]
+    y_batch <- Y[idx]
+    
+    yhat_batch <- c + b * x_batch
+    
+    learning_rate <- initial_learning_rate * decay_rate^iterations
+    
+    b_new <- b - learning_rate * ((1 / length(idx)) * 
+                                    sum((y_batch - yhat_batch) *
+                                          x_batch * (-1)))
+    c_new <- c - learning_rate * ((1 / length(idx)) *
+                                    sum(y_batch - yhat_batch) * (-1))
+    
+    b <- b_new
+    c <- c_new
+  }
+  
+  yhat <- b * x1 + c
+  MSE_new <- sum((Y - yhat) ^ 2) / n
+  d = abs(MSE_new - tail(MSE, 1))
+  
+  if (d < tolerance) converged = T
+  MSE <- c(MSE, MSE_new)
+  
+  iterations = iterations + 1
+  if (iterations > max_iterations) converged = T
+}
+
+c(iterations, c, b)
+```
+  
+Stochastic Gradient Descent (SGD) tends to be faster than plain Gradient Descent (GD) when working with large datasets. The main reason for this is that SGD updates the model parameters more frequently, using only a random subset of data points (or even a single data point) in each update, while GD uses the entire dataset for each update.
+
+The main advantage of using SGD over plain GD is related to the convergence speed and the ability to escape local minima.  In SGD, the model parameters are updated after each mini-batch (in this case, a single data point), whereas in GD, the updates happen after going through the entire dataset. As a result, SGD can converge faster than GD because it performs more frequent updates, which can be especially beneficial when working with large datasets.
+
+Moreover, SGD introduces randomness in the optimization process due to the random sampling of data points. This stochastic nature can help the algorithm to escape local minima and find a better (global) minimum. In the case of plain GD, the algorithm always follows the true gradient, which can cause it to get stuck in sharp, non-optimal minima.
+
+However, there are some trade-offs when using SGD. The updates in SGD can be noisy because they are based on a random subset of data points, which can lead to fluctuations in the learning process. This can make the algorithm's convergence path look less smooth than in the case of plain GD.  Further, SGD often requires more careful tuning of hyperparameters, such as the learning rate and batch size. In some cases, a learning rate schedule (decreasing the learning rate over time) can be used to improve convergence.
+
+In summary, while SGD can offer faster convergence and better ability to escape local minima, it comes with the trade-off of noisier updates and may require more careful hyperparameter tuning.  When working with large datasets, we can also consider using mini-batch gradient descent, which is a compromise between GD and SGD. Mini-batch gradient descent uses a small batch of data points to compute the gradient, rather than the entire dataset (GD) or a single data point (SGD). This can offer a good balance between computational efficiency and convergence properties.
+
+In the SGD code above, the decay rate is a hyperparameter that controls the rate at which the learning rate decreases over time in an adjustable learning rate schedule. Choosing an appropriate decay rate depends on the specific problem, the model, and the optimization algorithm being used. In practice, the decay rate is often chosen empirically through experimentation or by using techniques such as cross-validation or grid search.
+
+Here are some guidelines to help us choose an appropriate decay rate:
+  
+- A common starting point for the decay rate is 0.99, as it provides a relatively slow decay of the learning rate. However, this value might not be optimal for all problems, so you should treat it as a starting point and experiment with different values to see what works best for your specific problem. 
+- If the optimization problem is complex or has a highly non-convex loss surface, you might want to choose a smaller decay rate (e.g., 0.9 or 0.95) to allow for a faster reduction in the learning rate. This can help the model escape local minima or saddle points more quickly. On the other hand, if the problem is relatively simple, you might want to choose a larger decay rate (e.g., 0.995 or 0.999) to keep the learning rate higher for a longer period. 
+- Since there is no one-size-fits-all answer for the decay rate, it is essential to experiment with different values and observe how they affect the optimization process. You can use techniques such as cross-validation or grid search to systematically explore different decay rate values and choose the one that yields the best performance. 
+- It can be helpful to monitor the learning rate during training to ensure that it is decaying at an appropriate pace. If the learning rate is decreasing too quickly, it might result in slow convergence or getting stuck in local minima. If the learning rate is decreasing too slowly, it might cause oscillations around the optimal solution and prevent the model from converging.  
+
+Learning rate scheduler is a more general concept than the specific exponential decay method we demonstrated here. A learning rate scheduler is a technique used to adjust the learning rate during the training process according to a pre-defined schedule or rule. The exponential decay method is just one example of a learning rate scheduler.
+
+There are various learning rate scheduler strategies:
+  
+- Exponential decay: The learning rate is multiplied by a fixed decay rate at each iteration or epoch, as demonstrated in the previous example. 
+- Step decay: The learning rate is reduced by a fixed factor at specific intervals, such as every N epochs. For example, the learning rate could be reduced by a factor of 0.5 every 10 epochs. 
+- Time-based decay: The learning rate is reduced according to a function of the elapsed training time or the number of iterations. For example, the learning rate could be reduced by a factor proportional to the inverse of the square root of the number of iterations. 
+- Cosine annealing: The learning rate is reduced following a cosine function, which allows for periodic "restarts" of the learning rate, helping the optimization process escape local minima or saddle points. 
+- Cyclic learning rates: The learning rate is varied cyclically within a predefined range, allowing the model to explore different areas of the loss surface more effectively. 
+- Adaptive learning rates: These learning rate schedulers adjust the learning rate based on the progress of the optimization process, such as the improvement in the loss function or the validation accuracy. Some well-known adaptive learning rate methods include AdaGrad, RMSprop, and Adam. 
+
+The choice of the learning rate scheduler depends on the specific problem, the model, and the optimization algorithm being used. It's essential to experiment with different learning rate schedulers and monitor the training progress to find the best strategy for a particular problem.
+
 ### Multivariable
 
 We will expand the gradient descent algorithms with an multivariable example using matrix algebra.  First, the data and model simulation:

@@ -296,6 +296,7 @@ div.csl-indent {
 <li class="chapter" data-level="14.4.3" data-path="ensemble-applications.html"><a href="ensemble-applications.html#boosting-vs.-others"><i class="fa fa-check"></i><b>14.4.3</b> Boosting vs. Others</a></li>
 <li class="chapter" data-level="14.4.4" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-1"><i class="fa fa-check"></i><b>14.4.4</b> Classification</a></li>
 <li class="chapter" data-level="14.4.5" data-path="ensemble-applications.html"><a href="ensemble-applications.html#adaboost.m1"><i class="fa fa-check"></i><b>14.4.5</b> AdaBoost.M1</a></li>
+<li class="chapter" data-level="14.4.6" data-path="ensemble-applications.html"><a href="ensemble-applications.html#classification-with-xgboost"><i class="fa fa-check"></i><b>14.4.6</b> Classification with XGBoost</a></li>
 </ul></li>
 </ul></li>
 <li class="part"><span><b>V SVM &amp; Neural Networks</b></span></li>
@@ -445,7 +446,8 @@ div.csl-indent {
 <li class="chapter" data-level="38.4" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#gradient-descent-algorithm"><i class="fa fa-check"></i><b>38.4</b> Gradient Descent Algorithm</a>
 <ul>
 <li class="chapter" data-level="38.4.1" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#one-variable"><i class="fa fa-check"></i><b>38.4.1</b> One-variable</a></li>
-<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.2</b> Multivariable</a></li>
+<li class="chapter" data-level="38.4.2" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#adjustable-lr-and-sgd"><i class="fa fa-check"></i><b>38.4.2</b> Adjustable <code>lr</code> and SGD</a></li>
+<li class="chapter" data-level="38.4.3" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#multivariable"><i class="fa fa-check"></i><b>38.4.3</b> Multivariable</a></li>
 </ul></li>
 <li class="chapter" data-level="38.5" data-path="algorithmic-optimization.html"><a href="algorithmic-optimization.html#optimization-with-r"><i class="fa fa-check"></i><b>38.5</b> Optimization with R</a></li>
 </ul></li>
@@ -554,10 +556,10 @@ where <span class="math inline">\(i\)</span> is the index of the original variab
 <p>This method tries to find values of the loadings that bring the estimate of the total communality close to the total of the observed variances. The covariances are ignored. Remember, the communality is the part of the variance of the variable that is explained by the factors. So a larger communality means a more successful factor model in explaining the variable.</p>
 <p>Let’s have an example. The data set is called <code>bfi</code> and comes from the <code>psych</code> package.</p>
 <p>The data includes 25 self-reported personality items from the International Personality Item Pool, gender, education level, and age for 2800 subjects. The personality items are split into 5 categories: Agreeableness (A), Conscientiousness (C), Extraversion (E), Neuroticism (N), Openness (O). Each item was answered on a six point scale: 1 Very Inaccurate to 6 Very Accurate.</p>
-<div class="sourceCode" id="cb1113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1113-1"><a href="factor-analysis.html#cb1113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
-<span id="cb1113-2"><a href="factor-analysis.html#cb1113-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GPArotation)</span>
-<span id="cb1113-3"><a href="factor-analysis.html#cb1113-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;bfi&quot;</span>)</span>
-<span id="cb1113-4"><a href="factor-analysis.html#cb1113-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(bfi)</span></code></pre></div>
+<div class="sourceCode" id="cb1120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1120-1"><a href="factor-analysis.html#cb1120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1120-2"><a href="factor-analysis.html#cb1120-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GPArotation)</span>
+<span id="cb1120-3"><a href="factor-analysis.html#cb1120-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;bfi&quot;</span>)</span>
+<span id="cb1120-4"><a href="factor-analysis.html#cb1120-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(bfi)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    2800 obs. of  28 variables:
 ##  $ A1       : int  2 2 5 4 2 6 2 4 4 2 ...
 ##  $ A2       : int  4 4 4 4 3 6 5 3 3 5 ...
@@ -588,7 +590,7 @@ where <span class="math inline">\(i\)</span> is the index of the original variab
 ##  $ education: int  NA NA NA NA NA 3 NA 2 1 NA ...
 ##  $ age      : int  16 18 17 17 17 21 18 19 19 17 ...</code></pre>
 <p>To get rid of missing observations and the last three variables,</p>
-<div class="sourceCode" id="cb1115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1115-1"><a href="factor-analysis.html#cb1115-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> bfi[<span class="fu">complete.cases</span>(bfi[, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]), <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1122-1"><a href="factor-analysis.html#cb1122-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> bfi[<span class="fu">complete.cases</span>(bfi[, <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]), <span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>]</span></code></pre></div>
 <p>The first decision that we need make is the number of factors that we will need to extract. For <span class="math inline">\(p=25\)</span>, the variance-covariance matrix <span class="math inline">\(\Sigma\)</span> contains
 <span class="math display">\[
 \frac{p(p+1)}{2}=\frac{25 \times 26}{2}=325
@@ -598,11 +600,11 @@ unique elements or entries. With <span class="math inline">\(m\)</span> factors,
 p(m+1)=25(m+1)
 \]</span></p>
 <p>Taking <span class="math inline">\(m=5\)</span>, we have 150 parameters in the factor model. How do we choose <span class="math inline">\(m\)</span>? Although it is common to look at the results of the principal components analysis, often in social sciences, the underlying theory within the field of study indicates how many factors to expect.</p>
-<div class="sourceCode" id="cb1116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1116-1"><a href="factor-analysis.html#cb1116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb1123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1123-1"><a href="factor-analysis.html#cb1123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scree</span>(df)</span></code></pre></div>
 <p><img src="28-FactorAnalysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>Let’s use the <code>factanal()</code> function of the build-in <code>stats</code> package, which performs maximum likelihood estimation.</p>
-<div class="sourceCode" id="cb1117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1117-1"><a href="factor-analysis.html#cb1117-1" aria-hidden="true" tabindex="-1"></a>pa.out <span class="ot">&lt;-</span> <span class="fu">factanal</span>(df, <span class="at">factors =</span> <span class="dv">5</span>)</span>
-<span id="cb1117-2"><a href="factor-analysis.html#cb1117-2" aria-hidden="true" tabindex="-1"></a>pa.out</span></code></pre></div>
+<div class="sourceCode" id="cb1124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1124-1"><a href="factor-analysis.html#cb1124-1" aria-hidden="true" tabindex="-1"></a>pa.out <span class="ot">&lt;-</span> <span class="fu">factanal</span>(df, <span class="at">factors =</span> <span class="dv">5</span>)</span>
+<span id="cb1124-2"><a href="factor-analysis.html#cb1124-2" aria-hidden="true" tabindex="-1"></a>pa.out</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## factanal(x = df, factors = 5)
@@ -656,7 +658,7 @@ p(m+1)=25(m+1)
 \hat{h}_i^2=\sum_{j=1}^m \hat{l}_{i j}^2
 \]</span></p>
 <p>A well-fit factor model has low values for uniqueness and high values for communality. One way to calculate the communality is to subtract the uniquenesses from 1.</p>
-<div class="sourceCode" id="cb1119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1119-1"><a href="factor-analysis.html#cb1119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings <span class="sc">^</span> <span class="dv">2</span>, <span class="dv">1</span>, sum) <span class="co"># communality</span></span></code></pre></div>
+<div class="sourceCode" id="cb1126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1126-1"><a href="factor-analysis.html#cb1126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings <span class="sc">^</span> <span class="dv">2</span>, <span class="dv">1</span>, sum) <span class="co"># communality</span></span></code></pre></div>
 <pre><code>##        A1        A2        A3        A4        A5        C1        C2        C3 
 ## 0.1703640 0.4237506 0.5337657 0.3088959 0.4881042 0.3401202 0.4313729 0.3227542 
 ##        C4        C5        E1        E2        E3        E4        E5        N1 
@@ -665,7 +667,7 @@ p(m+1)=25(m+1)
 ## 0.6630751 0.5222584 0.4932099 0.3356293 0.3253527 0.2558864 0.4815981 0.2484000 
 ##        O5 
 ## 0.2740596</code></pre>
-<div class="sourceCode" id="cb1121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1121-1"><a href="factor-analysis.html#cb1121-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings <span class="sc">^</span> <span class="dv">2</span>, <span class="dv">1</span>, sum) <span class="co"># uniqueness</span></span></code></pre></div>
+<div class="sourceCode" id="cb1128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1128-1"><a href="factor-analysis.html#cb1128-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">apply</span>(pa.out<span class="sc">$</span>loadings <span class="sc">^</span> <span class="dv">2</span>, <span class="dv">1</span>, sum) <span class="co"># uniqueness</span></span></code></pre></div>
 <pre><code>##        A1        A2        A3        A4        A5        C1        C2        C3 
 ## 0.8296360 0.5762494 0.4662343 0.6911041 0.5118958 0.6598798 0.5686271 0.6772458 
 ##        C4        C5        E1        E2        E3        E4        E5        N1 
@@ -677,10 +679,10 @@ p(m+1)=25(m+1)
 <p>The table under the loadings reports the proportion of variance explained by each factor. <code>Proportion Var</code> shows the proportion of variance explained by each factor. The row <code>Cumulative Var</code> is the cumulative <code>Proportion Var</code>. Finally, the row <code>SS loadings</code> reports the sum of squared loadings. This can be used to determine a factor worth keeping (Kaiser Rule).</p>
 <p>The last section of the output reports a significance test: The null hypothesis is that the number of factors in the model is sufficient to capture the full dimensionality of the data set. Hence, in our example, we fitted not an appropriate model.</p>
 <p>Finally, we may compare estimated correlation matrix, <span class="math inline">\(\hat{\Sigma}\)</span> and the observed correlation matrix:</p>
-<div class="sourceCode" id="cb1123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1123-1"><a href="factor-analysis.html#cb1123-1" aria-hidden="true" tabindex="-1"></a>Lambda <span class="ot">&lt;-</span> pa.out<span class="sc">$</span>loadings</span>
-<span id="cb1123-2"><a href="factor-analysis.html#cb1123-2" aria-hidden="true" tabindex="-1"></a>Psi <span class="ot">&lt;-</span> <span class="fu">diag</span>(pa.out<span class="sc">$</span>uniquenesses)</span>
-<span id="cb1123-3"><a href="factor-analysis.html#cb1123-3" aria-hidden="true" tabindex="-1"></a>Sigma_hat <span class="ot">&lt;-</span> Lambda <span class="sc">%*%</span> <span class="fu">t</span>(Lambda) <span class="sc">+</span> Psi</span>
-<span id="cb1123-4"><a href="factor-analysis.html#cb1123-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Sigma_hat)</span></code></pre></div>
+<div class="sourceCode" id="cb1130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1130-1"><a href="factor-analysis.html#cb1130-1" aria-hidden="true" tabindex="-1"></a>Lambda <span class="ot">&lt;-</span> pa.out<span class="sc">$</span>loadings</span>
+<span id="cb1130-2"><a href="factor-analysis.html#cb1130-2" aria-hidden="true" tabindex="-1"></a>Psi <span class="ot">&lt;-</span> <span class="fu">diag</span>(pa.out<span class="sc">$</span>uniquenesses)</span>
+<span id="cb1130-3"><a href="factor-analysis.html#cb1130-3" aria-hidden="true" tabindex="-1"></a>Sigma_hat <span class="ot">&lt;-</span> Lambda <span class="sc">%*%</span> <span class="fu">t</span>(Lambda) <span class="sc">+</span> Psi</span>
+<span id="cb1130-4"><a href="factor-analysis.html#cb1130-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Sigma_hat)</span></code></pre></div>
 <pre><code>##             A1         A2         A3         A4         A5          C1
 ## A1  1.00000283 -0.2265272 -0.2483489 -0.1688548 -0.2292686 -0.03259104
 ## A2 -0.22652719  0.9999997  0.4722224  0.3326049  0.4275597  0.13835721
@@ -717,7 +719,7 @@ p(m+1)=25(m+1)
 ## A5 -0.05224734
 ## C1 -0.15426539</code></pre>
 <p>Let’s check the differences:</p>
-<div class="sourceCode" id="cb1125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1125-1"><a href="factor-analysis.html#cb1125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(<span class="fu">cor</span>(df)) <span class="sc">-</span> <span class="fu">head</span>(Sigma_hat), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1132-1"><a href="factor-analysis.html#cb1132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(<span class="fu">cor</span>(df)) <span class="sc">-</span> <span class="fu">head</span>(Sigma_hat), <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##       A1    A2    A3    A4    A5    C1    C2    C3    C4    C5    E1    E2
 ## A1  0.00 -0.12 -0.03  0.01  0.04  0.05  0.06  0.03  0.09  0.00  0.08  0.03
 ## A2 -0.12  0.00  0.03  0.02 -0.03 -0.04 -0.05  0.03 -0.03  0.02 -0.04 -0.01
