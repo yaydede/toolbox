@@ -91,7 +91,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -104,7 +104,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -529,8 +529,8 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 <h2><span class="header-section-number">25.1</span> Keras<a href="recurrent-neural-networks.html#keras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will use the Keras deep-learning framework (<a href="https://keras.rstudio.com" class="uri">https://keras.rstudio.com</a>) and the package <code>keras</code>, which provides high-level building blocks for developing deep-learning models. Keras operates on several tensor libraries to tensor manipulations and differentiation, one of which is TensorFlow.</p>
 <p>Tensors are simply multidimensional arrays, which are a generalization of vectors and matrices to an arbitrary number of dimensions. For example, vectors are 1D tensors, matrices are used for 2D tensors, and arrays (which support any number of dimensions) are used for multi-dimensional objects. Keras works on CPUs, but the most efficient implementations of Keras use NVIDIA GPUs and properly configured CUDA and cuDNN libraries. For CPU-based installation of Keras, which is what we use in this chapter, we suggest the following steps after installing the <code>keras</code> package.</p>
-<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb978-1"><a href="recurrent-neural-networks.html#cb978-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.unsetenv (&quot;RETICULATE_PYTHON&quot;)</span></span>
-<span id="cb978-2"><a href="recurrent-neural-networks.html#cb978-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes : sinstall_github(&quot;Istudio/reticulate&quot;)</span></span>
+<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb978-1"><a href="recurrent-neural-networks.html#cb978-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.unsetenv(&quot;RETICULATE_PYTHON&quot;)</span></span>
+<span id="cb978-2"><a href="recurrent-neural-networks.html#cb978-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;rstudio/reticulate&quot;)</span></span>
 <span id="cb978-3"><a href="recurrent-neural-networks.html#cb978-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reticulate::install_miniconda()</span></span>
 <span id="cb978-4"><a href="recurrent-neural-networks.html#cb978-4" aria-hidden="true" tabindex="-1"></a><span class="co"># keras::install_keras ()</span></span></code></pre></div>
 <p>The best source using Keras for artificial neural network projects with R is “Deep Learning with R” by Chollet and Allaire. In this section, we will use the <code>keras</code> package (on CPU) for two main time series applications: RNN and LSTM.</p>

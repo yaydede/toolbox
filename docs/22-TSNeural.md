@@ -55,8 +55,8 @@ Tensors are simply multidimensional arrays, which are a generalization of vector
 
 
 ```r
-# Sys.unsetenv ("RETICULATE_PYTHON")
-# remotes : sinstall_github("Istudio/reticulate")
+# Sys.unsetenv("RETICULATE_PYTHON")
+# remotes::install_github("rstudio/reticulate")
 # reticulate::install_miniconda()
 # keras::install_keras ()
 ```

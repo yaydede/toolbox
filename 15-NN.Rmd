@@ -203,8 +203,8 @@ $$
   
 where $w$ is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network.  This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it.  
   
-However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  The gradient descent is explained in Chapter 38 in detail.  We will use a plain gradient descent here to solve our ANN problem below as an example
-
+However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called "stochastic."  One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well.  The gradient descent is explained in Chapter 38 in detail.  We will use a very simple plain gradient descent algorithm here to solve our ANN problem as an example:
+  
 ```{r nn7a, cache=TRUE}
 n <- 200
 set.seed(1)
@@ -303,7 +303,7 @@ lines(x, yhat, col="red", lwd = 3)
 ```
 
 
-In a regular network, the number of parameters is usually very large and it gets even larger in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.       
+This plain gradient algorithm is very simple identifying only ten parameters.  In a regular network, the number of parameters is usually very large and it gets even larger in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence.  One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII. More details on gradient descent algorithms are provided in Chapter 38 Algorithmic Optimization.        
 
 ## Neural Network - More inputs
 

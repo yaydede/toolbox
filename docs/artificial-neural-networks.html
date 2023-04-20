@@ -91,7 +91,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -104,7 +104,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -656,7 +656,7 @@ Remember,</p>
 \hat{y} = f(x)=\frac{1}{1+e^{-z}}=\frac{1}{1+e^{-(\alpha+wx)}},
 \]</span></p>
 <p>where <span class="math inline">\(w\)</span> is the weight or bias in the network. By repeating this process for each weight and bias in the network, we can calculate the error gradient and use it to adjust the weights and biases in order to minimize the error of the neural network. This can be done by using gradient descent (See Appendix 1), which is an iterative method for optimizing a differentiable objective function, typically by minimizing it.</p>
-<p>However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called “stochastic.” One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well. The gradient descent is explained in Chapter 38 in detail. We will use a plain gradient descent here to solve our ANN problem below as an example</p>
+<p>However, with a multilayer ANN, we use stochastic gradient descent (SGD), which is a faster method iteratively minimizing the loss function by taking small steps in the opposite direction of the gradient of the function at the current position. The gradient is calculated using a randomly selected subset of the data, rather than the entire data set, which is why it is called “stochastic.” One of the main advantages of SGD is that it can be implemented very efficiently and can handle large data sets very well. The gradient descent is explained in Chapter 38 in detail. We will use a very simple plain gradient descent algorithm here to solve our ANN problem as an example:</p>
 <div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb771-1"><a href="artificial-neural-networks.html#cb771-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
 <span id="cb771-2"><a href="artificial-neural-networks.html#cb771-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb771-3"><a href="artificial-neural-networks.html#cb771-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">runif</span>(n))</span>
@@ -754,7 +754,7 @@ Remember,</p>
 <span id="cb777-9"><a href="artificial-neural-networks.html#cb777-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, Y, <span class="at">main=</span><span class="st">&quot;Simulated data&quot;</span>,  <span class="at">col=</span> <span class="st">&quot;grey&quot;</span>)</span>
 <span id="cb777-10"><a href="artificial-neural-networks.html#cb777-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, yhat, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="15-NN_files/figure-html/nn7a-1.png" width="672" /></p>
-<p>In a regular network, the number of parameters is usually very large and it gets larger even in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence. One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII.</p>
+<p>This plain gradient algorithm is very simple identifying only ten parameters. In a regular network, the number of parameters is usually very large and it gets even larger in deep neural networks. Therefore, finding the most efficient (fast) backpropagation method is an active research area in the field of artificial intelligence. One of the recent developments in this area is Tensors and Tensorflow that we will talk in Section VII. More details on gradient descent algorithms are provided in Chapter 38 Algorithmic Optimization.</p>
 </div>
 <div id="neural-network---more-inputs" class="section level2 hasAnchor" number="16.3">
 <h2><span class="header-section-number">16.3</span> Neural Network - More inputs<a href="artificial-neural-networks.html#neural-network---more-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>

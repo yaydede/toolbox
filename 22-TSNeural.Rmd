@@ -56,8 +56,8 @@ We will use the Keras deep-learning framework (<https://keras.rstudio.com>) and 
 Tensors are simply multidimensional arrays, which are a generalization of vectors and matrices to an arbitrary number of dimensions. For example, vectors are 1D tensors, matrices are used for 2D tensors, and arrays (which support any number of dimensions) are used for multi-dimensional objects.  Keras works on CPUs, but the most efficient implementations of Keras use NVIDIA GPUs and properly configured CUDA and cuDNN libraries.  For CPU-based installation of Keras, which is what we use in this chapter, we suggest the following steps after installing the `keras` package.
 
 ```{r tsnn2}
-# Sys.unsetenv ("RETICULATE_PYTHON")
-# remotes : sinstall_github("Istudio/reticulate")
+# Sys.unsetenv("RETICULATE_PYTHON")
+# remotes::install_github("rstudio/reticulate")
 # reticulate::install_miniconda()
 # keras::install_keras ()
 ```
