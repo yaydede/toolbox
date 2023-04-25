@@ -64,10 +64,10 @@ This book is designed for *motivated* students and researchers with a background
 
 This book was made possible by Mutlu Yuksel, Mehmet Caner, Juri Marcucci, Atul Dar and, Andrea Guisto. This work is greatly inspired by following books and people:
 
-1.  [Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani.
-2.  [Introduction to Data Science](https://rafalab.github.io/dsbook/) by Rafael A. Irizarry.\
-3.  [Applied Statistics with R](https://daviddalpiaz.github.io/appliedstats/) by David Dalpiaz
-4.  [R for Statistical Learning](https://daviddalpiaz.github.io/r4sl/) by David Dalpiaz
+1.  [Introduction to Statistical Learning with R](http://faculty.marshall.usc.edu/gareth-james/ISL/) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani [@Gareth].
+2.  [Introduction to Data Science](https://rafalab.github.io/dsbook/) by Rafael A. Irizarry [@Irizarry_2022].
+3.  [Applied Statistics with R](https://daviddalpiaz.github.io/appliedstats/) by David Dalpiaz (https://book.stat420.org)
+4.  [R for Statistical Learning](https://daviddalpiaz.github.io/r4sl/) by David Dalpiaz (https://daviddalpiaz.github.io/r4sl/)
 
 I've also greatly benefited from my participation in the Summer School of [SiDe](https://www.side-iea.it/events/summer-schools) in 2019 on *Machine Learning Algorithms for Econometricians* by [Arthur Carpentier](https://freakonometrics.github.io) and [Emmanuel Flachaire](https://www.amse-aixmarseille.fr/fr/membres/flachaire) and in 2017 on *High-Dimensional Econometrics* by [Anders Bredahl Kock](https://sites.google.com/site/andersbkock/) and [Mehmet Caner](https://poole.ncsu.edu/people/mehmet-caner/).  I never stop  learning from these people.
 
@@ -78,6 +78,10 @@ Finally, my wife and my son, Isik and Ege, you are always my compass finding my 
 ## License {.unnumbered}
 
 ![This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).](png/cc.png)
+
+To cite this online version of the book, please use the following:
+  
+> Yigit Aydede (2023) "Toolbox for Social Scientists and Policy Analysts: Applied Predictive Analytics with Machine Learning and R",https://yaydede.github.io/toolbox/. Halifax, Canada. Accessed on <current date>.
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
