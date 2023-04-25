@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -750,7 +739,7 @@ d\left(x, x^{\prime}\right)=\sqrt{\left(x_{1}-x_{1}^{\prime}\right)^{2}+\ldots+\
 </div>
 <div id="knn-with-caret" class="section level2 hasAnchor" number="8.4">
 <h2><span class="header-section-number">8.4</span> kNN with caret<a href="nonparametric-classifier---knn.html#knn-with-caret" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are many different learning algorithms developed by different authors and often with different parametric structures. The <code>caret</code>, <strong>Classification And Regression Training</strong> package tries to consolidate these differences and provide consistency. It currently includes 237 (and growing) different methods which are summarized in the caret <a href="https://topepo.github.io/caret/available-models.html">package manual</a> <span class="citation">(<a href="#ref-Kuhn_2019" role="doc-biblioref"><strong>Kuhn_2019?</strong></a>)</span>. Here, we will use <code>mnset_27</code> to illustrate how we can use <code>caret</code> for kNN. For now, we will use the caret’s <code>train()</code> function to find the optimal <code>k</code> in kNN, which is basically an automated version of cross-validation that we will see in the next chapter.</p>
+<p>There are many different learning algorithms developed by different authors and often with different parametric structures. The <code>caret</code>, <strong>Classification And Regression Training</strong> package tries to consolidate these differences and provide consistency. It currently includes 237 (and growing) different methods which are summarized in the caret <a href="https://topepo.github.io/caret/available-models.html">package manual</a> <span class="citation">(<a href="#ref-Kuhn_2019" role="doc-biblioref">Kuhn 2019</a>)</span>. Here, we will use <code>mnset_27</code> to illustrate how we can use <code>caret</code> for kNN. For now, we will use the caret’s <code>train()</code> function to find the optimal <code>k</code> in kNN, which is basically an automated version of cross-validation that we will see in the next chapter.</p>
 <div id="mnist_27" class="section level3 hasAnchor" number="8.4.1">
 <h3><span class="header-section-number">8.4.1</span> <code>mnist_27</code><a href="nonparametric-classifier---knn.html#mnist_27" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Since, our dataset, <code>mnist_27</code>, is already split into train and test sets, we do not need to do it again. Here is the starting point:</p>
@@ -871,7 +860,7 @@ d\left(x, x^{\prime}\right)=\sqrt{\left(x_{1}-x_{1}^{\prime}\right)^{2}+\ldots+\
 </div>
 <div id="adult-dataset" class="section level3 hasAnchor" number="8.4.2">
 <h3><span class="header-section-number">8.4.2</span> Adult dataset<a href="nonparametric-classifier---knn.html#adult-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>This dataset provides information on income earning and attributes that may effect it. Information on the dataset is given at its <a href="https://archive.ics.uci.edu/ml/datasets/Adult">website</a> <span class="citation">(<a href="#ref-Kohavi_1996" role="doc-biblioref"><strong>Kohavi_1996?</strong></a>)</span>:</p>
+<p>This dataset provides information on income earning and attributes that may effect it. Information on the dataset is given at its <a href="https://archive.ics.uci.edu/ml/datasets/Adult">website</a> <span class="citation">(<a href="#ref-Kohavi_1996" role="doc-biblioref">Kohavi and Becker 1996</a>)</span>:</p>
 <blockquote>
 <p>Extraction from 1994 US. Census database. A set of reasonably clean records was extracted using the following conditions: ((<code>AAGE</code>&gt;16) &amp;&amp; (<code>AGI</code>&gt;100) &amp;&amp; (<code>AFNLWGT</code>&gt;1)&amp;&amp; (<code>HRSWK</code>&gt;0)).</p>
 </blockquote>
@@ -907,7 +896,7 @@ d\left(x, x^{\prime}\right)=\sqrt{\left(x_{1}-x_{1}^{\prime}\right)^{2}+\ldots+\
 ##  $ V15: chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
 <div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="nonparametric-classifier---knn.html#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the test set into memory</span></span>
 <span id="cb363-2"><a href="nonparametric-classifier---knn.html#cb363-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;adult_test.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>The data doesn’t have the variable names. That’s bad because we don’t know which one is which. Check the <strong>adult_names.txt</strong> file. The list of variables is given in that file. Thanks to <a href="https://rpubs.com/mbaumer/knn">Matthew Baumer</a> <span class="citation">(<a href="#ref-Baumer_2015" role="doc-biblioref"><strong>Baumer_2015?</strong></a>)</span>, we can write them manually:</p>
+<p>The data doesn’t have the variable names. That’s bad because we don’t know which one is which. Check the <strong>adult_names.txt</strong> file. The list of variables is given in that file. Thanks to <a href="https://rpubs.com/mbaumer/knn">Matthew Baumer</a> <span class="citation">(<a href="#ref-Baumer_2015" role="doc-biblioref">Baumer 2015</a>)</span>, we can write them manually:</p>
 <div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="nonparametric-classifier---knn.html#cb364-1" aria-hidden="true" tabindex="-1"></a>varNames <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Age&quot;</span>, </span>
 <span id="cb364-2"><a href="nonparametric-classifier---knn.html#cb364-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;WorkClass&quot;</span>,</span>
 <span id="cb364-3"><a href="nonparametric-classifier---knn.html#cb364-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;fnlwgt&quot;</span>,</span>
@@ -1016,6 +1005,18 @@ d\left(x, x^{\prime}\right)=\sqrt{\left(x_{1}-x_{1}^{\prime}\right)^{2}+\ldots+\
 
 
 
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Baumer_2015" class="csl-entry">
+Baumer, Matthew. 2015. <span>“K Nearest Neighbors.”</span> <a href="https://rpubs.com/mbaumer/knn">https://rpubs.com/mbaumer/knn</a>.
+</div>
+<div id="ref-Kohavi_1996" class="csl-entry">
+Kohavi, Ronny, and Barry Becker. 1996. <span>“Adult Data Set.”</span> University of California, Irvine, School of Information &amp; Computer Sciences. <a href="https://archive.ics.uci.edu/ml/datasets/Adult">https://archive.ics.uci.edu/ml/datasets/Adult</a>.
+</div>
+<div id="ref-Kuhn_2019" class="csl-entry">
+Kuhn, Max. 2019. <em>The Caret Package</em>. Bookdown. <a href="https://topepo.github.io/caret/index.html">https://topepo.github.io/caret/index.html</a>.
+</div>
+</div>
             </section>
 
           </div>

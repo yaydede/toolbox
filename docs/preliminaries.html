@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -616,13 +605,13 @@ Time-series data have also one dimension with subject followed through the time.
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="preliminaries.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb15-2"><a href="preliminaries.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># get current system date</span></span>
 <span id="cb15-3"><a href="preliminaries.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.Date</span>() </span></code></pre></div>
-<pre><code>## [1] &quot;2023-04-19&quot;</code></pre>
+<pre><code>## [1] &quot;2023-04-25&quot;</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="preliminaries.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get current system time</span></span>
 <span id="cb17-2"><a href="preliminaries.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;2023-04-19 11:36:57 ADT&quot;</code></pre>
+<pre><code>## [1] &quot;2023-04-25 13:55:20 ADT&quot;</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="preliminaries.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lubridate</span></span>
 <span id="cb19-2"><a href="preliminaries.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;2023-04-19 11:36:57 ADT&quot;</code></pre>
+<pre><code>## [1] &quot;2023-04-25 13:55:20 ADT&quot;</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="preliminaries.html#cb21-1" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;2022-07-11&quot;</span>, <span class="st">&quot;2012-04-19&quot;</span>, <span class="st">&quot;2017-03-08&quot;</span>)</span>
 <span id="cb21-2"><a href="preliminaries.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="preliminaries.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># extract years from dates</span></span>
@@ -767,8 +756,8 @@ X \sim N\left(\mu=2, \sigma^{2}=25\right)
 <pre><code>## [1] 11.79982</code></pre>
 <p>Lastly, to generate a random sample of size n = 10, we use <code>rnorm()</code></p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="preliminaries.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span></code></pre></div>
-<pre><code>##  [1]  4.3836331 -1.1331691  0.9922461  0.6891933 10.8048355  3.3261365
-##  [7]  6.2544085 -1.6801836 -2.1296000 -5.5844557</code></pre>
+<pre><code>##  [1]  1.5649876  3.0111071  6.8152639 -0.8425465 11.2252404  6.5157502
+##  [7]  7.1391864  2.6877501  0.8437574 -5.0030431</code></pre>
 <p>These functions exist for many other distributions such as: <code>binom</code> (Binomial), <code>t</code> (Student’s t), <code>pois</code> (Poisson), <code>f</code> (F), <code>chisq</code> (Chi-Squared) and so on.</p>
 </div>
 <div id="regressions" class="section level2 hasAnchor" number="2.4">
@@ -1376,7 +1365,7 @@ y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 \]</span></p>
 <p>This assumption states that the the error is normally distributed with some common variance. Also, this assumption states that the expected value of the error term is zero. In order words, the model has to be correctly specified without any omitted variable.</p>
 <p>One very important issue to understand a causal relationship is to distinguish two terms often used to describe a relationship between two variables: <strong>causation</strong> and <strong>correlation</strong>, both of which <strong>explain</strong> the relationship between <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>.</p>
-<p>Correlation is often also referred to as association. One good example is the empirical relationship between ice cream sales and the crime rate in a given region. <a href="https://en.wikipedia.org/wiki/The_Book_of_Why">It has been shown that</a> <span class="citation">(<a href="#ref-Pearl_Mackenzie_2018" role="doc-biblioref"><strong>Pearl_Mackenzie_2018?</strong></a>)</span> the correlation between these two measures are strong and positive. Just because these two variables are correlated does not necessarily mean that one causes the other (as people eat more ice cream, they commit more crimes?). Perhaps there is a third variable that explains both! And, it is known that very hot weather is that third missing factor that causes both ice cream sales and crime rates to go up. You can see many more absurd examples on the <a href="http://tylervigen.com/spurious-correlations">Spurious Correlations website</a>.</p>
+<p>Correlation is often also referred to as association. One good example is the empirical relationship between ice cream sales and the crime rate in a given region. <a href="https://en.wikipedia.org/wiki/The_Book_of_Why">It has been shown that</a> <span class="citation">(<a href="#ref-Pearl_Mackenzie_2018" role="doc-biblioref">Pearl and Mackenzie 2018</a>)</span> the correlation between these two measures are strong and positive. Just because these two variables are correlated does not necessarily mean that one causes the other (as people eat more ice cream, they commit more crimes?). Perhaps there is a third variable that explains both! And, it is known that very hot weather is that third missing factor that causes both ice cream sales and crime rates to go up. You can see many more absurd examples on the <a href="http://tylervigen.com/spurious-correlations">Spurious Correlations website</a>.</p>
 <p>Causation is distinct from correlation, because it reflects a relationship in which one variable directly effects another. Rather than just an association between variables that may be caused by a third hidden variable, causation implies a direct link between the two. Continuing the example from earlier, the very hot weather has a causal connection with both ice cream sales and crime, even though those two outcomes only share a correlation with each other.</p>
 </div>
 <div id="predictive-models" class="section level3 hasAnchor" number="2.7.2">
@@ -1519,6 +1508,12 @@ y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 
 
 
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Pearl_Mackenzie_2018" class="csl-entry">
+Pearl, Judea, and Dana Mackenzie. 2018. <em>The Book of Why</em>. 1st ed. Basic Books.
+</div>
+</div>
             </section>
 
           </div>

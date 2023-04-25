@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -620,7 +609,7 @@ When we apply condition such as this for each observation of <span class="math i
 </div>
 <div id="multivariate-loess" class="section level2 hasAnchor" number="7.5">
 <h2><span class="header-section-number">7.5</span> Multivariate Loess<a href="smoothing.html#multivariate-loess" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When there are more than two predictors, it is always advisable to use additive models either GAM or MARS. Nevertheless, let’s try <code>loess()</code> with several variables. This dataset is from <a href="http://research.stlouisfed.org/fred2">from St.Louis Federal Reserve</a>. It has 6 variables (observed monthly): <code>psavert</code>, personal savings rate; <code>pce</code>, personal consumption expenditures (in billions of dollars); <code>unemploy</code>, number of unemployed (in thousands), <code>uempmed</code> median duration of unemployment (weeks), and <code>pop</code> total population (in thousands). Although we have a time variable, <code>date</code>, we create an index for time.</p>
+<p>When there are more than two predictors, it is always advisable to use additive models either GAM or MARS. Nevertheless, let’s try <code>loess()</code> with several variables. This dataset is from <a href="http://research.stlouisfed.org/fred2">St.Louis Federal Reserve</a> <span class="citation">(<a href="#ref-FRED_1" role="doc-biblioref">FRED 2015</a>)</span>. It has 6 variables (observed monthly): <code>psavert</code>, personal savings rate; <code>pce</code>, personal consumption expenditures (in billions of dollars); <code>unemploy</code>, number of unemployed (in thousands), <code>uempmed</code> median duration of unemployment (weeks), and <code>pop</code> total population (in thousands). Although we have a time variable, <code>date</code>, we create an index for time.</p>
 <div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="smoothing.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(economics, <span class="at">package =</span> <span class="st">&quot;ggplot2&quot;</span>)</span>
 <span id="cb325-2"><a href="smoothing.html#cb325-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(economics)</span></code></pre></div>
 <pre><code>## spc_tbl_ [574 × 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
@@ -653,6 +642,12 @@ When we apply condition such as this for each observation of <span class="math i
 <span id="cb330-6"><a href="smoothing.html#cb330-6" aria-hidden="true" tabindex="-1"></a>RRSS_2</span></code></pre></div>
 <pre><code>## [1] 58.61336</code></pre>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-FRED_1" class="csl-entry">
+FRED. 2015. <span>“FRED.”</span> Federal Reserve Bank of St. Louis. <a href="https://fred.stlouisfed.org/">https://fred.stlouisfed.org/</a>.
 </div>
 </div>
             </section>

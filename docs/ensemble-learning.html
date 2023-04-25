@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -610,7 +599,7 @@ div.csl-indent {
 <div id="random-forest" class="section level2 hasAnchor" number="13.2">
 <h2><span class="header-section-number">13.2</span> Random Forest<a href="ensemble-learning.html#random-forest" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Random Forest = Bagging + subsample of covariates at each node</strong>. We have done the first part before. Random forests algorithm produces many single trees based on randomly selected a subset of observations and features. Since the algorithm leads to many single trees (like a forest) with a sufficient variation, the averaging them provides relatively a smooth and, more importantly, better predictive power than a single tree. Random forests and regression trees are particularly effective in settings with a large number of features that are correlated each other. The splits will generally ignore those covariates, and as a result, the performance will remain strong even in settings with many features.</p>
-<p>We will use the Breiman and Cutler’s <a href="https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm">Random Forests for Classification and Regression</a>: <code>randomForest()</code><span class="citation">(<a href="#ref-Brei_2004" role="doc-biblioref"><strong>Brei_2004?</strong></a>)</span>.</p>
+<p>We will use the Breiman and Cutler’s <a href="https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm">Random Forests for Classification and Regression</a>: <code>randomForest()</code><span class="citation">(<a href="#ref-Brei_2004" role="doc-biblioref">Breiman and Cutler 2004</a>)</span>.</p>
 <p>Here are the steps and the loop structure:</p>
 <ol style="list-style-type: decimal">
 <li>Select number of trees (<code>ntree</code>), subsampling parameter (<code>mtry</code>), and the tree depth <code>maxnodes</code>,</li>
@@ -728,7 +717,7 @@ gets most of the votes among the OOB cases. The proportion of times that the sel
 </div>
 <div id="boosting" class="section level2 hasAnchor" number="13.3">
 <h2><span class="header-section-number">13.3</span> Boosting<a href="ensemble-learning.html#boosting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Boosting is an ensemble method that combines a set of “weak learners” into a strong learner to improve the prediction accuracy in self-learning algorithms. In boosting, the constructed iteration selects a random sample of data, fits a model, and then train sequentially. In each sequential model, the algorithm learns from the weaknesses of its predecessor (predictions errors) and tries to compensate for the weaknesses by “boosting” the weak rules from each individual classifier. The first original boosted application was offered in 1990 by Robert Schapire (1990) <span class="citation">(<a href="#ref-Schapire" role="doc-biblioref"><strong>Schapire?</strong></a>)</span>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<p>Boosting is an ensemble method that combines a set of “weak learners” into a strong learner to improve the prediction accuracy in self-learning algorithms. In boosting, the constructed iteration selects a random sample of data, fits a model, and then train sequentially. In each sequential model, the algorithm learns from the weaknesses of its predecessor (predictions errors) and tries to compensate for the weaknesses by “boosting” the weak rules from each individual classifier. The first original boosted application was offered in 1990 by Robert Schapire (1990) <span class="citation">(<a href="#ref-Schapire" role="doc-biblioref">Schapire 1990</a>)</span>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 <p>Today, there are many boosting algorithms that are mainly grouped in the following three types:</p>
 <ul>
 <li>Gradient descent algorithm,</li>
@@ -742,7 +731,7 @@ gets most of the votes among the OOB cases. The proportion of times that the sel
 <p>In regression trees, for example, each tree is fit to the residuals from the previous tree model so that each iteration is focused on <strong>improving previous errors</strong>. This process would be very weird for an econometrician. The accepted model building practice in econometrics is that you should have a model that the errors (residuals) should be orthogonal (independent from) to covariates. Here, what we suggest is the opposite of this practice: start with a very low-depth (shallow) model that omits many relevant variables, run a linear regression, get the residuals (prediction errors), and run another regression that explains the residuals with covariates. This is called <strong>learning from mistakes</strong>.</p>
 <p>Since there is no bootstrapping, this process is open to overfitting problem as it aims to minimize the in-sample prediction error. Hence, we introduce a <strong>hyperparameter</strong> that we can tune the learning process with cross-validation to stop the overfitting and get the best predictive model.</p>
 <p>This hyperparameter (shrinkage parameter, also known as the <strong>learning rate</strong> or <strong>step-size reduction</strong>) limits the size of the errors.</p>
-<p>Let’s see the whole process in a simple example inspired by <a href="https://freakonometrics.hypotheses.org/52782">Freakonometrics</a> <span class="citation">(<a href="#ref-Hyp_2018" role="doc-biblioref"><strong>Hyp_2018?</strong></a>)</span>:</p>
+<p>Let’s see the whole process in a simple example inspired by <a href="https://freakonometrics.hypotheses.org/52782">Freakonometrics</a> <span class="citation">(<a href="#ref-Hyp_2018" role="doc-biblioref">Charpentier 2018a</a>)</span>:</p>
 <div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="ensemble-learning.html#cb603-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First we will simulate our data</span></span>
 <span id="cb603-2"><a href="ensemble-learning.html#cb603-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
 <span id="cb603-3"><a href="ensemble-learning.html#cb603-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
@@ -831,7 +820,7 @@ gets most of the votes among the OOB cases. The proportion of times that the sel
 <span id="cb610-13"><a href="ensemble-learning.html#cb610-13" aria-hidden="true" tabindex="-1"></a><span class="fu">viz</span>(<span class="dv">101</span>)</span></code></pre></div>
 <p><img src="12-Ensemble_files/figure-html/en15-1.png" width="672" /></p>
 <p>It overfits. Unlike random forests, boosting can overfit if the number of trees (B) and depth of each tree (D) are too large. By averaging over a large number of trees, bagging and random forests reduces variability. Boosting does not average over the trees.</p>
-<p>This shows that <span class="math inline">\(h\)</span> should be tuned by a proper process. The generalized <a href="https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf">boosted regression modeling (GBM)</a> <span class="citation">(<a href="#ref-Ridgeway_2020" role="doc-biblioref"><strong>Ridgeway_2020?</strong></a>)</span> can also be used for boosting regressions. Note that there are many arguments with their specific default values in the function. For example, <code>n.tree</code> (B) is 100 and <code>shrinkage</code> (<span class="math inline">\(h\)</span>) is 0.1. The <code>gbm()</code> function also has <code>interaction.depth</code> (D) specifying the maximum depth of each tree. When it is 1, the model is just an additive model, while 2 implies a model with up to 2-way interactions. A smaller <span class="math inline">\(h\)</span> typically requires more trees <span class="math inline">\(B\)</span>. It allows more and different shaped trees to attack the residuals.</p>
+<p>This shows that <span class="math inline">\(h\)</span> should be tuned by a proper process. The generalized <a href="https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf">boosted regression modeling (GBM)</a> <span class="citation">(<a href="#ref-Ridgeway_2020" role="doc-biblioref">Ridgeway 2020</a>)</span> can also be used for boosting regressions. Note that there are many arguments with their specific default values in the function. For example, <code>n.tree</code> (B) is 100 and <code>shrinkage</code> (<span class="math inline">\(h\)</span>) is 0.1. The <code>gbm()</code> function also has <code>interaction.depth</code> (D) specifying the maximum depth of each tree. When it is 1, the model is just an additive model, while 2 implies a model with up to 2-way interactions. A smaller <span class="math inline">\(h\)</span> typically requires more trees <span class="math inline">\(B\)</span>. It allows more and different shaped trees to attack the residuals.</p>
 <p>Here is the application of <code>gbm</code> to our simulated data:</p>
 <div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb611-1"><a href="ensemble-learning.html#cb611-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gbm)</span>
 <span id="cb611-2"><a href="ensemble-learning.html#cb611-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -851,7 +840,7 @@ gets most of the votes among the OOB cases. The proportion of times that the sel
 </div>
 <div id="adaboost" class="section level3 hasAnchor" number="13.3.2">
 <h3><span class="header-section-number">13.3.2</span> AdaBoost<a href="ensemble-learning.html#adaboost" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>One of the most popular boosting algorithm is <strong>AdaBost.M1</strong> due to Freund and Schpire (1997). We consider two-class problem where <span class="math inline">\(y \in\{-1,1\}\)</span>, which is a categorical outcome. With a set of predictor variables <span class="math inline">\(X\)</span>, a classifier <span class="math inline">\(\hat{m}_{b}(x)\)</span> at tree <span class="math inline">\(b\)</span> among B trees, produces a prediction taking the two values <span class="math inline">\(\{-1,1\}\)</span>.</p>
+<p>One of the most popular boosting algorithm is <strong>AdaBost.M1</strong> due to Freund and Schpire (1997)<span class="citation">(<a href="#ref-FREUND_1997" role="doc-biblioref">Freund and Schapire 1997</a>)</span>. We consider two-class problem where <span class="math inline">\(y \in\{-1,1\}\)</span>, which is a categorical outcome. With a set of predictor variables <span class="math inline">\(X\)</span>, a classifier <span class="math inline">\(\hat{m}_{b}(x)\)</span> at tree <span class="math inline">\(b\)</span> among B trees, produces a prediction taking the two values <span class="math inline">\(\{-1,1\}\)</span>.</p>
 <p>To understand how AdaBoost works, let’s look at the algorithm step by step:</p>
 <ol style="list-style-type: decimal">
 <li>Select the number of trees B, and the tree depth D;</li>
@@ -1170,7 +1159,7 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 <div class="sourceCode" id="cb655"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb655-1"><a href="ensemble-learning.html#cb655-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
 <span id="cb655-2"><a href="ensemble-learning.html#cb655-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vip</span>(tr_model,</span>
 <span id="cb655-3"><a href="ensemble-learning.html#cb655-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">aesthetics =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;green&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>)) </span></code></pre></div>
-<pre><code>## [11:37:56] WARNING: src/learner.cc:553: 
+<pre><code>## [13:56:13] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:
@@ -1189,6 +1178,24 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 <p>Note the big difference between training and test RMSPE’s. This is an indication that our “example grid” is not doing a good job. We should include regularization tuning parameters and run a full scale grid search. We will look at a classification example in the next chapter (Chapter 13).</p>
 
 </div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Brei_2004" class="csl-entry">
+Breiman, Leo, and Adele Cutler. 2004. <span>“Random Forests.”</span> <a href="https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm ">https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm </a>.
+</div>
+<div id="ref-Hyp_2018" class="csl-entry">
+———. 2018a. <span>“Classification from Scratch, Boosting 11/8.”</span> Freakonometrics. <a href="https://freakonometrics.hypotheses.org/52782">https://freakonometrics.hypotheses.org/52782</a>.
+</div>
+<div id="ref-FREUND_1997" class="csl-entry">
+Freund, Yoav, and Robert E. Schapire. 1997. <span>“A Decision-Theoretic Generalization of on-Line Learning and an Application to Boosting.”</span> <em>Journal of Computer and System Sciences</em> 55 (1): 119–39. https://doi.org/<a href="https://doi.org/10.1006/jcss.1997.1504">https://doi.org/10.1006/jcss.1997.1504</a>.
+</div>
+<div id="ref-Ridgeway_2020" class="csl-entry">
+Ridgeway, Greg. 2020. <span>“Generalized Boosted Models: A Guide to the Gbm Package.”</span> <a href="https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf ">https://cran.r-project.org/web/packages/gbm/vignettes/gbm.pdf </a>.
+</div>
+<div id="ref-Schapire" class="csl-entry">
+Schapire, Robert E. 1990. <span>“The Strength of Weak Learnability.”</span> <em>Machine Learning</em> 5: 197–227. <a href="https://web.archive.org/web/20121010030839/http://www.cs.princeton.edu/~schapire/papers/strengthofweak.pdf">https://web.archive.org/web/20121010030839/http://www.cs.princeton.edu/~schapire/papers/strengthofweak.pdf</a>.
 </div>
 </div>
 <div class="footnotes">

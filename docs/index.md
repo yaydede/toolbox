@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-04-19"
+date: "This version: 2023-04-25"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -27,7 +27,7 @@ This book delves into the first component, statistical models, without excessive
   
 ![](png/cover3.png){width=400px height=550px}
   
-According to Leo Breiman [@Breiman_2001], [Statistical Modeling: The Two Cultures](https://projecteuclid.org/download/pdf_1/euclid.ss/1009213726), there are two goals in analyzing the data:
+According to Leo Breiman [@Breiman_TC], [Statistical Modeling: The Two Cultures](https://projecteuclid.org/download/pdf_1/euclid.ss/1009213726), there are two goals in analyzing the data:
 
 > **Prediction**: To be able to predict what the responses are going to be to future input variables; **Information**: To extract some information about how nature is associating the response variables to the input variables.
 

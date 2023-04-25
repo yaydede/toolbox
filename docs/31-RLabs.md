@@ -174,22 +174,21 @@ dir()
 ## [115] "35-Appendix1_cache"             "35-Appendix1_files"            
 ## [117] "35-Appendix1.Rmd"               "36-Appendix2_cache"            
 ## [119] "36-Appendix2_files"             "36-Appendix2.Rmd"              
-## [121] "44-citations.Rmd"               "45-blocks.Rmd"                 
-## [123] "50-references.Rmd"              "adult_names.txt"               
-## [125] "adult_test.csv"                 "adult_train.csv"               
-## [127] "auto-mpg.csv"                   "book.bib"                      
-## [129] "comt.rds"                       "creditcard10.RData"            
-## [131] "dftoronto.RData"                "docs"                          
-## [133] "fes73.rds"                      "hedonic.dat"                   
-## [135] "index.md"                       "index.Rmd"                     
-## [137] "irates.dat"                     "mnist.Rdata"                   
-## [139] "myocarde.csv"                   "packages.bib"                  
-## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "render57da2956557c.rds"        
-## [145] "style.css"                      "table1.text"                   
-## [147] "toolbox.Rproj"                  "toronto2.rds"                  
-## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
-## [151] "YA_TextBook.rds"
+## [121] "50-references.Rmd"              "adult_names.txt"               
+## [123] "adult_test.csv"                 "adult_train.csv"               
+## [125] "auto-mpg.csv"                   "book.bib"                      
+## [127] "comt.rds"                       "creditcard10.RData"            
+## [129] "dftoronto.RData"                "docs"                          
+## [131] "fes73.rds"                      "hedonic.dat"                   
+## [133] "index.md"                       "index.Rmd"                     
+## [135] "irates.dat"                     "mnist.Rdata"                   
+## [137] "myocarde.csv"                   "packages.bib"                  
+## [139] "png"                            "preamble.tex"                  
+## [141] "README.md"                      "render7b6d491e7fc.rds"         
+## [143] "style.css"                      "table1.text"                   
+## [145] "toolbox.Rproj"                  "toronto2.rds"                  
+## [147] "wineQualityReds.csv"            "YA_TextBook.md"                
+## [149] "YA_TextBook.rds"
 ```
 
 ```r
@@ -1068,6 +1067,6 @@ We will see later how these conditional subsetting can be done much smoother wit
 
 ## R-Style Guide
 
-The idea is simple: your R code, or any other code in different languages, should be written in a readable and maintainable style.  Here is a [blog](https://rpahl.github.io/r-some-blog/r-style-guide/) by Roman Pahl that may help you develop a better styling in your codes. (You may find in some chapters and labs that my codes are not following the "good" styling practices.  I am trying to improve!)  
+The idea is simple: your R code, or any other code in different languages, should be written in a readable and maintainable style.  Here is a [blog](https://rpahl.github.io/r-some-blog/) by Roman Pahl that may help you develop a better styling in your codes. (You may find in some chapters and labs that my codes are not following the "good" styling practices.  I am trying to improve!)  
 
 **Next: Lists and data frames**  

@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -551,7 +540,7 @@ div.csl-indent {
 ##  $ c: chr &quot;Hello!&quot;
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, &quot;srcref&quot;)= &#39;srcref&#39; int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7fa8b6326cf0&gt; 
+##   .. ..- attr(*, &quot;srcfile&quot;)=Classes &#39;srcfilecopy&#39;, &#39;srcfile&#39; &lt;environment: 0x7fca84817fc0&gt; 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
 <div class="sourceCode" id="cb1380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1380-1"><a href="r-lab-2---basics-ii.html#cb1380-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(B)</span></code></pre></div>
 <pre><code>## [1] &quot;list&quot;</code></pre>
@@ -743,7 +732,7 @@ div.csl-indent {
 </div>
 <div id="plotting-from-data-frame" class="section level3 hasAnchor" number="35.1.5">
 <h3><span class="header-section-number">35.1.5</span> Plotting from data frame<a href="r-lab-2---basics-ii.html#plotting-from-data-frame" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>There are many good ways and packages for plotting. I’ll show you one here. Visualizing the relationship between multiple variables can get messy very quickly. Here is the <code>ggpairs()</code> function in the <strong>GGally</strong> package <span class="citation">(<a href="#ref-Tay_2019" role="doc-biblioref"><strong>Tay_2019?</strong></a>)</span>.</p>
+<p>There are many good ways and packages for plotting. I’ll show you one here. Visualizing the relationship between multiple variables can get messy very quickly. Here is the <code>ggpairs()</code> function in the <strong>GGally</strong> package.</p>
 <div class="sourceCode" id="cb1425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1425-1"><a href="r-lab-2---basics-ii.html#cb1425-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  <span class="co">#install.packages(&quot;fueleconomy&quot;)</span></span>
 <span id="cb1425-2"><a href="r-lab-2---basics-ii.html#cb1425-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
 <span id="cb1425-3"><a href="r-lab-2---basics-ii.html#cb1425-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vehicles[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, ]</span>
@@ -780,15 +769,15 @@ div.csl-indent {
 <span id="cb1429-5"><a href="r-lab-2---basics-ii.html#cb1429-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels &quot;(-2.5,0.271]&quot;,..: 2 3 3 3 3 1 2 3 2 1</code></pre>
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels &quot;(-3.96,1.19]&quot;,..: 3 2 2 3 1 3 1 1 3 1</code></pre>
 <div class="sourceCode" id="cb1431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1431-1"><a href="r-lab-2---basics-ii.html#cb1431-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardizes variable (subtracts mean and divides by standard deviation)</span></span>
 <span id="cb1431-2"><a href="r-lab-2---basics-ii.html#cb1431-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>d <span class="ot">&lt;-</span> <span class="fu">scale</span>(my_data<span class="sc">$</span>a)</span>
 <span id="cb1431-3"><a href="r-lab-2---basics-ii.html#cb1431-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(my_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels &quot;(-2.5,0.271]&quot;,..: 2 3 3 3 3 1 2 3 2 1
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels &quot;(-3.96,1.19]&quot;,..: 3 2 2 3 1 3 1 1 3 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, &quot;scaled:center&quot;)= num 5.5
 ##   ..- attr(*, &quot;scaled:scale&quot;)= num 3.03</code></pre>
@@ -799,16 +788,16 @@ div.csl-indent {
 <span id="cb1433-5"><a href="r-lab-2---basics-ii.html#cb1433-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>h <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(my_data<span class="sc">$</span>d) </span>
 <span id="cb1433-6"><a href="r-lab-2---basics-ii.html#cb1433-6" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
 <pre><code>##     a          b            c          d          f          g         h
-## 1   1  2.8267830 (0.271,3.04] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  5.0607976  (3.04,5.81] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  3.7287942  (3.04,5.81] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  5.4296145  (3.04,5.81] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  4.9322914  (3.04,5.81] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 -2.4953587 (-2.5,0.271]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  0.4315730 (0.271,3.04]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  5.8039086  (3.04,5.81]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  1.0850013 (0.271,3.04]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  0.2290942 (-2.5,0.271]  1.4863011  1.1560120         NA  0.000000</code></pre>
+## 1   1  7.1669874  (6.32,11.5] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  1.8622356  (1.19,6.32] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  3.8684596  (1.19,6.32] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  7.1216184  (6.32,11.5] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  1.1410102 (-3.96,1.19] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 11.4529402  (6.32,11.5]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7 -2.1350216 (-3.96,1.19]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  0.3369667 (-3.96,1.19]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  6.7083418  (6.32,11.5]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -3.9399884 (-3.96,1.19]  1.4863011  1.1560120         NA  0.000000</code></pre>
 </div>
 <div id="categorical-variables-in-data-frames" class="section level3 hasAnchor" number="35.1.7">
 <h3><span class="header-section-number">35.1.7</span> Categorical Variables in Data Frames<a href="r-lab-2---basics-ii.html#categorical-variables-in-data-frames" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -942,8 +931,7 @@ If you want to convert them to back to characters.</p>
 <span id="cb1470-2"><a href="r-lab-2---basics-ii.html#cb1470-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1470-3"><a href="r-lab-2---basics-ii.html#cb1470-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Try it with if-else.</span></span></code></pre></div>
 <p>The <code>ifelse()</code> function only allows for one “if” statement, two cases. You could add nested “if” statements, but that’s just a pain, especially if the 3+ conditions you want to use are all on the same level, conceptually. Is there a way to specify multiple conditions at the same time?</p>
-<p><code>dplyr()</code> is the most powerful library for data management. When you have time, read more about it!<br />
-Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)" class="uri">https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)</a></p>
+<p><code>dplyr()</code> is the most powerful library for data management. When you have time, read more about it!</p>
 <div class="sourceCode" id="cb1471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1471-1"><a href="r-lab-2---basics-ii.html#cb1471-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Let&#39;s create a data frame:</span></span>
 <span id="cb1471-2"><a href="r-lab-2---basics-ii.html#cb1471-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;name&quot;</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;Kaija&quot;</span>, <span class="st">&quot;Ella&quot;</span>, <span class="st">&quot;Andis&quot;</span>), <span class="st">&quot;test1&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>),</span>
 <span id="cb1471-3"><a href="r-lab-2---basics-ii.html#cb1471-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;test2&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
@@ -1034,7 +1022,7 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <span id="cb1485-3"><a href="r-lab-2---basics-ii.html#cb1485-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1485-4"><a href="r-lab-2---basics-ii.html#cb1485-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum the values of each column with `apply()`</span></span>
 <span id="cb1485-5"><a href="r-lab-2---basics-ii.html#cb1485-5" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, sum)</span></code></pre></div>
-<pre><code>## [1] -0.09813913  3.80388523  2.16811135 -3.61989657 -1.18188391  2.39363736</code></pre>
+<pre><code>## [1] -0.3662922  0.1197668  2.6524091  0.8211474 -2.2927842 -1.4059134</code></pre>
 <div class="sourceCode" id="cb1487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1487-1"><a href="r-lab-2---basics-ii.html#cb1487-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">2</span>, length)</span></code></pre></div>
 <pre><code>## [1] 5 5 5 5 5 5</code></pre>
 <div class="sourceCode" id="cb1489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1489-1"><a href="r-lab-2---basics-ii.html#cb1489-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(X, <span class="dv">1</span>, length)</span></code></pre></div>
@@ -1051,11 +1039,11 @@ Source: <a href="https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)
 <span id="cb1495-2"><a href="r-lab-2---basics-ii.html#cb1495-2" aria-hidden="true" tabindex="-1"></a>X_new <span class="ot">&lt;-</span> <span class="fu">apply</span>(X, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">3</span>)</span>
 <span id="cb1495-3"><a href="r-lab-2---basics-ii.html#cb1495-3" aria-hidden="true" tabindex="-1"></a>X_new</span></code></pre></div>
 <pre><code>##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.027069 3.097459 5.163892 1.141302 3.843876 2.313892
-## [2,] 4.110574 3.153890 2.853738 0.788915 1.978948 3.659133
-## [3,] 2.893520 6.030457 2.419055 2.274441 2.572441 2.635440
-## [4,] 1.827768 3.739481 3.726244 3.364199 1.847009 5.355576
-## [5,] 3.042931 2.782599 3.005183 3.811246 3.575841 3.429596</code></pre>
+## [1,] 1.296347 2.154419 2.698632 4.081763 3.294838 4.187444
+## [2,] 3.024872 3.616963 3.573454 2.809846 2.047436 2.862360
+## [3,] 2.645027 3.580737 3.481540 3.808343 2.793891 2.627911
+## [4,] 5.158016 2.653085 3.350166 2.869844 2.694531 2.827116
+## [5,] 2.509446 3.114563 4.548618 2.251351 1.876519 1.089255</code></pre>
 <p>Since <code>apply()</code> is used only for matrices, if you apply <code>apply()</code> to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences. For a safer practice in data frames, we can use <code>lappy()</code> and <code>sapply()</code>:</p>
 </div>
 <div id="lapply" class="section level4 hasAnchor" number="35.2.3.2">

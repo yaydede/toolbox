@@ -219,7 +219,7 @@ Lastly, we could use the filter and select functions from the `dplyr` package wh
 
 ### Plotting from data frame
 
-There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package [@Tay_2019].
+There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package.
 
 ```{r, warning=FALSE, message=FALSE}
 library(fueleconomy)  #install.packages("fueleconomy")
@@ -410,7 +410,6 @@ if(y > w) print("y is bigger than w")
 The `ifelse()` function only allows for one “if” statement, two cases. You could add nested “if” statements, but that’s just a pain, especially if the 3+ conditions you want to use are all on the same level, conceptually. Is there a way to specify multiple conditions at the same time?  
 
 `dplyr()` is the most powerful library for data management.  When you have time, read more about it!  
-Source: https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)  
 
 ```{r, warning=FALSE, message=FALSE}
 #Let's create a data frame:

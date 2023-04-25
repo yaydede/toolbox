@@ -301,7 +301,7 @@ Since we use the default control parameters with 10-fold CV, our first tree was 
 
 `rpart(formula, data, weights, subset, na.action = na.rpart, method, model = FALSE, x = FALSE, y = TRUE, parms, control, cost, ...)`      
   
-The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
+The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [@Atkinson_2000]:
   
 `rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, surrogatestyle = 0, maxdepth = 30, ...)`   
   
@@ -567,7 +567,7 @@ plot(x, y, col = "gray")
 lines(z, predict(fit2, data.frame(x = z)), col = "green", lwd = 3)
 ```
   
-We will use an example of predicting Baseball players’ salaries from the ISLR package [@ISLR_2021].  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
+We will use an example of predicting Baseball players’ salaries from the `ISLR` package.  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
 
 ```{r tr32, warning=FALSE, message=FALSE}
 # Hitters data

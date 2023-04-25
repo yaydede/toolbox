@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-04-19"
+date: "This version: 2023-04-25"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -27,7 +27,7 @@ This book delves into the first component, statistical models, without excessive
   
 ![](png/cover3.png){width=400px height=550px}
   
-According to Leo Breiman [@Breiman_2001], [Statistical Modeling: The Two Cultures](https://projecteuclid.org/download/pdf_1/euclid.ss/1009213726), there are two goals in analyzing the data:
+According to Leo Breiman [@Breiman_TC], [Statistical Modeling: The Two Cultures](https://projecteuclid.org/download/pdf_1/euclid.ss/1009213726), there are two goals in analyzing the data:
 
 > **Prediction**: To be able to predict what the responses are going to be to future input variables; **Information**: To extract some information about how nature is associating the response variables to the input variables.
 
@@ -281,7 +281,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-04-19"
+## [1] "2023-04-25"
 ```
 
 ```r
@@ -290,7 +290,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-04-19 11:36:57 ADT"
+## [1] "2023-04-25 13:55:20 ADT"
 ```
 
 ```r
@@ -299,7 +299,7 @@ now()
 ```
 
 ```
-## [1] "2023-04-19 11:36:57 ADT"
+## [1] "2023-04-25 13:55:20 ADT"
 ```
 
 ```r
@@ -551,8 +551,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1]  4.3836331 -1.1331691  0.9922461  0.6891933 10.8048355  3.3261365
-##  [7]  6.2544085 -1.6801836 -2.1296000 -5.5844557
+##  [1]  1.5649876  3.0111071  6.8152639 -0.8425465 11.2252404  6.5157502
+##  [7]  7.1391864  2.6877501  0.8437574 -5.0030431
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -4576,7 +4576,7 @@ In a model, non-linearity can be captured by estimating a linear regression thro
   (\#eq:6-11)
 \end{equation} 
   
-This function will not have a smooth transitions at the knots, $z.$, which brings us to a regression **spline, which is a piecewise regression model** with a smooth transition at the knots.  First, let's see how a piecewise regression works with an example.  To show evidence of nonlinearity between short and long-term interest rates, [Pfann et al (1996)](https://www.sciencedirect.com/science/article/abs/pii/0304407695017542) estimates the following piecewise linear model:  
+This function will not have a smooth transitions at the knots, $z.$, which brings us to a regression **spline, which is a piecewise regression model** with a smooth transition at the knots.  First, let's see how a piecewise regression works with an example.  To show evidence of nonlinearity between short and long-term interest rates, [@PFANN1996149] estimates the following piecewise linear model:  
 
 \begin{equation}
 y=\beta_{0}+\beta_{1} x+\beta_{2}(x-\kappa)_{+}+\varepsilon
@@ -5603,7 +5603,7 @@ The gray shaded area denotes a 95% Bayesian “confidence interval” for the un
 
 ## Multivariate Loess
 
-When there are more than two predictors, it is always advisable to use additive models either GAM or MARS.  Nevertheless, let's try `loess()` with several variables.  This dataset is from [from St.Louis Federal Reserve](http://research.stlouisfed.org/fred2).  It has 6 variables (observed monthly): `psavert`, personal savings rate; `pce`, personal consumption expenditures (in billions of dollars); `unemploy`, number of unemployed (in thousands), `uempmed` median duration of unemployment (weeks), and `pop` total population (in thousands).  Although we have a time variable, `date`, we create an index for time.
+When there are more than two predictors, it is always advisable to use additive models either GAM or MARS.  Nevertheless, let's try `loess()` with several variables.  This dataset is from [St.Louis Federal Reserve](http://research.stlouisfed.org/fred2) [@FRED_1].  It has 6 variables (observed monthly): `psavert`, personal savings rate; `pce`, personal consumption expenditures (in billions of dollars); `unemploy`, number of unemployed (in thousands), `uempmed` median duration of unemployment (weeks), and `pop` total population (in thousands).  Although we have a time variable, `date`, we create an index for time.
 
 
 ```r
@@ -9062,7 +9062,7 @@ Since we use the default control parameters with 10-fold CV, our first tree was 
 
 `rpart(formula, data, weights, subset, na.action = na.rpart, method, model = FALSE, x = FALSE, y = TRUE, parms, control, cost, ...)`      
   
-The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [-@Atkinson_2000]:
+The `control` argument controls how the tree grows. We briefly describe its arguments based on [An Introduction to Recursive Partitioning Using the RPART Routines](https://www.mayo.edu/research/documents/rpartminipdf/doc-10027257) by Atkinson et.al. [@Atkinson_2000]:
   
 `rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10, surrogatestyle = 0, maxdepth = 30, ...)`   
   
@@ -9098,8 +9098,8 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.65517 0.12863
-## 3 0.010000      2   0.24138 0.68966 0.13070
+## 2 0.034483      1   0.27586 0.51724 0.11861
+## 3 0.010000      2   0.24138 0.48276 0.11560
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9148,10 +9148,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.02492 0.045923
-## 2 0.101694      1   0.41379 0.83270 0.165938
-## 3 0.028263      2   0.31209 0.71713 0.157192
-## 4 0.010000      3   0.28383 0.70190 0.151659
+## 1 0.586213      0   1.00000 1.02721 0.046119
+## 2 0.101694      1   0.41379 0.66802 0.152862
+## 3 0.028263      2   0.31209 0.63330 0.150779
+## 4 0.010000      3   0.28383 0.64687 0.153845
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9228,9 +9228,9 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.44828 0.11237
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.55172 0.12140
+## 2 0.103448      1  0.275862 0.58621 0.12399
+## 3 0.034483      2  0.172414 0.48276 0.11560
+## 4 0.017241      6  0.034483 0.51724 0.11861
 ## 5 0.000000      8  0.000000 0.51724 0.11861
 ```
 
@@ -9246,7 +9246,7 @@ min_cp
 ```
 
 ```
-## [1] 0.1034483
+## [1] 0.03448276
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -9271,15 +9271,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
-##        CP nsplit rel error  xerror    xstd
-## 1 0.72414      0   1.00000 1.00000 0.14282
-## 2 0.10345      1   0.27586 0.44828 0.11237
+##         CP nsplit rel error  xerror    xstd
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.58621 0.12399
+## 3 0.034483      2   0.17241 0.48276 0.11560
 ```
 
 ```r
@@ -9382,9 +9383,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.538 0.029238
-## 4 0.011333      5     0.504  0.522 0.028911
-## 5 0.010000      9     0.458  0.504 0.028530
+## 3 0.015000      3     0.534  0.546 0.029398
+## 4 0.011333      5     0.504  0.532 0.029117
+## 5 0.010000      9     0.458  0.534 0.029157
 ```
 
 ```r
@@ -9523,7 +9524,7 @@ lines(z, predict(fit2, data.frame(x = z)), col = "green", lwd = 3)
 
 <img src="11-CART_files/figure-html/tr31-2.png" width="672" />
   
-We will use an example of predicting Baseball players’ salaries from the ISLR package [@ISLR_2021].  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
+We will use an example of predicting Baseball players’ salaries from the `ISLR` package.  This data set is deduced from the Baseball fielding data set reflecting the fielding performance that includes the numbers of `Errors`, `Putouts` and `Assists` made by each player.
 
 
 ```r
@@ -10132,7 +10133,7 @@ We will have more applications with `gbm` in the next chapter.  We can also have
 
 ### AdaBoost
 
-One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
+One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997)[@FREUND_1997].  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
 
 To understand how AdaBoost works, let's look at the algorithm step by step:    
 
@@ -10635,7 +10636,7 @@ vip(tr_model,
 ```
 
 ```
-## [11:37:56] WARNING: src/learner.cc:553: 
+## [13:56:13] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:
@@ -10948,7 +10949,7 @@ Random forest has the lowest RMSPE.
 
 While the task in machine learning is to achieve the best predictive capacity, for many applications identifying the major predictors could be the major objective. Of course, finding the most important predictors is contingent on the model’s predictive performance.  As we discussed earlier, however, there is a trade-off between prediction accuracy and interpretability.  Although there are many different aspects of interpretability, it refer to understanding the relationship between the predicted outcome and the predictors.
 
-The interpretability in predictive modeling is an active research area.  Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar and [Explanatory Model Analysis](https://ema.drwhy.ai) by Biecek and Burzykowski (2020). 
+The interpretability in predictive modeling is an active research area.  Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar [@Molnar] and [Explanatory Model Analysis](https://ema.drwhy.ai) by Biecek and Burzykowski (2021) [[@Biecek]. 
 
 Explorations of predictive models are classified in two major groups.  The first one is the instance-level exploration, or example-based explanation methods, which present methods for exploration of a model’s predictions for a single observation.  For example, for a particular subject (person, firm, patient), we may want to know contribution of the different features to the predicted outcome for the subject.  The main idea is to understand marginal effect of a predictor on the prediction for a specific subject. There are two important methods in this level: Shapley Additive Explanations (SHAP) and Local Interpretable Model-agnostic Explanations (LIME). We will not explain and apply them here in this book.  These two methods are easily accessible with multiple examples in both books we cited ealrier.  
 
@@ -12647,16 +12648,16 @@ Unfortunately, there is no direct way to get information on predictors with SVM,
 
 # Artificial Neural Networks
 
-Artificial neural networks (ANNs) are a type of machine learning model that are inspired by the structure and function of the human brain. They consist of interconnected units called artificial neurons or nodes, which are organized into layers. The concept of artificial neural networks dates back to the 1940s, when Warren McCulloch and Walter Pitts ([1943](https://link.springer.com/article/10.1007/BF02478259)) proposed a model of the neuron as a simple threshold logic unit. In the 1950s and 1960s, researchers began developing more complex models of neurons and exploring the use of neural networks for tasks such as pattern recognition and machine translation. However, these early efforts were largely unsuccessful due to the limited computational power of the time.
+Artificial neural networks (ANNs) are a type of machine learning model that are inspired by the structure and function of the human brain. They consist of interconnected units called artificial neurons or nodes, which are organized into layers. The concept of artificial neural networks dates back to the 1940s, when [Warren McCulloch and Walter Pitts](https://link.springer.com/article/10.1007/BF02478259) [@McCulloch] proposed a model of the neuron as a simple threshold logic unit. In the 1950s and 1960s, researchers began developing more complex models of neurons and exploring the use of neural networks for tasks such as pattern recognition and machine translation. However, these early efforts were largely unsuccessful due to the limited computational power of the time.
 
-It wasn't until the 1980s and 1990s that significant progress was made in the development of artificial neural networks, thanks to advances in computer technology and the availability of larger and more diverse datasets. In [1986](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf), Geoffrey Hinton and his team developed the backpropagation algorithm, which revolutionized the field by allowing neural networks to be trained more efficiently and accurately.  Since then, artificial neural networks have been applied to a wide range of tasks, including image and speech recognition, natural language processing, and even playing games like chess and Go. They have also been used in a variety of fields, including finance, healthcare, and transportation.  Today, artificial neural networks are an important tool in the field of machine learning, and continue to be an active area of research and development.
+It wasn't until the 1980s and 1990s that significant progress was made in the development of artificial neural networks, thanks to advances in computer technology and the availability of larger and more diverse datasets. In [1986](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf), Geoffrey Hinton and his team [@Rumelhart] developed the backpropagation algorithm, which revolutionized the field by allowing neural networks to be trained more efficiently and accurately.  Since then, artificial neural networks have been applied to a wide range of tasks, including image and speech recognition, natural language processing, and even playing games like chess and Go. They have also been used in a variety of fields, including finance, healthcare, and transportation.  Today, artificial neural networks are an important tool in the field of machine learning, and continue to be an active area of research and development.
 
 There have been many influential works accomplished in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential works in the history of ANNs:
   
-- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt (1958): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
-- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams (1986): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
-- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. (1998): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
-- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton (2015): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
+- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt ([@Rosenblatt]): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
+- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams ([@Rumelhart]): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
+- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. ([@lecun]): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
+- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton ([@lecun2]): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
 
 ## Neural Network - the idea
 Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks.  
@@ -13096,7 +13097,7 @@ $$
 y \approx \alpha+\sum_{m=1}^M \beta_m f\left(\alpha_m^{(1)}+\underbrace{\sum_{p=1}^P f\left(\alpha_p^{(2)}+\textbf{X} \delta_p^{(2)}\right)}_{\text {it replaces } \textbf{X}} \delta_m^{(1)}\right)
 $$
    
-Before having an application, we should note the number of available packages that offer ANN implementations in R and with Python. For example, CRAN hosts more than 80 packages related to neural network modeling. Above, we just saw one example with `neuralnet`.  The work by [Mahdi et al, 2021](https://www.inmodelia.com/exemples/2021-0103-RJournal-SM-AV-CD-PK-JN.pdf) surveys and ranks these packages for their accuracy, reliability, and ease-of-use.  
+Before having an application, we should note the number of available packages that offer ANN implementations in R and with Python. For example, CRAN hosts more than 80 packages related to neural network modeling. Above, we just saw one example with `neuralnet`.  The work by [Mahdi et al, 2021](https://www.inmodelia.com/exemples/2021-0103-RJournal-SM-AV-CD-PK-JN.pdf) ([@salsabila_mahdi_2022_7415417] surveys and ranks these packages for their accuracy, reliability, and ease-of-use.  
   
 
 ```r
@@ -13148,8 +13149,8 @@ A simple ANN might have only a few layers and a relatively small number of neuro
 
 Here are a few resources that provide information about the interpretability of artificial neural networks (ANNs):  
   
-- [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar is a online book that provides an overview of interpretability in machine learning, including techniques for interpreting ANNs. 
-- [Interpretability of Deep Neural Networks](https://ieeexplore.ieee.org/document/8397411) by Chakraborty is a survey paper that discusses the interpretability of deep neural networks and presents an overview of the various techniques and approaches that have been developed to improve their interpretability.  
+- [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) by Christoph Molnar ([@Molnar]is a online book that provides an overview of interpretability in machine learning, including techniques for interpreting ANNs. 
+- [Interpretability of Deep Neural Networks](https://ieeexplore.ieee.org/document/8397411) by Chakraborty [@8397411] is a survey paper that discusses the interpretability of deep neural networks and presents an overview of the various techniques and approaches that have been developed to improve their interpretability.  
 
 Before concluding this section we apply DNN to a classification problem using the same data that we have in Chapter 14.4.4.  
 
@@ -13236,7 +13237,7 @@ for (i in 1:n) {
 
 Again the results are not very convincing to use DNN in this example.
    
-Let's have a more complex task with the [Red Wine](https://www.kaggle.com/datasets/piyushgoyal443/red-wine-dataset?resource=download) dataset from Kaggle ([Cortez et.al, 2009](https://www.sciencedirect.com/science/article/abs/pii/S0167923609001377)).  Our job us to use 11 attributes to classify each wine. 
+Let's have a more complex task with the [Red Wine](https://www.kaggle.com/datasets/piyushgoyal443/red-wine-dataset?resource=download) dataset from ([Kaggle](https://www.sciencedirect.com/science/article/abs/pii/S0167923609001377), [@CORTEZ2009547]).  Our job us to use 11 attributes to classify each wine. 
   
 
 ```r
@@ -13407,7 +13408,7 @@ where $\mathcal{L}$ could be conditional mean, quantiles, expectiles, $m$ could 
 
 There are two fundamental goals in statistical learning: achieving a high prediction accuracy and identifying relevant predictors. The second objective, variable selection, is particularly important when there is a true sparsity in the underlying model. By their nature, penalized parametric models are not well-performing tools for prediction.  But, they provide important tools for model selection specially when $p>N$ and the true model is sparse.  This section starts with two major models in regularized regressions, Ridge and Lasso, and develops an idea on sparse statistical modelling with Adaptive Lasso.
 
-Although there are many sources on the subject, perhaps the most fundamental one is [Statistical Learning with Sparsity](https://hastie.su.domains/StatLearnSparsity/) by Hastie et al. (2015).
+Although there are many sources on the subject, perhaps the most fundamental one is [Statistical Learning with Sparsity](https://hastie.su.domains/StatLearnSparsity/) by Hastie et al. ([@Hastie]).
 
 # Ridge
 
@@ -13444,7 +13445,7 @@ where,
 
 The hyperparameter $\lambda$ controls the relative impact of the penalization on the regression coefficient estimates. When $\lambda = 0$, the cost function becomes RSS (residual sum of squares), that is the cost function of OLS and the estimations, produce the least squares estimates. However, as $\lambda$ gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply the mean of the response, when all features are zero.
 
-Let's apply this to the same data we used earlier, `Hitters` from the [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/) [@ISLR_2021] package:
+Let's apply this to the same data we used earlier, `Hitters` from the [ISLR](http://faculty.marshall.usc.edu/gareth-james/ISL/) package:
 
 
 ```r
@@ -13726,7 +13727,7 @@ summary(model)
 ## F-statistic: 5.856 on 19 and 140 DF,  p-value: 1.346e-10
 ```
   
-The second way is to rely on the `glmnet` internal training process, `cv.glmnet`, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction.  A part of the following scripts follows the same algorithm as the one in the book ([Introduction to Statistical Learning](https://www.statlearning.com) - ISLR p.254).  This approach uses a specific grid on $\lambda$.  We also run the same grid search 100 times to see the associated uncertainty.     
+The second way is to rely on the `glmnet` internal training process, `cv.glmnet`, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction.  A part of the following scripts follows the same algorithm as the one in the book ([Introduction to Statistical Learning](https://www.statlearning.com) - [@Gareth] p.254).  This approach uses a specific grid on $\lambda$.  We also run the same grid search 100 times to see the associated uncertainty.     
 
 
 ```r
@@ -13834,7 +13835,7 @@ The lasso also shrinks the coefficient estimates towards zero. However, the $\el
 
 In general, one might expect lasso to perform better in a setting where a relatively small number of predictors have substantial coefficients and the remaining predictors have no significant effect on the outcome. This property is known as "sparsity", because it results in a model with a relatively small number of non-zero coefficients.  In some cases, Lasso can find a true sparsity pattern in the data by identifying a small subset of the most important features that are sufficient to accurately predict the target variable.
 
-Now, we apply lasso to the same data, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in [Introduction to Statistical Learning](https://www.statlearning.com) (ISLR).    
+Now, we apply lasso to the same data, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in [Introduction to Statistical Learning](https://www.statlearning.com) ([@Gareth]).    
 
 
 ```r
@@ -13991,7 +13992,7 @@ We can also try a classification problem with LPM or Logistic regression when th
 
 # Adaptive Lasso
 
-Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou (2006) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. 
+Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou ([@Zou]) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. 
 
 Since its introduction, adaptive lasso has been widely used in a variety of applications in statistical modeling and machine learning. It has been applied to problems such as feature selections in genomic data, high-dimensional regressions, and model selections with generalized linear models.  Adaptive lasso is useful in situations where the predictors are correlated and there is a need to select a small subset of important variables to include in the model. It has been shown that adaptive lasso is an oracle efficient estimator (consistency in variable selection and asymptotic normality in coefficient estimation), while the plain lasso is not.
   
@@ -14420,9 +14421,9 @@ Time series forecasting is a task that involves using a model to predict future 
 
 One key difference between time series forecasting and other types of machine learning tasks is the presence of temporal dependencies in the data. In time series data, the value at a particular time point is often influenced by the values that came before it, which means that the order in which the data points are presented is important. This can make time series forecasting more challenging, as the model must take into account the relationships between past and future values in order to make accurate predictions.
 
-One of the most accessible and comprehensive source on forecasting using R is [Forecasting: Principles and Practice](https://otexts.com/fpp3/) (FPP3) by Rob J Hyndman and George Athanasopoulos. The book now has the $3^{rd}$ edition that uses the `tsibble` and `fable` packages rather than the `forecast` package. This brings a better integration to the tidyverse collection of packages. A move from FPP2 to FPP3 brings a move from `forecast` to `fable`. The main difference is that `fable` is designed for `tsibble` objects and `forecast` is designed for `ts` objects [^18-timeseriesarima-1].
+One of the most accessible and comprehensive source on forecasting using R is [Forecasting: Principles and Practice](https://otexts.com/fpp3/) (FPP3) by Rob J Hyndman and George Athanasopoulos ([@Hyndman]. The book now has the $3^{rd}$ edition that uses the `tsibble` and `fable` packages rather than the `forecast` package. This brings a better integration to the tidyverse collection of packages. A move from FPP2 to FPP3 brings a move from `forecast` to `fable`. The main difference is that `fable` is designed for `tsibble` objects and `forecast` is designed for `ts` objects [^18-timeseriesarima-1].
 
-[^18-timeseriesarima-1]: There is a paper, \<<https://robjhyndman.com/publications/tsibble/>), by Wang et al. (2020) describing `tsibble` and the package in more details
+[^18-timeseriesarima-1]: There is a paper, \<<https://robjhyndman.com/publications/tsibble/>), by Wang et al. ([@wang]) describing `tsibble` and the package in more details
 
 In this section, we will use the `tsibble` and `fable` packages along with the `fpp3` package and cover five main topics: applications with ARIMA models, grid search for ARIMA, time series embedding, forecasting with random forests, and artificial neural network applications, RNN and LSTM. The time-series analysis and forecasting is a very deep and complex subject, which is beyond the scope of this book to cover in detail. FPP3 is free and very accessible even for those without a strong background on time-series forecasting. Therefore, this section assumes that some major concepts, like stationarity, time series decomposition, and exponential smoothing, are already understood by further readings of FPP3.
 
@@ -14484,7 +14485,7 @@ It is important to note that determining the values of p and q is an iterative p
 
 ## Hyndman-Khandakar algorithm
 
-The Hyndman-Khandakar algorithm ([Hyndman & Khandakar](https://www.jstatsoft.org/article/view/v027i03), 2008) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
+The Hyndman-Khandakar algorithm ([Hyndman & Khandakar](https://www.jstatsoft.org/article/view/v027i03), [@JSSv027i03]) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
 
 1.  Plot the data to identify any outliers.
 2.  If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.
@@ -14568,7 +14569,7 @@ grid.arrange(b, a, ncol = 2)
 
 ## Box-Cox transformation
 
-We would like to make the size of the variation about the same across the whole series. A proper variance-stabilizing transformation makes the forecasting model simpler and better. For example, Proietti and Lutkepohl (2012) find that the Box--Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See [Does the Box--Cox transformation help in forecasting macroeconomic time series?](https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830)).
+We would like to make the size of the variation about the same across the whole series. A proper variance-stabilizing transformation makes the forecasting model simpler and better. For example, Proietti and Lutkepohl (2012) find that the Box--Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See [Does the Box--Cox transformation help in forecasting macroeconomic time series?](https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830) [@PROIETTI201388]).
 
 
 ```r
@@ -14587,7 +14588,7 @@ toronto %>%
 
 <img src="18-TimeSeriesArima_files/figure-html/ar3-1.png" width="672" />
 
-The option `guerrero` computes the optimal $\lambda$ value for a Box-Cox transformation using the [Guerrero](https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104) method.
+The option `guerrero` computes the optimal $\lambda$ value for a Box-Cox transformation using the [Guerrero](https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104) method [@guerrero].
 
 Note that, since the number of tests performed in a given day changes the numbers of cases, we should use "positivity rates", which is the percentage of positive results in all COVID-19 tests given any day, instead of case numbers. We ignore this problem for now.
 
@@ -16630,7 +16631,7 @@ H_t & =o_t \times \tanh \left(C_t\right)
 $$
 Note that the tanh activation in the output function could be changed depending on the type of network we build. 
 
-The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
+The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al [@DBLP:journals/corr/ChoMBB14].  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
 
 Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network desihned with LSTM.
 
@@ -17114,9 +17115,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]    4  100   27
-## [2,]   25   62   75
-## [3,]   64   36   70
+## [1,]   99   60   33
+## [2,]   47   90   82
+## [3,]   35    9   78
 ```
 
 ```r
@@ -17126,13 +17127,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 158.16702+ 0.00000i -11.08351+36.37647i -11.08351-36.37647i
+## [1] 174.26297+ 0.00000i  46.36851+25.06653i  46.36851-25.06653i
 ## 
 ## $vectors
-##               [,1]                  [,2]                  [,3]
-## [1,] -0.5025556+0i -0.7444822+0.0000000i -0.7444822+0.0000000i
-## [2,] -0.6091251+0i -0.0037313-0.3668448i -0.0037313+0.3668448i
-## [3,] -0.6135181+0i  0.4297236+0.3556610i  0.4297236-0.3556610i
+##              [,1]                  [,2]                  [,3]
+## [1,] 0.6719346+0i  0.6341957+0.0000000i  0.6341957+0.0000000i
+## [2,] 0.6738443+0i -0.3926187+0.4678902i -0.3926187-0.4678902i
+## [3,] 0.3073073+0i -0.2976225-0.3689797i -0.2976225+0.3689797i
 ```
 
 ```r
@@ -17177,9 +17178,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   20   80    7
-## [2,]   12   98   33
-## [3,]   57   69   94
+## [1,]   48   97   13
+## [2,]   65   91   84
+## [3,]    4   64   75
 ```
 
 ```r
@@ -17192,9 +17193,9 @@ solve(A)
 
 ```
 ##              [,1]         [,2]         [,3]
-## [1,]  0.041869423 -0.042485239  0.011797095
-## [2,]  0.004546168  0.008941401 -0.003477547
-## [3,] -0.028725986  0.019198957  0.006037408
+## [1,] -0.004508639  0.020047731 -0.021671961
+## [2,]  0.014123336 -0.011039787  0.009916517
+## [3,] -0.011811452  0.008351406  0.006027077
 ```
 
 ```r
@@ -17203,10 +17204,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##                 [,1]            [,2]            [,3]
-## [1,]  0.041869423+0i -0.042485239-0i  0.011797095+0i
-## [2,]  0.004546168-0i  0.008941401+0i -0.003477547-0i
-## [3,] -0.028725986-0i  0.019198957+0i  0.006037408+0i
+##              [,1]         [,2]         [,3]
+## [1,] -0.004508639  0.020047731 -0.021671961
+## [2,]  0.014123336 -0.011039787  0.009916517
+## [3,] -0.011811452  0.008351406  0.006027077
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17626,9 +17627,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.4029218
-## x2 1.1169619
-## x3 2.1301609
+## x1 0.2403111
+## x2 1.4699489
+## x3 2.2447841
 ```
 
 ```r
@@ -17665,9 +17666,9 @@ betahat_ginv
 
 ```
 ##           [,1]
-## [1,] 0.4029218
-## [2,] 1.1169619
-## [3,] 2.1301609
+## [1,] 0.2403111
+## [2,] 1.4699489
+## [3,] 2.2447841
 ```
 
 ```r
@@ -17676,9 +17677,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.4029218
-## x2 1.1169619
-## x3 2.1301609
+## x1 0.2403111
+## x2 1.4699489
+## x3 2.2447841
 ```
   
 
@@ -19028,7 +19029,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] -0.6745623
+## [1] 0.5401778
 ```
 
 ```r
@@ -19036,13 +19037,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.6745623  0.62493203  0.34066192  0.07168796  0.33887356
-## [2,] -0.67456227 -1.0000000  0.64659351  0.37720650  0.10371790  0.38991777
-## [3,]  0.62493203  0.6465935 -1.00000000 -0.02445399 -0.24749759 -0.04543398
-## [4,]  0.34066192  0.3772065 -0.02445399 -1.00000000  0.63334217 -0.38690528
-## [5,]  0.07168796  0.1037179 -0.24749759  0.63334217 -1.00000000 -0.17206602
-## [6,]  0.33887356  0.3899178 -0.04543398 -0.38690528 -0.17206602 -1.00000000
+##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,] -1.0000000  0.5401778  0.4615814 -0.4410341 -0.1521973 -0.8699394
+## [2,]  0.5401778 -1.0000000  0.1101267 -0.1121858 -0.1744411  0.1916862
+## [3,]  0.4615814  0.1101267 -1.0000000  0.2507447  0.8036604  0.5852603
+## [4,] -0.4410341 -0.1121858  0.2507447 -1.0000000  0.1176414 -0.7133430
+## [5,] -0.1521973 -0.1744411  0.8036604  0.1176414 -1.0000000 -0.1797286
+## [6,] -0.8699394  0.1916862  0.5852603 -0.7133430 -0.1797286 -1.0000000
 ```
 
 ```r
@@ -19052,13 +19053,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,]  1.00000000 -0.6745623  0.62493203  0.34066192  0.07168796  0.33887356
-## [2,] -0.67456227  1.0000000  0.64659351  0.37720650  0.10371790  0.38991777
-## [3,]  0.62493203  0.6465935  1.00000000 -0.02445399 -0.24749759 -0.04543398
-## [4,]  0.34066192  0.3772065 -0.02445399  1.00000000  0.63334217 -0.38690528
-## [5,]  0.07168796  0.1037179 -0.24749759  0.63334217  1.00000000 -0.17206602
-## [6,]  0.33887356  0.3899178 -0.04543398 -0.38690528 -0.17206602  1.00000000
+##            [,1]       [,2]      [,3]       [,4]       [,5]       [,6]
+## [1,]  1.0000000  0.5401778 0.4615814 -0.4410341 -0.1521973 -0.8699394
+## [2,]  0.5401778  1.0000000 0.1101267 -0.1121858 -0.1744411  0.1916862
+## [3,]  0.4615814  0.1101267 1.0000000  0.2507447  0.8036604  0.5852603
+## [4,] -0.4410341 -0.1121858 0.2507447  1.0000000  0.1176414 -0.7133430
+## [5,] -0.1521973 -0.1744411 0.8036604  0.1176414  1.0000000 -0.1797286
+## [6,] -0.8699394  0.1916862 0.5852603 -0.7133430 -0.1797286  1.0000000
 ```
 
 ```r
@@ -19068,22 +19069,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##             [,1]       [,2]       [,3]       [,4]        [,5]       [,6]
-## [1,]  1.10415642 -0.2246708  0.5977478  0.1685864  0.04569017  0.1195994
-## [2,] -0.22467076  0.8435809  0.6014406  0.2645468  0.14257532  0.1172557
-## [3,]  0.59774779  0.6014406  1.8603211  0.1080077 -0.16083201  0.3555004
-## [4,]  0.16858640  0.2645468  0.1080077  0.8726946  0.66468484 -0.4033304
-## [5,]  0.04569017  0.1425753 -0.1608320  0.6646848  0.80527970 -0.4103704
-## [6,]  0.11959941  0.1172557  0.3555004 -0.4033304 -0.41037036  0.7215556
+##            [,1]        [,2]        [,3]        [,4]       [,5]       [,6]
+## [1,]  1.6314381  1.16116803 -0.20921482  0.26605798 -0.2271714 -1.1300935
+## [2,]  1.1611680  1.68181019  0.03061207 -0.06367711 -0.2081554 -0.5347591
+## [3,] -0.2092148  0.03061207  1.02011441 -0.06698638  0.8523546  0.4778589
+## [4,]  0.2660580 -0.06367711 -0.06698638  0.36470831  0.0824984 -0.4038556
+## [5,] -0.2271714 -0.20815542  0.85235457  0.08249840  1.0084393  0.3099554
+## [6,] -1.1300935 -0.53475907  0.47785887 -0.40385562  0.3099554  1.1003290
 ## 
 ## $wi
-##            [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
-## [1,]  2.0849176  1.7700820 -1.04547503 -1.0288722 -0.2035887 -0.80903135
-## [2,]  1.7700820  3.3025356 -1.36140655 -1.4338509 -0.3706576 -1.17161404
-## [3,] -1.0454750 -1.3614065  1.34230196  0.0593973  0.5638373  0.08708699
-## [4,] -1.0288722 -1.4338509  0.05939730  4.3739820 -2.6043328  1.33798481
-## [5,] -0.2035887 -0.3706576  0.56383731 -2.6043328  3.8662722  0.55938453
-## [6,] -0.8090314 -1.1716140  0.08708699  1.3379848  0.5593845  2.73352120
+##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,]  7.6924728 -1.9662444 -3.3450917  3.7627722  0.9199436  9.5173493
+## [2,] -1.9662444  1.7225577 -0.3783911  0.4541121  0.5002453 -0.9924484
+## [3,] -3.3450917 -0.3783911  6.8334524 -2.0147606 -4.5876113 -6.0303716
+## [4,]  3.7627722  0.4541121 -2.0147606  9.4755870 -0.7940941  8.6593465
+## [5,]  0.9199436  0.5002453 -4.5876113 -0.7940941  4.7695712  1.5424808
+## [6,]  9.5173493 -0.9924484 -6.0303716  8.6593465  1.5424808 15.5597149
 ## 
 ## $errflag
 ## [1] 0
@@ -19098,7 +19099,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] -0.6745672
+## [1] 0.540154
 ```
 
 ```r
@@ -19106,13 +19107,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]       [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,] -1.00000000 -0.6745672  0.62494833  0.34070498  0.07170725  0.33889073
-## [2,] -0.67456717 -1.0000000  0.64660487  0.37726086  0.10372967  0.38994162
-## [3,]  0.62494833  0.6466049 -1.00000000 -0.02451337 -0.24750415 -0.04546393
-## [4,]  0.34070498  0.3772609 -0.02451337 -1.00000000  0.63330335 -0.38694698
-## [5,]  0.07170725  0.1037297 -0.24750415  0.63330335 -1.00000000 -0.17206915
-## [6,]  0.33889073  0.3899416 -0.04546393 -0.38694698 -0.17206915 -1.00000000
+##            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,] -1.0000000  0.5401540  0.4613760 -0.4407293 -0.1518758 -0.8699258
+## [2,]  0.5401540 -1.0000000  0.1102894 -0.1124018 -0.1745245  0.1916992
+## [3,]  0.4613760  0.1102894 -1.0000000  0.2503804  0.8035758  0.5848213
+## [4,] -0.4407293 -0.1124018  0.2503804 -1.0000000  0.1181216 -0.7131506
+## [5,] -0.1518758 -0.1745245  0.8035758  0.1181216 -1.0000000 -0.1790520
+## [6,] -0.8699258  0.1916992  0.5848213 -0.7131506 -0.1790520 -1.0000000
 ```
 
 ## High-dimensional data
@@ -19394,7 +19395,7 @@ str(opt)
 op <- opt$optLambda
 ```
 
-We know that Ridge will not provide a sparse solution.  Yet, we need a sparse precision matrix for network analysis. The $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after the precision matrix is estimated. The extra step is explained in their [paper](https://www.sciencedirect.com/science/article/pii/S0167947316301141) (van Wieringen, W.N. and Peeters, C.F.W., 2016):
+We know that Ridge will not provide a sparse solution.  Yet, we need a sparse precision matrix for network analysis. The $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after the precision matrix is estimated. The extra step is explained in their [paper](https://www.sciencedirect.com/science/article/pii/S0167947316301141) ([@VANWIERINGEN2016284]):
 
 >While some may argue this as a drawback (typically due to a lack of perceived simplicity), it is often beneficial to separate the “variable selection” and estimation.
 
@@ -19749,22 +19750,21 @@ dir()
 ## [115] "35-Appendix1_cache"             "35-Appendix1_files"            
 ## [117] "35-Appendix1.Rmd"               "36-Appendix2_cache"            
 ## [119] "36-Appendix2_files"             "36-Appendix2.Rmd"              
-## [121] "44-citations.Rmd"               "45-blocks.Rmd"                 
-## [123] "50-references.Rmd"              "adult_names.txt"               
-## [125] "adult_test.csv"                 "adult_train.csv"               
-## [127] "auto-mpg.csv"                   "book.bib"                      
-## [129] "comt.rds"                       "creditcard10.RData"            
-## [131] "dftoronto.RData"                "docs"                          
-## [133] "fes73.rds"                      "hedonic.dat"                   
-## [135] "index.md"                       "index.Rmd"                     
-## [137] "irates.dat"                     "mnist.Rdata"                   
-## [139] "myocarde.csv"                   "packages.bib"                  
-## [141] "png"                            "preamble.tex"                  
-## [143] "README.md"                      "render57da2956557c.rds"        
-## [145] "style.css"                      "table1.text"                   
-## [147] "toolbox.Rproj"                  "toronto2.rds"                  
-## [149] "wineQualityReds.csv"            "YA_TextBook.md"                
-## [151] "YA_TextBook.rds"
+## [121] "50-references.Rmd"              "adult_names.txt"               
+## [123] "adult_test.csv"                 "adult_train.csv"               
+## [125] "auto-mpg.csv"                   "book.bib"                      
+## [127] "comt.rds"                       "creditcard10.RData"            
+## [129] "dftoronto.RData"                "docs"                          
+## [131] "fes73.rds"                      "hedonic.dat"                   
+## [133] "index.md"                       "index.Rmd"                     
+## [135] "irates.dat"                     "mnist.Rdata"                   
+## [137] "myocarde.csv"                   "packages.bib"                  
+## [139] "png"                            "preamble.tex"                  
+## [141] "README.md"                      "render7b6d491e7fc.rds"         
+## [143] "style.css"                      "table1.text"                   
+## [145] "toolbox.Rproj"                  "toronto2.rds"                  
+## [147] "wineQualityReds.csv"            "YA_TextBook.md"                
+## [149] "YA_TextBook.rds"
 ```
 
 ```r
@@ -20643,7 +20643,7 @@ We will see later how these conditional subsetting can be done much smoother wit
 
 ## R-Style Guide
 
-The idea is simple: your R code, or any other code in different languages, should be written in a readable and maintainable style.  Here is a [blog](https://rpahl.github.io/r-some-blog/r-style-guide/) by Roman Pahl that may help you develop a better styling in your codes. (You may find in some chapters and labs that my codes are not following the "good" styling practices.  I am trying to improve!)  
+The idea is simple: your R code, or any other code in different languages, should be written in a readable and maintainable style.  Here is a [blog](https://rpahl.github.io/r-some-blog/) by Roman Pahl that may help you develop a better styling in your codes. (You may find in some chapters and labs that my codes are not following the "good" styling practices.  I am trying to improve!)  
 
 **Next: Lists and data frames**  
 
@@ -20754,7 +20754,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fa8b6326cf0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fca84817fc0> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -21121,7 +21121,7 @@ Lastly, we could use the filter and select functions from the `dplyr` package wh
 
 ### Plotting from data frame
 
-There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package [@Tay_2019].
+There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package.
 
 
 ```r
@@ -21182,8 +21182,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels "(-2.5,0.271]",..: 2 3 3 3 3 1 2 3 2 1
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels "(-3.96,1.19]",..: 3 2 2 3 1 3 1 1 3 1
 ```
 
 ```r
@@ -21195,8 +21195,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels "(-2.5,0.271]",..: 2 3 3 3 3 1 2 3 2 1
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels "(-3.96,1.19]",..: 3 2 2 3 1 3 1 1 3 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -21213,16 +21213,16 @@ my_data
 
 ```
 ##     a          b            c          d          f          g         h
-## 1   1  2.8267830 (0.271,3.04] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  5.0607976  (3.04,5.81] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  3.7287942  (3.04,5.81] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  5.4296145  (3.04,5.81] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  4.9322914  (3.04,5.81] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 -2.4953587 (-2.5,0.271]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  0.4315730 (0.271,3.04]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  5.8039086  (3.04,5.81]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  1.0850013 (0.271,3.04]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  0.2290942 (-2.5,0.271]  1.4863011  1.1560120         NA  0.000000
+## 1   1  7.1669874  (6.32,11.5] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  1.8622356  (1.19,6.32] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  3.8684596  (1.19,6.32] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  7.1216184  (6.32,11.5] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  1.1410102 (-3.96,1.19] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 11.4529402  (6.32,11.5]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7 -2.1350216 (-3.96,1.19]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  0.3369667 (-3.96,1.19]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  6.7083418  (6.32,11.5]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -3.9399884 (-3.96,1.19]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21484,7 +21484,6 @@ if(y > w) print("y is bigger than w")
 The `ifelse()` function only allows for one “if” statement, two cases. You could add nested “if” statements, but that’s just a pain, especially if the 3+ conditions you want to use are all on the same level, conceptually. Is there a way to specify multiple conditions at the same time?  
 
 `dplyr()` is the most powerful library for data management.  When you have time, read more about it!  
-Source: https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)  
 
 
 ```r
@@ -21635,7 +21634,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1] -0.09813913  3.80388523  2.16811135 -3.61989657 -1.18188391  2.39363736
+## [1] -0.3662922  0.1197668  2.6524091  0.8211474 -2.2927842 -1.4059134
 ```
 
 ```r
@@ -21682,11 +21681,11 @@ X_new
 
 ```
 ##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.027069 3.097459 5.163892 1.141302 3.843876 2.313892
-## [2,] 4.110574 3.153890 2.853738 0.788915 1.978948 3.659133
-## [3,] 2.893520 6.030457 2.419055 2.274441 2.572441 2.635440
-## [4,] 1.827768 3.739481 3.726244 3.364199 1.847009 5.355576
-## [5,] 3.042931 2.782599 3.005183 3.811246 3.575841 3.429596
+## [1,] 1.296347 2.154419 2.698632 4.081763 3.294838 4.187444
+## [2,] 3.024872 3.616963 3.573454 2.809846 2.047436 2.862360
+## [3,] 2.645027 3.580737 3.481540 3.808343 2.793891 2.627911
+## [4,] 5.158016 2.653085 3.350166 2.869844 2.694531 2.827116
+## [5,] 2.509446 3.114563 4.548618 2.251351 1.876519 1.089255
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23322,7 +23321,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "H" "T" "T" "T" "H" "H"
+## [1] "H" "H" "T" "H" "H" "T" "H" "H"
 ```
 
 ```r
@@ -23330,7 +23329,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 6 5
+## [1] 6 6
 ```
 
 ```r
@@ -23339,7 +23338,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "H" "H" "H" "H" "H" "H" "T"
+## [1] "H" "T" "T" "T" "T" "T" "T" "T"
 ```
 
 ```r
@@ -23347,7 +23346,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 2 3
+## [1] 6 1
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  
@@ -25225,7 +25224,7 @@ In this chapter we will see some examples using only `SMOTE`.
 
 ## `SMOTE`
 
-We will use [Credit Card Fraud Detection dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud) on Kaggle {-@Kaggle_Cred}.  The dataset has about 300K anonymized credit card transfers labeled as fraudulent or genuine.  The features are numerical and anonymized (`V1`, `V2`, ... , `V28`).  They are the principal components obtained with principal component analysis (PCA). The only features which have not been transformed with PCA are `Time` and `Amount`. Feature `Time` contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature `Amount` is the transaction Amount and `Class` is the response variable and it takes value 1 in case of fraud and 0 otherwise.
+We will use [Credit Card Fraud Detection dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud) on Kaggle.  The dataset has about 300K anonymized credit card transfers labeled as fraudulent or genuine.  The features are numerical and anonymized (`V1`, `V2`, ... , `V28`).  They are the principal components obtained with principal component analysis (PCA). The only features which have not been transformed with PCA are `Time` and `Amount`. Feature `Time` contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature `Amount` is the transaction Amount and `Class` is the response variable and it takes value 1 in case of fraud and 0 otherwise.
 
 The prediction problem is to label transactions as fraud or not.  We will use only a subset of data with roughly 10K observations, representing transactions. 
 
@@ -25460,57 +25459,6 @@ data.frame(model, AUCs, sd)
 Our results show improved AUC results and lower sd for our model built on the balanced data. 
 
 <!--chapter:end:36-Appendix2.Rmd-->
-
-# Footnotes and citations 
-
-## Footnotes
-
-Footnotes are put inside the square brackets after a caret `^[]`. Like this one ^[This is a footnote.]. 
-
-## Citations
-
-Reference items in your bibliography file(s) using `@key`.
-
-For example, we are using the **bookdown** package [@R-bookdown] (check out the last code chunk in index.Rmd to see how this citation key was added) in this sample book, which was built on top of R Markdown and **knitr** [@xie2015] (this citation was added manually in an external file book.bib). 
-Note that the `.bib` files need to be listed in the index.Rmd with the YAML `bibliography` key.
-
-
-The RStudio Visual Markdown Editor can also make it easier to insert citations: <https://rstudio.github.io/visual-markdown-editing/#/citations>
-
-<!--chapter:end:44-citations.Rmd-->
-
-# Blocks
-
-## Equations
-
-Here is an equation.
-
-\begin{equation} 
-  f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
-  (\#eq:binom)
-\end{equation} 
-
-You may refer to using `\@ref(eq:binom)`, like see Equation \@ref(eq:binom).
-
-
-## Theorems and proofs
-
-Labeled theorems can be referenced in text using `\@ref(thm:tri)`, for example, check out this smart theorem \@ref(thm:tri).
-
-::: {.theorem #tri}
-For a right triangle, if $c$ denotes the *length* of the hypotenuse
-and $a$ and $b$ denote the lengths of the **other** two sides, we have
-$$a^2 + b^2 = c^2$$
-:::
-
-Read more here <https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html>.
-
-## Callout blocks
-
-
-The R Markdown Cookbook provides more help on how to use custom blocks to design your own callouts: https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html
-
-<!--chapter:end:45-blocks.Rmd-->
 
 
 # References {-}

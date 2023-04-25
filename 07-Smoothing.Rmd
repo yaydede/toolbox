@@ -132,7 +132,7 @@ The gray shaded area denotes a 95% Bayesian “confidence interval” for the un
 
 ## Multivariate Loess
 
-When there are more than two predictors, it is always advisable to use additive models either GAM or MARS.  Nevertheless, let's try `loess()` with several variables.  This dataset is from [from St.Louis Federal Reserve](http://research.stlouisfed.org/fred2).  It has 6 variables (observed monthly): `psavert`, personal savings rate; `pce`, personal consumption expenditures (in billions of dollars); `unemploy`, number of unemployed (in thousands), `uempmed` median duration of unemployment (weeks), and `pop` total population (in thousands).  Although we have a time variable, `date`, we create an index for time.
+When there are more than two predictors, it is always advisable to use additive models either GAM or MARS.  Nevertheless, let's try `loess()` with several variables.  This dataset is from [St.Louis Federal Reserve](http://research.stlouisfed.org/fred2) [@FRED_1].  It has 6 variables (observed monthly): `psavert`, personal savings rate; `pce`, personal consumption expenditures (in billions of dollars); `unemploy`, number of unemployed (in thousands), `uempmed` median duration of unemployment (weeks), and `pop` total population (in thousands).  Although we have a time variable, `date`, we create an index for time.
 
 ```{r sm9, message=FALSE, warning=FALSE}
 data(economics, package = "ggplot2")

@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -699,7 +688,7 @@ y=m(x)+\varepsilon
 <p>This shows that the regression function can be computed from the joint density <span class="math inline">\(f(x,y)\)</span> and the marginal <span class="math inline">\(f(x)\)</span>. Therefore, given a sample <span class="math inline">\(\left\{\left(X_{i}, Y_{i}\right)\right\}_{i=1}^{n}\)</span>, a nonparametric estimate of <span class="math inline">\(m\)</span> may follow by replacing the these densities with their kernel density estimators, as we have see earlier in this section.</p>
 <p>A limitation of the bin smoothing approach in kernel density estimations is that we need small windows for the “approximately constant” assumptions to hold. As a result, we end up with a small number of data points to average and obtain imprecise estimates of <span class="math inline">\(f(x)\)</span>. Locally estimated scatter-plot smoothing (LOESS, <code>loess</code>) permits us to consider larger window sizes, which is a nonparametric approach that fits multiple regressions in local neighborhood.</p>
 <p>It is called local regression because, instead of assuming the function is approximately constant in a window, it fits a local regression at the “neighborhood” of <span class="math inline">\(x_0\)</span>. The distance from <span class="math inline">\(x_0\)</span> is controlled by the <code>span</code> setting, which determines the width of the moving (sliding) window when smoothing the data. The parameter <code>span</code>represents the proportion of the data (size of the sliding window) that is considered to be neighboring <span class="math inline">\(x_0\)</span>. For example, if N is the number of data points and <code>span</code> = 0.5, then for a given <span class="math inline">\(x_0\)</span>, <code>loess</code> will use the <span class="math inline">\(0.5\times N\)</span> closest points to <span class="math inline">\(x_0\)</span> for the fit. Usually <code>span</code> should be between 0 and 1. When its larger than 1, the regression will be over-smoothed. Moreover, the weighting in the regression is proportional to <span class="math inline">\(1-(\text{distance}/\text{maximum distance})^3)^3\)</span>, which is called the Tukey tri-weight. Different than the Gaussian kernel, the Tukey tri-weight covers more points closer to the center point.</p>
-<p>We will not see the theoretical derivations of kernel regressions but an illustration of local polynomial of order 0, 1 and 2, below. (Examples from Ahamada and Flachaire) <span class="citation">(<a href="#ref-Ibrahim_2011" role="doc-biblioref"><strong>Ibrahim_2011?</strong></a>)</span>. The Nadaraya–Watson estimator is a local polynomial of order 0, which estimates a local mean of <span class="math inline">\(Y_1...Y_n\)</span> around <span class="math inline">\(X=x_0\)</span>.</p>
+<p>We will not see the theoretical derivations of kernel regressions but an illustration of local polynomial of order 0, 1 and 2, below. (Examples from Ahamada and Flachaire) <span class="citation">(<a href="#ref-Ibrahim_2011" role="doc-biblioref">2011</a>)</span>. The Nadaraya–Watson estimator is a local polynomial of order 0, which estimates a local mean of <span class="math inline">\(Y_1...Y_n\)</span> around <span class="math inline">\(X=x_0\)</span>.</p>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="nonparametric-estimations---basics.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Simulating our data</span></span>
 <span id="cb264-2"><a href="nonparametric-estimations---basics.html#cb264-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">300</span></span>
 <span id="cb264-3"><a href="nonparametric-estimations---basics.html#cb264-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
@@ -743,7 +732,7 @@ y=m(x)+\varepsilon
   \end{split}
   \tag{6.10}
 \end{equation}\]</span></p>
-<p>This function will not have a smooth transitions at the knots, <span class="math inline">\(z.\)</span>, which brings us to a regression <strong>spline, which is a piecewise regression model</strong> with a smooth transition at the knots. First, let’s see how a piecewise regression works with an example. To show evidence of nonlinearity between short and long-term interest rates, <a href="https://www.sciencedirect.com/science/article/abs/pii/0304407695017542">Pfann et al (1996)</a> estimates the following piecewise linear model:</p>
+<p>This function will not have a smooth transitions at the knots, <span class="math inline">\(z.\)</span>, which brings us to a regression <strong>spline, which is a piecewise regression model</strong> with a smooth transition at the knots. First, let’s see how a piecewise regression works with an example. To show evidence of nonlinearity between short and long-term interest rates, <span class="citation">(<a href="#ref-PFANN1996149" role="doc-biblioref">Pfann, Schotman, and Tschernig 1996</a>)</span> estimates the following piecewise linear model:</p>
 <p><span class="math display" id="eq:6-12">\[\begin{equation}
 y=\beta_{0}+\beta_{1} x+\beta_{2}(x-\kappa)_{+}+\varepsilon
   \tag{6.11}
@@ -909,7 +898,7 @@ y=\beta_{0}+\beta_{1} x+\cdots+\beta_{p} x^{p}+\sum_{j=1}^{q} \beta_{p j}\left(x
 <span id="cb274-20"><a href="nonparametric-estimations---basics.html#cb274-20" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> k, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>)</span></code></pre></div>
 <p><img src="06-Basics_files/figure-html/bn10-1.png" width="672" /></p>
 <p>Note that, in regression spline, <code>df</code> (degree of freedom) is the number of components of the basis. Thus, with cubic spline, <code>df</code>=6 defines 3 knots (quartiles q:25; q:50; q:75). Since, <code>df</code>= 8, we have 5 knots, so is the quantile of 20%.</p>
-<p>Is bad or good for prediction to have a very large number of knots? See <a href="https://freakonometrics.hypotheses.org/47681" class="uri">https://freakonometrics.hypotheses.org/47681</a> <span class="citation">(<a href="#ref-Charpentier_SplineReg" role="doc-biblioref"><strong>Charpentier_SplineReg?</strong></a>)</span>, for the argument about the number of knots. Here is Arthur Charpentier’s conclusion:</p>
+<p>Is bad or good for prediction to have a very large number of knots? See <a href="https://freakonometrics.hypotheses.org/47681" class="uri">https://freakonometrics.hypotheses.org/47681</a> <span class="citation">(<a href="#ref-Charpentier_SplineReg" role="doc-biblioref">Charpentier 2016</a>)</span>, for the argument about the number of knots. Here is Arthur Charpentier’s conclusion:</p>
 <blockquote>
 <p>So, it looks like having a lot of non-significant components in a spline regression is not a major issue. And reducing the degrees of freedom is clearly a bad option.</p>
 </blockquote>
@@ -1180,7 +1169,7 @@ y=\beta_{0}+m_{1}\left(x_{1}\right)+m_{2}\left(x_{2}\right)+\cdots+m_{p}\left(x_
 </div>
 <div id="gam---generalized-additive-model" class="section level2 hasAnchor" number="6.5">
 <h2><span class="header-section-number">6.5</span> GAM - Generalized Additive Model<a href="nonparametric-estimations---basics.html#gam---generalized-additive-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Generalized Additive Model (GAM) is another method for discovering non-linear relationships in a multivariate setting. The performance difference between MARS and GAM is well explained by Leathwich, Elith, and Hastie <span class="citation">(<a href="#ref-Leath_2006" role="doc-biblioref"><strong>Leath_2006?</strong></a>)</span>. Here is an excerpt from their paper (Page 189):</p>
+<p>Generalized Additive Model (GAM) is another method for discovering non-linear relationships in a multivariate setting. The performance difference between MARS and GAM is well explained by Leathwich, Elith, and Hastie <span class="citation">(<a href="#ref-Leath_2006" role="doc-biblioref">2006</a>)</span>. Here is an excerpt from their paper (Page 189):</p>
 <blockquote>
 <p>Two other commonly used techniques capable of fitting non-linear relationships (…) are neural nets and classification and regression trees. A third alternative, multivariate adaptive regression splines (MARS), has shown promise in recent comparative studies. This technique combines the strengths of regression trees and spline fitting by replacing the step functions normally associated with regression trees with piecewise linear basis functions. This allows the modelling of complex relationships between a response variable and its predictors. In practical terms, MARS has exceptional analytical speed, and its simple rule-based basis functions facilitate the prediction of species distributions using independent data.</p>
 </blockquote>
@@ -1359,6 +1348,21 @@ where the spatial dependence is specified fully nonparametrically.</p>
 <p>GAM becomes an important tool to understand whether model should be estimated as a linear function or a complex nonlinear function. We can even see and test if a specific variable should have a nonlinear part. For example, if we want to know coordinates should be included additively, linear, or nonparametrically, we can use GAM and then compare performances of those different models and make a decision.</p>
 <p>GAMs are based on a hypothesis of additive separability. They are helpful for reducing the dimension of the model without facing the curse of dimensionality problem. But, unlike MARS, <strong>they miss possible important interactions</strong> (we can add them manually, though).</p>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Ibrahim_2011" class="csl-entry">
+Ahamada, Ibrahim, and Emmanuel Flachaire. 2011. <em>Non-Parametric Econometrics</em>. Oxford University Press.
+</div>
+<div id="ref-Charpentier_SplineReg" class="csl-entry">
+Charpentier, Arthur. 2016. <span>“Regression with Splines: Should We Care about Non-Significant Components?”</span> Freakonometrics. <a href="https://freakonometrics.hypotheses.org/47681">https://freakonometrics.hypotheses.org/47681</a>.
+</div>
+<div id="ref-Leath_2006" class="csl-entry">
+Leathwick, J. R., J. Elith, and T. Hastie. 2006. <span>“Comparative Performance of Generalized Additive Models and Multivariate Adaptive Regression Splines for Statistical Modelling of Species Distributions.”</span> <em>Ecological Modelling</em> 199 (2): 188–96. <a href="https://www.sciencedirect.com/science/article/pii/S0304380006002572">https://www.sciencedirect.com/science/article/pii/S0304380006002572</a>.
+</div>
+<div id="ref-PFANN1996149" class="csl-entry">
+Pfann, Gerard A., Peter C. Schotman, and Rolf Tschernig. 1996. <span>“Nonlinear Interest Rate Dynamics and Implications for the Term Structure.”</span> <em>Journal of Econometrics</em> 74 (1): 149–76. https://doi.org/<a href="https://doi.org/10.1016/0304-4076(95)01754-2">https://doi.org/10.1016/0304-4076(95)01754-2</a>.
 </div>
 </div>
 <div class="footnotes">

@@ -524,7 +524,7 @@ H_t & =o_t \times \tanh \left(C_t\right)
 $$
 Note that the tanh activation in the output function could be changed depending on the type of network we build. 
 
-The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. ([2014](https://arxiv.org/abs/1409.1259)).  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
+The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM.  One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al [@DBLP:journals/corr/ChoMBB14].  The details of GRU is beyond this book.  But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp.  One of the accessible sources to learn different types of RNN is [blog posts](http://colah.github.io) by Christopher Olah.
 
 Now, we return to the application of LSTM to our COVID-19 data.  We use the "Adam" optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well.  Below, the code shows an arbitrary network desihned with LSTM.
 

@@ -12,7 +12,7 @@ In this chapter we will see some examples using only `SMOTE`.
 
 ## `SMOTE`
 
-We will use [Credit Card Fraud Detection dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud) on Kaggle {-@Kaggle_Cred}.  The dataset has about 300K anonymized credit card transfers labeled as fraudulent or genuine.  The features are numerical and anonymized (`V1`, `V2`, ... , `V28`).  They are the principal components obtained with principal component analysis (PCA). The only features which have not been transformed with PCA are `Time` and `Amount`. Feature `Time` contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature `Amount` is the transaction Amount and `Class` is the response variable and it takes value 1 in case of fraud and 0 otherwise.
+We will use [Credit Card Fraud Detection dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud) on Kaggle.  The dataset has about 300K anonymized credit card transfers labeled as fraudulent or genuine.  The features are numerical and anonymized (`V1`, `V2`, ... , `V28`).  They are the principal components obtained with principal component analysis (PCA). The only features which have not been transformed with PCA are `Time` and `Amount`. Feature `Time` contains the seconds elapsed between each transaction and the first transaction in the dataset. The feature `Amount` is the transaction Amount and `Class` is the response variable and it takes value 1 in case of fraud and 0 otherwise.
 
 The prediction problem is to label transactions as fraud or not.  We will use only a subset of data with roughly 10K observations, representing transactions. 
 

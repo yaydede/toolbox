@@ -415,7 +415,7 @@ We will have more applications with `gbm` in the next chapter.  We can also have
 
 ### AdaBoost
 
-One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997).  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
+One of the most popular boosting algorithm is **AdaBost.M1**  due to Freund and Schpire (1997)[@FREUND_1997].  We consider two-class problem where $y \in\{-1,1\}$, which is a categorical outcome.  With a set of predictor variables $X$, a classifier $\hat{m}_{b}(x)$ at tree $b$ among B trees, produces a prediction taking the two values $\{-1,1\}$.  
 
 To understand how AdaBoost works, let's look at the algorithm step by step:    
 

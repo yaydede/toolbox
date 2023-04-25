@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -504,14 +493,14 @@ div.csl-indent {
 <h2><span class="header-section-number">37.1</span> Sampling in R: <code>sample()</code><a href="r-lab-4---simulation-in-r.html#sampling-in-r-sample" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s play with sample() for simple random sampling. We will see the arguments of sample() function.</p>
 <div class="sourceCode" id="cb1647"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1647-1"><a href="r-lab-4---simulation-in-r.html#cb1647-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;H&quot;</span>,<span class="st">&quot;T&quot;</span>), <span class="at">size =</span> <span class="dv">8</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># fair coin</span></span></code></pre></div>
-<pre><code>## [1] &quot;T&quot; &quot;H&quot; &quot;H&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot; &quot;H&quot; &quot;H&quot;</code></pre>
+<pre><code>## [1] &quot;H&quot; &quot;H&quot; &quot;T&quot; &quot;H&quot; &quot;H&quot; &quot;T&quot; &quot;H&quot; &quot;H&quot;</code></pre>
 <div class="sourceCode" id="cb1649"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1649-1"><a href="r-lab-4---simulation-in-r.html#cb1649-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>))</span></code></pre></div>
-<pre><code>## [1] 6 5</code></pre>
+<pre><code>## [1] 6 6</code></pre>
 <div class="sourceCode" id="cb1651"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1651-1"><a href="r-lab-4---simulation-in-r.html#cb1651-1" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s do it again</span></span>
 <span id="cb1651-2"><a href="r-lab-4---simulation-in-r.html#cb1651-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;H&quot;</span>,<span class="st">&quot;T&quot;</span>), <span class="at">size =</span> <span class="dv">8</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># fair coin</span></span></code></pre></div>
-<pre><code>## [1] &quot;H&quot; &quot;H&quot; &quot;H&quot; &quot;H&quot; &quot;H&quot; &quot;H&quot; &quot;H&quot; &quot;T&quot;</code></pre>
+<pre><code>## [1] &quot;H&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot; &quot;T&quot;</code></pre>
 <div class="sourceCode" id="cb1653"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1653-1"><a href="r-lab-4---simulation-in-r.html#cb1653-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>))</span></code></pre></div>
-<pre><code>## [1] 2 3</code></pre>
+<pre><code>## [1] 6 1</code></pre>
 <p>The results are different. If we use <code>set.seed()</code> then we can get the same results each time. Lets try now:</p>
 <div class="sourceCode" id="cb1655"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1655-1"><a href="r-lab-4---simulation-in-r.html#cb1655-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1655-2"><a href="r-lab-4---simulation-in-r.html#cb1655-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;H&quot;</span>,<span class="st">&quot;T&quot;</span>), <span class="at">size =</span> <span class="dv">8</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># fair coin</span></span></code></pre></div>
@@ -866,7 +855,7 @@ with the following coefficient vector: <span class="math inline">\(\beta = (12, 
 </li>
 <li>Find the standard deviation of the distribution of that statistic.</li>
 </ul>
-<p>In the following bootstrapping example we would like to obtain a standard error for the estimate of the mean. We will be using the <code>lapply()</code>, <code>sapply()</code> functions in combination with the sample function. (see <a href="https://stats.idre.ucla.edu/r/library/r-library-introduction-to-bootstrapping/" class="uri">https://stats.idre.ucla.edu/r/library/r-library-introduction-to-bootstrapping/</a>)<span class="citation">(<a href="#ref-UCLA_2021" role="doc-biblioref"><strong>UCLA_2021?</strong></a>)</span></p>
+<p>In the following bootstrapping example we would like to obtain a standard error for the estimate of the mean. We will be using the <code>lapply()</code>, <code>sapply()</code> functions in combination with the sample function. (see <a href="https://stats.idre.ucla.edu/r/library/r-library-introduction-to-bootstrapping/" class="uri">https://stats.idre.ucla.edu/r/library/r-library-introduction-to-bootstrapping/</a>)<span class="citation">(<a href="#ref-UCLA_2021" role="doc-biblioref">UCLA 2021</a>)</span></p>
 <div class="sourceCode" id="cb1734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1734-1"><a href="r-lab-4---simulation-in-r.html#cb1734-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating the data set by taking 100 observations </span></span>
 <span id="cb1734-2"><a href="r-lab-4---simulation-in-r.html#cb1734-2" aria-hidden="true" tabindex="-1"></a><span class="co">#from a normal distribution with mean 5 and stdev 3</span></span>
 <span id="cb1734-3"><a href="r-lab-4---simulation-in-r.html#cb1734-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1007,7 +996,7 @@ with the following coefficient vector: <span class="math inline">\(\beta = (12, 
 <span id="cb1752-3"><a href="r-lab-4---simulation-in-r.html#cb1752-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;aliceblue&quot;</span>, <span class="st">&quot;pink&quot;</span>),</span>
 <span id="cb1752-4"><a href="r-lab-4---simulation-in-r.html#cb1752-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> <span class="fl">0.75</span>, <span class="at">cex.lab =</span> <span class="fl">0.75</span>, <span class="at">cex.main =</span> <span class="fl">0.85</span>)</span></code></pre></div>
 <p><img src="34-RLab4SimLab_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
-<p>The simulation is inspired by <a href="https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/" class="uri">https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/</a> <span class="citation">(<a href="#ref-Rajter_2019" role="doc-biblioref"><strong>Rajter_2019?</strong></a>)</span></p>
+<p>The simulation is inspired by <a href="https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/" class="uri">https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/</a> <span class="citation">(<a href="#ref-Rajter_2019" role="doc-biblioref">Rajter 2019</a>)</span></p>
 
 </div>
 </div>
@@ -1015,6 +1004,15 @@ with the following coefficient vector: <span class="math inline">\(\beta = (12, 
 
 
 
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Rajter_2019" class="csl-entry">
+Rajter, M. 2019. <span>“In Memory of Monty Hall.”</span> <a href="https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/">https://theressomethingaboutr.wordpress.com/2019/02/12/in-memory-of-monty-hall/</a>.
+</div>
+<div id="ref-UCLA_2021" class="csl-entry">
+UCLA. 2021. <span>“R Library Introduction to Bootstrapping.”</span> ULCA Advanced Research Computing Statistical Methods &amp; Data Analytics. <a href="https://stats.oarc.ucla.edu/r/library/r-library-introduction-to-bootstrapping/">https://stats.oarc.ucla.edu/r/library/r-library-introduction-to-bootstrapping/</a>.
+</div>
+</div>
             </section>
 
           </div>

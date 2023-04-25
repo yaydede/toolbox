@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -495,7 +484,7 @@ div.csl-indent {
 <p>We start with <strong>k-fold cross validation</strong> process and perform a cross-validated grid search to identify the optimal mix of tuning parameters. We will learn the rules with simple applications about how to set up a grid search that evaluates many different combinations of hyperparameters. This chapter covers the key concept in modern machine learning applications and many learning algorithms.</p>
 <div id="training-validation-and-test-datasets" class="section level2 hasAnchor" number="9.1">
 <h2><span class="header-section-number">9.1</span> Training, validation, and test datasets<a href="hyperparameter-tuning.html#training-validation-and-test-datasets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before learning how to split the data into subsections randomly, we need to know what these sets are for and how we define them properly. This section is inspired by the article, <a href="https://machinelearningmastery.com/difference-test-validation-datasets/"><em>What is the Difference Between Test and Validation Datasets?</em></a>, by Jason Brownlee <span class="citation">(<a href="#ref-Brownlee_2017" role="doc-biblioref"><strong>Brownlee_2017?</strong></a>)</span>. The article clarifies how validation and test datasets are different, which can be confusing in practice.</p>
+<p>Before learning how to split the data into subsections randomly, we need to know what these sets are for and how we define them properly. This section is inspired by the article, <a href="https://machinelearningmastery.com/difference-test-validation-datasets/"><em>What is the Difference Between Test and Validation Datasets?</em></a>, by Jason Brownlee <span class="citation">(<a href="#ref-Brownlee_2017" role="doc-biblioref">2017</a>)</span>. The article clarifies how validation and test datasets are different, which can be confusing in practice.</p>
 <p>Each machine learning model needs a training, which is a process of tuning their hyperparameters and selecting their features (variables) for the best predictive performance. Therefore, this process requires two different datasets: <strong>training</strong> and <strong>validation</strong> datasets. The intuition behind this split is very simple: the prediction is an out-of-sample problem. If we use the same sample that we use to fit the model for assessing the prediction accuracy of our model, we face the infamous overfitting problem. Since we usually don’t have another unseen dataset available to us, we split the data and leave one part out of our original dataset. We literally pretend that one that is left out is “unseen” by us. Now the question is how we do this split. Would it be 50-50?. The general approach is k-fold cross validation with a grid search. Here are the main steps:</p>
 <ol style="list-style-type: decimal">
 <li>Suppose Model1 requires to pick a value for <span class="math inline">\(\lambda\)</span>, perhaps it is a degree of polynomials in the model.<br />
@@ -1191,10 +1180,19 @@ K-fold loop:  10 </code></pre>
 <p>Before concluding this section, notice that as the sample size rises, the learning algorithms take longer to complete, specially for cross sectional data. That’s why there are some other cross-validation methods that use only a subsample randomly selected from the original sample to speed up the validation and the test procedures. You can think how slow the conventional cross validation would be if the dataset has 1-2 million observations, for example.</p>
 <p>There are some methods to accelerate the training process. One method is to increase the delta (the increments) in our grid and identify the range of hyperparameters where the RMSPE becomes the lowest. Then we reshape our grid with finer increments targeting that specific range.</p>
 <p>Another method is called a random grid search. In this method, instead of the exhaustive enumeration of all combinations of hyperparameters, we select them randomly. This can be found in <a href="https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a> by James Bergstra and
-Yoshua Bengio <span class="citation">(<a href="#ref-Berg_2012" role="doc-biblioref"><strong>Berg_2012?</strong></a>)</span>.</p>
+Yoshua Bengio <span class="citation">(<a href="#ref-Berg_2012" role="doc-biblioref">2012b</a>)</span>.</p>
 <p>To accelerate the grid search, we can also use parallel processing so that each loop will be assigned to a separate core in capable computers. We will see several application using these options later in the book. Both methods are covered in Chapter 14.</p>
 <p>Finally, we did not use functions in our algorithms. We should create functions for each major process in algorithms and compile them in one clean “source” script.</p>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Berg_2012" class="csl-entry">
+Bergstra, James, and Yoshua Bengio. 2012b. <span>“Random Search for Hyper-Parameter Optimization.”</span> <em>Journal of Machine Learning Research</em> 13: 281–305. <a href="https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf ">https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf </a>.
+</div>
+<div id="ref-Brownlee_2017" class="csl-entry">
+Brownlee, Jason. 2017. <span>“What Is the Difference Between Test and Validation Datasets?”</span> <a href="https://machinelearningmastery.com/difference-test-validation-datasets/">https://machinelearningmastery.com/difference-test-validation-datasets/</a>.
 </div>
 </div>
             </section>

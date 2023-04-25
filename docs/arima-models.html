@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -532,7 +521,7 @@ X_t=\epsilon_t+\phi_1 \epsilon_{t-1}+\phi_1^2 \epsilon_{t-2}+\phi_1^3 \epsilon_{
 <p>It is important to note that determining the values of p and q is an iterative process, and we may need to try different values and evaluate the results in order to find the best fit for our data.</p>
 <div id="hyndman-khandakar-algorithm" class="section level2 hasAnchor" number="21.1">
 <h2><span class="header-section-number">21.1</span> Hyndman-Khandakar algorithm<a href="arima-models.html#hyndman-khandakar-algorithm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The Hyndman-Khandakar algorithm (<a href="https://www.jstatsoft.org/article/view/v027i03">Hyndman &amp; Khandakar</a>, 2008) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to <code>ARIMA()</code> in the <code>fable</code> package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:</p>
+<p>The Hyndman-Khandakar algorithm (<a href="https://www.jstatsoft.org/article/view/v027i03">Hyndman &amp; Khandakar</a>, <span class="citation">(<a href="#ref-JSSv027i03" role="doc-biblioref">Rob J. Hyndman and Khandakar 2008a</a>)</span>) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to <code>ARIMA()</code> in the <code>fable</code> package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Plot the data to identify any outliers.</li>
 <li>If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.</li>
@@ -601,7 +590,7 @@ X_t=\epsilon_t+\phi_1 \epsilon_{t-1}+\phi_1^2 \epsilon_{t-2}+\phi_1^3 \epsilon_{
 </div>
 <div id="box-cox-transformation" class="section level2 hasAnchor" number="21.3">
 <h2><span class="header-section-number">21.3</span> Box-Cox transformation<a href="arima-models.html#box-cox-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We would like to make the size of the variation about the same across the whole series. A proper variance-stabilizing transformation makes the forecasting model simpler and better. For example, Proietti and Lutkepohl (2012) find that the Box–Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See <a href="https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830">Does the Box–Cox transformation help in forecasting macroeconomic time series?</a>).</p>
+<p>We would like to make the size of the variation about the same across the whole series. A proper variance-stabilizing transformation makes the forecasting model simpler and better. For example, Proietti and Lutkepohl (2012) find that the Box–Cox transformation produces forecasts which are significantly better than the untransformed data at the one-step-ahead horizon (See <a href="https://www.sciencedirect.com/science/article/abs/pii/S0169207012000830">Does the Box–Cox transformation help in forecasting macroeconomic time series?</a> <span class="citation">(<a href="#ref-PROIETTI201388" role="doc-biblioref">Proietti and Lütkepohl 2013</a>)</span>).</p>
 <div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb874-1"><a href="arima-models.html#cb874-1" aria-hidden="true" tabindex="-1"></a>lmbd <span class="ot">&lt;-</span> toronto <span class="sc">%&gt;%</span></span>
 <span id="cb874-2"><a href="arima-models.html#cb874-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">features</span>(cases, <span class="at">features =</span> guerrero) <span class="sc">%&gt;%</span></span>
 <span id="cb874-3"><a href="arima-models.html#cb874-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(lambda_guerrero)</span>
@@ -614,7 +603,7 @@ X_t=\epsilon_t+\phi_1 \epsilon_{t-1}+\phi_1^2 \epsilon_{t-2}+\phi_1^3 \epsilon_{
 <span id="cb874-10"><a href="arima-models.html#cb874-10" aria-hidden="true" tabindex="-1"></a>         <span class="fu">round</span>(lmbd, <span class="dv">2</span>)</span>
 <span id="cb874-11"><a href="arima-models.html#cb874-11" aria-hidden="true" tabindex="-1"></a>       )))</span></code></pre></div>
 <p><img src="18-TimeSeriesArima_files/figure-html/ar3-1.png" width="672" /></p>
-<p>The option <code>guerrero</code> computes the optimal <span class="math inline">\(\lambda\)</span> value for a Box-Cox transformation using the <a href="https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104">Guerrero</a> method.</p>
+<p>The option <code>guerrero</code> computes the optimal <span class="math inline">\(\lambda\)</span> value for a Box-Cox transformation using the <a href="https://onlinelibrary.wiley.com/doi/10.1002/for.3980120104">Guerrero</a> method <span class="citation">(<a href="#ref-guerrero" role="doc-biblioref">Guerrero 1993</a>)</span>.</p>
 <p>Note that, since the number of tests performed in a given day changes the numbers of cases, we should use “positivity rates”, which is the percentage of positive results in all COVID-19 tests given any day, instead of case numbers. We ignore this problem for now.</p>
 </div>
 <div id="stationarity" class="section level2 hasAnchor" number="21.4">
@@ -869,6 +858,18 @@ F_{Seasonality}=\max \left(0,1-\frac{\operatorname{Var}\left(R_t\right)}{\operat
 <p>As we discussed earlier in this book, there are basically two ways to select a best fitting predictive model: <strong>ex-post</strong> and <strong>ex-ante</strong> tools to penalize the overfitting. With AIC (Akaike Information Criterion) and BIC (Bayesian Information Criteria) measures, we can indirectly estimate the test (out-of-sample) error by making an adjustment to the training (in-sample) error to account for the bias due to overfitting. Therefore, these methods are ex-post tools to penalize the overfitting. The Hyndman-Khandakar algorithm uses this ex-post approach by selecting the best predictive ARIMA model with minimum AICc among alternatives.</p>
 <p>We can directly estimate the test error (out-sample) and choose the model that minimizes it. Instead of selecting a model with AICc, we can do it by tuning the parameters of ARIMA with a cross-validation approach so that the tuned model achieves the highest predictive accuracy.</p>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-guerrero" class="csl-entry">
+Guerrero, Victor M. 1993. <span>“Time-Series Analysis Supported by Power Transformations.”</span> <em>Journal of Forecasting</em> 12 (1): 37–48. https://doi.org/<a href="https://doi.org/10.1002/for.3980120104">https://doi.org/10.1002/for.3980120104</a>.
+</div>
+<div id="ref-JSSv027i03" class="csl-entry">
+Hyndman, Rob J., and Yeasmin Khandakar. 2008a. <span>“Automatic Time Series Forecasting: The Forecast Package for r.”</span> <em>Journal of Statistical Software</em> 27 (3): 1–22. <a href="https://doi.org/10.18637/jss.v027.i03">https://doi.org/10.18637/jss.v027.i03</a>.
+</div>
+<div id="ref-PROIETTI201388" class="csl-entry">
+Proietti, Tommaso, and Helmut Lütkepohl. 2013. <span>“Does the Box–Cox Transformation Help in Forecasting Macroeconomic Time Series?”</span> <em>International Journal of Forecasting</em> 29 (1): 88–99. https://doi.org/<a href="https://doi.org/10.1016/j.ijforecast.2012.06.001">https://doi.org/10.1016/j.ijforecast.2012.06.001</a>.
 </div>
 </div>
             </section>

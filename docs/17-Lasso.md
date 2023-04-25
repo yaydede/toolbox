@@ -15,7 +15,7 @@ The lasso also shrinks the coefficient estimates towards zero. However, the $\el
 
 In general, one might expect lasso to perform better in a setting where a relatively small number of predictors have substantial coefficients and the remaining predictors have no significant effect on the outcome. This property is known as "sparsity", because it results in a model with a relatively small number of non-zero coefficients.  In some cases, Lasso can find a true sparsity pattern in the data by identifying a small subset of the most important features that are sufficient to accurately predict the target variable.
 
-Now, we apply lasso to the same data, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in [Introduction to Statistical Learning](https://www.statlearning.com) (ISLR).    
+Now, we apply lasso to the same data, `Hitters`.  Again, we will follow a similar way to compare ridge and lasso as in [Introduction to Statistical Learning](https://www.statlearning.com) ([@Gareth]).    
 
 
 ```r
@@ -172,7 +172,7 @@ We can also try a classification problem with LPM or Logistic regression when th
 
 # Adaptive Lasso
 
-Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou (2006) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. 
+Adaptive lasso is a method for regularization and variable selection in regression analysis that was introduced by Zou ([@Zou]) in [The Adaptive Lasso and Its Oracle Properties](http://users.stat.umn.edu/~zouxx019/Papers/adalasso.pdf). In this paper, the author proposed the use of a weighted $\ell_{1}$ penalty in the objective function, with the weights chosen to adapt to the correlation structure of the data. He showed that this method can result in a more stable model with fewer coefficients being exactly zero, compared to the standard lasso method which uses a simple $\ell_{1}$ penalty. 
 
 Since its introduction, adaptive lasso has been widely used in a variety of applications in statistical modeling and machine learning. It has been applied to problems such as feature selections in genomic data, high-dimensional regressions, and model selections with generalized linear models.  Adaptive lasso is useful in situations where the predictors are correlated and there is a need to select a small subset of important variables to include in the model. It has been shown that adaptive lasso is an oracle efficient estimator (consistency in variable selection and asymptotic normality in coefficient estimation), while the plain lasso is not.
   

@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -727,7 +716,7 @@ div.csl-indent {
 <div id="exploration" class="section level2 hasAnchor" number="14.3">
 <h2><span class="header-section-number">14.3</span> Exploration<a href="ensemble-applications.html#exploration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>While the task in machine learning is to achieve the best predictive capacity, for many applications identifying the major predictors could be the major objective. Of course, finding the most important predictors is contingent on the model’s predictive performance. As we discussed earlier, however, there is a trade-off between prediction accuracy and interpretability. Although there are many different aspects of interpretability, it refer to understanding the relationship between the predicted outcome and the predictors.</p>
-<p>The interpretability in predictive modeling is an active research area. Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: <a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning</a> by Christoph Molnar and <a href="https://ema.drwhy.ai">Explanatory Model Analysis</a> by Biecek and Burzykowski (2020).</p>
+<p>The interpretability in predictive modeling is an active research area. Two excellent books on the subject provide much needed comprehensive information about the interpretability and explanatory analysis in machine learning: <a href="https://christophm.github.io/interpretable-ml-book/">Interpretable Machine Learning</a> by Christoph Molnar <span class="citation">(<a href="#ref-Molnar" role="doc-biblioref">Molnar 2021</a>)</span> and <a href="https://ema.drwhy.ai">Explanatory Model Analysis</a> by Biecek and Burzykowski (2021) [<span class="citation">(<a href="#ref-Biecek" role="doc-biblioref">Biecek and Burzykowski 2021</a>)</span>.</p>
 <p>Explorations of predictive models are classified in two major groups. The first one is the instance-level exploration, or example-based explanation methods, which present methods for exploration of a model’s predictions for a single observation. For example, for a particular subject (person, firm, patient), we may want to know contribution of the different features to the predicted outcome for the subject. The main idea is to understand marginal effect of a predictor on the prediction for a specific subject. There are two important methods in this level: Shapley Additive Explanations (SHAP) and Local Interpretable Model-agnostic Explanations (LIME). We will not explain and apply them here in this book. These two methods are easily accessible with multiple examples in both books we cited ealrier.</p>
 <p>The second group of explanation methods focuses on dataset-level explainers, which help understand the average behavior of a machine learning model for an entire set of observations. Here, we will focus on several variable-importance measures. They are permutation-based variable importance metrics offering a model-agnostic approach to the assessment of the influence of an explanatory variable on a model’s performance.</p>
 <p>There are several options to evaluate how important is the variable <span class="math inline">\(x\)</span> in predictions. One major method is the permutation-based variable-importance in which the effect of a variable is removed through a random reshuffling of the data in <span class="math inline">\(x\)</span>. This method takes the original data under <span class="math inline">\(x\)</span>, permutates (mixes) its values, and gets “new” data, on which computes the weighted decrease of accuracy corresponding to splits along the variable <span class="math inline">\(x\)</span> and averages this quantity over all trees. If a variable is an important predictor in the model, after its permutation, the mean decrease accuracy (MDA) rises. It stems from the idea that if the variable is not important, rearranging its values should not degrade prediction accuracy. The MDA relies on a different principle and uses the out-of-bag error estimate. Every tree in the forest has its own out-of-bag sample, on which the prediction accuracy is measured. To calculate MDA, the values of the variable in the out-of-bag-sample are randomly shuffled and the decrease in prediction accuracy on the shuffled data is measured. This process is repeated for all variables and trees. The MDA averaged over all trees is ranked. If a variable has insignificant predictive power, shuffling may not lead to substantial decrease in accuracy. It is shown that building a tree with additional irrelevant variables does not alter the importance of relevant variables in an infinite sample setting.</p>
@@ -746,7 +735,7 @@ div.csl-indent {
 <p><img src="13-EnsembleApplication_files/figure-html/ea9-1.png" width="672" /></p>
 <p>Partial dependence plots (PDPs) are a graphical tool used to visualize the relationship between a single feature and the predicted outcome in a machine learning model, while averaging out the effects of all other features. For each unique value of the chosen feature, the algorithm fixes the value and keeps all other feature values unchanged. Then, the modified dataset with the fixed feature value is used by the Random Forest model to obtain predictions for each instance. We compute the average prediction across all instances for the fixed feature value. This represents the partial dependence of the outcome on the chosen feature value. We perform these steps for all unique values of the chosen feature, and obtain the partial dependence values for each feature value. A plot with the chosen feature values on the x-axis and the corresponding partial dependence values on the y-axis is the Partial dependence plot.</p>
 <p>The resulting partial dependence plot illustrates the relationship between the chosen feature and the model’s predictions, while accounting for the average effect of all other features. The plot helps to identify the direction (positive or negative) and strength of the relationship, as well as any non-linear patterns or interactions with other features. Keep in mind that partial dependence plots are most useful for understanding the effects of individual features in isolation, and they may not capture the full complexity of the model if there are strong interactions between features.</p>
-<p>There are several libraries that we can use to improve presentation of permutation-based variable importance metrics: the <code>randomForestExplainer</code> package (see its <a href="https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html">vignette</a>) <span class="citation">(<a href="#ref-Palu_2012" role="doc-biblioref"><strong>Palu_2012?</strong></a>)</span> and.the <code>DALEX</code> packages.</p>
+<p>There are several libraries that we can use to improve presentation of permutation-based variable importance metrics: the <code>randomForestExplainer</code> package (see its <a href="https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html">vignette</a>) <span class="citation">(<a href="#ref-Palu_2012" role="doc-biblioref">Paluszyńska 2017</a>)</span> and.the <code>DALEX</code> packages.</p>
 <div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb670-1"><a href="ensemble-applications.html#cb670-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForestExplainer)</span>
 <span id="cb670-2"><a href="ensemble-applications.html#cb670-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb670-3"><a href="ensemble-applications.html#cb670-3" aria-hidden="true" tabindex="-1"></a>importance_frame <span class="ot">&lt;-</span> <span class="fu">measure_importance</span>(model3)</span>
@@ -910,7 +899,7 @@ div.csl-indent {
 </div>
 <div id="random-search-with-parallel-processing" class="section level3 hasAnchor" number="14.4.2">
 <h3><span class="header-section-number">14.4.2</span> Random search with parallel processing<a href="ensemble-applications.html#random-search-with-parallel-processing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Now, we will apply a random grid search introduced by Bergstra and Bengio in <a href="https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a>) <span class="citation">(<a href="#ref-Bergs_2012" role="doc-biblioref"><strong>Bergs_2012?</strong></a>)</span>. This paper shows that randomly chosen trials are more efficient for hyperparameter optimization than trials on a grid. Random search is a slight variation on grid search. Instead of searching over the entire grid, random search evaluates randomly selected parts on the grid.</p>
+<p>Now, we will apply a random grid search introduced by Bergstra and Bengio in <a href="https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a>) <span class="citation">(<a href="#ref-Bergs_2012" role="doc-biblioref">Bergstra and Bengio 2012a</a>)</span>. This paper shows that randomly chosen trials are more efficient for hyperparameter optimization than trials on a grid. Random search is a slight variation on grid search. Instead of searching over the entire grid, random search evaluates randomly selected parts on the grid.</p>
 <p>To characterize the performance of random search, the authors use the analytic form of the expectation. The expected probability of finding the target is <span class="math inline">\(1.0\)</span> minus the probability of missing the target with every single one of <span class="math inline">\(T\)</span> trials in the experiment. If the volume of the target relative to the unit hypercube is <span class="math inline">\((v / V=0.01)\)</span> and there are <span class="math inline">\(T\)</span> trials, then this probability of finding the target is</p>
 <p><span class="math display">\[
 1-\left(1-\frac{v}{V}\right)^T=1-0.99^T .
@@ -1052,7 +1041,7 @@ which can be solved as</p>
 </div>
 <div id="classification-1" class="section level3 hasAnchor" number="14.4.4">
 <h3><span class="header-section-number">14.4.4</span> Classification<a href="ensemble-applications.html#classification-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>A simulated data set containing sales of child car seats at 400 different stores from. We will predict the sale, a binary variable that will be 1 if the sale is higher than 8. See <a href="https://rdrr.io/cran/ISLR/man/Carseats.html">ISLR</a> <span class="citation">(<a href="#ref-ISLR_Car" role="doc-biblioref"><strong>ISLR_Car?</strong></a>)</span> for the details.</p>
+<p>A simulated data set containing sales of child car seats at 400 different stores from. We will predict the sale, a binary variable that will be 1 if the sale is higher than 8. See <a href="https://rdrr.io/cran/ISLR/man/Carseats.html">ISLR</a> <span class="citation">(<a href="#ref-ISLR_Car" role="doc-biblioref">ISLR 2021</a>)</span> for the details.</p>
 <div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb699-1"><a href="ensemble-applications.html#cb699-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
 <span id="cb699-2"><a href="ensemble-applications.html#cb699-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Carseats</span>
 <span id="cb699-3"><a href="ensemble-applications.html#cb699-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div>
@@ -1391,6 +1380,24 @@ which can be solved as</p>
 
 
 
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bergs_2012" class="csl-entry">
+———. 2012a. <span>“Random Search for Hyper-Parameter Optimization.”</span> <em>Journal of Machine Learning Research</em> 13: 281–305. <a href="https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf ">https://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf </a>.
+</div>
+<div id="ref-Biecek" class="csl-entry">
+Biecek, Przemyslaw, and Tomasz Burzykowski. 2021. <em><span>Explanatory Model Analysis</span></em>. Chapman; Hall/CRC, New York. <a href="https://pbiecek.github.io/ema/">https://pbiecek.github.io/ema/</a>.
+</div>
+<div id="ref-ISLR_Car" class="csl-entry">
+ISLR. 2021. <span>“Carseats: Sales of Child Car Seats.”</span> ISLR. <a href="https://rdrr.io/cran/ISLR/man/Carseats.html ">https://rdrr.io/cran/ISLR/man/Carseats.html </a>.
+</div>
+<div id="ref-Molnar" class="csl-entry">
+Molnar, Christoph. 2021. <em><span>Interpretable Machine Learning</span></em>. <a href="https://christophm.github.io/interpretable-ml-book/">https://christophm.github.io/interpretable-ml-book/</a>.
+</div>
+<div id="ref-Palu_2012" class="csl-entry">
+Paluszyńska, Aleksandra. 2017. <span>“Understanding Random Forests with randomForestExplainer.”</span> <a href="https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html">https://htmlpreview.github.io/?https://github.com/geneticsMiNIng/BlackBoxOpener/master/randomForestExplainer/inst/doc/randomForestExplainer.html</a>.
+</div>
+</div>
             </section>
 
           </div>

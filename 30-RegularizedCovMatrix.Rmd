@@ -221,7 +221,7 @@ str(opt)
 op <- opt$optLambda
 ```
 
-We know that Ridge will not provide a sparse solution.  Yet, we need a sparse precision matrix for network analysis. The $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after the precision matrix is estimated. The extra step is explained in their [paper](https://www.sciencedirect.com/science/article/pii/S0167947316301141) (van Wieringen, W.N. and Peeters, C.F.W., 2016):
+We know that Ridge will not provide a sparse solution.  Yet, we need a sparse precision matrix for network analysis. The $\ell_{2}$ penalty of `rags2ridges` relies on an extra step that selects the edges after the precision matrix is estimated. The extra step is explained in their [paper](https://www.sciencedirect.com/science/article/pii/S0167947316301141) ([@VANWIERINGEN2016284]):
 
 >While some may argue this as a drawback (typically due to a lack of perceived simplicity), it is often beneficial to separate the “variable selection” and estimation.
 

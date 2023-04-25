@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -513,7 +502,7 @@ Ridge regression is very similar to least squares, except that the coefficients 
 <li>If <span class="math inline">\(\lambda \rightarrow \infty, \quad \hat{\beta}_{\infty}^{\text {ridge }}=\mathbf{0}\)</span>.</li>
 </ul>
 <p>The hyperparameter <span class="math inline">\(\lambda\)</span> controls the relative impact of the penalization on the regression coefficient estimates. When <span class="math inline">\(\lambda = 0\)</span>, the cost function becomes RSS (residual sum of squares), that is the cost function of OLS and the estimations, produce the least squares estimates. However, as <span class="math inline">\(\lambda\)</span> gets higher, the impact of the shrinkage penalty grows, and the coefficients of the ridge regression will approach zero. Note that, the shrinkage penalty is applied to slope coefficients not to the intercept, which is simply the mean of the response, when all features are zero.</p>
-<p>Let’s apply this to the same data we used earlier, <code>Hitters</code> from the <a href="http://faculty.marshall.usc.edu/gareth-james/ISL/">ISLR</a> <span class="citation">(<a href="#ref-ISLR_2021" role="doc-biblioref"><strong>ISLR_2021?</strong></a>)</span> package:</p>
+<p>Let’s apply this to the same data we used earlier, <code>Hitters</code> from the <a href="http://faculty.marshall.usc.edu/gareth-james/ISL/">ISLR</a> package:</p>
 <div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="ridge.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
 <span id="cb802-2"><a href="ridge.html#cb802-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb802-3"><a href="ridge.html#cb802-3" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
@@ -528,7 +517,7 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 <p>The <code>glmnet</code> function has a slightly different syntax from other model-fitting functions that we have used so far in this book (<code>y ~ X</code>). Therefore, before we execute the syntax, we have the prepare the model so that <code>X</code> will be a matrix and <code>y</code> will be a vector. The matrix <code>X</code> has to be prepared before we proceed, which must be free of <code>NA</code>s.</p>
 <div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="ridge.html#cb803-1" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
 <span id="cb803-2"><a href="ridge.html#cb803-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>Salary</span></code></pre></div>
-<p>The <code>glmnet</code> package is maintained by Trevor Hastie who provides a friendly <a href="https://glmnet.stanford.edu/articles/glmnet.html">vignette</a> <span class="citation">(<a href="#ref-Hastie_glmnet" role="doc-biblioref"><strong>Hastie_glmnet?</strong></a>)</span>. They describe the importance of <code>model.matrix()</code> in <code>glmnet</code> as follows:</p>
+<p>The <code>glmnet</code> package is maintained by Trevor Hastie who provides a friendly <a href="https://glmnet.stanford.edu/articles/glmnet.html">vignette</a> <span class="citation">(<a href="#ref-Hastie_glmnet" role="doc-biblioref">Hastie, Qian, and Tay 2021</a>)</span>. They describe the importance of <code>model.matrix()</code> in <code>glmnet</code> as follows:</p>
 <blockquote>
 <p>(…)particularly useful for creating <span class="math inline">\(x\)</span>; not only does it produce a matrix corresponding to the 19 predictors but it also automatically transforms any qualitative variables into dummy variables. The latter property is important because <code>glmnet()</code> can only take numerical, quantitative inputs.</p>
 </blockquote>
@@ -706,7 +695,7 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 ## Residual standard error: 335.6 on 140 degrees of freedom
 ## Multiple R-squared:  0.4428, Adjusted R-squared:  0.3672 
 ## F-statistic: 5.856 on 19 and 140 DF,  p-value: 1.346e-10</code></pre>
-<p>The second way is to rely on the <code>glmnet</code> internal training process, <code>cv.glmnet</code>, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction. A part of the following scripts follows the same algorithm as the one in the book (<a href="https://www.statlearning.com">Introduction to Statistical Learning</a> - ISLR p.254). This approach uses a specific grid on <span class="math inline">\(\lambda\)</span>. We also run the same grid search 100 times to see the associated uncertainty.</p>
+<p>The second way is to rely on the <code>glmnet</code> internal training process, <code>cv.glmnet</code>, which is the main function to do cross-validation along with various supporting methods such as plotting and prediction. A part of the following scripts follows the same algorithm as the one in the book (<a href="https://www.statlearning.com">Introduction to Statistical Learning</a> - <span class="citation">(<a href="#ref-Gareth" role="doc-biblioref">James et al. 2013</a>)</span> p.254). This approach uses a specific grid on <span class="math inline">\(\lambda\)</span>. We also run the same grid search 100 times to see the associated uncertainty.</p>
 <div class="sourceCode" id="cb824"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb824-1"><a href="ridge.html#cb824-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With a defined grid on lambda</span></span>
 <span id="cb824-2"><a href="ridge.html#cb824-2" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
 <span id="cb824-3"><a href="ridge.html#cb824-3" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
@@ -760,6 +749,15 @@ where <span class="math inline">\(l\left(y_i, \eta_i\right)\)</span> is the nega
 <p>Ridge regression adds a penalty term that is the sum of the squares of the coefficients of the features in the model. This results in a penalty that is continuous and differentiable, which makes Ridge regression easy to optimize using gradient descent. Ridge regression can be useful when we have a large number of features but we still want to keep all of the features in the model. Ridge regression works best in situations where the least squares estimates have high variance.</p>
 <p>On the other hand, Lasso (Least Absolute Shrinkage and Selection Operator) adds a penalty term that is the sum of the absolute values of the coefficients in the model. This results in a penalty that is non-differentiable, which makes it more difficult to optimize using gradient descent. However, Lasso has the advantage of being able to set the coefficients of some features to exactly zero, effectively eliminating those features from the model. This can be useful when we have a large number of features, and we want to select a subset of the most important features to include in the model.</p>
 
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Hastie_glmnet" class="csl-entry">
+Hastie, Trevor, Junyang Qian, and Kenneth Tay. 2021. <span>“An Introduction to Glmnet.”</span> <a href="https://glmnet.stanford.edu/articles/glmnet.html">https://glmnet.stanford.edu/articles/glmnet.html</a>.
+</div>
+<div id="ref-Gareth" class="csl-entry">
+James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2013. <em>An Introduction to Statistical Learning</em>. 1st ed. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-4614-7138-7">https://doi.org/10.1007/978-1-4614-7138-7</a>.
+</div>
 </div>
             </section>
 

@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -741,13 +730,19 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 <pre><code>## [1] 0.9600363</code></pre>
 <p>This ROC curve is the same as the one that we developed earlier.</p>
 <p>When we train a model, in each run (different train and test sets) we will obtain a different AUC. Differences in AUC across train and validation sets creates an uncertainty about AUC. Consequently, the asymptotic properties of AUC for comparing alternative models has become a subject of discussions in the literature.</p>
-<p>Another important point is that, while AUC represents the entire area under the curve, our interest would be on a specific location of TPR or FPR. Hence it’s possible that, for any given two competing algorithms, while one prediction algorithm has a higher overall AUC, the other one could have a better AUC in that specific location. This issue can be seen in the following figure taken from <a href="https://arxiv.org/pdf/1812.01388.pdf">Bad practices in evaluation methodology relevant to class-imbalanced problems</a> by Jan Brabec and Lukas Machlica <span class="citation">(<a href="#ref-Brab_2018" role="doc-biblioref"><strong>Brab_2018?</strong></a>)</span>.</p>
+<p>Another important point is that, while AUC represents the entire area under the curve, our interest would be on a specific location of TPR or FPR. Hence it’s possible that, for any given two competing algorithms, while one prediction algorithm has a higher overall AUC, the other one could have a better AUC in that specific location. This issue can be seen in the following figure taken from <a href="https://arxiv.org/pdf/1812.01388.pdf">Bad practices in evaluation methodology relevant to class-imbalanced problems</a> by Jan Brabec and Lukas Machlica <span class="citation">(<a href="#ref-Brab_2018" role="doc-biblioref">2018</a>)</span>.</p>
 <p><img src="png/AUCs.png" width="140%" height="140%" /></p>
 <blockquote>
 <p>For example, in the domain of network traffic intrusion-detection, the imbalance ratio is often higher than 1:1000, and the cost of a false alarm for an applied system is very high. This is due to increased analysis and remediation costs of infected devices. In such systems, the region of interest on the ROC curve is for false positive rate at most 0.0001. If AUC was computed in the usual way over the complete ROC curve then 99.99% of the area would be irrelevant and would represent only noise in the final outcome. We demonstrate this phenomenon in Figure 1.</p>
 <p>If AUC has to be used, we suggest to discuss the region of interest, and eventually compute the area only at this region. This is even more important if ROC curves are not presented, but only AUCs of the compared algorithms are reported.</p>
 </blockquote>
 <p>Most of the challenges in classification problems are related to class imbalances in the data. We look at this issue in Cahpter 39.</p>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Brab_2018" class="csl-entry">
+Brabec, Jan, and Lukás Machlica. 2018. <span>“Bad Practices in Evaluation Methodology Relevant to Class-Imbalanced Problems.”</span> <em>CoRR</em> abs/1812.01388. <a href="https://arxiv.org/pdf/1812.01388.pdf">https://arxiv.org/pdf/1812.01388.pdf</a>.
 </div>
 </div>
             </section>

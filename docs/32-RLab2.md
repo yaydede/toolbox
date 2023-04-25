@@ -103,7 +103,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fa8b6326cf0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fca84817fc0> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -470,7 +470,7 @@ Lastly, we could use the filter and select functions from the `dplyr` package wh
 
 ### Plotting from data frame
 
-There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package [@Tay_2019].
+There are many good ways and packages for plotting.  I'll show you one here.  Visualizing the relationship between multiple variables can get messy very quickly. Here is the `ggpairs()` function in the **GGally** package.
 
 
 ```r
@@ -531,8 +531,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels "(-2.5,0.271]",..: 2 3 3 3 3 1 2 3 2 1
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels "(-3.96,1.19]",..: 3 2 2 3 1 3 1 1 3 1
 ```
 
 ```r
@@ -544,8 +544,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  2.83 5.06 3.73 5.43 4.93 ...
-##  $ c: Factor w/ 3 levels "(-2.5,0.271]",..: 2 3 3 3 3 1 2 3 2 1
+##  $ b: num  7.17 1.86 3.87 7.12 1.14 ...
+##  $ c: Factor w/ 3 levels "(-3.96,1.19]",..: 3 2 2 3 1 3 1 1 3 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -562,16 +562,16 @@ my_data
 
 ```
 ##     a          b            c          d          f          g         h
-## 1   1  2.8267830 (0.271,3.04] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  5.0607976  (3.04,5.81] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  3.7287942  (3.04,5.81] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  5.4296145  (3.04,5.81] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  4.9322914  (3.04,5.81] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 -2.4953587 (-2.5,0.271]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  0.4315730 (0.271,3.04]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  5.8039086  (3.04,5.81]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  1.0850013 (0.271,3.04]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  0.2290942 (-2.5,0.271]  1.4863011  1.1560120         NA  0.000000
+## 1   1  7.1669874  (6.32,11.5] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  1.8622356  (1.19,6.32] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3  3.8684596  (1.19,6.32] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  7.1216184  (6.32,11.5] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  1.1410102 (-3.96,1.19] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6 11.4529402  (6.32,11.5]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7 -2.1350216 (-3.96,1.19]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  0.3369667 (-3.96,1.19]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  6.7083418  (6.32,11.5]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -3.9399884 (-3.96,1.19]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -833,7 +833,6 @@ if(y > w) print("y is bigger than w")
 The `ifelse()` function only allows for one “if” statement, two cases. You could add nested “if” statements, but that’s just a pain, especially if the 3+ conditions you want to use are all on the same level, conceptually. Is there a way to specify multiple conditions at the same time?  
 
 `dplyr()` is the most powerful library for data management.  When you have time, read more about it!  
-Source: https://stats.idre.ucla.edu/stat/data/intro_r/intro_r.html#(35)  
 
 
 ```r
@@ -984,7 +983,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1] -0.09813913  3.80388523  2.16811135 -3.61989657 -1.18188391  2.39363736
+## [1] -0.3662922  0.1197668  2.6524091  0.8211474 -2.2927842 -1.4059134
 ```
 
 ```r
@@ -1031,11 +1030,11 @@ X_new
 
 ```
 ##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.027069 3.097459 5.163892 1.141302 3.843876 2.313892
-## [2,] 4.110574 3.153890 2.853738 0.788915 1.978948 3.659133
-## [3,] 2.893520 6.030457 2.419055 2.274441 2.572441 2.635440
-## [4,] 1.827768 3.739481 3.726244 3.364199 1.847009 5.355576
-## [5,] 3.042931 2.782599 3.005183 3.811246 3.575841 3.429596
+## [1,] 1.296347 2.154419 2.698632 4.081763 3.294838 4.187444
+## [2,] 3.024872 3.616963 3.573454 2.809846 2.047436 2.862360
+## [3,] 2.645027 3.580737 3.481540 3.808343 2.793891 2.627911
+## [4,] 5.158016 2.653085 3.350166 2.869844 2.694531 2.827116
+## [5,] 2.509446 3.114563 4.548618 2.251351 1.876519 1.089255
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  

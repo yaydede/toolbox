@@ -55,8 +55,6 @@ eq:7-1
 eq:8-1
 eq:8-2
 eq:16-1
-eq:binom
-thm:tri
 intro
 preliminaries
 data-and-dataset-types
@@ -261,10 +259,3 @@ optimization-with-r
 imbalanced-data
 smote
 fraud-detection
-footnotes-and-citations
-footnotes
-citations
-blocks
-equations
-theorems-and-proofs
-callout-blocks

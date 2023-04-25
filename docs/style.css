@@ -82,3 +82,13 @@ li code {
 .book .book-body .page-wrapper .page-inner section.normal h3 {
   border-bottom: 1px solid #eaecef;
 }
+
+/* Bibliography / references */
+.csl-entry {
+  margin-top: 1em;
+}
+
+.hanging-indent .csl-entry {
+  padding-left: 1em;
+  text-indent: -1em;
+}

@@ -456,17 +456,6 @@ div.csl-indent {
 <li class="chapter" data-level="39.1" data-path="imbalanced-data.html"><a href="imbalanced-data.html#smote"><i class="fa fa-check"></i><b>39.1</b> <code>SMOTE</code></a></li>
 <li class="chapter" data-level="39.2" data-path="imbalanced-data.html"><a href="imbalanced-data.html#fraud-detection"><i class="fa fa-check"></i><b>39.2</b> Fraud detection</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>40</b> Footnotes and citations</a>
-<ul>
-<li class="chapter" data-level="40.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>40.1</b> Footnotes</a></li>
-<li class="chapter" data-level="40.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>40.2</b> Citations</a></li>
-</ul></li>
-<li class="chapter" data-level="41" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>41</b> Blocks</a>
-<ul>
-<li class="chapter" data-level="41.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>41.1</b> Equations</a></li>
-<li class="chapter" data-level="41.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>41.2</b> Theorems and proofs</a></li>
-<li class="chapter" data-level="41.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>41.3</b> Callout blocks</a></li>
-</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/yaydede/toolbox" target="blank"> 2023 Yigit Aydede - Bookdown</a></li>
@@ -821,7 +810,7 @@ H_t &amp; =o_t \times \tanh \left(C_t\right)
 \end{aligned}
 \]</span>
 Note that the tanh activation in the output function could be changed depending on the type of network we build.</p>
-<p>The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM. One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al. (<a href="https://arxiv.org/abs/1409.1259">2014</a>). The details of GRU is beyond this book. But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp. One of the accessible sources to learn different types of RNN is <a href="http://colah.github.io">blog posts</a> by Christopher Olah.</p>
+<p>The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM. One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al <span class="citation">(<a href="#ref-DBLP:journals/corr/ChoMBB14" role="doc-biblioref">Cho et al. 2014</a>)</span>. The details of GRU is beyond this book. But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp. One of the accessible sources to learn different types of RNN is <a href="http://colah.github.io">blog posts</a> by Christopher Olah.</p>
 <p>Now, we return to the application of LSTM to our COVID-19 data. We use the “Adam” optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well. Below, the code shows an arbitrary network desihned with LSTM.</p>
 <div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1019-1"><a href="recurrent-neural-networks.html#cb1019-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb1019-2"><a href="recurrent-neural-networks.html#cb1019-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units =</span> <span class="dv">128</span>,</span>
@@ -941,6 +930,12 @@ Before concluding this chapter, let’s change our network setting slightly and 
 
 
 
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-DBLP:journals/corr/ChoMBB14" class="csl-entry">
+Cho, KyungHyun, Bart van Merrienboer, Dzmitry Bahdanau, and Yoshua Bengio. 2014. <span>“On the Properties of Neural Machine Translation: Encoder-Decoder Approaches.”</span> <em>CoRR</em> abs/1409.1259. <a href="http://arxiv.org/abs/1409.1259">http://arxiv.org/abs/1409.1259</a>.
+</div>
+</div>
             </section>
 
           </div>

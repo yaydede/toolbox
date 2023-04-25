@@ -396,7 +396,7 @@ In a model, non-linearity can be captured by estimating a linear regression thro
   (\#eq:6-11)
 \end{equation} 
   
-This function will not have a smooth transitions at the knots, $z.$, which brings us to a regression **spline, which is a piecewise regression model** with a smooth transition at the knots.  First, let's see how a piecewise regression works with an example.  To show evidence of nonlinearity between short and long-term interest rates, [Pfann et al (1996)](https://www.sciencedirect.com/science/article/abs/pii/0304407695017542) estimates the following piecewise linear model:  
+This function will not have a smooth transitions at the knots, $z.$, which brings us to a regression **spline, which is a piecewise regression model** with a smooth transition at the knots.  First, let's see how a piecewise regression works with an example.  To show evidence of nonlinearity between short and long-term interest rates, [@PFANN1996149] estimates the following piecewise linear model:  
 
 \begin{equation}
 y=\beta_{0}+\beta_{1} x+\beta_{2}(x-\kappa)_{+}+\varepsilon
