@@ -566,16 +566,16 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 \]</span></p>
 <p>In the first case, <span class="math inline">\(TPR = 1\)</span> and <span class="math inline">\(FPR = 1\)</span>; and in the second case, <span class="math inline">\(TPR = 0\)</span> and <span class="math inline">\(FPR = 0\)</span>. So when we calculate all possible confusion tables with different values of thresholds ranging from 0% to 100%, we will have the same number of (<span class="math inline">\(TPR, FPR\)</span>) points each corresponding to one threshold. <strong>The ROC curve is the curve that connects these points</strong>.</p>
 <p>Let’s use an example with the <em>Boston Housing Market</em> dataset to illustrate ROC:</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="tuning-in-classification.html#cb426-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb426-2"><a href="tuning-in-classification.html#cb426-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Boston)</span>
-<span id="cb426-3"><a href="tuning-in-classification.html#cb426-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb426-4"><a href="tuning-in-classification.html#cb426-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create our binary outcome</span></span>
-<span id="cb426-5"><a href="tuning-in-classification.html#cb426-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> Boston[, <span class="sc">-</span><span class="dv">14</span>] <span class="co">#Dropping &quot;medv&quot;</span></span>
-<span id="cb426-6"><a href="tuning-in-classification.html#cb426-6" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb426-7"><a href="tuning-in-classification.html#cb426-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb426-8"><a href="tuning-in-classification.html#cb426-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use logistic regression for classification</span></span>
-<span id="cb426-9"><a href="tuning-in-classification.html#cb426-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb426-10"><a href="tuning-in-classification.html#cb426-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="tuning-in-classification.html#cb421-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb421-2"><a href="tuning-in-classification.html#cb421-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Boston)</span>
+<span id="cb421-3"><a href="tuning-in-classification.html#cb421-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb421-4"><a href="tuning-in-classification.html#cb421-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create our binary outcome</span></span>
+<span id="cb421-5"><a href="tuning-in-classification.html#cb421-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> Boston[, <span class="sc">-</span><span class="dv">14</span>] <span class="co">#Dropping &quot;medv&quot;</span></span>
+<span id="cb421-6"><a href="tuning-in-classification.html#cb421-6" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb421-7"><a href="tuning-in-classification.html#cb421-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb421-8"><a href="tuning-in-classification.html#cb421-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use logistic regression for classification</span></span>
+<span id="cb421-9"><a href="tuning-in-classification.html#cb421-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb421-10"><a href="tuning-in-classification.html#cb421-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = dummy ~ ., family = &quot;binomial&quot;, data = data)
@@ -611,89 +611,89 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 ## 
 ## Number of Fisher Scoring iterations: 7</code></pre>
 <p>And our prediction (in-sample):</p>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="tuning-in-classification.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classified Y&#39;s by TRUE and FALSE</span></span>
-<span id="cb428-2"><a href="tuning-in-classification.html#cb428-2" aria-hidden="true" tabindex="-1"></a>yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
-<span id="cb428-3"><a href="tuning-in-classification.html#cb428-3" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
-<span id="cb428-4"><a href="tuning-in-classification.html#cb428-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb428-5"><a href="tuning-in-classification.html#cb428-5" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s change the order of cells</span></span>
-<span id="cb428-6"><a href="tuning-in-classification.html#cb428-6" aria-hidden="true" tabindex="-1"></a>ctt <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table)</span>
-<span id="cb428-7"><a href="tuning-in-classification.html#cb428-7" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb428-8"><a href="tuning-in-classification.html#cb428-8" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">2</span>]</span>
-<span id="cb428-9"><a href="tuning-in-classification.html#cb428-9" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">1</span>]</span>
-<span id="cb428-10"><a href="tuning-in-classification.html#cb428-10" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">1</span>]</span>
-<span id="cb428-11"><a href="tuning-in-classification.html#cb428-11" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">2</span>]</span>
-<span id="cb428-12"><a href="tuning-in-classification.html#cb428-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb428-13"><a href="tuning-in-classification.html#cb428-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
-<span id="cb428-14"><a href="tuning-in-classification.html#cb428-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
-<span id="cb428-15"><a href="tuning-in-classification.html#cb428-15" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="tuning-in-classification.html#cb423-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Classified Y&#39;s by TRUE and FALSE</span></span>
+<span id="cb423-2"><a href="tuning-in-classification.html#cb423-2" aria-hidden="true" tabindex="-1"></a>yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
+<span id="cb423-3"><a href="tuning-in-classification.html#cb423-3" aria-hidden="true" tabindex="-1"></a>conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
+<span id="cb423-4"><a href="tuning-in-classification.html#cb423-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb423-5"><a href="tuning-in-classification.html#cb423-5" aria-hidden="true" tabindex="-1"></a><span class="co">#let&#39;s change the order of cells</span></span>
+<span id="cb423-6"><a href="tuning-in-classification.html#cb423-6" aria-hidden="true" tabindex="-1"></a>ctt <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table)</span>
+<span id="cb423-7"><a href="tuning-in-classification.html#cb423-7" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb423-8"><a href="tuning-in-classification.html#cb423-8" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb423-9"><a href="tuning-in-classification.html#cb423-9" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb423-10"><a href="tuning-in-classification.html#cb423-10" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb423-11"><a href="tuning-in-classification.html#cb423-11" aria-hidden="true" tabindex="-1"></a>ct[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> ctt[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb423-12"><a href="tuning-in-classification.html#cb423-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb423-13"><a href="tuning-in-classification.html#cb423-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
+<span id="cb423-14"><a href="tuning-in-classification.html#cb423-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
+<span id="cb423-15"><a href="tuning-in-classification.html#cb423-15" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
 <pre><code>##          Y = 1 Y = 0
 ## Yhat = 1   100    16
 ## Yhat = 0    24   366</code></pre>
 <p>It would be much easier if we create our own function to rotate a matrix/table:</p>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="tuning-in-classification.html#cb430-1" aria-hidden="true" tabindex="-1"></a>rot <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb430-2"><a href="tuning-in-classification.html#cb430-2" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, rev)</span>
-<span id="cb430-3"><a href="tuning-in-classification.html#cb430-3" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">apply</span>(t, <span class="dv">1</span>, rev)</span>
-<span id="cb430-4"><a href="tuning-in-classification.html#cb430-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">t</span>(tt))</span>
-<span id="cb430-5"><a href="tuning-in-classification.html#cb430-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb430-6"><a href="tuning-in-classification.html#cb430-6" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">rot</span>(conf_table)</span>
-<span id="cb430-7"><a href="tuning-in-classification.html#cb430-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
-<span id="cb430-8"><a href="tuning-in-classification.html#cb430-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
-<span id="cb430-9"><a href="tuning-in-classification.html#cb430-9" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="tuning-in-classification.html#cb425-1" aria-hidden="true" tabindex="-1"></a>rot <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb425-2"><a href="tuning-in-classification.html#cb425-2" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">apply</span>(x, <span class="dv">2</span>, rev)</span>
+<span id="cb425-3"><a href="tuning-in-classification.html#cb425-3" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">apply</span>(t, <span class="dv">1</span>, rev)</span>
+<span id="cb425-4"><a href="tuning-in-classification.html#cb425-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">t</span>(tt))</span>
+<span id="cb425-5"><a href="tuning-in-classification.html#cb425-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb425-6"><a href="tuning-in-classification.html#cb425-6" aria-hidden="true" tabindex="-1"></a>ct <span class="ot">&lt;-</span> <span class="fu">rot</span>(conf_table)</span>
+<span id="cb425-7"><a href="tuning-in-classification.html#cb425-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Yhat = 1&quot;</span>, <span class="st">&quot;Yhat = 0&quot;</span>)</span>
+<span id="cb425-8"><a href="tuning-in-classification.html#cb425-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ct) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y = 1&quot;</span>, <span class="st">&quot;Y = 0&quot;</span>)</span>
+<span id="cb425-9"><a href="tuning-in-classification.html#cb425-9" aria-hidden="true" tabindex="-1"></a>ct</span></code></pre></div>
 <pre><code>##           
 ## yHat       Y = 1 Y = 0
 ##   Yhat = 1   100    16
 ##   Yhat = 0    24   366</code></pre>
 <p>Now we calculate our TPR, FPR, and J-Index:</p>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="tuning-in-classification.html#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR</span></span>
-<span id="cb432-2"><a href="tuning-in-classification.html#cb432-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
-<span id="cb432-3"><a href="tuning-in-classification.html#cb432-3" aria-hidden="true" tabindex="-1"></a>TPR</span></code></pre></div>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="tuning-in-classification.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR</span></span>
+<span id="cb427-2"><a href="tuning-in-classification.html#cb427-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
+<span id="cb427-3"><a href="tuning-in-classification.html#cb427-3" aria-hidden="true" tabindex="-1"></a>TPR</span></code></pre></div>
 <pre><code>## [1] 0.8064516</code></pre>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="tuning-in-classification.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="co">#FPR</span></span>
-<span id="cb434-2"><a href="tuning-in-classification.html#cb434-2" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">2</span>])</span>
-<span id="cb434-3"><a href="tuning-in-classification.html#cb434-3" aria-hidden="true" tabindex="-1"></a>FPR</span></code></pre></div>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="tuning-in-classification.html#cb429-1" aria-hidden="true" tabindex="-1"></a><span class="co">#FPR</span></span>
+<span id="cb429-2"><a href="tuning-in-classification.html#cb429-2" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">2</span>])</span>
+<span id="cb429-3"><a href="tuning-in-classification.html#cb429-3" aria-hidden="true" tabindex="-1"></a>FPR</span></code></pre></div>
 <pre><code>## [1] 0.04188482</code></pre>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="tuning-in-classification.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="co">#J-Index</span></span>
-<span id="cb436-2"><a href="tuning-in-classification.html#cb436-2" aria-hidden="true" tabindex="-1"></a>TPR<span class="sc">-</span>FPR</span></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="tuning-in-classification.html#cb431-1" aria-hidden="true" tabindex="-1"></a><span class="co">#J-Index</span></span>
+<span id="cb431-2"><a href="tuning-in-classification.html#cb431-2" aria-hidden="true" tabindex="-1"></a>TPR<span class="sc">-</span>FPR</span></code></pre></div>
 <pre><code>## [1] 0.7645668</code></pre>
 <p>These rates are calculated for the threshold of 0.5. We can have all pairs of <span class="math inline">\(TPR\)</span> and <span class="math inline">\(FPR\)</span> for all possible discrimination thresholds. What’s the possible set? We will use our <span class="math inline">\(\hat{P}\)</span> values for this.</p>
-<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="tuning-in-classification.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We create an ordered grid from our fitted values</span></span>
-<span id="cb438-2"><a href="tuning-in-classification.html#cb438-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model<span class="sc">$</span>fitted.values)</span></code></pre></div>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="tuning-in-classification.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We create an ordered grid from our fitted values</span></span>
+<span id="cb433-2"><a href="tuning-in-classification.html#cb433-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model<span class="sc">$</span>fitted.values)</span></code></pre></div>
 <pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
 ## 0.000000 0.004205 0.035602 0.245059 0.371758 0.999549</code></pre>
-<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="tuning-in-classification.html#cb440-1" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values[<span class="fu">order</span>(model<span class="sc">$</span>fitted.values)]</span>
-<span id="cb440-2"><a href="tuning-in-classification.html#cb440-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(phat)</span></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="tuning-in-classification.html#cb435-1" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values[<span class="fu">order</span>(model<span class="sc">$</span>fitted.values)]</span>
+<span id="cb435-2"><a href="tuning-in-classification.html#cb435-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(phat)</span></code></pre></div>
 <pre><code>## [1] 506</code></pre>
-<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="tuning-in-classification.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We need to have containers for the pairs of TPR and FPR</span></span>
-<span id="cb442-2"><a href="tuning-in-classification.html#cb442-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb442-3"><a href="tuning-in-classification.html#cb442-3" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb442-4"><a href="tuning-in-classification.html#cb442-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb442-5"><a href="tuning-in-classification.html#cb442-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Now the loop</span></span>
-<span id="cb442-6"><a href="tuning-in-classification.html#cb442-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(phat)) {</span>
-<span id="cb442-7"><a href="tuning-in-classification.html#cb442-7" aria-hidden="true" tabindex="-1"></a>  yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> phat[i]</span>
-<span id="cb442-8"><a href="tuning-in-classification.html#cb442-8" aria-hidden="true" tabindex="-1"></a>  conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
-<span id="cb442-9"><a href="tuning-in-classification.html#cb442-9" aria-hidden="true" tabindex="-1"></a>  ct <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table) </span>
-<span id="cb442-10"><a href="tuning-in-classification.html#cb442-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">sum</span>(<span class="fu">dim</span>(ct))<span class="sc">&gt;</span><span class="dv">3</span>){ <span class="co">#here we ignore the thresholds 0 and 1</span></span>
-<span id="cb442-11"><a href="tuning-in-classification.html#cb442-11" aria-hidden="true" tabindex="-1"></a>    TPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">1</span>,<span class="dv">2</span>])</span>
-<span id="cb442-12"><a href="tuning-in-classification.html#cb442-12" aria-hidden="true" tabindex="-1"></a>    FPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
-<span id="cb442-13"><a href="tuning-in-classification.html#cb442-13" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb442-14"><a href="tuning-in-classification.html#cb442-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb442-15"><a href="tuning-in-classification.html#cb442-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FPR, TPR, <span class="at">col=</span> <span class="st">&quot;blue&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">main =</span> <span class="st">&quot;ROC&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb442-16"><a href="tuning-in-classification.html#cb442-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="tuning-in-classification.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We need to have containers for the pairs of TPR and FPR</span></span>
+<span id="cb437-2"><a href="tuning-in-classification.html#cb437-2" aria-hidden="true" tabindex="-1"></a>TPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb437-3"><a href="tuning-in-classification.html#cb437-3" aria-hidden="true" tabindex="-1"></a>FPR <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb437-4"><a href="tuning-in-classification.html#cb437-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb437-5"><a href="tuning-in-classification.html#cb437-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Now the loop</span></span>
+<span id="cb437-6"><a href="tuning-in-classification.html#cb437-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(phat)) {</span>
+<span id="cb437-7"><a href="tuning-in-classification.html#cb437-7" aria-hidden="true" tabindex="-1"></a>  yHat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values <span class="sc">&gt;</span> phat[i]</span>
+<span id="cb437-8"><a href="tuning-in-classification.html#cb437-8" aria-hidden="true" tabindex="-1"></a>  conf_table <span class="ot">&lt;-</span> <span class="fu">table</span>(yHat, data<span class="sc">$</span>dummy)</span>
+<span id="cb437-9"><a href="tuning-in-classification.html#cb437-9" aria-hidden="true" tabindex="-1"></a>  ct <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(conf_table) </span>
+<span id="cb437-10"><a href="tuning-in-classification.html#cb437-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">sum</span>(<span class="fu">dim</span>(ct))<span class="sc">&gt;</span><span class="dv">3</span>){ <span class="co">#here we ignore the thresholds 0 and 1</span></span>
+<span id="cb437-11"><a href="tuning-in-classification.html#cb437-11" aria-hidden="true" tabindex="-1"></a>    TPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>(ct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">+</span>ct[<span class="dv">1</span>,<span class="dv">2</span>])</span>
+<span id="cb437-12"><a href="tuning-in-classification.html#cb437-12" aria-hidden="true" tabindex="-1"></a>    FPR[i] <span class="ot">&lt;-</span> ct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>(ct[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">+</span>ct[<span class="dv">2</span>,<span class="dv">1</span>])</span>
+<span id="cb437-13"><a href="tuning-in-classification.html#cb437-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb437-14"><a href="tuning-in-classification.html#cb437-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb437-15"><a href="tuning-in-classification.html#cb437-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FPR, TPR, <span class="at">col=</span> <span class="st">&quot;blue&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">main =</span> <span class="st">&quot;ROC&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb437-16"><a href="tuning-in-classification.html#cb437-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="10-TuningClass_files/figure-html/tc7-1.png" width="672" /></p>
 <p>Several things we observe on this curve. First, there is a trade-off between TPF and FPR. Approximately, after 70% of TPR, an increase in TPF can be achieved by increasing FPR, which means that if we care more about the possible lowest FPR, we can fix the discriminating rate at that point.</p>
 <p>Second, we can identify the best discriminating threshold that makes the distance between TPR and FPR largest. In other words, we can identify the threshold where the marginal gain on TPR would be equal to the marginal cost of FPR. This can be achieved by the <strong>Jouden’s J statistics</strong>, <span class="math inline">\(J=TPR+TNR-1\)</span>, which identifies the best discriminating threshold. Note that <span class="math inline">\(TNR= 1-FPR\)</span>. Hence <span class="math inline">\(J = TPR-FPR\)</span>.</p>
-<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="tuning-in-classification.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Youden&#39;s J Statistics</span></span>
-<span id="cb443-2"><a href="tuning-in-classification.html#cb443-2" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> TPR <span class="sc">-</span> FPR</span>
-<span id="cb443-3"><a href="tuning-in-classification.html#cb443-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The best discriminating threshold</span></span>
-<span id="cb443-4"><a href="tuning-in-classification.html#cb443-4" aria-hidden="true" tabindex="-1"></a>phat[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="tuning-in-classification.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Youden&#39;s J Statistics</span></span>
+<span id="cb438-2"><a href="tuning-in-classification.html#cb438-2" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> TPR <span class="sc">-</span> FPR</span>
+<span id="cb438-3"><a href="tuning-in-classification.html#cb438-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The best discriminating threshold</span></span>
+<span id="cb438-4"><a href="tuning-in-classification.html#cb438-4" aria-hidden="true" tabindex="-1"></a>phat[<span class="fu">which.max</span>(J)]</span></code></pre></div>
 <pre><code>##       231 
 ## 0.1786863</code></pre>
-<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="tuning-in-classification.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR and FPR at this threshold</span></span>
-<span id="cb445-2"><a href="tuning-in-classification.html#cb445-2" aria-hidden="true" tabindex="-1"></a>TPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="tuning-in-classification.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TPR and FPR at this threshold</span></span>
+<span id="cb440-2"><a href="tuning-in-classification.html#cb440-2" aria-hidden="true" tabindex="-1"></a>TPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
 <pre><code>## [1] 0.9354839</code></pre>
-<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="tuning-in-classification.html#cb447-1" aria-hidden="true" tabindex="-1"></a>FPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="tuning-in-classification.html#cb442-1" aria-hidden="true" tabindex="-1"></a>FPR[<span class="fu">which.max</span>(J)]</span></code></pre></div>
 <pre><code>## [1] 0.1361257</code></pre>
-<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="tuning-in-classification.html#cb449-1" aria-hidden="true" tabindex="-1"></a>J[<span class="fu">which.max</span>(J)]</span></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="tuning-in-classification.html#cb444-1" aria-hidden="true" tabindex="-1"></a>J[<span class="fu">which.max</span>(J)]</span></code></pre></div>
 <pre><code>## [1] 0.7993582</code></pre>
 <p>This simple example shows that the best (in-sample) fit can be achieved by</p>
 <p><span class="math display">\[
@@ -711,22 +711,22 @@ OA-EA=\frac{m_{i j}}{n}-\frac{m_{i} m_{j}}{n^{2}}
 0.60-0.70 = Poor (D)<br />
 0.50-0.60 = Fail (F)</p>
 <p>Since the formula and its derivation is beyond the scope of this chapter, we will use the package <code>ROCR</code> to calculate it.</p>
-<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="tuning-in-classification.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
-<span id="cb451-2"><a href="tuning-in-classification.html#cb451-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb451-3"><a href="tuning-in-classification.html#cb451-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb451-4"><a href="tuning-in-classification.html#cb451-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb451-5"><a href="tuning-in-classification.html#cb451-5" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values</span>
-<span id="cb451-6"><a href="tuning-in-classification.html#cb451-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb451-7"><a href="tuning-in-classification.html#cb451-7" aria-hidden="true" tabindex="-1"></a>phat_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(phat, <span class="st">&quot;Y&quot;</span> <span class="ot">=</span> data<span class="sc">$</span>dummy)</span>
-<span id="cb451-8"><a href="tuning-in-classification.html#cb451-8" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat_df[,<span class="dv">1</span>], phat_df[,<span class="dv">2</span>])</span>
-<span id="cb451-9"><a href="tuning-in-classification.html#cb451-9" aria-hidden="true" tabindex="-1"></a>perf <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr,<span class="st">&quot;tpr&quot;</span>,<span class="st">&quot;fpr&quot;</span>)</span>
-<span id="cb451-10"><a href="tuning-in-classification.html#cb451-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb451-11"><a href="tuning-in-classification.html#cb451-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf, <span class="at">colorize=</span><span class="cn">TRUE</span>)</span>
-<span id="cb451-12"><a href="tuning-in-classification.html#cb451-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="tuning-in-classification.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb446-2"><a href="tuning-in-classification.html#cb446-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-3"><a href="tuning-in-classification.html#cb446-3" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>dummy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">ifelse</span>(Boston<span class="sc">$</span>medv <span class="sc">&gt;</span> <span class="dv">25</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb446-4"><a href="tuning-in-classification.html#cb446-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(dummy <span class="sc">~</span> ., <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb446-5"><a href="tuning-in-classification.html#cb446-5" aria-hidden="true" tabindex="-1"></a>phat <span class="ot">&lt;-</span> model<span class="sc">$</span>fitted.values</span>
+<span id="cb446-6"><a href="tuning-in-classification.html#cb446-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-7"><a href="tuning-in-classification.html#cb446-7" aria-hidden="true" tabindex="-1"></a>phat_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(phat, <span class="st">&quot;Y&quot;</span> <span class="ot">=</span> data<span class="sc">$</span>dummy)</span>
+<span id="cb446-8"><a href="tuning-in-classification.html#cb446-8" aria-hidden="true" tabindex="-1"></a>pred_rocr <span class="ot">&lt;-</span> <span class="fu">prediction</span>(phat_df[,<span class="dv">1</span>], phat_df[,<span class="dv">2</span>])</span>
+<span id="cb446-9"><a href="tuning-in-classification.html#cb446-9" aria-hidden="true" tabindex="-1"></a>perf <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr,<span class="st">&quot;tpr&quot;</span>,<span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb446-10"><a href="tuning-in-classification.html#cb446-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-11"><a href="tuning-in-classification.html#cb446-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf, <span class="at">colorize=</span><span class="cn">TRUE</span>)</span>
+<span id="cb446-12"><a href="tuning-in-classification.html#cb446-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="10-TuningClass_files/figure-html/tc10-1.png" width="672" /></p>
-<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="tuning-in-classification.html#cb452-1" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
-<span id="cb452-2"><a href="tuning-in-classification.html#cb452-2" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
-<span id="cb452-3"><a href="tuning-in-classification.html#cb452-3" aria-hidden="true" tabindex="-1"></a>AUC</span></code></pre></div>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="tuning-in-classification.html#cb447-1" aria-hidden="true" tabindex="-1"></a>auc_ROCR <span class="ot">&lt;-</span> <span class="fu">performance</span>(pred_rocr, <span class="at">measure =</span> <span class="st">&quot;auc&quot;</span>)</span>
+<span id="cb447-2"><a href="tuning-in-classification.html#cb447-2" aria-hidden="true" tabindex="-1"></a>AUC <span class="ot">&lt;-</span> auc_ROCR<span class="sc">@</span>y.values[[<span class="dv">1</span>]]</span>
+<span id="cb447-3"><a href="tuning-in-classification.html#cb447-3" aria-hidden="true" tabindex="-1"></a>AUC</span></code></pre></div>
 <pre><code>## [1] 0.9600363</code></pre>
 <p>This ROC curve is the same as the one that we developed earlier.</p>
 <p>When we train a model, in each run (different train and test sets) we will obtain a different AUC. Differences in AUC across train and validation sets creates an uncertainty about AUC. Consequently, the asymptotic properties of AUC for comparing alternative models has become a subject of discussions in the literature.</p>

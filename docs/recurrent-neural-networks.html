@@ -518,31 +518,31 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 <h2><span class="header-section-number">25.1</span> Keras<a href="recurrent-neural-networks.html#keras" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will use the Keras deep-learning framework (<a href="https://keras.rstudio.com" class="uri">https://keras.rstudio.com</a>) and the package <code>keras</code>, which provides high-level building blocks for developing deep-learning models. Keras operates on several tensor libraries to tensor manipulations and differentiation, one of which is TensorFlow.</p>
 <p>Tensors are simply multidimensional arrays, which are a generalization of vectors and matrices to an arbitrary number of dimensions. For example, vectors are 1D tensors, matrices are used for 2D tensors, and arrays (which support any number of dimensions) are used for multi-dimensional objects. Keras works on CPUs, but the most efficient implementations of Keras use NVIDIA GPUs and properly configured CUDA and cuDNN libraries. For CPU-based installation of Keras, which is what we use in this chapter, we suggest the following steps after installing the <code>keras</code> package.</p>
-<div class="sourceCode" id="cb979"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb979-1"><a href="recurrent-neural-networks.html#cb979-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.unsetenv(&quot;RETICULATE_PYTHON&quot;)</span></span>
-<span id="cb979-2"><a href="recurrent-neural-networks.html#cb979-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;rstudio/reticulate&quot;)</span></span>
-<span id="cb979-3"><a href="recurrent-neural-networks.html#cb979-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reticulate::install_miniconda()</span></span>
-<span id="cb979-4"><a href="recurrent-neural-networks.html#cb979-4" aria-hidden="true" tabindex="-1"></a><span class="co"># keras::install_keras ()</span></span></code></pre></div>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb974-1"><a href="recurrent-neural-networks.html#cb974-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.unsetenv(&quot;RETICULATE_PYTHON&quot;)</span></span>
+<span id="cb974-2"><a href="recurrent-neural-networks.html#cb974-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;rstudio/reticulate&quot;)</span></span>
+<span id="cb974-3"><a href="recurrent-neural-networks.html#cb974-3" aria-hidden="true" tabindex="-1"></a><span class="co"># reticulate::install_miniconda()</span></span>
+<span id="cb974-4"><a href="recurrent-neural-networks.html#cb974-4" aria-hidden="true" tabindex="-1"></a><span class="co"># keras::install_keras ()</span></span></code></pre></div>
 <p>The best source using Keras for artificial neural network projects with R is “Deep Learning with R” by Chollet and Allaire. In this section, we will use the <code>keras</code> package (on CPU) for two main time series applications: RNN and LSTM.</p>
 <p>Let’s set up our COVID-19 data and standardize each of the variables.</p>
-<div class="sourceCode" id="cb980"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb980-1"><a href="recurrent-neural-networks.html#cb980-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
-<span id="cb980-2"><a href="recurrent-neural-networks.html#cb980-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span>
-<span id="cb980-3"><a href="recurrent-neural-networks.html#cb980-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb980-4"><a href="recurrent-neural-networks.html#cb980-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;~/Dropbox/ToolShed_draft/toronto2.rds&quot;</span>)</span>
-<span id="cb980-5"><a href="recurrent-neural-networks.html#cb980-5" aria-hidden="true" tabindex="-1"></a>toronto2 <span class="ot">&lt;-</span> data</span>
-<span id="cb980-6"><a href="recurrent-neural-networks.html#cb980-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> toronto2 <span class="sc">%&gt;%</span></span>
-<span id="cb980-7"><a href="recurrent-neural-networks.html#cb980-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb980-8"><a href="recurrent-neural-networks.html#cb980-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dcases =</span> <span class="fu">difference</span>(cases),</span>
-<span id="cb980-9"><a href="recurrent-neural-networks.html#cb980-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmob =</span> <span class="fu">difference</span>(mob),</span>
-<span id="cb980-10"><a href="recurrent-neural-networks.html#cb980-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ddelay =</span> <span class="fu">difference</span>(delay),</span>
-<span id="cb980-11"><a href="recurrent-neural-networks.html#cb980-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmale =</span> <span class="fu">difference</span>(male),</span>
-<span id="cb980-12"><a href="recurrent-neural-networks.html#cb980-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">dtemp =</span> <span class="fu">difference</span>(temp),</span>
-<span id="cb980-13"><a href="recurrent-neural-networks.html#cb980-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">dhum =</span> <span class="fu">difference</span>(hum)</span>
-<span id="cb980-14"><a href="recurrent-neural-networks.html#cb980-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb980-15"><a href="recurrent-neural-networks.html#cb980-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb980-16"><a href="recurrent-neural-networks.html#cb980-16" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>)] <span class="co">#removing levels</span></span>
-<span id="cb980-17"><a href="recurrent-neural-networks.html#cb980-17" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> dft[<span class="sc">-</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">2</span>)] <span class="co"># reordering the columns</span></span>
-<span id="cb980-18"><a href="recurrent-neural-networks.html#cb980-18" aria-hidden="true" tabindex="-1"></a>sdtf <span class="ot">&lt;-</span> <span class="fu">scale</span>(dft) <span class="co">#</span></span>
-<span id="cb980-19"><a href="recurrent-neural-networks.html#cb980-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sdtf)</span></code></pre></div>
+<div class="sourceCode" id="cb975"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb975-1"><a href="recurrent-neural-networks.html#cb975-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)</span>
+<span id="cb975-2"><a href="recurrent-neural-networks.html#cb975-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpp3)</span>
+<span id="cb975-3"><a href="recurrent-neural-networks.html#cb975-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb975-4"><a href="recurrent-neural-networks.html#cb975-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;~/Dropbox/ToolShed_draft/toronto2.rds&quot;</span>)</span>
+<span id="cb975-5"><a href="recurrent-neural-networks.html#cb975-5" aria-hidden="true" tabindex="-1"></a>toronto2 <span class="ot">&lt;-</span> data</span>
+<span id="cb975-6"><a href="recurrent-neural-networks.html#cb975-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> toronto2 <span class="sc">%&gt;%</span></span>
+<span id="cb975-7"><a href="recurrent-neural-networks.html#cb975-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb975-8"><a href="recurrent-neural-networks.html#cb975-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dcases =</span> <span class="fu">difference</span>(cases),</span>
+<span id="cb975-9"><a href="recurrent-neural-networks.html#cb975-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmob =</span> <span class="fu">difference</span>(mob),</span>
+<span id="cb975-10"><a href="recurrent-neural-networks.html#cb975-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ddelay =</span> <span class="fu">difference</span>(delay),</span>
+<span id="cb975-11"><a href="recurrent-neural-networks.html#cb975-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">dmale =</span> <span class="fu">difference</span>(male),</span>
+<span id="cb975-12"><a href="recurrent-neural-networks.html#cb975-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">dtemp =</span> <span class="fu">difference</span>(temp),</span>
+<span id="cb975-13"><a href="recurrent-neural-networks.html#cb975-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">dhum =</span> <span class="fu">difference</span>(hum)</span>
+<span id="cb975-14"><a href="recurrent-neural-networks.html#cb975-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb975-15"><a href="recurrent-neural-networks.html#cb975-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb975-16"><a href="recurrent-neural-networks.html#cb975-16" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> df[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>)] <span class="co">#removing levels</span></span>
+<span id="cb975-17"><a href="recurrent-neural-networks.html#cb975-17" aria-hidden="true" tabindex="-1"></a>dft <span class="ot">&lt;-</span> dft[<span class="sc">-</span><span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">2</span>)] <span class="co"># reordering the columns</span></span>
+<span id="cb975-18"><a href="recurrent-neural-networks.html#cb975-18" aria-hidden="true" tabindex="-1"></a>sdtf <span class="ot">&lt;-</span> <span class="fu">scale</span>(dft) <span class="co">#</span></span>
+<span id="cb975-19"><a href="recurrent-neural-networks.html#cb975-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sdtf)</span></code></pre></div>
 <pre><code>##        dcases        dmob     ddelay       dmale      dtemp        age
 ## 2  0.04202890 -0.21389272 -7.6496254  2.16845790  2.4818892  0.5144024
 ## 3  0.10622289  0.30023017  1.8050246 -2.58211378 -0.4756078  1.6374603
@@ -561,13 +561,13 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 <div id="input-tensors" class="section level2 hasAnchor" number="25.2">
 <h2><span class="header-section-number">25.2</span> Input Tensors<a href="recurrent-neural-networks.html#input-tensors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will define a three dimensional array that contains time series data. First, let’s see an array:</p>
-<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb982-1"><a href="recurrent-neural-networks.html#cb982-1" aria-hidden="true" tabindex="-1"></a><span class="co"># array</span></span>
-<span id="cb982-2"><a href="recurrent-neural-networks.html#cb982-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb982-3"><a href="recurrent-neural-networks.html#cb982-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span>
-<span id="cb982-4"><a href="recurrent-neural-networks.html#cb982-4" aria-hidden="true" tabindex="-1"></a>adata <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(x1, x2), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
-<span id="cb982-5"><a href="recurrent-neural-networks.html#cb982-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(adata)</span></code></pre></div>
+<div class="sourceCode" id="cb977"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb977-1"><a href="recurrent-neural-networks.html#cb977-1" aria-hidden="true" tabindex="-1"></a><span class="co"># array</span></span>
+<span id="cb977-2"><a href="recurrent-neural-networks.html#cb977-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb977-3"><a href="recurrent-neural-networks.html#cb977-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span>
+<span id="cb977-4"><a href="recurrent-neural-networks.html#cb977-4" aria-hidden="true" tabindex="-1"></a>adata <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(x1, x2), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb977-5"><a href="recurrent-neural-networks.html#cb977-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(adata)</span></code></pre></div>
 <pre><code>## [1] 3 3 2</code></pre>
-<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb984-1"><a href="recurrent-neural-networks.html#cb984-1" aria-hidden="true" tabindex="-1"></a>adata</span></code></pre></div>
+<div class="sourceCode" id="cb979"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb979-1"><a href="recurrent-neural-networks.html#cb979-1" aria-hidden="true" tabindex="-1"></a>adata</span></code></pre></div>
 <pre><code>## , , 1
 ## 
 ##      [,1] [,2] [,3]
@@ -581,16 +581,16 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [1,]    1    4    7
 ## [2,]    2    5    8
 ## [3,]    3    6    9</code></pre>
-<div class="sourceCode" id="cb986"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb986-1"><a href="recurrent-neural-networks.html#cb986-1" aria-hidden="true" tabindex="-1"></a>adata[<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb981"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb981-1"><a href="recurrent-neural-networks.html#cb981-1" aria-hidden="true" tabindex="-1"></a>adata[<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2]
 ## [1,]    1    1
 ## [2,]    4    4
 ## [3,]    7    7</code></pre>
 <p>Now, we create our data matrix:</p>
-<div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb988-1"><a href="recurrent-neural-networks.html#cb988-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
-<span id="cb988-2"><a href="recurrent-neural-networks.html#cb988-2" aria-hidden="true" tabindex="-1"></a>toydata <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">101</span><span class="sc">:</span><span class="dv">200</span>, <span class="dv">201</span><span class="sc">:</span><span class="dv">300</span>), <span class="dv">100</span>)</span>
-<span id="cb988-3"><a href="recurrent-neural-networks.html#cb988-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(toydata) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>)</span>
-<span id="cb988-4"><a href="recurrent-neural-networks.html#cb988-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(toydata)</span></code></pre></div>
+<div class="sourceCode" id="cb983"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb983-1"><a href="recurrent-neural-networks.html#cb983-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
+<span id="cb983-2"><a href="recurrent-neural-networks.html#cb983-2" aria-hidden="true" tabindex="-1"></a>toydata <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">101</span><span class="sc">:</span><span class="dv">200</span>, <span class="dv">201</span><span class="sc">:</span><span class="dv">300</span>), <span class="dv">100</span>)</span>
+<span id="cb983-3"><a href="recurrent-neural-networks.html#cb983-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(toydata) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>)</span>
+<span id="cb983-4"><a href="recurrent-neural-networks.html#cb983-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(toydata)</span></code></pre></div>
 <pre><code>##      y  x1  x2
 ## [1,] 1 101 201
 ## [2,] 2 102 202
@@ -599,9 +599,9 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [5,] 5 105 205
 ## [6,] 6 106 206</code></pre>
 <p>Suppose that this is daily data and we try to make 1-day-ahead predictions. In preparing the input tensor, we need to decide how many earlier days we need to predict the next day’s value. Suppose that we decide on 5 days. As we seen before, we transform the data by embedding to a new structure:</p>
-<div class="sourceCode" id="cb990"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb990-1"><a href="recurrent-neural-networks.html#cb990-1" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> <span class="fu">embed</span>(toydata, <span class="dv">6</span>)</span>
-<span id="cb990-2"><a href="recurrent-neural-networks.html#cb990-2" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> datam[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
-<span id="cb990-3"><a href="recurrent-neural-networks.html#cb990-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datam)</span></code></pre></div>
+<div class="sourceCode" id="cb985"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb985-1"><a href="recurrent-neural-networks.html#cb985-1" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> <span class="fu">embed</span>(toydata, <span class="dv">6</span>)</span>
+<span id="cb985-2"><a href="recurrent-neural-networks.html#cb985-2" aria-hidden="true" tabindex="-1"></a>datam <span class="ot">&lt;-</span> datam[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb985-3"><a href="recurrent-neural-networks.html#cb985-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datam)</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
 ## [1,]    6    5  105  205    4  104  204    3  103   203     2   102   202     1
 ## [2,]    7    6  106  206    5  105  205    4  104   204     3   103   203     2
@@ -630,23 +630,23 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [4,]    5  105  205
 ## [5,]    6  106  206</code></pre>
 <p>The outcome variable <span class="math inline">\(y\)</span> is 6 and 7 in the first and second samples. Let’s see how we can manipulate our embedded data <code>datam</code> to achieve it:</p>
-<div class="sourceCode" id="cb994"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb994-1"><a href="recurrent-neural-networks.html#cb994-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datam)</span>
-<span id="cb994-2"><a href="recurrent-neural-networks.html#cb994-2" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(datam[,<span class="sc">-</span><span class="dv">1</span>]) <span class="co"># Removing Y</span></span>
-<span id="cb994-3"><a href="recurrent-neural-networks.html#cb994-3" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="dv">3</span>, <span class="dv">5</span>))</span>
-<span id="cb994-4"><a href="recurrent-neural-networks.html#cb994-4" aria-hidden="true" tabindex="-1"></a>f2[<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb989"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb989-1"><a href="recurrent-neural-networks.html#cb989-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datam)</span>
+<span id="cb989-2"><a href="recurrent-neural-networks.html#cb989-2" aria-hidden="true" tabindex="-1"></a>f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(datam[,<span class="sc">-</span><span class="dv">1</span>]) <span class="co"># Removing Y</span></span>
+<span id="cb989-3"><a href="recurrent-neural-networks.html#cb989-3" aria-hidden="true" tabindex="-1"></a>f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="dv">3</span>, <span class="dv">5</span>))</span>
+<span id="cb989-4"><a href="recurrent-neural-networks.html#cb989-4" aria-hidden="true" tabindex="-1"></a>f2[<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5]
 ## [1,]    5    4    3    2    1
 ## [2,]  105  104  103  102  101
 ## [3,]  205  204  203  202  201</code></pre>
 <p>We need reverse the order</p>
-<div class="sourceCode" id="cb996"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb996-1"><a href="recurrent-neural-networks.html#cb996-1" aria-hidden="true" tabindex="-1"></a>f3 <span class="ot">&lt;-</span> f2[, , <span class="dv">5</span><span class="sc">:</span><span class="dv">1</span>]</span>
-<span id="cb996-2"><a href="recurrent-neural-networks.html#cb996-2" aria-hidden="true" tabindex="-1"></a>f3[<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb991"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb991-1"><a href="recurrent-neural-networks.html#cb991-1" aria-hidden="true" tabindex="-1"></a>f3 <span class="ot">&lt;-</span> f2[, , <span class="dv">5</span><span class="sc">:</span><span class="dv">1</span>]</span>
+<span id="cb991-2"><a href="recurrent-neural-networks.html#cb991-2" aria-hidden="true" tabindex="-1"></a>f3[<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5]
 ## [1,]    1    2    3    4    5
 ## [2,]  101  102  103  104  105
 ## [3,]  201  202  203  204  205</code></pre>
 <p>And, taking the transposition,</p>
-<div class="sourceCode" id="cb998"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb998-1"><a href="recurrent-neural-networks.html#cb998-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(f3[<span class="dv">1</span>, , ])</span></code></pre></div>
+<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb993-1"><a href="recurrent-neural-networks.html#cb993-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(f3[<span class="dv">1</span>, , ])</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1  101  201
 ## [2,]    2  102  202
@@ -654,8 +654,8 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [4,]    4  104  204
 ## [5,]    5  105  205</code></pre>
 <p>For the whole array of <code>datam</code>, we use array transposition:</p>
-<div class="sourceCode" id="cb1000"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1000-1"><a href="recurrent-neural-networks.html#cb1000-1" aria-hidden="true" tabindex="-1"></a>f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
-<span id="cb1000-2"><a href="recurrent-neural-networks.html#cb1000-2" aria-hidden="true" tabindex="-1"></a>f4[<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb995"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb995-1"><a href="recurrent-neural-networks.html#cb995-1" aria-hidden="true" tabindex="-1"></a>f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb995-2"><a href="recurrent-neural-networks.html#cb995-2" aria-hidden="true" tabindex="-1"></a>f4[<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1  101  201
 ## [2,]    2  102  202
@@ -663,36 +663,36 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [4,]    4  104  204
 ## [5,]    5  105  205</code></pre>
 <p>Now, we are ready to apply all these steps to our toy data with a function:</p>
-<div class="sourceCode" id="cb1002"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1002-1"><a href="recurrent-neural-networks.html#cb1002-1" aria-hidden="true" tabindex="-1"></a>tensorin <span class="ot">&lt;-</span> <span class="cf">function</span>(l, x) {</span>
-<span id="cb1002-2"><a href="recurrent-neural-networks.html#cb1002-2" aria-hidden="true" tabindex="-1"></a>  maxl <span class="ot">=</span> l <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1002-3"><a href="recurrent-neural-networks.html#cb1002-3" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> <span class="fu">embed</span>(x, maxl)</span>
-<span id="cb1002-4"><a href="recurrent-neural-networks.html#cb1002-4" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> xm[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
-<span id="cb1002-5"><a href="recurrent-neural-networks.html#cb1002-5" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xm)</span>
-<span id="cb1002-6"><a href="recurrent-neural-networks.html#cb1002-6" aria-hidden="true" tabindex="-1"></a>  f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xm[,<span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb1002-7"><a href="recurrent-neural-networks.html#cb1002-7" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> xm[, <span class="dv">1</span>]</span>
-<span id="cb1002-8"><a href="recurrent-neural-networks.html#cb1002-8" aria-hidden="true" tabindex="-1"></a>  f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="fu">ncol</span>(x), l))</span>
-<span id="cb1002-9"><a href="recurrent-neural-networks.html#cb1002-9" aria-hidden="true" tabindex="-1"></a>  f3 <span class="ot">&lt;-</span> f2[, , l<span class="sc">:</span><span class="dv">1</span>]</span>
-<span id="cb1002-10"><a href="recurrent-neural-networks.html#cb1002-10" aria-hidden="true" tabindex="-1"></a>  f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
-<span id="cb1002-11"><a href="recurrent-neural-networks.html#cb1002-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(f4, y)</span>
-<span id="cb1002-12"><a href="recurrent-neural-networks.html#cb1002-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1002-13"><a href="recurrent-neural-networks.html#cb1002-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1002-14"><a href="recurrent-neural-networks.html#cb1002-14" aria-hidden="true" tabindex="-1"></a>tensored <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">5</span>, toydata)</span>
-<span id="cb1002-15"><a href="recurrent-neural-networks.html#cb1002-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> tensored[<span class="dv">1</span>]</span>
-<span id="cb1002-16"><a href="recurrent-neural-networks.html#cb1002-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> tensored[<span class="dv">2</span>]</span>
-<span id="cb1002-17"><a href="recurrent-neural-networks.html#cb1002-17" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb997"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb997-1"><a href="recurrent-neural-networks.html#cb997-1" aria-hidden="true" tabindex="-1"></a>tensorin <span class="ot">&lt;-</span> <span class="cf">function</span>(l, x) {</span>
+<span id="cb997-2"><a href="recurrent-neural-networks.html#cb997-2" aria-hidden="true" tabindex="-1"></a>  maxl <span class="ot">=</span> l <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb997-3"><a href="recurrent-neural-networks.html#cb997-3" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> <span class="fu">embed</span>(x, maxl)</span>
+<span id="cb997-4"><a href="recurrent-neural-networks.html#cb997-4" aria-hidden="true" tabindex="-1"></a>  xm <span class="ot">&lt;-</span> xm[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)]</span>
+<span id="cb997-5"><a href="recurrent-neural-networks.html#cb997-5" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(xm)</span>
+<span id="cb997-6"><a href="recurrent-neural-networks.html#cb997-6" aria-hidden="true" tabindex="-1"></a>  f1 <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(xm[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb997-7"><a href="recurrent-neural-networks.html#cb997-7" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> xm[, <span class="dv">1</span>]</span>
+<span id="cb997-8"><a href="recurrent-neural-networks.html#cb997-8" aria-hidden="true" tabindex="-1"></a>  f2 <span class="ot">&lt;-</span> <span class="fu">array</span>(f1, <span class="fu">c</span>(n, <span class="fu">ncol</span>(x), l))</span>
+<span id="cb997-9"><a href="recurrent-neural-networks.html#cb997-9" aria-hidden="true" tabindex="-1"></a>  f3 <span class="ot">&lt;-</span> f2[, , l<span class="sc">:</span><span class="dv">1</span>]</span>
+<span id="cb997-10"><a href="recurrent-neural-networks.html#cb997-10" aria-hidden="true" tabindex="-1"></a>  f4 <span class="ot">&lt;-</span> <span class="fu">aperm</span>(f3, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb997-11"><a href="recurrent-neural-networks.html#cb997-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(f4, y)</span>
+<span id="cb997-12"><a href="recurrent-neural-networks.html#cb997-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb997-13"><a href="recurrent-neural-networks.html#cb997-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb997-14"><a href="recurrent-neural-networks.html#cb997-14" aria-hidden="true" tabindex="-1"></a>tensored <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">5</span>, toydata)</span>
+<span id="cb997-15"><a href="recurrent-neural-networks.html#cb997-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> tensored[<span class="dv">1</span>]</span>
+<span id="cb997-16"><a href="recurrent-neural-networks.html#cb997-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> tensored[<span class="dv">2</span>]</span>
+<span id="cb997-17"><a href="recurrent-neural-networks.html#cb997-17" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1  101  201
 ## [2,]    2  102  202
 ## [3,]    3  103  203
 ## [4,]    4  104  204
 ## [5,]    5  105  205</code></pre>
-<div class="sourceCode" id="cb1004"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1004-1"><a href="recurrent-neural-networks.html#cb1004-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb999"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb999-1"><a href="recurrent-neural-networks.html#cb999-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <p>Note that this type of data transformation can be achieved several different ways. We can apply it to our COVID-19 data for 7-day windows:</p>
-<div class="sourceCode" id="cb1006"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1006-1"><a href="recurrent-neural-networks.html#cb1006-1" aria-hidden="true" tabindex="-1"></a>trnt <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">7</span>, sdtf)</span>
-<span id="cb1006-2"><a href="recurrent-neural-networks.html#cb1006-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> trnt[<span class="dv">1</span>]</span>
-<span id="cb1006-3"><a href="recurrent-neural-networks.html#cb1006-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trnt[<span class="dv">2</span>]</span>
-<span id="cb1006-4"><a href="recurrent-neural-networks.html#cb1006-4" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>, , ]</span></code></pre></div>
+<div class="sourceCode" id="cb1001"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1001-1"><a href="recurrent-neural-networks.html#cb1001-1" aria-hidden="true" tabindex="-1"></a>trnt <span class="ot">&lt;-</span> <span class="fu">tensorin</span>(<span class="dv">7</span>, sdtf)</span>
+<span id="cb1001-2"><a href="recurrent-neural-networks.html#cb1001-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> trnt[<span class="dv">1</span>]</span>
+<span id="cb1001-3"><a href="recurrent-neural-networks.html#cb1001-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trnt[<span class="dv">2</span>]</span>
+<span id="cb1001-4"><a href="recurrent-neural-networks.html#cb1001-4" aria-hidden="true" tabindex="-1"></a>X[[<span class="dv">1</span>]][<span class="dv">1</span>, , ]</span></code></pre></div>
 <pre><code>##             [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
 ## [1,] -2.58211378 -0.4756078  1.6374603  0.04202890 -0.21389272 -7.6496254
 ## [2,] -3.56924556  0.3182466  1.1383235  0.10622289  0.30023017  1.8050246
@@ -701,65 +701,65 @@ Y_{t}=\beta_0+\sum_{k=1}^2 \beta_k A_{k,t}
 ## [5,]  0.00910714 -0.5347577  0.6703827  0.07412590 -0.41612714 -2.1128735
 ## [6,]  3.46406836  2.4663234  1.1383235 -0.08635909  0.47965067 -0.7048789
 ## [7,] -2.48614263  1.9215213 -0.6641151  0.04202890  0.02204745  0.3698224</code></pre>
-<div class="sourceCode" id="cb1008"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1008-1"><a href="recurrent-neural-networks.html#cb1008-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1003"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1003-1"><a href="recurrent-neural-networks.html#cb1003-1" aria-hidden="true" tabindex="-1"></a>y[[<span class="dv">1</span>]][<span class="dv">1</span>]</span></code></pre></div>
 <pre><code>## [1] 0.2346109</code></pre>
 <p>Obviously, our choice of <span class="math inline">\(l\)</span> (7) is arbitrary and should be decided with a proper validation.</p>
 </div>
 <div id="plain-rnn" class="section level2 hasAnchor" number="25.3">
 <h2><span class="header-section-number">25.3</span> Plain RNN<a href="recurrent-neural-networks.html#plain-rnn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>As we have the input tensor stored as an array of (258, 7, 6), we are ready to design our network for an RNN with one layer with 24 hidden units (neurons):</p>
-<div class="sourceCode" id="cb1010"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1010-1"><a href="recurrent-neural-networks.html#cb1010-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
-<span id="cb1010-2"><a href="recurrent-neural-networks.html#cb1010-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb1010-3"><a href="recurrent-neural-networks.html#cb1010-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_simple_rnn</span>(</span>
-<span id="cb1010-4"><a href="recurrent-neural-networks.html#cb1010-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">24</span>,</span>
-<span id="cb1010-5"><a href="recurrent-neural-networks.html#cb1010-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_shape =</span> <span class="fu">list</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
-<span id="cb1010-6"><a href="recurrent-neural-networks.html#cb1010-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dropout =</span> <span class="fl">0.1</span>,</span>
-<span id="cb1010-7"><a href="recurrent-neural-networks.html#cb1010-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">recurrent_dropout =</span> <span class="fl">0.1</span></span>
-<span id="cb1010-8"><a href="recurrent-neural-networks.html#cb1010-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb1010-9"><a href="recurrent-neural-networks.html#cb1010-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1010-10"><a href="recurrent-neural-networks.html#cb1010-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(<span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
-<span id="cb1010-11"><a href="recurrent-neural-networks.html#cb1010-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">loss =</span> <span class="st">&quot;mse&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1005"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1005-1"><a href="recurrent-neural-networks.html#cb1005-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb1005-2"><a href="recurrent-neural-networks.html#cb1005-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1005-3"><a href="recurrent-neural-networks.html#cb1005-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_simple_rnn</span>(</span>
+<span id="cb1005-4"><a href="recurrent-neural-networks.html#cb1005-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">units =</span> <span class="dv">24</span>,</span>
+<span id="cb1005-5"><a href="recurrent-neural-networks.html#cb1005-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_shape =</span> <span class="fu">list</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
+<span id="cb1005-6"><a href="recurrent-neural-networks.html#cb1005-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dropout =</span> <span class="fl">0.1</span>,</span>
+<span id="cb1005-7"><a href="recurrent-neural-networks.html#cb1005-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">recurrent_dropout =</span> <span class="fl">0.1</span></span>
+<span id="cb1005-8"><a href="recurrent-neural-networks.html#cb1005-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1005-9"><a href="recurrent-neural-networks.html#cb1005-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1005-10"><a href="recurrent-neural-networks.html#cb1005-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(<span class="at">optimizer =</span> <span class="fu">optimizer_rmsprop</span>(),</span>
+<span id="cb1005-11"><a href="recurrent-neural-networks.html#cb1005-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">loss =</span> <span class="st">&quot;mse&quot;</span>)</span></code></pre></div>
 <p>As before, neural networks consist of layers and neurons in each layer. Since we use sequence data stored in 3D tensors of shape (samples, timesteps, features) we will use recurrent layers for our RNN. The term <code>layer_dense</code> is the output layer.</p>
 <p>We also (arbitrarily) specify two types of dropout for the units feeding into the hidden layer. The first one is set for the input feeding into a layer. The second one is for the previous hidden units feeding into the same layer.</p>
 <p>One of the tools to fight with overfitting is randomly removing inputs to a layer. Similar to Random Forest, this dropping out process has the effect of generating a large number of networks with different network structure and, in turn, breaking the possible correlation between the inputs that the layers are exposed to. These “dropped out” inputs may be variables in the data sample or activations from a previous layer. This is a conventional regularization method in ANN but how this can be applied to sequential data is a complex issue. Every recurrent layer in Keras has two dropout-related arguments: <code>dropout</code>, a float specifying the dropout rate for input units of the layer, and <code>recurrent_dropout</code>, specifying the dropout rate of the recurrent units. These are again additions to our hyperparameter grid. It has the effect of simulating a large number of networks with very different network structure and, in turn, making nodes in the network generally more robust to the inputs.</p>
 <p>Before fitting the model, we need to split the data. We have 258 observations in total. We will take the last 50 observations as our test set:</p>
-<div class="sourceCode" id="cb1011"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1011-1"><a href="recurrent-neural-networks.html#cb1011-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb1006"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1006-1"><a href="recurrent-neural-networks.html#cb1006-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] 258   7   6</code></pre>
-<div class="sourceCode" id="cb1013"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1013-1"><a href="recurrent-neural-networks.html#cb1013-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">208</span></span>
-<span id="cb1013-2"><a href="recurrent-neural-networks.html#cb1013-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">208</span><span class="sc">:</span><span class="fu">dim</span>(X[[<span class="dv">1</span>]])[<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb1008"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1008-1"><a href="recurrent-neural-networks.html#cb1008-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">208</span></span>
+<span id="cb1008-2"><a href="recurrent-neural-networks.html#cb1008-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">208</span><span class="sc">:</span><span class="fu">dim</span>(X[[<span class="dv">1</span>]])[<span class="dv">1</span>]</span></code></pre></div>
 <p>And, finally we fit our RNN. There are two hyperparameters that Keras use in fitting RNN: batch size and epoch. They are both related to how and how many times the weights in the network will be updated</p>
 <p>The batch size is the number of observations (“samples”) used in its gradient descent to update its internal parameters. For example, a conventional (batch) gradient descent uses the entire data in one batch so that the batch size would be the number of samples in the data. The stochastic gradient descent, on the other hand, uses randomly selected each observation. While the batch gradient descent is efficient (fast), it is not as robust as the stochastic gradient descent. Therefore, Keras uses a mini-batch gradient descent as a parameter that balance the between efficiency and robustness.</p>
 <p>The number of epochs is the number of times the algorithm works trough the complete training dataset. We need multiple passes through the entire data because updating the weights with gradient descent in a single pass (one epoch) is not enough. But, when the number of epochs goes up, the algorithm updates the weights more. As a result, the curve goes from underfitting (very few runs) to overfitting (too many runs).</p>
 <p>Hence, these two parameters, batch size and epoch, should be set as hyperparameters. Note that we pick arbitrary numbers below.</p>
-<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1014-1"><a href="recurrent-neural-networks.html#cb1014-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
-<span id="cb1014-2"><a href="recurrent-neural-networks.html#cb1014-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
-<span id="cb1014-3"><a href="recurrent-neural-networks.html#cb1014-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
-<span id="cb1014-4"><a href="recurrent-neural-networks.html#cb1014-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
-<span id="cb1014-5"><a href="recurrent-neural-networks.html#cb1014-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
-<span id="cb1014-6"><a href="recurrent-neural-networks.html#cb1014-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span></span>
-<span id="cb1014-7"><a href="recurrent-neural-networks.html#cb1014-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
-<span id="cb1014-8"><a href="recurrent-neural-networks.html#cb1014-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
-<span id="cb1014-9"><a href="recurrent-neural-networks.html#cb1014-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb1014-10"><a href="recurrent-neural-networks.html#cb1014-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1009"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1009-1"><a href="recurrent-neural-networks.html#cb1009-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
+<span id="cb1009-2"><a href="recurrent-neural-networks.html#cb1009-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
+<span id="cb1009-3"><a href="recurrent-neural-networks.html#cb1009-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
+<span id="cb1009-4"><a href="recurrent-neural-networks.html#cb1009-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
+<span id="cb1009-5"><a href="recurrent-neural-networks.html#cb1009-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1009-6"><a href="recurrent-neural-networks.html#cb1009-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span></span>
+<span id="cb1009-7"><a href="recurrent-neural-networks.html#cb1009-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1009-8"><a href="recurrent-neural-networks.html#cb1009-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1009-9"><a href="recurrent-neural-networks.html#cb1009-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1009-10"><a href="recurrent-neural-networks.html#cb1009-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn17-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1015"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1015-1"><a href="recurrent-neural-networks.html#cb1015-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction</span></span>
-<span id="cb1015-2"><a href="recurrent-neural-networks.html#cb1015-2" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
-<span id="cb1015-3"><a href="recurrent-neural-networks.html#cb1015-3" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
-<span id="cb1015-4"><a href="recurrent-neural-networks.html#cb1015-4" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(X[[<span class="dv">1</span>]][test, ,])</span>
-<span id="cb1015-5"><a href="recurrent-neural-networks.html#cb1015-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<div class="sourceCode" id="cb1010"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1010-1"><a href="recurrent-neural-networks.html#cb1010-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction</span></span>
+<span id="cb1010-2"><a href="recurrent-neural-networks.html#cb1010-2" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1010-3"><a href="recurrent-neural-networks.html#cb1010-3" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1010-4"><a href="recurrent-neural-networks.html#cb1010-4" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">predict</span>(X[[<span class="dv">1</span>]][test, ,])</span>
+<span id="cb1010-5"><a href="recurrent-neural-networks.html#cb1010-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
 <pre><code>## [1] 0.2706921</code></pre>
-<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1017-1"><a href="recurrent-neural-networks.html#cb1017-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<div class="sourceCode" id="cb1012"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1012-1"><a href="recurrent-neural-networks.html#cb1012-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
 <pre><code>## [1] 1.473745</code></pre>
 <p>Although it could be done easily as we shown in the previous chapter, we will not back-transform the predictions to levels. Here is the plot for the last 50 days:</p>
-<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1019-1"><a href="recurrent-neural-networks.html#cb1019-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb1019-2"><a href="recurrent-neural-networks.html#cb1019-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
-<span id="cb1019-3"><a href="recurrent-neural-networks.html#cb1019-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb1019-4"><a href="recurrent-neural-networks.html#cb1019-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb1019-5"><a href="recurrent-neural-networks.html#cb1019-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
-<span id="cb1019-6"><a href="recurrent-neural-networks.html#cb1019-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
-<span id="cb1019-7"><a href="recurrent-neural-networks.html#cb1019-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;RNN Forecasting for Covid-19 Cases - in differences&quot;</span></span>
-<span id="cb1019-8"><a href="recurrent-neural-networks.html#cb1019-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1019-9"><a href="recurrent-neural-networks.html#cb1019-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1014-1"><a href="recurrent-neural-networks.html#cb1014-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb1014-2"><a href="recurrent-neural-networks.html#cb1014-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
+<span id="cb1014-3"><a href="recurrent-neural-networks.html#cb1014-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb1014-4"><a href="recurrent-neural-networks.html#cb1014-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1014-5"><a href="recurrent-neural-networks.html#cb1014-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1014-6"><a href="recurrent-neural-networks.html#cb1014-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1014-7"><a href="recurrent-neural-networks.html#cb1014-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;RNN Forecasting for Covid-19 Cases - in differences&quot;</span></span>
+<span id="cb1014-8"><a href="recurrent-neural-networks.html#cb1014-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1014-9"><a href="recurrent-neural-networks.html#cb1014-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn18-1.png" width="672" /></p>
 <p>It looks like, our RNN without a proper training is capturing most ups and downs correctly.</p>
 <p>There are four groups of hyperparameters that we need to search by validation:</p>
@@ -812,21 +812,21 @@ H_t &amp; =o_t \times \tanh \left(C_t\right)
 Note that the tanh activation in the output function could be changed depending on the type of network we build.</p>
 <p>The LSTM network that we described so far is a conceptual one. In practice, there are many different variants of LSTM. One of them is called the Gated Recurrent Unit (GRU) introduced by Cho, et al <span class="citation">(<a href="#ref-DBLP:journals/corr/ChoMBB14" role="doc-biblioref">Cho et al. 2014</a>)</span>. The details of GRU is beyond this book. But, after understanding the structure of LSTM networks, GRU should not be difficult to grasp. One of the accessible sources to learn different types of RNN is <a href="http://colah.github.io">blog posts</a> by Christopher Olah.</p>
 <p>Now, we return to the application of LSTM to our COVID-19 data. We use the “Adam” optimization algorithm, which is an extension to stochastic gradient descent and works with LSTM very well. Below, the code shows an arbitrary network desihned with LSTM.</p>
-<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1020-1"><a href="recurrent-neural-networks.html#cb1020-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb1020-2"><a href="recurrent-neural-networks.html#cb1020-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units =</span> <span class="dv">128</span>,</span>
-<span id="cb1020-3"><a href="recurrent-neural-networks.html#cb1020-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
-<span id="cb1020-4"><a href="recurrent-neural-networks.html#cb1020-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">activation =</span> <span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1020-5"><a href="recurrent-neural-networks.html#cb1020-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1020-6"><a href="recurrent-neural-networks.html#cb1020-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1020-7"><a href="recurrent-neural-networks.html#cb1020-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1020-8"><a href="recurrent-neural-networks.html#cb1020-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>)</span>
-<span id="cb1020-9"><a href="recurrent-neural-networks.html#cb1020-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1020-10"><a href="recurrent-neural-networks.html#cb1020-10" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">compile</span>(</span>
-<span id="cb1020-11"><a href="recurrent-neural-networks.html#cb1020-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
-<span id="cb1020-12"><a href="recurrent-neural-networks.html#cb1020-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
-<span id="cb1020-13"><a href="recurrent-neural-networks.html#cb1020-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
-<span id="cb1020-14"><a href="recurrent-neural-networks.html#cb1020-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb1020-15"><a href="recurrent-neural-networks.html#cb1020-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1015"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1015-1"><a href="recurrent-neural-networks.html#cb1015-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1015-2"><a href="recurrent-neural-networks.html#cb1015-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units =</span> <span class="dv">128</span>,</span>
+<span id="cb1015-3"><a href="recurrent-neural-networks.html#cb1015-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
+<span id="cb1015-4"><a href="recurrent-neural-networks.html#cb1015-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">activation =</span> <span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1015-5"><a href="recurrent-neural-networks.html#cb1015-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">&quot;relu&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1015-6"><a href="recurrent-neural-networks.html#cb1015-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1015-7"><a href="recurrent-neural-networks.html#cb1015-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1015-8"><a href="recurrent-neural-networks.html#cb1015-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>)</span>
+<span id="cb1015-9"><a href="recurrent-neural-networks.html#cb1015-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1015-10"><a href="recurrent-neural-networks.html#cb1015-10" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">compile</span>(</span>
+<span id="cb1015-11"><a href="recurrent-neural-networks.html#cb1015-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
+<span id="cb1015-12"><a href="recurrent-neural-networks.html#cb1015-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
+<span id="cb1015-13"><a href="recurrent-neural-networks.html#cb1015-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
+<span id="cb1015-14"><a href="recurrent-neural-networks.html#cb1015-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1015-15"><a href="recurrent-neural-networks.html#cb1015-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## Model: &quot;sequential_1&quot;
 ## ________________________________________________________________________________
 ##  Layer (type)                       Output Shape                    Param #     
@@ -841,49 +841,49 @@ Note that the tanh activation in the output function could be changed depending 
 ## Trainable params: 80,001
 ## Non-trainable params: 0
 ## ________________________________________________________________________________</code></pre>
-<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1022-1"><a href="recurrent-neural-networks.html#cb1022-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
-<span id="cb1022-2"><a href="recurrent-neural-networks.html#cb1022-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
-<span id="cb1022-3"><a href="recurrent-neural-networks.html#cb1022-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
-<span id="cb1022-4"><a href="recurrent-neural-networks.html#cb1022-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
-<span id="cb1022-5"><a href="recurrent-neural-networks.html#cb1022-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
-<span id="cb1022-6"><a href="recurrent-neural-networks.html#cb1022-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
-<span id="cb1022-7"><a href="recurrent-neural-networks.html#cb1022-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
-<span id="cb1022-8"><a href="recurrent-neural-networks.html#cb1022-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb1022-9"><a href="recurrent-neural-networks.html#cb1022-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1017-1"><a href="recurrent-neural-networks.html#cb1017-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
+<span id="cb1017-2"><a href="recurrent-neural-networks.html#cb1017-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
+<span id="cb1017-3"><a href="recurrent-neural-networks.html#cb1017-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
+<span id="cb1017-4"><a href="recurrent-neural-networks.html#cb1017-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
+<span id="cb1017-5"><a href="recurrent-neural-networks.html#cb1017-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1017-6"><a href="recurrent-neural-networks.html#cb1017-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1017-7"><a href="recurrent-neural-networks.html#cb1017-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1017-8"><a href="recurrent-neural-networks.html#cb1017-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1017-9"><a href="recurrent-neural-networks.html#cb1017-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn20-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1023-1"><a href="recurrent-neural-networks.html#cb1023-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test, ,])</span>
-<span id="cb1023-2"><a href="recurrent-neural-networks.html#cb1023-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1023-3"><a href="recurrent-neural-networks.html#cb1023-3" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
-<span id="cb1023-4"><a href="recurrent-neural-networks.html#cb1023-4" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
-<span id="cb1023-5"><a href="recurrent-neural-networks.html#cb1023-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1018-1"><a href="recurrent-neural-networks.html#cb1018-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test, ,])</span>
+<span id="cb1018-2"><a href="recurrent-neural-networks.html#cb1018-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1018-3"><a href="recurrent-neural-networks.html#cb1018-3" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1018-4"><a href="recurrent-neural-networks.html#cb1018-4" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1018-5"><a href="recurrent-neural-networks.html#cb1018-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
 <pre><code>## [1] -0.3102839</code></pre>
-<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1025-1"><a href="recurrent-neural-networks.html#cb1025-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1020-1"><a href="recurrent-neural-networks.html#cb1020-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
 <pre><code>## [1] 1.975375</code></pre>
-<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1027-1"><a href="recurrent-neural-networks.html#cb1027-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb1027-2"><a href="recurrent-neural-networks.html#cb1027-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
-<span id="cb1027-3"><a href="recurrent-neural-networks.html#cb1027-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb1027-4"><a href="recurrent-neural-networks.html#cb1027-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb1027-5"><a href="recurrent-neural-networks.html#cb1027-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
-<span id="cb1027-6"><a href="recurrent-neural-networks.html#cb1027-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
-<span id="cb1027-7"><a href="recurrent-neural-networks.html#cb1027-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
-<span id="cb1027-8"><a href="recurrent-neural-networks.html#cb1027-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">1</span></span>
-<span id="cb1027-9"><a href="recurrent-neural-networks.html#cb1027-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1027-10"><a href="recurrent-neural-networks.html#cb1027-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1022-1"><a href="recurrent-neural-networks.html#cb1022-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb1022-2"><a href="recurrent-neural-networks.html#cb1022-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
+<span id="cb1022-3"><a href="recurrent-neural-networks.html#cb1022-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb1022-4"><a href="recurrent-neural-networks.html#cb1022-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1022-5"><a href="recurrent-neural-networks.html#cb1022-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1022-6"><a href="recurrent-neural-networks.html#cb1022-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1022-7"><a href="recurrent-neural-networks.html#cb1022-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
+<span id="cb1022-8"><a href="recurrent-neural-networks.html#cb1022-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">1</span></span>
+<span id="cb1022-9"><a href="recurrent-neural-networks.html#cb1022-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1022-10"><a href="recurrent-neural-networks.html#cb1022-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn20-2.png" width="672" /></p>
 <p>Although LSTM does a good job for the last 10 days, there are specific days that it is way off. That’s why it has a higher RMSPE than RNN we had earlier.
 Before concluding this chapter, let’s change our network setting slightly and see the results:</p>
-<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1028-1"><a href="recurrent-neural-networks.html#cb1028-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb1028-2"><a href="recurrent-neural-networks.html#cb1028-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units =</span> <span class="dv">24</span>,</span>
-<span id="cb1028-3"><a href="recurrent-neural-networks.html#cb1028-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
-<span id="cb1028-4"><a href="recurrent-neural-networks.html#cb1028-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">activation =</span> <span class="st">&quot;tanh&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1028-5"><a href="recurrent-neural-networks.html#cb1028-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1028-6"><a href="recurrent-neural-networks.html#cb1028-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
-<span id="cb1028-7"><a href="recurrent-neural-networks.html#cb1028-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
-<span id="cb1028-8"><a href="recurrent-neural-networks.html#cb1028-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
-<span id="cb1028-9"><a href="recurrent-neural-networks.html#cb1028-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
-<span id="cb1028-10"><a href="recurrent-neural-networks.html#cb1028-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1028-11"><a href="recurrent-neural-networks.html#cb1028-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1028-12"><a href="recurrent-neural-networks.html#cb1028-12" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1023-1"><a href="recurrent-neural-networks.html#cb1023-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1023-2"><a href="recurrent-neural-networks.html#cb1023-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_lstm</span>(<span class="at">units =</span> <span class="dv">24</span>,</span>
+<span id="cb1023-3"><a href="recurrent-neural-networks.html#cb1023-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">input_shape =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">6</span>),</span>
+<span id="cb1023-4"><a href="recurrent-neural-networks.html#cb1023-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">activation =</span> <span class="st">&quot;tanh&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1023-5"><a href="recurrent-neural-networks.html#cb1023-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">&quot;linear&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1023-6"><a href="recurrent-neural-networks.html#cb1023-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(</span>
+<span id="cb1023-7"><a href="recurrent-neural-networks.html#cb1023-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">&#39;mse&#39;</span>,</span>
+<span id="cb1023-8"><a href="recurrent-neural-networks.html#cb1023-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">optimizer =</span> <span class="st">&#39;adam&#39;</span>,</span>
+<span id="cb1023-9"><a href="recurrent-neural-networks.html#cb1023-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">&quot;mean_absolute_error&quot;</span>)</span>
+<span id="cb1023-10"><a href="recurrent-neural-networks.html#cb1023-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1023-11"><a href="recurrent-neural-networks.html#cb1023-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1023-12"><a href="recurrent-neural-networks.html#cb1023-12" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code></pre></div>
 <pre><code>## Model: &quot;sequential_2&quot;
 ## ________________________________________________________________________________
 ##  Layer (type)                       Output Shape                    Param #     
@@ -895,33 +895,33 @@ Before concluding this chapter, let’s change our network setting slightly and 
 ## Trainable params: 3,001
 ## Non-trainable params: 0
 ## ________________________________________________________________________________</code></pre>
-<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="recurrent-neural-networks.html#cb1030-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
-<span id="cb1030-2"><a href="recurrent-neural-networks.html#cb1030-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
-<span id="cb1030-3"><a href="recurrent-neural-networks.html#cb1030-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
-<span id="cb1030-4"><a href="recurrent-neural-networks.html#cb1030-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
-<span id="cb1030-5"><a href="recurrent-neural-networks.html#cb1030-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
-<span id="cb1030-6"><a href="recurrent-neural-networks.html#cb1030-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
-<span id="cb1030-7"><a href="recurrent-neural-networks.html#cb1030-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
-<span id="cb1030-8"><a href="recurrent-neural-networks.html#cb1030-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb1030-9"><a href="recurrent-neural-networks.html#cb1030-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1025-1"><a href="recurrent-neural-networks.html#cb1025-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">fit</span>(</span>
+<span id="cb1025-2"><a href="recurrent-neural-networks.html#cb1025-2" aria-hidden="true" tabindex="-1"></a>  X[[<span class="dv">1</span>]][train, ,],</span>
+<span id="cb1025-3"><a href="recurrent-neural-networks.html#cb1025-3" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][train],</span>
+<span id="cb1025-4"><a href="recurrent-neural-networks.html#cb1025-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">12</span>,</span>
+<span id="cb1025-5"><a href="recurrent-neural-networks.html#cb1025-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">75</span>,</span>
+<span id="cb1025-6"><a href="recurrent-neural-networks.html#cb1025-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span> <span class="fu">list</span>(X[[<span class="dv">1</span>]][test, ,], y[[<span class="dv">1</span>]][test]),</span>
+<span id="cb1025-7"><a href="recurrent-neural-networks.html#cb1025-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb1025-8"><a href="recurrent-neural-networks.html#cb1025-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1025-9"><a href="recurrent-neural-networks.html#cb1025-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn21-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1031"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1031-1"><a href="recurrent-neural-networks.html#cb1031-1" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
-<span id="cb1031-2"><a href="recurrent-neural-networks.html#cb1031-2" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
-<span id="cb1031-3"><a href="recurrent-neural-networks.html#cb1031-3" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test, ,])</span>
-<span id="cb1031-4"><a href="recurrent-neural-networks.html#cb1031-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
+<div class="sourceCode" id="cb1026"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1026-1"><a href="recurrent-neural-networks.html#cb1026-1" aria-hidden="true" tabindex="-1"></a>y_act <span class="ot">&lt;-</span> y[[<span class="dv">1</span>]][test]</span>
+<span id="cb1026-2"><a href="recurrent-neural-networks.html#cb1026-2" aria-hidden="true" tabindex="-1"></a>var_y <span class="ot">&lt;-</span> <span class="fu">var</span>(y_act)</span>
+<span id="cb1026-3"><a href="recurrent-neural-networks.html#cb1026-3" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, X[[<span class="dv">1</span>]][test, ,])</span>
+<span id="cb1026-4"><a href="recurrent-neural-networks.html#cb1026-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> var_y <span class="co"># R^2</span></span></code></pre></div>
 <pre><code>## [1] 0.1097859</code></pre>
-<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1033-1"><a href="recurrent-neural-networks.html#cb1033-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
+<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1028-1"><a href="recurrent-neural-networks.html#cb1028-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((yhat <span class="sc">-</span> y_act) <span class="sc">^</span> <span class="dv">2</span>)) <span class="co"># RMSPE</span></span></code></pre></div>
 <pre><code>## [1] 1.628224</code></pre>
-<div class="sourceCode" id="cb1035"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1035-1"><a href="recurrent-neural-networks.html#cb1035-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb1035-2"><a href="recurrent-neural-networks.html#cb1035-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
-<span id="cb1035-3"><a href="recurrent-neural-networks.html#cb1035-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
-<span id="cb1035-4"><a href="recurrent-neural-networks.html#cb1035-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb1035-5"><a href="recurrent-neural-networks.html#cb1035-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
-<span id="cb1035-6"><a href="recurrent-neural-networks.html#cb1035-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
-<span id="cb1035-7"><a href="recurrent-neural-networks.html#cb1035-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
-<span id="cb1035-8"><a href="recurrent-neural-networks.html#cb1035-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">1</span></span>
-<span id="cb1035-9"><a href="recurrent-neural-networks.html#cb1035-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1035-10"><a href="recurrent-neural-networks.html#cb1035-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="recurrent-neural-networks.html#cb1030-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb1030-2"><a href="recurrent-neural-networks.html#cb1030-2" aria-hidden="true" tabindex="-1"></a>  y[[<span class="dv">1</span>]][test],</span>
+<span id="cb1030-3"><a href="recurrent-neural-networks.html#cb1030-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb1030-4"><a href="recurrent-neural-networks.html#cb1030-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb1030-5"><a href="recurrent-neural-networks.html#cb1030-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Actual (Blue) vs. Prediction (Red)&quot;</span>,</span>
+<span id="cb1030-6"><a href="recurrent-neural-networks.html#cb1030-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Last 50 Days&quot;</span>,</span>
+<span id="cb1030-7"><a href="recurrent-neural-networks.html#cb1030-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;LSTM Forecasting for Covid-19 Cases&quot;</span>,</span>
+<span id="cb1030-8"><a href="recurrent-neural-networks.html#cb1030-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">1</span></span>
+<span id="cb1030-9"><a href="recurrent-neural-networks.html#cb1030-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1030-10"><a href="recurrent-neural-networks.html#cb1030-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(yhat, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="22-TSNeural_files/figure-html/tsnn21-2.png" width="672" /></p>
 <p>Building a network that does relatively a good job requires a well-designed validation process and a good network architecture that can be achieved after several trials.</p>
 

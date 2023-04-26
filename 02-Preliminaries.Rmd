@@ -715,7 +715,7 @@ A regression analysis requires a correctly specified regression model.  When the
 
 What we are looking for is the isolated effect of $x_i$ on $y_i$, after controlling for all the other possible reasons of the variation in $y_i$.  Let's illustrate it with Venn diagrams.
 
-```{r s32}
+```{r s32, message=FALSE, warning=FALSE}
 library(broom)        
 library(faux)      
 library(eulerr) #For Euler and Venn diagrams
@@ -831,7 +831,7 @@ plot(euler(all_pieces),
 
 Hence, when we omit $X_2$, the effect of $X_1$ is the area of $\mathbf{D+G}$, while the true effect is $\mathbf{D}$.  Of course, if $X_1$ and $X_2$ are independent, omitting $X_2$ would not be a problem. It is the same thing to say that, if we have independent regressors, running separate regressions each regressor would give us the same results as the one when we combine them. However, when omitted variables are correlated with the regressors ($X$), the conditional expectation on the error term will be non-zero,  $\text{E}(\epsilon|x)\neq0$.   An excellent demonstration of regressions with Venn diagrams can be found in the Andrew Heiss' [post](https://www.andrewheiss.com/blog/2021/08/21/r2-euler/).   
 
-Here is a more realistic example from Stock and Watson (2015, p. 196): suppose we want to understand the relationship between test score and class size.  If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the "true" model should look like equation 2.15:  
+Here is a more realistic example from Stock and Watson [@33858] (p. 196): suppose we want to understand the relationship between test score and class size.  If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the "true" model should look like equation 2.15:  
 
 \begin{equation}
 Test Score =\beta_{0}+\beta_{1}S T R+\beta_{2}PctEL+\epsilon_{i},

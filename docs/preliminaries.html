@@ -608,10 +608,10 @@ Time-series data have also one dimension with subject followed through the time.
 <pre><code>## [1] &quot;2023-04-26&quot;</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="preliminaries.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get current system time</span></span>
 <span id="cb17-2"><a href="preliminaries.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;2023-04-26 06:46:59 ADT&quot;</code></pre>
+<pre><code>## [1] &quot;2023-04-26 07:59:54 ADT&quot;</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="preliminaries.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lubridate</span></span>
 <span id="cb19-2"><a href="preliminaries.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;2023-04-26 06:46:59 ADT&quot;</code></pre>
+<pre><code>## [1] &quot;2023-04-26 07:59:54 ADT&quot;</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="preliminaries.html#cb21-1" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;2022-07-11&quot;</span>, <span class="st">&quot;2012-04-19&quot;</span>, <span class="st">&quot;2017-03-08&quot;</span>)</span>
 <span id="cb21-2"><a href="preliminaries.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="preliminaries.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># extract years from dates</span></span>
@@ -756,8 +756,8 @@ X \sim N\left(\mu=2, \sigma^{2}=25\right)
 <pre><code>## [1] 11.79982</code></pre>
 <p>Lastly, to generate a random sample of size n = 10, we use <code>rnorm()</code></p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="preliminaries.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span></code></pre></div>
-<pre><code>##  [1]  4.209858  1.454627  8.787977 -7.600848 -5.040431 -2.520641  1.550218
-##  [8]  4.098124  7.386667  3.460105</code></pre>
+<pre><code>##  [1]  4.474874 -5.305104  6.508647  2.277630 13.128407  5.760568  2.038199
+##  [8] -6.432537  1.122933  6.769191</code></pre>
 <p>These functions exist for many other distributions such as: <code>binom</code> (Binomial), <code>t</code> (Student’s t), <code>pois</code> (Poisson), <code>f</code> (F), <code>chisq</code> (Chi-Squared) and so on.</p>
 </div>
 <div id="regressions" class="section level2 hasAnchor" number="2.4">
@@ -1190,42 +1190,20 @@ L(x)=\prod_{i=1}^{i=n} \frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{
 <p>A regression analysis requires a correctly specified regression model. When the estimated model is misspecified by “omitting” some necessary variables, the resulting sample regression function (SRF) will be a biased estimator of the true data generating model (DGM). While the solution seems simple - “correctly specify your SRF by including all necessary variables as in the true DGM”, we often have to assume what the true DGM is. In other words, we do our best to control all the confounding variables, variables that are correlated with the outcome (<span class="math inline">\(y_i\)</span>) and the explanatory variables. When we miss (omit) one of those “control” variables, perhaps due to our ignorance on the true DGM, the effect of <span class="math inline">\(x_i\)</span> on <span class="math inline">\(y_i\)</span> will be misleading and biased. One gross example is the significant and positive relationship between ice-cream sales and the crime rates. When we include the confounding factor, the hot weather, which is strongly and positively related to both ice-cream sales and the crime rates, the effect disappears.</p>
 <p>What we are looking for is the isolated effect of <span class="math inline">\(x_i\)</span> on <span class="math inline">\(y_i\)</span>, after controlling for all the other possible reasons of the variation in <span class="math inline">\(y_i\)</span>. Let’s illustrate it with Venn diagrams.</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="preliminaries.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)        </span>
-<span id="cb96-2"><a href="preliminaries.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faux)      </span></code></pre></div>
-<pre><code>## 
-## ************
-## Welcome to faux. For support and examples visit:
-## https://debruine.github.io/faux/
-## - Get and set global package options with: faux_options()
-## ************</code></pre>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="preliminaries.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(eulerr) <span class="co">#For Euler and Venn diagrams</span></span>
-<span id="cb98-2"><a href="preliminaries.html#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2
-## ──</code></pre>
-<pre><code>## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.1      ✔ stringr 1.5.0 
-## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-## ✔ purrr   1.0.0      
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ purrr::%||%()            masks faux::%||%()
-## ✖ lubridate::as.difftime() masks base::as.difftime()
-## ✖ dplyr::between()         masks plm::between()
-## ✖ lubridate::date()        masks base::date()
-## ✖ dplyr::filter()          masks stats::filter()
-## ✖ lubridate::intersect()   masks base::intersect()
-## ✖ dplyr::lag()             masks plm::lag(), stats::lag()
-## ✖ dplyr::lead()            masks plm::lead()
-## ✖ lubridate::setdiff()     masks base::setdiff()
-## ✖ lubridate::union()       masks base::union()</code></pre>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="preliminaries.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlated variables and PRF</span></span>
-<span id="cb101-2"><a href="preliminaries.html#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb101-3"><a href="preliminaries.html#cb101-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rnorm_multi</span>(<span class="at">n =</span> <span class="dv">100</span>,</span>
-<span id="cb101-4"><a href="preliminaries.html#cb101-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">9</span>),</span>
-<span id="cb101-5"><a href="preliminaries.html#cb101-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">1.7</span>, <span class="fl">1.3</span>),</span>
-<span id="cb101-6"><a href="preliminaries.html#cb101-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.4</span>, <span class="fl">0.8</span>),</span>
-<span id="cb101-7"><a href="preliminaries.html#cb101-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>),</span>
-<span id="cb101-8"><a href="preliminaries.html#cb101-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">empirical =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb96-2"><a href="preliminaries.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faux)      </span>
+<span id="cb96-3"><a href="preliminaries.html#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(eulerr) <span class="co">#For Euler and Venn diagrams</span></span>
+<span id="cb96-4"><a href="preliminaries.html#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb96-5"><a href="preliminaries.html#cb96-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="preliminaries.html#cb96-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlated variables and PRF</span></span>
+<span id="cb96-7"><a href="preliminaries.html#cb96-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb96-8"><a href="preliminaries.html#cb96-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rnorm_multi</span>(<span class="at">n =</span> <span class="dv">100</span>,</span>
+<span id="cb96-9"><a href="preliminaries.html#cb96-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">9</span>),</span>
+<span id="cb96-10"><a href="preliminaries.html#cb96-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">1.7</span>, <span class="fl">1.3</span>),</span>
+<span id="cb96-11"><a href="preliminaries.html#cb96-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">r =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.4</span>, <span class="fl">0.8</span>),</span>
+<span id="cb96-12"><a href="preliminaries.html#cb96-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>),</span>
+<span id="cb96-13"><a href="preliminaries.html#cb96-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">empirical =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>Here is our simulated data and the SRF:</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="preliminaries.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="preliminaries.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>##           Y        X1        X2
 ## 1 12.510529 10.266830 10.180426
 ## 2  9.058085  8.682856  9.391148
@@ -1233,12 +1211,12 @@ L(x)=\prod_{i=1}^{i=n} \frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{
 ## 4 13.509343 12.554053 12.030183
 ## 5  8.419466  8.878325  9.273916
 ## 6  9.337398  7.832841  8.773532</code></pre>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="preliminaries.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="preliminaries.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df)</span></code></pre></div>
 <pre><code>##            Y        X1        X2
 ## Y  1.0000000 0.4739343 0.3878172
 ## X1 0.4739343 1.0000000 0.8107924
 ## X2 0.3878172 0.8107924 1.0000000</code></pre>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="preliminaries.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Y <span class="sc">~</span>., <span class="at">data =</span> df) <span class="co"># true model</span></span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="preliminaries.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Y <span class="sc">~</span>., <span class="at">data =</span> df) <span class="co"># true model</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ ., data = df)
@@ -1251,7 +1229,7 @@ L(x)=\prod_{i=1}^{i=n} \frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{
 <p>Now, after controlling for the effect of <span class="math inline">\(X_2\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, the isolated effect of <span class="math inline">\(X_1\)</span> is reduced to <span class="math inline">\(\mathbf{D}\)</span>:</p>
 <p><img src="02-Preliminaries_files/figure-html/s35-1.png" width="672" /></p>
 <p>Hence, when we omit <span class="math inline">\(X_2\)</span>, the effect of <span class="math inline">\(X_1\)</span> is the area of <span class="math inline">\(\mathbf{D+G}\)</span>, while the true effect is <span class="math inline">\(\mathbf{D}\)</span>. Of course, if <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> are independent, omitting <span class="math inline">\(X_2\)</span> would not be a problem. It is the same thing to say that, if we have independent regressors, running separate regressions each regressor would give us the same results as the one when we combine them. However, when omitted variables are correlated with the regressors (<span class="math inline">\(X\)</span>), the conditional expectation on the error term will be non-zero, <span class="math inline">\(\text{E}(\epsilon|x)\neq0\)</span>. An excellent demonstration of regressions with Venn diagrams can be found in the Andrew Heiss’ <a href="https://www.andrewheiss.com/blog/2021/08/21/r2-euler/">post</a>.</p>
-<p>Here is a more realistic example from Stock and Watson (2015, p. 196): suppose we want to understand the relationship between test score and class size. If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the “true” model should look like equation 2.15:</p>
+<p>Here is a more realistic example from Stock and Watson <span class="citation">(<a href="#ref-33858" role="doc-biblioref">Stock and Watson 2015</a>)</span> (p. 196): suppose we want to understand the relationship between test score and class size. If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the “true” model should look like equation 2.15:</p>
 <p><span class="math display" id="eq:2-15">\[\begin{equation}
 Test Score =\beta_{0}+\beta_{1}S T R+\beta_{2}PctEL+\epsilon_{i},
   \tag{2.15}
@@ -1274,12 +1252,12 @@ Test Score =\hat{\beta}_{0}+\hat{\beta}_{1}STR+v_{i}.
 \begin{aligned} \mathrm{E}\left[\hat{\beta}_{1}\right] &amp;=\mathrm{E}\left[\beta_{1}+\beta_{2} \frac{\sum_{i}\left(x_{i}-\bar{x}\right) z_{i}}{\sum_{i}\left(x_{i}-\bar{x}\right) x_{i}}+\frac{\sum_{i}\left(x_{i}-\bar{x}\right) \epsilon_{i}}{\sum_{i}\left(x_{i}-\bar{x}\right) x_{i}}\right] \\ &amp;=\beta_{1}+\beta_{2} \mathrm{E}\left[\frac{\sum_{i}\left(x_{i}-\bar{x}\right) z_{i}}{\sum_{i}\left(x_{i}-\bar{x}\right) x_{i}}\right]+\mathrm{E}\left[\frac{\sum_{i}\left(x_{i}-\bar{x}\right) \epsilon_{i}}{\sum_{i}\left(x_{i}-\bar{x}\right) x_{i}}\right] \\ &amp;=\beta_{1}+\beta_{2} [\mathrm{Cov}(x_i,z_i)/\mathrm{Var}(x_i)] \end{aligned}
 \]</span></p>
 <p>What this means is that on average, our regression estimate is going to miss the true population parameter by the second term. Here is the OVB in action:</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="preliminaries.html#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the AER package</span></span>
-<span id="cb108-2"><a href="preliminaries.html#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
-<span id="cb108-3"><a href="preliminaries.html#cb108-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb108-4"><a href="preliminaries.html#cb108-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data set</span></span>
-<span id="cb108-5"><a href="preliminaries.html#cb108-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(CASchools)</span>
-<span id="cb108-6"><a href="preliminaries.html#cb108-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(CASchools)</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="preliminaries.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the AER package</span></span>
+<span id="cb103-2"><a href="preliminaries.html#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AER)</span>
+<span id="cb103-3"><a href="preliminaries.html#cb103-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-4"><a href="preliminaries.html#cb103-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data set</span></span>
+<span id="cb103-5"><a href="preliminaries.html#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(CASchools)</span>
+<span id="cb103-6"><a href="preliminaries.html#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(CASchools)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    420 obs. of  14 variables:
 ##  $ district   : chr  &quot;75119&quot; &quot;61499&quot; &quot;61549&quot; &quot;61457&quot; ...
 ##  $ school     : chr  &quot;Sunol Glen Unified&quot; &quot;Manzanita Elementary&quot; &quot;Thermalito Union Elementary&quot; &quot;Golden Feather Union Elementary&quot; ...
@@ -1295,15 +1273,15 @@ Test Score =\hat{\beta}_{0}+\hat{\beta}_{1}STR+v_{i}.
 ##  $ english    : num  0 4.58 30 0 13.86 ...
 ##  $ read       : num  692 660 636 652 642 ...
 ##  $ math       : num  690 662 651 644 640 ...</code></pre>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="preliminaries.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define variables</span></span>
-<span id="cb110-2"><a href="preliminaries.html#cb110-2" aria-hidden="true" tabindex="-1"></a>CASchools<span class="sc">$</span>STR <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>students<span class="sc">/</span>CASchools<span class="sc">$</span>teachers       </span>
-<span id="cb110-3"><a href="preliminaries.html#cb110-3" aria-hidden="true" tabindex="-1"></a>CASchools<span class="sc">$</span>score <span class="ot">&lt;-</span> (CASchools<span class="sc">$</span>read <span class="sc">+</span> CASchools<span class="sc">$</span>math)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="preliminaries.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define variables</span></span>
+<span id="cb105-2"><a href="preliminaries.html#cb105-2" aria-hidden="true" tabindex="-1"></a>CASchools<span class="sc">$</span>STR <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>students<span class="sc">/</span>CASchools<span class="sc">$</span>teachers       </span>
+<span id="cb105-3"><a href="preliminaries.html#cb105-3" aria-hidden="true" tabindex="-1"></a>CASchools<span class="sc">$</span>score <span class="ot">&lt;-</span> (CASchools<span class="sc">$</span>read <span class="sc">+</span> CASchools<span class="sc">$</span>math)<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 <p>Let’s estimate both regression models and compare.</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="preliminaries.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate both regressions</span></span>
-<span id="cb111-2"><a href="preliminaries.html#cb111-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> STR, <span class="at">data =</span> CASchools) <span class="co"># Underfitted model</span></span>
-<span id="cb111-3"><a href="preliminaries.html#cb111-3" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> STR <span class="sc">+</span> english, <span class="at">data =</span> CASchools) <span class="co"># True model</span></span>
-<span id="cb111-4"><a href="preliminaries.html#cb111-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb111-5"><a href="preliminaries.html#cb111-5" aria-hidden="true" tabindex="-1"></a>model1</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="preliminaries.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate both regressions</span></span>
+<span id="cb106-2"><a href="preliminaries.html#cb106-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> STR, <span class="at">data =</span> CASchools) <span class="co"># Underfitted model</span></span>
+<span id="cb106-3"><a href="preliminaries.html#cb106-3" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> STR <span class="sc">+</span> english, <span class="at">data =</span> CASchools) <span class="co"># True model</span></span>
+<span id="cb106-4"><a href="preliminaries.html#cb106-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-5"><a href="preliminaries.html#cb106-5" aria-hidden="true" tabindex="-1"></a>model1</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ STR, data = CASchools)
@@ -1311,7 +1289,7 @@ Test Score =\hat{\beta}_{0}+\hat{\beta}_{1}STR+v_{i}.
 ## Coefficients:
 ## (Intercept)          STR  
 ##      698.93        -2.28</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="preliminaries.html#cb113-1" aria-hidden="true" tabindex="-1"></a>model2</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="preliminaries.html#cb108-1" aria-hidden="true" tabindex="-1"></a>model2</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = score ~ STR + english, data = CASchools)
@@ -1320,7 +1298,7 @@ Test Score =\hat{\beta}_{0}+\hat{\beta}_{1}STR+v_{i}.
 ## (Intercept)          STR      english  
 ##    686.0322      -1.1013      -0.6498</code></pre>
 <p>Is the magnitude of the bias, <span class="math inline">\(-1.1787 = -2.28 - (-1.1013)\)</span>, consistent with the formula, <span class="math inline">\(\beta_{2} [\mathrm{Cov}(x_i,z_i)/\mathrm{Var}(x_i)]\)</span>?</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="preliminaries.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(CASchools<span class="sc">$</span>STR, CASchools<span class="sc">$</span>english)<span class="sc">/</span><span class="fu">var</span>(CASchools<span class="sc">$</span>STR)<span class="sc">*</span>model2<span class="sc">$</span>coefficients[<span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="preliminaries.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(CASchools<span class="sc">$</span>STR, CASchools<span class="sc">$</span>english)<span class="sc">/</span><span class="fu">var</span>(CASchools<span class="sc">$</span>STR)<span class="sc">*</span>model2<span class="sc">$</span>coefficients[<span class="dv">3</span>]</span></code></pre></div>
 <pre><code>##   english 
 ## -1.178512</code></pre>
 </div>
@@ -1328,25 +1306,25 @@ Test Score =\hat{\beta}_{0}+\hat{\beta}_{1}STR+v_{i}.
 <h2><span class="header-section-number">2.6</span> Modeling the data<a href="preliminaries.html#modeling-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>When modeling data, there are a number of choices that need to be made.</p>
 <p>What <strong>family</strong> of models will be considered? In linear regression, we specified models with parameters (<span class="math inline">\(\beta{j}\)</span>) and fit the model by finding the best values of these parameters. This is a <em>parametric</em> approach. A <em>non-parametric</em> approach skips the step of specifying a model with parameters and are often described as more of an algorithm. Non-parametric models are often used in machine learning, which we will see in Part II. Here is an example</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="preliminaries.html#cb117-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>STR</span>
-<span id="cb117-2"><a href="preliminaries.html#cb117-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>score</span>
-<span id="cb117-3"><a href="preliminaries.html#cb117-3" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out =</span> <span class="fu">length</span>(x))</span>
-<span id="cb117-4"><a href="preliminaries.html#cb117-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Parametric (red) vs Nonparametric (blue)&quot;</span>)</span>
-<span id="cb117-5"><a href="preliminaries.html#cb117-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">predict</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x)), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb117-6"><a href="preliminaries.html#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xt, <span class="fu">predict</span>(<span class="fu">loess</span>(y <span class="sc">~</span> x, <span class="at">degree =</span> <span class="dv">2</span>, <span class="at">span =</span><span class="fl">0.2</span>), xt), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="preliminaries.html#cb112-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>STR</span>
+<span id="cb112-2"><a href="preliminaries.html#cb112-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> CASchools<span class="sc">$</span>score</span>
+<span id="cb112-3"><a href="preliminaries.html#cb112-3" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(x), <span class="fu">max</span>(x), <span class="at">length.out =</span> <span class="fu">length</span>(x))</span>
+<span id="cb112-4"><a href="preliminaries.html#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Parametric (red) vs Nonparametric (blue)&quot;</span>)</span>
+<span id="cb112-5"><a href="preliminaries.html#cb112-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">predict</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x)), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb112-6"><a href="preliminaries.html#cb112-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xt, <span class="fu">predict</span>(<span class="fu">loess</span>(y <span class="sc">~</span> x, <span class="at">degree =</span> <span class="dv">2</span>, <span class="at">span =</span><span class="fl">0.2</span>), xt), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s39-1.png" width="672" /></p>
 <p>If we define a parametric model, what <strong>form</strong> of the model will be used for <span class="math inline">\(f(.)\)</span> shown below?</p>
 <p><span class="math display">\[
 y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 \]</span></p>
 <p>Would it be linear or polynomial?</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="preliminaries.html#cb118-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">3</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">4</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">5</span>))</span>
-<span id="cb118-2"><a href="preliminaries.html#cb118-2" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">yhat =</span> pfit<span class="sc">$</span>fitted.values, <span class="at">x =</span> x)</span>
-<span id="cb118-3"><a href="preliminaries.html#cb118-3" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> dt[<span class="fu">order</span>(dt<span class="sc">$</span>x), ]</span>
-<span id="cb118-4"><a href="preliminaries.html#cb118-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb118-5"><a href="preliminaries.html#cb118-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Linear (red) vs Polynomial (blue)&quot;</span>)</span>
-<span id="cb118-6"><a href="preliminaries.html#cb118-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">predict</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x)), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb118-7"><a href="preliminaries.html#cb118-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dt<span class="sc">$</span>x, dt<span class="sc">$</span>yhat, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="preliminaries.html#cb113-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">3</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">4</span>)<span class="sc">+</span><span class="fu">I</span>(x<span class="sc">^</span><span class="dv">5</span>))</span>
+<span id="cb113-2"><a href="preliminaries.html#cb113-2" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">yhat =</span> pfit<span class="sc">$</span>fitted.values, <span class="at">x =</span> x)</span>
+<span id="cb113-3"><a href="preliminaries.html#cb113-3" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> dt[<span class="fu">order</span>(dt<span class="sc">$</span>x), ]</span>
+<span id="cb113-4"><a href="preliminaries.html#cb113-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-5"><a href="preliminaries.html#cb113-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Linear (red) vs Polynomial (blue)&quot;</span>)</span>
+<span id="cb113-6"><a href="preliminaries.html#cb113-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">predict</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x)), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb113-7"><a href="preliminaries.html#cb113-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dt<span class="sc">$</span>x, dt<span class="sc">$</span>yhat, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s40-1.png" width="672" /></p>
 <p>If we are going to add non-linear terms, which variables would be selected with what degree of polynomial terms? Moreover, if there are interaction between the predictors, the effect of a regressor on the response will change depending on the values of the other predictors. Hence, we need to assume what the “true” population model (DGM) would be when searching for a model.</p>
 <p>How will the model be <strong>fit</strong>? Although we have seen two of the most common techniques, OLS and MLE, there are more techniques in the literature.</p>
@@ -1379,16 +1357,16 @@ y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 \]</span></p>
 <p>where <span class="math inline">\(y_i\)</span> are the actual values of the response for the “given data” and <span class="math inline">\(\hat{y}\)</span> are the predicted values using the fitted model and the predictors from the data. Note that RMSPE has the same unit as the response variable. Later, we will see more performance metrics in predictive models.</p>
 <p>An important issue in calculating RMSPE is which <span class="math inline">\(y\)</span>’s are supposed to be predicted. If we use the same” <span class="math inline">\(y\)</span>’s that we also use to calculate <span class="math inline">\(\hat{y}\)</span>’s, RMSPE will tend to be lower for a larger and more complex models. However, a model becomes too specific for a sample as it gets more complex, which is called <strong>overfitting</strong>. In other words, when a model overfits, it will be less “generalizable” for another sample. Consequently, these overly specific models would have very poor predictions for “out-of-sample” data. This topic will be covered in the next section. But before that, lets have an example that shows an overfitting model:</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="preliminaries.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple OLS</span></span>
-<span id="cb119-2"><a href="preliminaries.html#cb119-2" aria-hidden="true" tabindex="-1"></a>model_ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars)</span>
-<span id="cb119-3"><a href="preliminaries.html#cb119-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_ols)</span>
-<span id="cb119-4"><a href="preliminaries.html#cb119-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb119-5"><a href="preliminaries.html#cb119-5" aria-hidden="true" tabindex="-1"></a><span class="co"># A complex model</span></span>
-<span id="cb119-6"><a href="preliminaries.html#cb119-6" aria-hidden="true" tabindex="-1"></a>model_cmpx <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist, <span class="at">df=</span><span class="dv">19</span>)</span>
-<span id="cb119-7"><a href="preliminaries.html#cb119-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb119-8"><a href="preliminaries.html#cb119-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cars, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;Complex Model vs. Simple OLS&quot;</span>)</span>
-<span id="cb119-9"><a href="preliminaries.html#cb119-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(b, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb119-10"><a href="preliminaries.html#cb119-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(model_cmpx,<span class="at">col=</span><span class="st">&#39;green&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="preliminaries.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple OLS</span></span>
+<span id="cb114-2"><a href="preliminaries.html#cb114-2" aria-hidden="true" tabindex="-1"></a>model_ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars)</span>
+<span id="cb114-3"><a href="preliminaries.html#cb114-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_ols)</span>
+<span id="cb114-4"><a href="preliminaries.html#cb114-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-5"><a href="preliminaries.html#cb114-5" aria-hidden="true" tabindex="-1"></a><span class="co"># A complex model</span></span>
+<span id="cb114-6"><a href="preliminaries.html#cb114-6" aria-hidden="true" tabindex="-1"></a>model_cmpx <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(cars<span class="sc">$</span>speed, cars<span class="sc">$</span>dist, <span class="at">df=</span><span class="dv">19</span>)</span>
+<span id="cb114-7"><a href="preliminaries.html#cb114-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-8"><a href="preliminaries.html#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cars, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;Complex Model vs. Simple OLS&quot;</span>)</span>
+<span id="cb114-9"><a href="preliminaries.html#cb114-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(b, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb114-10"><a href="preliminaries.html#cb114-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(model_cmpx,<span class="at">col=</span><span class="st">&#39;green&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s41-1.png" width="672" /></p>
 <p>The figure above shows two models to predict the stopping distance a car by its speed. The “complex” model uses a non-parametric method (green line), which has the minimum RMSPE relative to the red dashed line representing a simple linear model. We have only one sample and the “complex” model is the winner with the smallest RMSPE.</p>
 <p>But if we use these two models on “unseen” (out-of-sample) data, would the winner change? Would it be possible to have the following results (consider only the order of the numbers)?</p>
@@ -1420,84 +1398,84 @@ y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 <h2><span class="header-section-number">2.8</span> Simulation<a href="preliminaries.html#simulation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Simulations are tools to see whether statistical arguments are true or not. In simulations, we know the data generating process (DGP) because we define them by a selected model and a set of parameters. On of the biggest strengths of R is its ability to carry out simulations with a simple design. We will see more examples on simulations in Chapter 37.</p>
 <p>We are going to generate a sample of observations on <span class="math inline">\(Y\)</span> from a data generation model (DGM):</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="preliminaries.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb120-2"><a href="preliminaries.html#cb120-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
-<span id="cb120-3"><a href="preliminaries.html#cb120-3" aria-hidden="true" tabindex="-1"></a>dgm <span class="ot">&lt;-</span> <span class="dv">500</span> <span class="sc">+</span> <span class="dv">20</span><span class="sc">*</span>X <span class="sc">-</span> <span class="dv">90</span><span class="sc">*</span><span class="fu">sin</span>(X)                   <span class="co">#This is our DGM</span></span>
-<span id="cb120-4"><a href="preliminaries.html#cb120-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-5"><a href="preliminaries.html#cb120-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> dgm <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X), <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">100</span>) <span class="co">#This is our DGP</span></span>
-<span id="cb120-6"><a href="preliminaries.html#cb120-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(y, X)</span>
-<span id="cb120-7"><a href="preliminaries.html#cb120-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-8"><a href="preliminaries.html#cb120-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>,</span>
-<span id="cb120-9"><a href="preliminaries.html#cb120-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Observed data &amp; DGM&#39;</span>)</span>
-<span id="cb120-10"><a href="preliminaries.html#cb120-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, dgm, <span class="at">col=</span><span class="st">&#39;firebrick1&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="preliminaries.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb115-2"><a href="preliminaries.html#cb115-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
+<span id="cb115-3"><a href="preliminaries.html#cb115-3" aria-hidden="true" tabindex="-1"></a>dgm <span class="ot">&lt;-</span> <span class="dv">500</span> <span class="sc">+</span> <span class="dv">20</span><span class="sc">*</span>X <span class="sc">-</span> <span class="dv">90</span><span class="sc">*</span><span class="fu">sin</span>(X)                   <span class="co">#This is our DGM</span></span>
+<span id="cb115-4"><a href="preliminaries.html#cb115-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-5"><a href="preliminaries.html#cb115-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> dgm <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X), <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">100</span>) <span class="co">#This is our DGP</span></span>
+<span id="cb115-6"><a href="preliminaries.html#cb115-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(y, X)</span>
+<span id="cb115-7"><a href="preliminaries.html#cb115-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-8"><a href="preliminaries.html#cb115-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>,</span>
+<span id="cb115-9"><a href="preliminaries.html#cb115-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Observed data &amp; DGM&#39;</span>)</span>
+<span id="cb115-10"><a href="preliminaries.html#cb115-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, dgm, <span class="at">col=</span><span class="st">&#39;firebrick1&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s42-1.png" width="672" /></p>
 <p>This is the plot of our simulated data. The simulated data points are the blue dots while the red line is the DGM or the systematic part. Now we have the data (<span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>) and we also know the underlying data generating procedure (DGP) that produces these observations. Let’s pretend that we do not know DGP. Our job is to estimate DGM from the data we have. We will use three alternative models to estimate the true DGM.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="preliminaries.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear model</span></span>
-<span id="cb121-2"><a href="preliminaries.html#cb121-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
-<span id="cb121-3"><a href="preliminaries.html#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Linear&#39;</span>)</span>
-<span id="cb121-4"><a href="preliminaries.html#cb121-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, model1<span class="sc">$</span>fitted.values, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="preliminaries.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear model</span></span>
+<span id="cb116-2"><a href="preliminaries.html#cb116-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
+<span id="cb116-3"><a href="preliminaries.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Linear&#39;</span>)</span>
+<span id="cb116-4"><a href="preliminaries.html#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, model1<span class="sc">$</span>fitted.values, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s43-1.png" width="672" /></p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="preliminaries.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Polynomial model (there is an easier way!)</span></span>
-<span id="cb122-2"><a href="preliminaries.html#cb122-2" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span>  <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">6</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">7</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">8</span>)</span>
-<span id="cb122-3"><a href="preliminaries.html#cb122-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">9</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">10</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">11</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">12</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">14</span>)</span>
-<span id="cb122-4"><a href="preliminaries.html#cb122-4" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">15</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">16</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">17</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">18</span>), <span class="at">data=</span>data)</span>
-<span id="cb122-5"><a href="preliminaries.html#cb122-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span> <span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Polynomial&#39;</span>)</span>
-<span id="cb122-6"><a href="preliminaries.html#cb122-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, <span class="fu">fitted</span>(model2), <span class="at">col=</span><span class="st">&#39;darkgreen&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="preliminaries.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Polynomial model (there is an easier way!)</span></span>
+<span id="cb117-2"><a href="preliminaries.html#cb117-2" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">4</span>) <span class="sc">+</span>  <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">6</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">7</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">8</span>)</span>
+<span id="cb117-3"><a href="preliminaries.html#cb117-3" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">9</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">10</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">11</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">12</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">13</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">14</span>)</span>
+<span id="cb117-4"><a href="preliminaries.html#cb117-4" aria-hidden="true" tabindex="-1"></a>             <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">15</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">16</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">17</span>) <span class="sc">+</span> <span class="fu">I</span>(X<span class="sc">^</span><span class="dv">18</span>), <span class="at">data=</span>data)</span>
+<span id="cb117-5"><a href="preliminaries.html#cb117-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span> <span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Polynomial&#39;</span>)</span>
+<span id="cb117-6"><a href="preliminaries.html#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(X, <span class="fu">fitted</span>(model2), <span class="at">col=</span><span class="st">&#39;darkgreen&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s43-2.png" width="672" /></p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="preliminaries.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Nonparametric</span></span>
-<span id="cb123-2"><a href="preliminaries.html#cb123-2" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(X, y, <span class="at">df=</span><span class="dv">200</span>)</span>
-<span id="cb123-3"><a href="preliminaries.html#cb123-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Spline&#39;</span>)</span>
-<span id="cb123-4"><a href="preliminaries.html#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(model3, <span class="at">col=</span><span class="st">&#39;orange&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="preliminaries.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Nonparametric</span></span>
+<span id="cb118-2"><a href="preliminaries.html#cb118-2" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(X, y, <span class="at">df=</span><span class="dv">200</span>)</span>
+<span id="cb118-3"><a href="preliminaries.html#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>, <span class="at">main=</span><span class="st">&#39;Spline&#39;</span>)</span>
+<span id="cb118-4"><a href="preliminaries.html#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(model3, <span class="at">col=</span><span class="st">&#39;orange&#39;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s43-3.png" width="672" /></p>
 <p>As obvious from the plots, the nonparametric spline model (we’ll see later what it is) should have the minimum RMSPE.</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="preliminaries.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let create a function for RMSPE</span></span>
-<span id="cb124-2"><a href="preliminaries.html#cb124-2" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> <span class="cf">function</span>(actual, predicted) {</span>
-<span id="cb124-3"><a href="preliminaries.html#cb124-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((actual <span class="sc">-</span> predicted) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb124-4"><a href="preliminaries.html#cb124-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb124-5"><a href="preliminaries.html#cb124-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb124-6"><a href="preliminaries.html#cb124-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted values by the 3 models using the &quot;seen&quot; data</span></span>
-<span id="cb124-7"><a href="preliminaries.html#cb124-7" aria-hidden="true" tabindex="-1"></a>predicted1 <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model1)</span>
-<span id="cb124-8"><a href="preliminaries.html#cb124-8" aria-hidden="true" tabindex="-1"></a>predicted2 <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model2)</span>
-<span id="cb124-9"><a href="preliminaries.html#cb124-9" aria-hidden="true" tabindex="-1"></a>predicted3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model3, X)</span>
-<span id="cb124-10"><a href="preliminaries.html#cb124-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb124-11"><a href="preliminaries.html#cb124-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that the actual y is the same for all models</span></span>
-<span id="cb124-12"><a href="preliminaries.html#cb124-12" aria-hidden="true" tabindex="-1"></a>rmse1_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted1, y)</span>
-<span id="cb124-13"><a href="preliminaries.html#cb124-13" aria-hidden="true" tabindex="-1"></a>rmse2_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted2, y)</span>
-<span id="cb124-14"><a href="preliminaries.html#cb124-14" aria-hidden="true" tabindex="-1"></a>rmse3_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted3<span class="sc">$</span>y, y)</span>
-<span id="cb124-15"><a href="preliminaries.html#cb124-15" aria-hidden="true" tabindex="-1"></a>seen <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;RMSPE for model1 (linear)&quot;</span> <span class="ot">=</span> rmse1_s, <span class="st">&quot;RMSPE for model2 (polynomial)&quot;</span> <span class="ot">=</span> rmse2_s,</span>
-<span id="cb124-16"><a href="preliminaries.html#cb124-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;RMSPE for model3 (nonparametric)&quot;</span> <span class="ot">=</span> rmse3_s )</span>
-<span id="cb124-17"><a href="preliminaries.html#cb124-17" aria-hidden="true" tabindex="-1"></a>seen</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="preliminaries.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let create a function for RMSPE</span></span>
+<span id="cb119-2"><a href="preliminaries.html#cb119-2" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> <span class="cf">function</span>(actual, predicted) {</span>
+<span id="cb119-3"><a href="preliminaries.html#cb119-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((actual <span class="sc">-</span> predicted) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb119-4"><a href="preliminaries.html#cb119-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb119-5"><a href="preliminaries.html#cb119-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-6"><a href="preliminaries.html#cb119-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted values by the 3 models using the &quot;seen&quot; data</span></span>
+<span id="cb119-7"><a href="preliminaries.html#cb119-7" aria-hidden="true" tabindex="-1"></a>predicted1 <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model1)</span>
+<span id="cb119-8"><a href="preliminaries.html#cb119-8" aria-hidden="true" tabindex="-1"></a>predicted2 <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model2)</span>
+<span id="cb119-9"><a href="preliminaries.html#cb119-9" aria-hidden="true" tabindex="-1"></a>predicted3 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model3, X)</span>
+<span id="cb119-10"><a href="preliminaries.html#cb119-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-11"><a href="preliminaries.html#cb119-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that the actual y is the same for all models</span></span>
+<span id="cb119-12"><a href="preliminaries.html#cb119-12" aria-hidden="true" tabindex="-1"></a>rmse1_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted1, y)</span>
+<span id="cb119-13"><a href="preliminaries.html#cb119-13" aria-hidden="true" tabindex="-1"></a>rmse2_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted2, y)</span>
+<span id="cb119-14"><a href="preliminaries.html#cb119-14" aria-hidden="true" tabindex="-1"></a>rmse3_s <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted3<span class="sc">$</span>y, y)</span>
+<span id="cb119-15"><a href="preliminaries.html#cb119-15" aria-hidden="true" tabindex="-1"></a>seen <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;RMSPE for model1 (linear)&quot;</span> <span class="ot">=</span> rmse1_s, <span class="st">&quot;RMSPE for model2 (polynomial)&quot;</span> <span class="ot">=</span> rmse2_s,</span>
+<span id="cb119-16"><a href="preliminaries.html#cb119-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;RMSPE for model3 (nonparametric)&quot;</span> <span class="ot">=</span> rmse3_s )</span>
+<span id="cb119-17"><a href="preliminaries.html#cb119-17" aria-hidden="true" tabindex="-1"></a>seen</span></code></pre></div>
 <pre><code>##        RMSPE for model1 (linear)    RMSPE for model2 (polynomial) 
 ##                        119.46405                         88.87396 
 ## RMSPE for model3 (nonparametric) 
 ##                         67.72450</code></pre>
 <p>Now we will test them on another sample from the same DGP that we haven’t seen before:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="preliminaries.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since DGM is the same the only difference is the random error</span></span>
-<span id="cb126-2"><a href="preliminaries.html#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="co"># in this sample</span></span>
-<span id="cb126-3"><a href="preliminaries.html#cb126-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
-<span id="cb126-4"><a href="preliminaries.html#cb126-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">=</span> dgm <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X), <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">100</span>) </span>
-<span id="cb126-5"><a href="preliminaries.html#cb126-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y2, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>,</span>
-<span id="cb126-6"><a href="preliminaries.html#cb126-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>,</span>
-<span id="cb126-7"><a href="preliminaries.html#cb126-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&#39;The &quot;Unseen&quot; 2nd Sample&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="preliminaries.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since DGM is the same the only difference is the random error</span></span>
+<span id="cb121-2"><a href="preliminaries.html#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="co"># in this sample</span></span>
+<span id="cb121-3"><a href="preliminaries.html#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb121-4"><a href="preliminaries.html#cb121-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">=</span> dgm <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X), <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">100</span>) </span>
+<span id="cb121-5"><a href="preliminaries.html#cb121-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, y2, <span class="at">col=</span><span class="st">&#39;deepskyblue4&#39;</span>,</span>
+<span id="cb121-6"><a href="preliminaries.html#cb121-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;X&#39;</span>,</span>
+<span id="cb121-7"><a href="preliminaries.html#cb121-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&#39;The &quot;Unseen&quot; 2nd Sample&#39;</span>)</span></code></pre></div>
 <p><img src="02-Preliminaries_files/figure-html/s45-1.png" width="672" /></p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="preliminaries.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since DGM is the same X&#39;s are the same</span></span>
-<span id="cb127-2"><a href="preliminaries.html#cb127-2" aria-hidden="true" tabindex="-1"></a>rmse1_us <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted1, y2)</span>
-<span id="cb127-3"><a href="preliminaries.html#cb127-3" aria-hidden="true" tabindex="-1"></a>rmse2_us<span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted2, y2)</span>
-<span id="cb127-4"><a href="preliminaries.html#cb127-4" aria-hidden="true" tabindex="-1"></a>rmse3_us <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted3<span class="sc">$</span>y, y2)</span>
-<span id="cb127-5"><a href="preliminaries.html#cb127-5" aria-hidden="true" tabindex="-1"></a>unseen <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;RMSPE for model1 (linear)&quot;</span> <span class="ot">=</span> rmse1_us,</span>
-<span id="cb127-6"><a href="preliminaries.html#cb127-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;RMSPE for model2 (polynomial)&quot;</span> <span class="ot">=</span> rmse2_us,</span>
-<span id="cb127-7"><a href="preliminaries.html#cb127-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;RMSPE for model3 (nonparametric)&quot;</span> <span class="ot">=</span> rmse3_us)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="preliminaries.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since DGM is the same X&#39;s are the same</span></span>
+<span id="cb122-2"><a href="preliminaries.html#cb122-2" aria-hidden="true" tabindex="-1"></a>rmse1_us <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted1, y2)</span>
+<span id="cb122-3"><a href="preliminaries.html#cb122-3" aria-hidden="true" tabindex="-1"></a>rmse2_us<span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted2, y2)</span>
+<span id="cb122-4"><a href="preliminaries.html#cb122-4" aria-hidden="true" tabindex="-1"></a>rmse3_us <span class="ot">&lt;-</span> <span class="fu">rmse</span>(predicted3<span class="sc">$</span>y, y2)</span>
+<span id="cb122-5"><a href="preliminaries.html#cb122-5" aria-hidden="true" tabindex="-1"></a>unseen <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;RMSPE for model1 (linear)&quot;</span> <span class="ot">=</span> rmse1_us,</span>
+<span id="cb122-6"><a href="preliminaries.html#cb122-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;RMSPE for model2 (polynomial)&quot;</span> <span class="ot">=</span> rmse2_us,</span>
+<span id="cb122-7"><a href="preliminaries.html#cb122-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;RMSPE for model3 (nonparametric)&quot;</span> <span class="ot">=</span> rmse3_us)</span></code></pre></div>
 <p>Let’s put them together:</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="preliminaries.html#cb128-1" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
-<span id="cb128-2"><a href="preliminaries.html#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Seen-data&quot;</span>, <span class="st">&quot;Unseen-data&quot;</span>)</span>
-<span id="cb128-3"><a href="preliminaries.html#cb128-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>, <span class="st">&quot;Polynomial&quot;</span>, <span class="st">&quot;Spline&quot;</span>)</span>
-<span id="cb128-4"><a href="preliminaries.html#cb128-4" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> seen[<span class="dv">1</span>]</span>
-<span id="cb128-5"><a href="preliminaries.html#cb128-5" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> seen[<span class="dv">2</span>]</span>
-<span id="cb128-6"><a href="preliminaries.html#cb128-6" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> seen[<span class="dv">3</span>]</span>
-<span id="cb128-7"><a href="preliminaries.html#cb128-7" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">1</span>]</span>
-<span id="cb128-8"><a href="preliminaries.html#cb128-8" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">2</span>]</span>
-<span id="cb128-9"><a href="preliminaries.html#cb128-9" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">3</span>]</span>
-<span id="cb128-10"><a href="preliminaries.html#cb128-10" aria-hidden="true" tabindex="-1"></a>table</span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="preliminaries.html#cb123-1" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb123-2"><a href="preliminaries.html#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Seen-data&quot;</span>, <span class="st">&quot;Unseen-data&quot;</span>)</span>
+<span id="cb123-3"><a href="preliminaries.html#cb123-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Linear&quot;</span>, <span class="st">&quot;Polynomial&quot;</span>, <span class="st">&quot;Spline&quot;</span>)</span>
+<span id="cb123-4"><a href="preliminaries.html#cb123-4" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> seen[<span class="dv">1</span>]</span>
+<span id="cb123-5"><a href="preliminaries.html#cb123-5" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> seen[<span class="dv">2</span>]</span>
+<span id="cb123-6"><a href="preliminaries.html#cb123-6" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">1</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> seen[<span class="dv">3</span>]</span>
+<span id="cb123-7"><a href="preliminaries.html#cb123-7" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">1</span>]</span>
+<span id="cb123-8"><a href="preliminaries.html#cb123-8" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">2</span>]</span>
+<span id="cb123-9"><a href="preliminaries.html#cb123-9" aria-hidden="true" tabindex="-1"></a>table[<span class="dv">2</span>,<span class="dv">3</span>] <span class="ot">&lt;-</span> unseen[<span class="dv">3</span>]</span>
+<span id="cb123-10"><a href="preliminaries.html#cb123-10" aria-hidden="true" tabindex="-1"></a>table</span></code></pre></div>
 <pre><code>##               Linear Polynomial   Spline
 ## Seen-data   119.4640   88.87396  67.7245
 ## Unseen-data 123.4378  109.99681 122.3018</code></pre>
@@ -1512,6 +1490,9 @@ y =f\left(x_{1}, x_{2}, x_{3}, \ldots, x_{p}\right)+\epsilon
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Pearl_Mackenzie_2018" class="csl-entry">
 Pearl, Judea, and Dana Mackenzie. 2018. <em>The Book of Why</em>. 1st ed. Basic Books.
+</div>
+<div id="ref-33858" class="csl-entry">
+Stock, James, and Mark Watson. 2015. <em>Introduction to Econometrics (3rd Edition)</em>. Addison Wesley Longman; Addison Wesley Longman.
 </div>
 </div>
             </section>

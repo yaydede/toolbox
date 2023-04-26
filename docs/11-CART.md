@@ -476,11 +476,11 @@ printcp(cart)
 ## 
 ## n= 71 
 ## 
-##         CP nsplit rel error  xerror    xstd
-## 1 0.586213      0   1.00000 1.03490 0.04675
-## 2 0.101694      1   0.41379 0.77980 0.15631
-## 3 0.028263      2   0.31209 0.68221 0.14708
-## 4 0.010000      3   0.28383 0.64090 0.14210
+##         CP nsplit rel error  xerror     xstd
+## 1 0.586213      0   1.00000 1.05135 0.047604
+## 2 0.101694      1   0.41379 0.83095 0.164564
+## 3 0.028263      2   0.31209 0.70938 0.153379
+## 4 0.010000      3   0.28383 0.71958 0.154554
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -557,10 +557,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.58621 0.12399
-## 3 0.034483      2  0.172414 0.41379 0.10889
+## 2 0.103448      1  0.275862 0.55172 0.12140
+## 3 0.034483      2  0.172414 0.44828 0.11237
 ## 4 0.017241      6  0.034483 0.41379 0.10889
-## 5 0.000000      8  0.000000 0.41379 0.10889
+## 5 0.000000      8  0.000000 0.37931 0.10513
 ```
 
 ```r
@@ -575,7 +575,7 @@ min_cp
 ```
 
 ```
-## [1] 0.03448276
+## [1] 0
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -600,16 +600,18 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS PVENT
+## [1] FRCAR INCAR INSYS PVENT REPUL
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.103448      1   0.27586 0.58621 0.12399
-## 3 0.034483      2   0.17241 0.41379 0.10889
+## 1 0.724138      0  1.000000 1.00000 0.14282
+## 2 0.103448      1  0.275862 0.55172 0.12140
+## 3 0.034483      2  0.172414 0.44828 0.11237
+## 4 0.017241      6  0.034483 0.41379 0.10889
+## 5 0.000000      8  0.000000 0.37931 0.10513
 ```
 
 ```r
@@ -712,9 +714,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.552 0.029517
-## 4 0.011333      5     0.504  0.524 0.028952
-## 5 0.010000      9     0.458  0.532 0.029117
+## 3 0.015000      3     0.534  0.590 0.030234
+## 4 0.011333      5     0.504  0.576 0.029976
+## 5 0.010000      9     0.458  0.554 0.029556
 ```
 
 ```r

@@ -190,7 +190,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-04-26 06:46:59 ADT"
+## [1] "2023-04-26 07:59:54 ADT"
 ```
 
 ```r
@@ -199,7 +199,7 @@ now()
 ```
 
 ```
-## [1] "2023-04-26 06:46:59 ADT"
+## [1] "2023-04-26 07:59:54 ADT"
 ```
 
 ```r
@@ -451,8 +451,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1]  4.209858  1.454627  8.787977 -7.600848 -5.040431 -2.520641  1.550218
-##  [8]  4.098124  7.386667  3.460105
+##  [1]  4.474874 -5.305104  6.508647  2.277630 13.128407  5.760568  2.038199
+##  [8] -6.432537  1.122933  6.769191
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -1167,46 +1167,9 @@ What we are looking for is the isolated effect of $x_i$ on $y_i$, after controll
 ```r
 library(broom)        
 library(faux)      
-```
-
-```
-## 
-## ************
-## Welcome to faux. For support and examples visit:
-## https://debruine.github.io/faux/
-## - Get and set global package options with: faux_options()
-## ************
-```
-
-```r
 library(eulerr) #For Euler and Venn diagrams
 library(tidyverse)
-```
 
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2
-## ──
-```
-
-```
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.1      ✔ stringr 1.5.0 
-## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-## ✔ purrr   1.0.0      
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ purrr::%||%()            masks faux::%||%()
-## ✖ lubridate::as.difftime() masks base::as.difftime()
-## ✖ dplyr::between()         masks plm::between()
-## ✖ lubridate::date()        masks base::date()
-## ✖ dplyr::filter()          masks stats::filter()
-## ✖ lubridate::intersect()   masks base::intersect()
-## ✖ dplyr::lag()             masks plm::lag(), stats::lag()
-## ✖ dplyr::lead()            masks plm::lead()
-## ✖ lubridate::setdiff()     masks base::setdiff()
-## ✖ lubridate::union()       masks base::union()
-```
-
-```r
 # Correlated variables and PRF
 set.seed(1234)
 df <- rnorm_multi(n = 100,
@@ -1268,7 +1231,7 @@ Now, after controlling for the effect of $X_2$, $\mathbf{B}$, the isolated effec
 
 Hence, when we omit $X_2$, the effect of $X_1$ is the area of $\mathbf{D+G}$, while the true effect is $\mathbf{D}$.  Of course, if $X_1$ and $X_2$ are independent, omitting $X_2$ would not be a problem. It is the same thing to say that, if we have independent regressors, running separate regressions each regressor would give us the same results as the one when we combine them. However, when omitted variables are correlated with the regressors ($X$), the conditional expectation on the error term will be non-zero,  $\text{E}(\epsilon|x)\neq0$.   An excellent demonstration of regressions with Venn diagrams can be found in the Andrew Heiss' [post](https://www.andrewheiss.com/blog/2021/08/21/r2-euler/).   
 
-Here is a more realistic example from Stock and Watson (2015, p. 196): suppose we want to understand the relationship between test score and class size.  If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the "true" model should look like equation 2.15:  
+Here is a more realistic example from Stock and Watson [@33858] (p. 196): suppose we want to understand the relationship between test score and class size.  If we run a regression without considering possible confounding factors, we may face the same problem we described above. This is because the percentage of English learners in the school district might be correlated with both test score and class size. Hence, the "true" model should look like equation 2.15:  
 
 \begin{equation}
 Test Score =\beta_{0}+\beta_{1}S T R+\beta_{2}PctEL+\epsilon_{i},

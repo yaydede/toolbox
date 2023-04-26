@@ -500,27 +500,27 @@ Y=\left\{\begin{array}{ll}{1} &amp; {\text { yes }} \\ {0} &amp; {\text { no }}\
 <div id="linear-probability-models-lpm" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Linear Probability Models (LPM)<a href="parametric-estimations.html#linear-probability-models-lpm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s use the dataset <strong>Vehicles</strong> from the <code>fueleconomy</code> package. We we ill create a new variable a new variable, <code>mpg</code>, which is 1 if the car’s hightway mpg is more than the average, 0 otherwise:</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="parametric-estimations.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  </span>
-<span id="cb206-2"><a href="parametric-estimations.html#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
-<span id="cb206-3"><a href="parametric-estimations.html#cb206-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
-<span id="cb206-4"><a href="parametric-estimations.html#cb206-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb206-5"><a href="parametric-estimations.html#cb206-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NAs</span></span>
-<span id="cb206-6"><a href="parametric-estimations.html#cb206-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="parametric-estimations.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fueleconomy)  </span>
+<span id="cb201-2"><a href="parametric-estimations.html#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(vehicles)</span>
+<span id="cb201-3"><a href="parametric-estimations.html#cb201-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vehicles)</span>
+<span id="cb201-4"><a href="parametric-estimations.html#cb201-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb201-5"><a href="parametric-estimations.html#cb201-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NAs</span></span>
+<span id="cb201-6"><a href="parametric-estimations.html#cb201-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)</span></code></pre></div>
 <pre><code>## [1] 33442    12</code></pre>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="parametric-estimations.html#cb208-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df[<span class="fu">complete.cases</span>(df), ]</span>
-<span id="cb208-2"><a href="parametric-estimations.html#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="parametric-estimations.html#cb203-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> df[<span class="fu">complete.cases</span>(df), ]</span>
+<span id="cb203-2"><a href="parametric-estimations.html#cb203-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div>
 <pre><code>## [1] 33382    12</code></pre>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="parametric-estimations.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary outcome mpg = 1 if hwy &gt; mean(hwy), 0 otherwise</span></span>
-<span id="cb210-2"><a href="parametric-estimations.html#cb210-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="fu">mean</span>(data<span class="sc">$</span>hwy), <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb210-3"><a href="parametric-estimations.html#cb210-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg)</span></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="parametric-estimations.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binary outcome mpg = 1 if hwy &gt; mean(hwy), 0 otherwise</span></span>
+<span id="cb205-2"><a href="parametric-estimations.html#cb205-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>mpg <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(data<span class="sc">$</span>hwy <span class="sc">&gt;</span> <span class="fu">mean</span>(data<span class="sc">$</span>hwy), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb205-3"><a href="parametric-estimations.html#cb205-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg)</span></code></pre></div>
 <pre><code>## 
 ##     0     1 
 ## 17280 16102</code></pre>
 <p>We are going to have a model that predicts <code>mpg</code> (i.e. <code>mpg</code> = 1) for each car depending on their attributes. If you check the data, you see that many variables are character variables. Although most functions, like <code>lm()</code>, accept character variables (and convert them to factor), it is a good practice to check each variable and convert them appropriate data types.</p>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="parametric-estimations.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data)) {</span>
-<span id="cb212-2"><a href="parametric-estimations.html#cb212-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.character</span>(data[,i])) data[,i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data[,i])</span>
-<span id="cb212-3"><a href="parametric-estimations.html#cb212-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb212-4"><a href="parametric-estimations.html#cb212-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="parametric-estimations.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(data)) {</span>
+<span id="cb207-2"><a href="parametric-estimations.html#cb207-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.character</span>(data[,i])) data[,i] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data[,i])</span>
+<span id="cb207-3"><a href="parametric-estimations.html#cb207-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb207-4"><a href="parametric-estimations.html#cb207-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    33382 obs. of  13 variables:
 ##  $ id   : num  13309 13310 13311 14038 14039 ...
 ##  $ make : Factor w/ 124 levels &quot;Acura&quot;,&quot;Alfa Romeo&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
@@ -536,8 +536,8 @@ Y=\left\{\begin{array}{ll}{1} &amp; {\text { yes }} \\ {0} &amp; {\text { no }}\
 ##  $ cty  : num  20 22 18 19 21 17 20 21 17 18 ...
 ##  $ mpg  : num  1 1 1 1 1 1 1 1 1 0 ...</code></pre>
 <p>Done! We are ready to have a model to predict <code>mpg</code>. For now, we’ll use only <code>fuel</code>.</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="parametric-estimations.html#cb214-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> data) <span class="co">#No intercept</span></span>
-<span id="cb214-2"><a href="parametric-estimations.html#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="parametric-estimations.html#cb209-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> <span class="dv">0</span>, <span class="at">data =</span> data) <span class="co">#No intercept</span></span>
+<span id="cb209-2"><a href="parametric-estimations.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ fuel + 0, data = data)
@@ -571,8 +571,8 @@ Y=\left\{\begin{array}{ll}{1} &amp; {\text { yes }} \\ {0} &amp; {\text { no }}\
 E[Y | \mathbf{X}=\mathbf{Regular}]) = \text{Pr}(Y=1|\mathbf{X}=\mathbf{Regular}),
 \]</span></p>
 <p>In this context, the link function is called “identity” because it directly “links” the probability to the linear function of the predictor variables. Let’s see if we can verify this:</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="parametric-estimations.html#cb216-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>fuel, data<span class="sc">$</span>mpg)</span>
-<span id="cb216-2"><a href="parametric-estimations.html#cb216-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(<span class="fu">addmargins</span>(tab))</span></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="parametric-estimations.html#cb211-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>fuel, data<span class="sc">$</span>mpg)</span>
+<span id="cb211-2"><a href="parametric-estimations.html#cb211-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(<span class="fu">addmargins</span>(tab))</span></code></pre></div>
 <pre><code>##                                  0     1   Sum
 ##                                               
 ## CNG                             37    21    58
@@ -588,7 +588,7 @@ E[Y | \mathbf{X}=\mathbf{Regular}]) = \text{Pr}(Y=1|\mathbf{X}=\mathbf{Regular})
 ## Regular                      11688 10929 22617
 ## Regular Gas and Electricity      0     8     8
 ## Sum                          17280 16102 33382</code></pre>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="parametric-estimations.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tab, <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="parametric-estimations.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tab, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>##                              
 ##                                       0         1
 ##   CNG                         0.6379310 0.3620690
@@ -638,8 +638,8 @@ for <span class="math inline">\(k = 0, 1, 2, ..., n\)</span>, where</p>
 \operatorname{Pr}\left(Y_{i}=1 | x_{1, i}, \ldots, x_{m, i}\right)=p_{i}=E[Y_{i}  | \mathbf{X}=\mathbf{x}])
 \]</span></p>
 <p>Let’s have a more complex model:</p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="parametric-estimations.html#cb220-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">data =</span> data)</span>
-<span id="cb220-2"><a href="parametric-estimations.html#cb220-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="parametric-estimations.html#cb215-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">data =</span> data)</span>
+<span id="cb215-2"><a href="parametric-estimations.html#cb215-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ fuel + drive + cyl, data = data)
@@ -676,28 +676,28 @@ for <span class="math inline">\(k = 0, 1, 2, ..., n\)</span>, where</p>
 ## Multiple R-squared:  0.5094, Adjusted R-squared:  0.5091 
 ## F-statistic:  1924 on 18 and 33363 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Since OLS is a “Gaussian” member of GLS family, we can also estimate it as GLS. We use <code>glm()</code> and define the family as “gaussian”.</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="parametric-estimations.html#cb222-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">family =</span> gaussian, <span class="at">data =</span> data)</span>
-<span id="cb222-2"><a href="parametric-estimations.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">round</span>(<span class="fu">coef</span>(model2),<span class="dv">2</span>), <span class="fu">round</span>(<span class="fu">coef</span>(model3),<span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="parametric-estimations.html#cb217-1" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(mpg <span class="sc">~</span> fuel <span class="sc">+</span> drive <span class="sc">+</span> cyl, <span class="at">family =</span> gaussian, <span class="at">data =</span> data)</span>
+<span id="cb217-2"><a href="parametric-estimations.html#cb217-2" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">round</span>(<span class="fu">coef</span>(model2),<span class="dv">2</span>), <span class="fu">round</span>(<span class="fu">coef</span>(model3),<span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>With this LPM model, we can now predict the classification of future cars in terms of high (<code>mpg</code> = 1) or low (<code>mpg</code> = 0), which was our objective. Let’s see how successful we are in identifying cars with <code>mpg</code> = 1 in our own sample.</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="parametric-estimations.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="co">#How many cars we have with mpg = 1 and mpg = 0 in our data</span></span>
-<span id="cb224-2"><a href="parametric-estimations.html#cb224-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg) </span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="parametric-estimations.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="co">#How many cars we have with mpg = 1 and mpg = 0 in our data</span></span>
+<span id="cb219-2"><a href="parametric-estimations.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>mpg) </span></code></pre></div>
 <pre><code>## 
 ##     0     1 
 ## 17280 16102</code></pre>
-<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="parametric-estimations.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="co">#In-sample fitted values or predicted probabilities for mpg = 1</span></span>
-<span id="cb226-2"><a href="parametric-estimations.html#cb226-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember our E(Y|X) is Pr(Y=1|X)</span></span>
-<span id="cb226-3"><a href="parametric-estimations.html#cb226-3" aria-hidden="true" tabindex="-1"></a>mpg_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model2)</span>
-<span id="cb226-4"><a href="parametric-estimations.html#cb226-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb226-5"><a href="parametric-estimations.html#cb226-5" aria-hidden="true" tabindex="-1"></a><span class="co">#If any predicted mpg above 0.5 should be considered as 1 </span></span>
-<span id="cb226-6"><a href="parametric-estimations.html#cb226-6" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&gt;</span> <span class="fl">0.5</span>]) </span></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="parametric-estimations.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="co">#In-sample fitted values or predicted probabilities for mpg = 1</span></span>
+<span id="cb221-2"><a href="parametric-estimations.html#cb221-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember our E(Y|X) is Pr(Y=1|X)</span></span>
+<span id="cb221-3"><a href="parametric-estimations.html#cb221-3" aria-hidden="true" tabindex="-1"></a>mpg_hat <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model2)</span>
+<span id="cb221-4"><a href="parametric-estimations.html#cb221-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb221-5"><a href="parametric-estimations.html#cb221-5" aria-hidden="true" tabindex="-1"></a><span class="co">#If any predicted mpg above 0.5 should be considered as 1 </span></span>
+<span id="cb221-6"><a href="parametric-estimations.html#cb221-6" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&gt;</span> <span class="fl">0.5</span>]) </span></code></pre></div>
 <pre><code>## [1] 14079</code></pre>
-<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="parametric-estimations.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&lt;=</span> <span class="fl">0.5</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="parametric-estimations.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mpg_hat[mpg_hat <span class="sc">&lt;=</span> <span class="fl">0.5</span>])</span></code></pre></div>
 <pre><code>## [1] 19303</code></pre>
 <p>Our prediction is significantly off: we predict many cars with <code>mpg</code> = 0 as having <code>mpg</code> = 1.</p>
 <p>Note that we are using 0.5 as our discriminating threshold to convert predicted probabilities to predicted “labels”. This is an arbitrary choice as we will see later</p>
 <p>Another issue with LPM can be see below:</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="parametric-estimations.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpg_hat)</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="parametric-estimations.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mpg_hat)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ## -0.7994  0.2187  0.4429  0.4824  0.9138  1.2088</code></pre>
 <p>The predicted probabilities (of <code>mpg</code> = 1) are not bounded between 1 and 0. We will talk about these issues later. None of these problems are major drawbacks for LPM. But, by its nature, LPM defines a constant marginal effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(Pr[Y = 1 | x)\)</span>.</p>
@@ -705,9 +705,9 @@ for <span class="math inline">\(k = 0, 1, 2, ..., n\)</span>, where</p>
 Pr(Y = 1 | x=\mathbf{Regular}) = \beta_{0}+\beta_{1} x_{i}.
 \]</span></p>
 <p>We can see it with a different example</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="parametric-estimations.html#cb232-1" aria-hidden="true" tabindex="-1"></a>model_n <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> cyl, <span class="at">data =</span> data)</span>
-<span id="cb232-2"><a href="parametric-estimations.html#cb232-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>cyl, data<span class="sc">$</span>mpg, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">1.2</span>))</span>
-<span id="cb232-3"><a href="parametric-estimations.html#cb232-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(data<span class="sc">$</span>cyl, model_n<span class="sc">$</span>fitted.values, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="parametric-estimations.html#cb227-1" aria-hidden="true" tabindex="-1"></a>model_n <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> cyl, <span class="at">data =</span> data)</span>
+<span id="cb227-2"><a href="parametric-estimations.html#cb227-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>cyl, data<span class="sc">$</span>mpg, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">1.2</span>))</span>
+<span id="cb227-3"><a href="parametric-estimations.html#cb227-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(data<span class="sc">$</span>cyl, model_n<span class="sc">$</span>fitted.values, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="05-ParametricEstimations_files/figure-html/p9-1.png" width="672" /></p>
 <p>Two things we see in the plot: first predicted probabilities are not bounded between 0 and 1. Second, the effect of <code>cyc</code> on <span class="math inline">\(Pr(Y = 1 | x)\)</span> is constant regardless of the value of <code>cyc</code>.</p>
 <p>We can of course add polynomial terms to LPM to deal with it. But, we may have a better model, Logistic regression, if we think that the constant marginal effect is an unrealistic assumption.</p>
@@ -728,11 +728,11 @@ p(\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})
   \tag{5.5}
 \end{equation}\]</span></p>
 <p>Here is an example:</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="parametric-estimations.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb233-2"><a href="parametric-estimations.html#cb233-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
-<span id="cb233-3"><a href="parametric-estimations.html#cb233-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>,<span class="dv">2</span>)</span>
-<span id="cb233-4"><a href="parametric-estimations.html#cb233-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>x))</span>
-<span id="cb233-5"><a href="parametric-estimations.html#cb233-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sigma <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;blue&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="parametric-estimations.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb228-2"><a href="parametric-estimations.html#cb228-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb228-3"><a href="parametric-estimations.html#cb228-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>,<span class="dv">2</span>)</span>
+<span id="cb228-4"><a href="parametric-estimations.html#cb228-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>x))</span>
+<span id="cb228-5"><a href="parametric-estimations.html#cb228-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sigma <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;blue&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
 <p><img src="05-ParametricEstimations_files/figure-html/p10-1.png" width="672" /></p>
 <p>This logistic function is nice because: (1) whatever the <span class="math inline">\(x\)</span>’s are <span class="math inline">\(\sigma(z)\)</span> is always between 0 and 1, (2) The effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(\sigma(z)\)</span> is not linear. That is, there is lower and upper thresholds in <span class="math inline">\(x\)</span> that before and after those values (around -2 and 2 here) the marginal effect of <span class="math inline">\(x\)</span> on <span class="math inline">\(\sigma(z)\)</span> is very low. Therefore, it seems that if we use a logistic function and replace <span class="math inline">\(\sigma(z)\)</span> with <span class="math inline">\(p(x)\)</span>, we can solve issues related to these two major drawbacks of LPM.</p>
 <p>Let us assume that <span class="math inline">\(z = y = \beta_{0}+\beta_{1} x_{1}\)</span>. Then, the logistic function can now be written as:</p>
@@ -747,9 +747,9 @@ p(x)=P(Y=1|\mathbf{X}=\mathbf{x})=\frac{1}{1+e^{-\left(\beta_{0}+\beta_{1} x\rig
   \tag{5.7}
 \end{equation}\]</span></p>
 <p>where <span class="math inline">\(p(x)/(1-p(x))\)</span> is called <strong>odds</strong>, a ratio of success over failure. The natural log of this ratio is called, <strong>log odds</strong>, or <strong>Logit</strong>, usually denoted as <span class="math inline">\(\mathbf(L)\)</span>.</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="parametric-estimations.html#cb234-1" aria-hidden="true" tabindex="-1"></a>p_x <span class="ot">&lt;-</span> sigma</span>
-<span id="cb234-2"><a href="parametric-estimations.html#cb234-2" aria-hidden="true" tabindex="-1"></a>Logit <span class="ot">&lt;-</span> <span class="fu">log</span>(p_x<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p_x)) <span class="co">#By defult log() calculates natural logarithms</span></span>
-<span id="cb234-3"><a href="parametric-estimations.html#cb234-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Logit <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;red&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="parametric-estimations.html#cb229-1" aria-hidden="true" tabindex="-1"></a>p_x <span class="ot">&lt;-</span> sigma</span>
+<span id="cb229-2"><a href="parametric-estimations.html#cb229-2" aria-hidden="true" tabindex="-1"></a>Logit <span class="ot">&lt;-</span> <span class="fu">log</span>(p_x<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p_x)) <span class="co">#By defult log() calculates natural logarithms</span></span>
+<span id="cb229-3"><a href="parametric-estimations.html#cb229-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Logit <span class="sc">~</span> x, <span class="at">col =</span><span class="st">&quot;red&quot;</span>, <span class="at">cex.axis =</span> <span class="fl">0.7</span>)</span></code></pre></div>
 <p><img src="05-ParametricEstimations_files/figure-html/p11-1.png" width="672" /></p>
 <p>In many cases, researchers use a logistic function, when the outcome variable in a regression is dichotomous. Although there are situations where the linear model is clearly problematic (as described above), there are many common situations where the linear model is just fine, and even has advantages.</p>
 <p>Let’s start by comparing the two models explicitly. If the outcome <span class="math inline">\(Y\)</span> is dichotomous with values 1 and 0, we define <span class="math inline">\(P(Y=1|X) = E(Y|X)\)</span> as proved earlier, which is just the probability that <span class="math inline">\(Y\)</span> is 1, given some value of the regressors <span class="math inline">\(X\)</span>. Then the linear and logistic probability models are:</p>
@@ -769,22 +769,22 @@ p(\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})=\frac{
 <p>The major advantage of LPM is its interpretability. In the linear model, if <span class="math inline">\(\beta_{2}\)</span> is (say) 0.05, that means that a one-unit increase in <span class="math inline">\(x_{2}\)</span> is associated with a 5-percentage point increase in the probability that <span class="math inline">\(Y\)</span> is 1. Just about everyone has some understanding of what it would mean to increase by 5 percentage points their probability of, say, voting, or dying, or becoming obese. In the logistic model, however, a change in <span class="math inline">\(x_{1}\)</span> changes the log odds, <span class="math inline">\(\text{log}(P/{(1-P)})\)</span>. Hence, the coefficient of a logistic regression requires additional steps to understand what it means: we convert it to the odd ratio (OR) or use the above equation to calculate fitted (predicted) probabilities.</p>
 <p>When we should use the logistic model? It should be the choice if it fits the data much better than the linear model. In other words, <strong>for a logistic model to fit better than a linear model, it must be the case that the log odds are a linear function of X, but the probability is not.</strong></p>
 <p>Lets review these concepts in a simulation exercise:</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="parametric-estimations.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating random data</span></span>
-<span id="cb235-2"><a href="parametric-estimations.html#cb235-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb235-3"><a href="parametric-estimations.html#cb235-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> </span>
-<span id="cb235-4"><a href="parametric-estimations.html#cb235-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb235-5"><a href="parametric-estimations.html#cb235-5" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> x</span>
-<span id="cb235-6"><a href="parametric-estimations.html#cb235-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb235-7"><a href="parametric-estimations.html#cb235-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Probablity is defined by a logistic function</span></span>
-<span id="cb235-8"><a href="parametric-estimations.html#cb235-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Therefore it is not a linear function of x!</span></span>
-<span id="cb235-9"><a href="parametric-estimations.html#cb235-9" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>z))</span>
-<span id="cb235-10"><a href="parametric-estimations.html#cb235-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb235-11"><a href="parametric-estimations.html#cb235-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember Bernoulli distribution defines Y as 1 or 0 </span></span>
-<span id="cb235-12"><a href="parametric-estimations.html#cb235-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
-<span id="cb235-13"><a href="parametric-estimations.html#cb235-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb235-14"><a href="parametric-estimations.html#cb235-14" aria-hidden="true" tabindex="-1"></a><span class="co">#And we create our data</span></span>
-<span id="cb235-15"><a href="parametric-estimations.html#cb235-15" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(y, x)</span>
-<span id="cb235-16"><a href="parametric-estimations.html#cb235-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="parametric-estimations.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating random data</span></span>
+<span id="cb230-2"><a href="parametric-estimations.html#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb230-3"><a href="parametric-estimations.html#cb230-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> </span>
+<span id="cb230-4"><a href="parametric-estimations.html#cb230-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb230-5"><a href="parametric-estimations.html#cb230-5" aria-hidden="true" tabindex="-1"></a>z <span class="ot">=</span> <span class="sc">-</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> x</span>
+<span id="cb230-6"><a href="parametric-estimations.html#cb230-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-7"><a href="parametric-estimations.html#cb230-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Probablity is defined by a logistic function</span></span>
+<span id="cb230-8"><a href="parametric-estimations.html#cb230-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Therefore it is not a linear function of x!</span></span>
+<span id="cb230-9"><a href="parametric-estimations.html#cb230-9" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>z))</span>
+<span id="cb230-10"><a href="parametric-estimations.html#cb230-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-11"><a href="parametric-estimations.html#cb230-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Remember Bernoulli distribution defines Y as 1 or 0 </span></span>
+<span id="cb230-12"><a href="parametric-estimations.html#cb230-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb230-13"><a href="parametric-estimations.html#cb230-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb230-14"><a href="parametric-estimations.html#cb230-14" aria-hidden="true" tabindex="-1"></a><span class="co">#And we create our data</span></span>
+<span id="cb230-15"><a href="parametric-estimations.html#cb230-15" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(y, x)</span>
+<span id="cb230-16"><a href="parametric-estimations.html#cb230-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
 <pre><code>##   y          x
 ## 1 0 -0.6264538
 ## 2 0  0.1836433
@@ -792,13 +792,13 @@ p(\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})=\frac{
 ## 4 0  1.5952808
 ## 5 0  0.3295078
 ## 6 0 -0.8204684</code></pre>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="parametric-estimations.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="parametric-estimations.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y)</span></code></pre></div>
 <pre><code>## y
 ##   0   1 
 ## 353 147</code></pre>
 <p>We know that probability is defined by a logistic function (see above). What happens if we fit it as LPM, which is <span class="math inline">\(Pr(Y = 1 | x=\mathbf{x}) = \beta_{0}+\beta_{1} x_{i}\)</span>?</p>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="parametric-estimations.html#cb239-1" aria-hidden="true" tabindex="-1"></a>lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
-<span id="cb239-2"><a href="parametric-estimations.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lpm)</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="parametric-estimations.html#cb234-1" aria-hidden="true" tabindex="-1"></a>lpm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data)</span>
+<span id="cb234-2"><a href="parametric-estimations.html#cb234-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lpm)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ x, data = data)
@@ -817,20 +817,20 @@ p(\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})=\frac{
 ## Residual standard error: 0.3504 on 498 degrees of freedom
 ## Multiple R-squared:  0.411,  Adjusted R-squared:  0.4098 
 ## F-statistic: 347.5 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="parametric-estimations.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, </span>
-<span id="cb241-2"><a href="parametric-estimations.html#cb241-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab =</span> <span class="fl">0.7</span>,</span>
-<span id="cb241-3"><a href="parametric-estimations.html#cb241-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
-<span id="cb241-4"><a href="parametric-estimations.html#cb241-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lpm, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb241-5"><a href="parametric-estimations.html#cb241-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by LPM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
-<span id="cb241-6"><a href="parametric-estimations.html#cb241-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb241-7"><a href="parametric-estimations.html#cb241-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
-<span id="cb241-8"><a href="parametric-estimations.html#cb241-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb241-9"><a href="parametric-estimations.html#cb241-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb241-10"><a href="parametric-estimations.html#cb241-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="parametric-estimations.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, </span>
+<span id="cb236-2"><a href="parametric-estimations.html#cb236-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.lab =</span> <span class="fl">0.7</span>,</span>
+<span id="cb236-3"><a href="parametric-estimations.html#cb236-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
+<span id="cb236-4"><a href="parametric-estimations.html#cb236-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lpm, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb236-5"><a href="parametric-estimations.html#cb236-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by LPM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
+<span id="cb236-6"><a href="parametric-estimations.html#cb236-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb236-7"><a href="parametric-estimations.html#cb236-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb236-8"><a href="parametric-estimations.html#cb236-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb236-9"><a href="parametric-estimations.html#cb236-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb236-10"><a href="parametric-estimations.html#cb236-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
 <p><img src="05-ParametricEstimations_files/figure-html/p13-1.png" width="672" /></p>
 <p>How about a logistic regression?</p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="parametric-estimations.html#cb242-1" aria-hidden="true" tabindex="-1"></a>logis <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data, <span class="at">family =</span> binomial)</span>
-<span id="cb242-2"><a href="parametric-estimations.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logis)</span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="parametric-estimations.html#cb237-1" aria-hidden="true" tabindex="-1"></a>logis <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data, <span class="at">family =</span> binomial)</span>
+<span id="cb237-2"><a href="parametric-estimations.html#cb237-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(logis)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = y ~ x, family = binomial, data = data)
@@ -853,17 +853,17 @@ p(\mathbf{x})=E(Y | \mathbf{X}=\mathbf{x})=P(Y=1 | \mathbf{X}=\mathbf{x})=\frac{
 ## AIC: 332.13
 ## 
 ## Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="parametric-estimations.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">cex.lab =</span> <span class="fl">0.8</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
-<span id="cb244-2"><a href="parametric-estimations.html#cb244-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">predict</span>(logis, <span class="fu">data.frame</span>(x), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>),</span>
-<span id="cb244-3"><a href="parametric-estimations.html#cb244-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb244-4"><a href="parametric-estimations.html#cb244-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb244-5"><a href="parametric-estimations.html#cb244-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb244-6"><a href="parametric-estimations.html#cb244-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by GLM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
-<span id="cb244-7"><a href="parametric-estimations.html#cb244-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb244-8"><a href="parametric-estimations.html#cb244-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
-<span id="cb244-9"><a href="parametric-estimations.html#cb244-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb244-10"><a href="parametric-estimations.html#cb244-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
-<span id="cb244-11"><a href="parametric-estimations.html#cb244-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="parametric-estimations.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, p, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">cex.lab =</span> <span class="fl">0.8</span>, <span class="at">cex.axis =</span> <span class="fl">0.8</span>)</span>
+<span id="cb239-2"><a href="parametric-estimations.html#cb239-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">predict</span>(logis, <span class="fu">data.frame</span>(x), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>),</span>
+<span id="cb239-3"><a href="parametric-estimations.html#cb239-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb239-4"><a href="parametric-estimations.html#cb239-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb239-5"><a href="parametric-estimations.html#cb239-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb239-6"><a href="parametric-estimations.html#cb239-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Estimated Probability by GLM&quot;</span>, <span class="st">&quot;Probability&quot;</span>),</span>
+<span id="cb239-7"><a href="parametric-estimations.html#cb239-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb239-8"><a href="parametric-estimations.html#cb239-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>),</span>
+<span id="cb239-9"><a href="parametric-estimations.html#cb239-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb239-10"><a href="parametric-estimations.html#cb239-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>),</span>
+<span id="cb239-11"><a href="parametric-estimations.html#cb239-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code></pre></div>
 <p><img src="05-ParametricEstimations_files/figure-html/p14-1.png" width="672" /></p>
 <p>As you can see, the estimated logistic regression coefficients are in line with our DGM coefficients (-2, 3).</p>
 <p><span class="math display">\[
