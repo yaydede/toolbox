@@ -184,7 +184,7 @@ dir()
 ## [135] "irates.dat"                     "mnist.Rdata"                   
 ## [137] "myocarde.csv"                   "packages.bib"                  
 ## [139] "png"                            "preamble.tex"                  
-## [141] "README.md"                      "render85031f1a0b62.rds"        
+## [141] "README.md"                      "renderd9c501611e0.rds"         
 ## [143] "style.css"                      "table1.text"                   
 ## [145] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [147] "wineQualityReds.csv"            "YA_TextBook.md"                

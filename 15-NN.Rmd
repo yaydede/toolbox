@@ -6,10 +6,10 @@ It wasn't until the 1980s and 1990s that significant progress was made in the de
 
 There have been many influential works accomplished in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential works in the history of ANNs:
   
-- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt ([@Rosenblatt]): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
-- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams ([@Rumelhart]): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
-- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. ([@lecun]): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
-- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton ([@lecun2]): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
+- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt [@Rosenblatt]: This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
+- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams [@Rumelhart]: This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
+- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. [@lecun]: This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
+- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton [@lecun2]: This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
 
 ## Neural Network - the idea
 Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks.  
@@ -80,11 +80,59 @@ lines(x, yhat, col = "red", lwd = 3)
 mtext("Fixed Components",
       outer=TRUE, cex = 1.5, col="olivedrab")
 ```
+   
 
 The artificial neural net replaces the fixed components in the polynomial regression with adjustable ones, $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $\ldots, f\left(\alpha_M+\delta_M x\right)$ that are more flexible.  They are adjustable with tunable internal parameters. They can express several shapes, not just one (fixed) shape. Hence, adjustable components enable to capture complex models with fewer components (smaller M).  
 
 Let's replace those fixed components $x, x^2, x^3$ in our polynomial regression with $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $f\left(\alpha_3+\delta_3 x\right).$  
 
+The following code demonstrates the ability of a simple artificial neural network (ANN) with arbitrary parameters to capture the underlying signal relative to a third-degree polynomial regression model. It defines an ANN function with sigmoid activation functions for three nodes (M = 3), arbitrary parameters `a`, `b`, `beta`, and an intercept (`int`).  For each node, the code calculates the weighted input (`z`) using `a` and `b`, and then applies the sigmoid activation function to obtain the output (`sig`). The output is then multiplied by the corresponding beta value. The final output (`yhat`) is calculated as the sum of the intercept and the weighted outputs from all three nodes.
+
+The resulting plot demonstrates the ANN's ability to fit the data compared to the third-degree polynomial regression model.
+  
+```{r, warning=FALSE, message=FALSE}
+a = c(1.5, 9, 3)
+b = c(-20,-14,-8)
+beta = c(15, 25,-40)
+int = 3
+
+ann <- function(a, b, beta, int) {
+  #1st sigmoid
+  a1 = a[1]
+  b1 = b[1]
+  z1 = a1 + b1 * x
+  sig1 = 1 / (1 + exp(-z1))
+  
+  f1 <- sig1
+  
+  #2nd sigmoid
+  a2 = a[2]
+  b2 = b[2]
+  z2 = a2 + b2 * x
+  sig2 = 1 / (1 + exp(-z2))
+  
+  f2 <- sig2
+  
+  #3rd sigmoid
+  a3 = a[3]
+  b3 = b[3]
+  z3 = a3 + b3 * x
+  sig3 = 1 / (1 + exp(-z3))
+  
+  f3 <- sig3
+  
+  yhat = int + beta[1] * f1 + beta[2] * f2 + beta[3] * f3
+  return(yhat)
+}
+
+yhat <- ann(a, b, beta, int)
+
+plot(x, y, main = "ANN: M = 3", ylim = c(-5, 15))
+lines(x, yhat, col = "red", lwd = 3)
+```
+  
+The next section, Backpropagation, will show us how to get the correct parameters for our simple ANN.  For now, let's obstain them with `neuralnet`.  
+  
 ```{r nn4, warning=FALSE, message=FALSE, cache=TRUE}
 library(neuralnet)
 set.seed(2)

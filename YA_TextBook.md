@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-04-25"
+date: "This version: 2023-04-26"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -285,7 +285,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-04-25"
+## [1] "2023-04-26"
 ```
 
 ```r
@@ -294,7 +294,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-04-25 14:49:01 ADT"
+## [1] "2023-04-26 06:46:59 ADT"
 ```
 
 ```r
@@ -303,7 +303,7 @@ now()
 ```
 
 ```
-## [1] "2023-04-25 14:49:01 ADT"
+## [1] "2023-04-26 06:46:59 ADT"
 ```
 
 ```r
@@ -555,8 +555,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1]  3.521319 -1.727875  2.283478  1.911803 -4.373883  8.816327  3.767233
-##  [8] -1.550730  5.538482  6.625935
+##  [1]  4.209858  1.454627  8.787977 -7.600848 -5.040431 -2.520641  1.550218
+##  [8]  4.098124  7.386667  3.460105
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -9103,7 +9103,7 @@ printcp(tree)
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
 ## 2 0.034483      1   0.27586 0.51724 0.11861
-## 3 0.010000      2   0.24138 0.44828 0.11237
+## 3 0.010000      2   0.24138 0.51724 0.11861
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9151,11 +9151,11 @@ printcp(cart)
 ## 
 ## n= 71 
 ## 
-##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.02445 0.045705
-## 2 0.101694      1   0.41379 0.88893 0.170558
-## 3 0.028263      2   0.31209 0.85993 0.170162
-## 4 0.010000      3   0.28383 0.79157 0.159781
+##         CP nsplit rel error  xerror    xstd
+## 1 0.586213      0   1.00000 1.03490 0.04675
+## 2 0.101694      1   0.41379 0.77980 0.15631
+## 3 0.028263      2   0.31209 0.68221 0.14708
+## 4 0.010000      3   0.28383 0.64090 0.14210
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9232,10 +9232,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.55172 0.12140
-## 4 0.017241      6  0.034483 0.55172 0.12140
-## 5 0.000000      8  0.000000 0.55172 0.12140
+## 2 0.103448      1  0.275862 0.58621 0.12399
+## 3 0.034483      2  0.172414 0.41379 0.10889
+## 4 0.017241      6  0.034483 0.41379 0.10889
+## 5 0.000000      8  0.000000 0.41379 0.10889
 ```
 
 ```r
@@ -9250,7 +9250,7 @@ min_cp
 ```
 
 ```
-## [1] 0.1034483
+## [1] 0.03448276
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -9275,15 +9275,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] INSYS
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
-##        CP nsplit rel error  xerror    xstd
-## 1 0.72414      0   1.00000 1.00000 0.14282
-## 2 0.10345      1   0.27586 0.55172 0.12140
+##         CP nsplit rel error  xerror    xstd
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.58621 0.12399
+## 3 0.034483      2   0.17241 0.41379 0.10889
 ```
 
 ```r
@@ -9386,9 +9387,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.544 0.029359
-## 4 0.011333      5     0.504  0.538 0.029238
-## 5 0.010000      9     0.458  0.540 0.029279
+## 3 0.015000      3     0.534  0.552 0.029517
+## 4 0.011333      5     0.504  0.524 0.028952
+## 5 0.010000      9     0.458  0.532 0.029117
 ```
 
 ```r
@@ -10639,7 +10640,7 @@ vip(tr_model,
 ```
 
 ```
-## [14:49:57] WARNING: src/learner.cc:553: 
+## [06:47:52] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:
@@ -12657,10 +12658,10 @@ It wasn't until the 1980s and 1990s that significant progress was made in the de
 
 There have been many influential works accomplished in the field of artificial neural networks (ANNs) over the years. Here are a few examples of some of the most important and influential works in the history of ANNs:
   
-- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt ([@Rosenblatt]): This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
-- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams ([@Rumelhart]): This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
-- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. ([@lecun]): This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
-- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton ([@lecun2]): This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
+- [Perceptrons](https://psycnet.apa.org/record/1959-09865-001) by Frank Rosenblatt [@Rosenblatt]: This paper introduced the concept of the perceptron, which is a type of ANN that can be trained to recognize patterns in data. The perceptron became a foundational concept in the field of machine learning and was a key catalyst for the development of more advanced ANNs. 
+- [Backpropagation](https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf) by Rumelhart, Hinton, and Williams [@Rumelhart]: This paper introduced the backpropagation algorithm, which is a method for training ANNs that allows them to learn and adapt over time. The backpropagation algorithm is still widely used today and has been a key factor in the success of ANNs in many applications. 
+- [LeNet-5](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) by Yann LeCun et al. [@lecun]: This paper described the development of LeNet-5, an ANN designed for recognizing handwritten digits. LeNet-5 was one of the first successful applications of ANNs in the field of image recognition and set the stage for many subsequent advances in this area. 
+- [Deep Learning](https://pubmed.ncbi.nlm.nih.gov/26017442/) by Yann LeCun, Yoshua Bengio, and Geoffrey Hinton [@lecun2]: This paper provided a comprehensive review of the field of deep learning, which is a type of ANN that uses many layers of interconnected neurons to process data. It has had a major impact on the development of deep learning and has helped to drive many of the recent advances in the field. 
 
 ## Neural Network - the idea
 Both Support Vector Machines and Neural Networks employ some kind of data transformation that moves them into a higher dimensional space. What the kernel function does for the SVM, the hidden layers do for neural networks.  
@@ -12740,11 +12741,62 @@ mtext("Fixed Components",
 ```
 
 <img src="15-NN_files/figure-html/nn3-1.png" width="672" />
+   
 
 The artificial neural net replaces the fixed components in the polynomial regression with adjustable ones, $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $\ldots, f\left(\alpha_M+\delta_M x\right)$ that are more flexible.  They are adjustable with tunable internal parameters. They can express several shapes, not just one (fixed) shape. Hence, adjustable components enable to capture complex models with fewer components (smaller M).  
 
 Let's replace those fixed components $x, x^2, x^3$ in our polynomial regression with $f\left(\alpha_1+\delta_1 x\right)$, $f\left(\alpha_2+\delta_2 x\right)$, $f\left(\alpha_3+\delta_3 x\right).$  
 
+The following code demonstrates the ability of a simple artificial neural network (ANN) with arbitrary parameters to capture the underlying signal relative to a third-degree polynomial regression model. It defines an ANN function with sigmoid activation functions for three nodes (M = 3), arbitrary parameters `a`, `b`, `beta`, and an intercept (`int`).  For each node, the code calculates the weighted input (`z`) using `a` and `b`, and then applies the sigmoid activation function to obtain the output (`sig`). The output is then multiplied by the corresponding beta value. The final output (`yhat`) is calculated as the sum of the intercept and the weighted outputs from all three nodes.
+
+The resulting plot demonstrates the ANN's ability to fit the data compared to the third-degree polynomial regression model.
+  
+
+```r
+a = c(1.5, 9, 3)
+b = c(-20,-14,-8)
+beta = c(15, 25,-40)
+int = 3
+
+ann <- function(a, b, beta, int) {
+  #1st sigmoid
+  a1 = a[1]
+  b1 = b[1]
+  z1 = a1 + b1 * x
+  sig1 = 1 / (1 + exp(-z1))
+  
+  f1 <- sig1
+  
+  #2nd sigmoid
+  a2 = a[2]
+  b2 = b[2]
+  z2 = a2 + b2 * x
+  sig2 = 1 / (1 + exp(-z2))
+  
+  f2 <- sig2
+  
+  #3rd sigmoid
+  a3 = a[3]
+  b3 = b[3]
+  z3 = a3 + b3 * x
+  sig3 = 1 / (1 + exp(-z3))
+  
+  f3 <- sig3
+  
+  yhat = int + beta[1] * f1 + beta[2] * f2 + beta[3] * f3
+  return(yhat)
+}
+
+yhat <- ann(a, b, beta, int)
+
+plot(x, y, main = "ANN: M = 3", ylim = c(-5, 15))
+lines(x, yhat, col = "red", lwd = 3)
+```
+
+<img src="15-NN_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+  
+The next section, Backpropagation, will show us how to get the correct parameters for our simple ANN.  For now, let's obstain them with `neuralnet`.  
+  
 
 ```r
 library(neuralnet)
@@ -17118,9 +17170,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   19    6    4
-## [2,]   54   45   79
-## [3,]   33   59   17
+## [1,]   80   56   73
+## [2,]   89   50   45
+## [3,]   14   39   58
 ```
 
 ```r
@@ -17130,13 +17182,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 105.88436 -38.78498  13.90062
+## [1] 166.78309+ 0.00000i  10.60846+11.30658i  10.60846-11.30658i
 ## 
 ## $vectors
-##            [,1]        [,2]       [,3]
-## [1,] 0.08268915  0.02213879  0.8139177
-## [2,] 0.81588495 -0.69337367 -0.4350121
-## [3,] 0.57227113  0.72023804 -0.3851006
+##              [,1]                  [,2]                  [,3]
+## [1,] 0.6893367+0i -0.0515937+0.1962126i -0.0515937-0.1962126i
+## [2,] 0.6492112+0i  0.7703664+0.0000000i  0.7703664+0.0000000i
+## [3,] 0.3214650+0i -0.5723130-0.1945047i -0.5723130+0.1945047i
 ```
 
 ```r
@@ -17181,9 +17233,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   56   30   13
-## [2,]   90   32   81
-## [3,]   20   51   61
+## [1,]   92    5   38
+## [2,]   69   48   64
+## [3,]   59   43    1
 ```
 
 ```r
@@ -17195,10 +17247,10 @@ solve(A)
 ```
 
 ```
-##             [,1]         [,2]        [,3]
-## [1,]  0.01166651  0.006248193 -0.01078309
-## [2,]  0.02072023 -0.016897427  0.01802178
-## [3,] -0.02114855  0.012078769  0.00486149
+##               [,1]         [,2]         [,3]
+## [1,]  0.0120122788 -0.007236687  0.006681386
+## [2,] -0.0164680169  0.009551183  0.014508914
+## [3,] -0.0005997255  0.016263666 -0.018085054
 ```
 
 ```r
@@ -17207,10 +17259,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##             [,1]         [,2]        [,3]
-## [1,]  0.01166651  0.006248193 -0.01078309
-## [2,]  0.02072023 -0.016897427  0.01802178
-## [3,] -0.02114855  0.012078769  0.00486149
+##               [,1]         [,2]         [,3]
+## [1,]  0.0120122788 -0.007236687  0.006681386
+## [2,] -0.0164680169  0.009551183  0.014508914
+## [3,] -0.0005997255  0.016263666 -0.018085054
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17630,9 +17682,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.6050777
-## x2 1.3789664
-## x3 1.9182833
+## x1 0.4812971
+## x2 1.7980415
+## x3 2.3056991
 ```
 
 ```r
@@ -17669,9 +17721,9 @@ betahat_ginv
 
 ```
 ##           [,1]
-## [1,] 0.6050777
-## [2,] 1.3789664
-## [3,] 1.9182833
+## [1,] 0.4812971
+## [2,] 1.7980415
+## [3,] 2.3056991
 ```
 
 ```r
@@ -17680,9 +17732,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.6050777
-## x2 1.3789664
-## x3 1.9182833
+## x1 0.4812971
+## x2 1.7980415
+## x3 2.3056991
 ```
   
 
@@ -19032,7 +19084,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] 0.1133512
+## [1] -0.2624583
 ```
 
 ```r
@@ -19040,13 +19092,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]         [,2]        [,3]        [,4]         [,5]       [,6]
-## [1,] -1.00000000  0.113351241  0.05085047  0.06061407 -0.260117403  0.1940762
-## [2,]  0.11335124 -1.000000000 -0.17333198  0.13210686  0.007370795 -0.1640281
-## [3,]  0.05085047 -0.173331978 -1.00000000  0.36615207  0.604632370 -0.3422172
-## [4,]  0.06061407  0.132106865  0.36615207 -1.00000000 -0.274534530  0.4474992
-## [5,] -0.26011740  0.007370795  0.60463237 -0.27453453 -1.000000000  0.2905416
-## [6,]  0.19407621 -0.164028133 -0.34221721  0.44749919  0.290541612 -1.0000000
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,] -1.00000000 -0.2624583 -0.07539084 -0.0243017  0.2806425  0.07722534
+## [2,] -0.26245832 -1.0000000 -0.20914601  0.6093819  0.8705547  0.92841840
+## [3,] -0.07539084 -0.2091460 -1.00000000  0.5038206  0.3854259  0.17786621
+## [4,] -0.02430170  0.6093819  0.50382057 -1.0000000 -0.7077681 -0.59671523
+## [5,]  0.28064253  0.8705547  0.38542591 -0.7077681 -1.0000000 -0.81834859
+## [6,]  0.07722534  0.9284184  0.17786621 -0.5967152 -0.8183486 -1.00000000
 ```
 
 ```r
@@ -19056,13 +19108,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]         [,2]        [,3]        [,4]         [,5]       [,6]
-## [1,]  1.00000000  0.113351241  0.05085047  0.06061407 -0.260117403  0.1940762
-## [2,]  0.11335124  1.000000000 -0.17333198  0.13210686  0.007370795 -0.1640281
-## [3,]  0.05085047 -0.173331978  1.00000000  0.36615207  0.604632370 -0.3422172
-## [4,]  0.06061407  0.132106865  0.36615207  1.00000000 -0.274534530  0.4474992
-## [5,] -0.26011740  0.007370795  0.60463237 -0.27453453  1.000000000  0.2905416
-## [6,]  0.19407621 -0.164028133 -0.34221721  0.44749919  0.290541612  1.0000000
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,]  1.00000000 -0.2624583 -0.07539084 -0.0243017  0.2806425  0.07722534
+## [2,] -0.26245832  1.0000000 -0.20914601  0.6093819  0.8705547  0.92841840
+## [3,] -0.07539084 -0.2091460  1.00000000  0.5038206  0.3854259  0.17786621
+## [4,] -0.02430170  0.6093819  0.50382057  1.0000000 -0.7077681 -0.59671523
+## [5,]  0.28064253  0.8705547  0.38542591 -0.7077681  1.0000000 -0.81834859
+## [6,]  0.07722534  0.9284184  0.17786621 -0.5967152 -0.8183486  1.00000000
 ```
 
 ```r
@@ -19072,22 +19124,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##             [,1]        [,2]        [,3]        [,4]        [,5]        [,6]
-## [1,]  1.31122519  0.09279157 -0.14520846  0.26094883 -0.40174585  0.22852558
-## [2,]  0.09279157  0.32815497 -0.08659382  0.04539253 -0.11655840 -0.04014955
-## [3,] -0.14520846 -0.08659382  0.63411784  0.13929032  0.52904306 -0.10531543
-## [4,]  0.26094883  0.04539253  0.13929032  1.39681357 -0.12943233  0.43481393
-## [5,] -0.40174585 -0.11655840  0.52904306 -0.12943233  1.35604768  0.04001064
-## [6,]  0.22852558 -0.04014955 -0.10531543  0.43481393  0.04001064  0.92407028
+##             [,1]       [,2]        [,3]       [,4]       [,5]        [,6]
+## [1,]  0.96488347 -0.3669924 -0.05084732 -0.3942968  0.3425267 -0.60817759
+## [2,] -0.36699244  0.8628771  0.10206296  0.1145241  0.4109566  0.97482805
+## [3,] -0.05084732  0.1020630  0.84126394  0.4221780  0.2838247 -0.09339049
+## [4,] -0.39429677  0.1145241  0.42217800  1.5438364 -0.5940417  0.07396640
+## [5,]  0.34252671  0.4109566  0.28382471 -0.5940417  1.7049602 -0.27314141
+## [6,] -0.60817759  0.9748281 -0.09339049  0.0739664 -0.2731414  1.76560301
 ## 
 ## $wi
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,]  0.90571435 -0.19645349 -0.08194362 -0.05758366  0.28461627 -0.2270886
-## [2,] -0.19645349  3.31661250  0.53451899 -0.24013596 -0.01541758  0.3672674
-## [3,] -0.08194362  0.53451899  2.86764832 -0.61890824 -1.17720263  0.7125091
-## [4,] -0.05758366 -0.24013596 -0.61890824  0.99634797  0.31506102 -0.5491951
-## [5,]  0.28461627 -0.01541758 -1.17720263  0.31506102  1.32189174 -0.4107071
-## [6,] -0.22708856  0.36726743  0.71250909 -0.54919507 -0.41070714  1.5116904
+##             [,1]      [,2]       [,3]        [,4]       [,5]       [,6]
+## [1,]  1.63072965  1.251464  0.1281174  0.04057159 -0.6730262 -0.2282176
+## [2,]  1.25146372 13.949565  1.0396007 -2.96449098 -6.1069996 -8.0353859
+## [3,]  0.12811735  1.039601  1.7731286 -0.87381872 -0.9637300 -0.5482904
+## [4,]  0.04057159 -2.964491 -0.8738187  1.69695224  1.7315820  1.8009499
+## [5,] -0.67302623 -6.107000 -0.9637300  1.73158197  3.5280253  3.5617146
+## [6,] -0.22821759 -8.035386 -0.5482904  1.80094988  3.5617146  5.3702153
 ## 
 ## $errflag
 ## [1] 0
@@ -19102,7 +19154,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] 0.1133488
+## [1] -0.2623898
 ```
 
 ```r
@@ -19110,13 +19162,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]         [,2]        [,3]        [,4]         [,5]       [,6]
-## [1,] -1.00000000  0.113348758  0.05084597  0.06061751 -0.260115450  0.1940744
-## [2,]  0.11334876 -1.000000000 -0.17332165  0.13210046  0.007363271 -0.1640226
-## [3,]  0.05084597 -0.173321655 -1.00000000  0.36614896  0.604630892 -0.3422126
-## [4,]  0.06061751  0.132100455  0.36614896 -1.00000000 -0.274530887  0.4474965
-## [5,] -0.26011545  0.007363271  0.60463089 -0.27453089 -1.000000000  0.2905380
-## [6,]  0.19407438 -0.164022573 -0.34221263  0.44749654  0.290537958 -1.0000000
+##             [,1]       [,2]        [,3]        [,4]       [,5]        [,6]
+## [1,] -1.00000000 -0.2623898 -0.07534368 -0.02438913  0.2805919  0.07711916
+## [2,] -0.26238980 -1.0000000 -0.20903361  0.60930535  0.8705259  0.92839024
+## [3,] -0.07534368 -0.2090336 -1.00000000  0.50375158  0.3853181  0.17768250
+## [4,] -0.02438913  0.6093054  0.50375158 -1.00000000 -0.7076889 -0.59658313
+## [5,]  0.28059192  0.8705259  0.38531810 -0.70768892 -1.0000000 -0.81827150
+## [6,]  0.07711916  0.9283902  0.17768250 -0.59658313 -0.8182715 -1.00000000
 ```
 
 ## High-dimensional data
@@ -19763,7 +19815,7 @@ dir()
 ## [135] "irates.dat"                     "mnist.Rdata"                   
 ## [137] "myocarde.csv"                   "packages.bib"                  
 ## [139] "png"                            "preamble.tex"                  
-## [141] "README.md"                      "render85031f1a0b62.rds"        
+## [141] "README.md"                      "renderd9c501611e0.rds"         
 ## [143] "style.css"                      "table1.text"                   
 ## [145] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [147] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20757,7 +20809,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7f90a006f1c0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fc05d8c97c0> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -21185,8 +21237,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  9.175 3.602 3.826 0.631 3.973 ...
-##  $ c: Factor w/ 3 levels "(-2.92,1.44]",..: 3 2 2 1 2 1 2 2 3 3
+##  $ b: num  4.19 2.03 -0.76 1.28 -3.96 ...
+##  $ c: Factor w/ 3 levels "(-4.07,-1.31]",..: 3 3 2 2 1 3 2 3 1 1
 ```
 
 ```r
@@ -21198,8 +21250,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  9.175 3.602 3.826 0.631 3.973 ...
-##  $ c: Factor w/ 3 levels "(-2.92,1.44]",..: 3 2 2 1 2 1 2 2 3 3
+##  $ b: num  4.19 2.03 -0.76 1.28 -3.96 ...
+##  $ c: Factor w/ 3 levels "(-4.07,-1.31]",..: 3 3 2 2 1 3 2 3 1 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -21215,17 +21267,17 @@ my_data
 ```
 
 ```
-##     a         b            c          d          f          g         h
-## 1   1  9.175379  (5.79,10.1] -1.4863011         NA -1.1560120 -1.486301
-## 2   2  3.601660  (1.44,5.79] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  3.825685  (1.44,5.79] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  0.630863 (-2.92,1.44] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5  3.973493  (1.44,5.79] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6 -2.903140 (-2.92,1.44]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7  4.236121  (1.44,5.79]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  2.293777  (1.44,5.79]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  6.860032  (5.79,10.1]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10 10.133829  (5.79,10.1]  1.4863011  1.1560120         NA  0.000000
+##     a          b             c          d          f          g         h
+## 1   1  4.1862837   (1.44,4.19] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  2.0304154   (1.44,4.19] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3 -0.7604396  (-1.31,1.44] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4  1.2831672  (-1.31,1.44] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5 -3.9645463 (-4.07,-1.31] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6  1.6089421   (1.44,4.19]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  0.2638553  (-1.31,1.44]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  3.0359579   (1.44,4.19]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9 -4.0569355 (-4.07,-1.31]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -1.4949160 (-4.07,-1.31]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21637,7 +21689,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1]  0.90566856 -2.47008710  5.37437619  0.03387735  0.06036159  0.11872048
+## [1]  1.134223 -2.301765 -1.440216  5.129249 -2.890622  2.085633
 ```
 
 ```r
@@ -21683,12 +21735,12 @@ X_new
 ```
 
 ```
-##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.703418 1.426058 3.269319 2.114802 4.786530 3.339447
-## [2,] 2.599022 2.950091 4.240495 3.100809 1.464613 3.213212
-## [3,] 3.150456 2.527897 4.591165 1.769760 3.385478 2.230215
-## [4,] 2.883226 3.824104 4.035227 3.508711 2.207640 2.816554
-## [5,] 3.569545 1.801764 4.238170 4.539794 3.216101 3.519293
+##          [,1]     [,2]      [,3]     [,4]      [,5]     [,6]
+## [1,] 2.780216 2.538025 3.2143238 4.589989 2.8057924 3.276114
+## [2,] 4.673427 4.043584 0.6253278 2.942423 4.2769320 4.531738
+## [3,] 4.243433 2.382225 4.3901433 3.257037 1.7700021 4.034407
+## [4,] 3.367528 1.415495 2.1701575 2.848317 2.7175012 1.996674
+## [5,] 1.069619 2.318906 3.1598317 6.491481 0.5391504 3.246700
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23324,7 +23376,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "H" "T" "H" "T" "H" "T"
+## [1] "H" "H" "T" "T" "T" "T" "H" "T"
 ```
 
 ```r
@@ -23332,7 +23384,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 3 4
+## [1] 2 1
 ```
 
 ```r
@@ -23341,7 +23393,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "H" "T" "T" "T" "T" "T"
+## [1] "H" "T" "H" "T" "T" "T" "T" "T"
 ```
 
 ```r
@@ -23349,7 +23401,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 2 3
+## [1] 2 1
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  

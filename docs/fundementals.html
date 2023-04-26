@@ -493,10 +493,10 @@ x_{n 1} &amp; x_{n 2} &amp; \cdots &amp; x_{n p}
 \end{array}\right)
 \]</span></p>
 <p>An example would be</p>
-<div class="sourceCode" id="cb1134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1134-1"><a href="fundementals.html#cb1134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
-<span id="cb1134-2"><a href="fundementals.html#cb1134-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">sd=</span><span class="fu">runif</span>(<span class="dv">30</span>, <span class="dv">2</span>, <span class="dv">50</span>))</span>
-<span id="cb1134-3"><a href="fundementals.html#cb1134-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="dv">10</span>)</span>
-<span id="cb1134-4"><a href="fundementals.html#cb1134-4" aria-hidden="true" tabindex="-1"></a>X</span></code></pre></div>
+<div class="sourceCode" id="cb1135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1135-1"><a href="fundementals.html#cb1135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb1135-2"><a href="fundementals.html#cb1135-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">sd=</span><span class="fu">runif</span>(<span class="dv">30</span>, <span class="dv">2</span>, <span class="dv">50</span>))</span>
+<span id="cb1135-3"><a href="fundementals.html#cb1135-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="dv">10</span>)</span>
+<span id="cb1135-4"><a href="fundementals.html#cb1135-4" aria-hidden="true" tabindex="-1"></a>X</span></code></pre></div>
 <pre><code>##              [,1]       [,2]       [,3]
 ##  [1,]   -1.613670  -4.436764  42.563842
 ##  [2,]  -20.840548  36.237338 -36.942481
@@ -547,11 +547,11 @@ x_{n 1}-\bar{x}_{1} &amp; x_{n 2}-\bar{x}_{2} &amp; \cdots &amp; x_{n p}-\bar{x}
 \end{array}\right)
 \]</span></p>
 <p>How?</p>
-<div class="sourceCode" id="cb1136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1136-1"><a href="fundementals.html#cb1136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># More direct</span></span>
-<span id="cb1136-2"><a href="fundementals.html#cb1136-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb1136-3"><a href="fundementals.html#cb1136-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">colMeans</span>(X)</span>
-<span id="cb1136-4"><a href="fundementals.html#cb1136-4" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> X<span class="sc">-</span>m</span>
-<span id="cb1136-5"><a href="fundementals.html#cb1136-5" aria-hidden="true" tabindex="-1"></a>Xc</span></code></pre></div>
+<div class="sourceCode" id="cb1137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1137-1"><a href="fundementals.html#cb1137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># More direct</span></span>
+<span id="cb1137-2"><a href="fundementals.html#cb1137-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb1137-3"><a href="fundementals.html#cb1137-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">colMeans</span>(X)</span>
+<span id="cb1137-4"><a href="fundementals.html#cb1137-4" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> X<span class="sc">-</span>m</span>
+<span id="cb1137-5"><a href="fundementals.html#cb1137-5" aria-hidden="true" tabindex="-1"></a>Xc</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]
 ##  [1,]   -5.2709585 -29.3678760  45.6561309
 ##  [2,]  -24.4978367  11.3062262 -33.8501919
@@ -563,10 +563,10 @@ x_{n 1}-\bar{x}_{1} &amp; x_{n 2}-\bar{x}_{2} &amp; \cdots &amp; x_{n p}-\bar{x}
 ##  [8,]   56.2075038  73.9177518  -0.5148158
 ##  [9,]   30.2050530   9.9222117  19.7966643
 ## [10,]    2.3229057  37.8242961 -18.7495065</code></pre>
-<div class="sourceCode" id="cb1138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1138-1"><a href="fundementals.html#cb1138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
-<span id="cb1138-2"><a href="fundementals.html#cb1138-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span>n, n, n)</span>
-<span id="cb1138-3"><a href="fundementals.html#cb1138-3" aria-hidden="true" tabindex="-1"></a>XC <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb1138-4"><a href="fundementals.html#cb1138-4" aria-hidden="true" tabindex="-1"></a>Xc</span></code></pre></div>
+<div class="sourceCode" id="cb1139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1139-1"><a href="fundementals.html#cb1139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
+<span id="cb1139-2"><a href="fundementals.html#cb1139-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span>n, n, n)</span>
+<span id="cb1139-3"><a href="fundementals.html#cb1139-3" aria-hidden="true" tabindex="-1"></a>XC <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb1139-4"><a href="fundementals.html#cb1139-4" aria-hidden="true" tabindex="-1"></a>Xc</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]
 ##  [1,]   -5.2709585 -29.3678760  45.6561309
 ##  [2,]  -24.4978367  11.3062262 -33.8501919
@@ -578,18 +578,18 @@ x_{n 1}-\bar{x}_{1} &amp; x_{n 2}-\bar{x}_{2} &amp; \cdots &amp; x_{n p}-\bar{x}
 ##  [8,]   56.2075038  73.9177518  -0.5148158
 ##  [9,]   30.2050530   9.9222117  19.7966643
 ## [10,]    2.3229057  37.8242961 -18.7495065</code></pre>
-<div class="sourceCode" id="cb1140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1140-1"><a href="fundementals.html#cb1140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also use `scale` </span></span>
-<span id="cb1140-2"><a href="fundementals.html#cb1140-2" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1141-1"><a href="fundementals.html#cb1141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also use `scale` </span></span>
+<span id="cb1141-2"><a href="fundementals.html#cb1141-2" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p>And, the covariance matrix</p>
-<div class="sourceCode" id="cb1141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1141-1"><a href="fundementals.html#cb1141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariance Matrix</span></span>
-<span id="cb1141-2"><a href="fundementals.html#cb1141-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb1141-3"><a href="fundementals.html#cb1141-3" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
+<div class="sourceCode" id="cb1142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1142-1"><a href="fundementals.html#cb1142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariance Matrix</span></span>
+<span id="cb1142-2"><a href="fundementals.html#cb1142-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb1142-3"><a href="fundementals.html#cb1142-3" aria-hidden="true" tabindex="-1"></a>S</span></code></pre></div>
 <pre><code>##           [,1]      [,2]      [,3]
 ## [1,] 1875.3209  429.8712  462.4775
 ## [2,]  429.8712 1306.9817 -262.8231
 ## [3,]  462.4775 -262.8231  755.5193</code></pre>
-<div class="sourceCode" id="cb1143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1143-1"><a href="fundementals.html#cb1143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check it</span></span>
-<span id="cb1143-2"><a href="fundementals.html#cb1143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1144-1"><a href="fundementals.html#cb1144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check it</span></span>
+<span id="cb1144-2"><a href="fundementals.html#cb1144-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(X)</span></code></pre></div>
 <pre><code>##           [,1]      [,2]      [,3]
 ## [1,] 1875.3209  429.8712  462.4775
 ## [2,]  429.8712 1306.9817 -262.8231
@@ -632,12 +632,12 @@ is the Pearson correlation coefficient between variables <span class="math inlin
 \end{array}\right)
 \]</span></p>
 <p>How?</p>
-<div class="sourceCode" id="cb1145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1145-1"><a href="fundementals.html#cb1145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># More direct</span></span>
-<span id="cb1145-2"><a href="fundementals.html#cb1145-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb1145-3"><a href="fundementals.html#cb1145-3" aria-hidden="true" tabindex="-1"></a>sdx <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">apply</span>(X, <span class="dv">2</span>, sd)</span>
-<span id="cb1145-4"><a href="fundementals.html#cb1145-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">colMeans</span>(X)</span>
-<span id="cb1145-5"><a href="fundementals.html#cb1145-5" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> (X<span class="sc">-</span>m)<span class="sc">*</span>sdx</span>
-<span id="cb1145-6"><a href="fundementals.html#cb1145-6" aria-hidden="true" tabindex="-1"></a>Xs</span></code></pre></div>
+<div class="sourceCode" id="cb1146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1146-1"><a href="fundementals.html#cb1146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># More direct</span></span>
+<span id="cb1146-2"><a href="fundementals.html#cb1146-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb1146-3"><a href="fundementals.html#cb1146-3" aria-hidden="true" tabindex="-1"></a>sdx <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">apply</span>(X, <span class="dv">2</span>, sd)</span>
+<span id="cb1146-4"><a href="fundementals.html#cb1146-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, n, <span class="dv">1</span>)<span class="sc">%*%</span><span class="fu">colMeans</span>(X)</span>
+<span id="cb1146-5"><a href="fundementals.html#cb1146-5" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> (X<span class="sc">-</span>m)<span class="sc">*</span>sdx</span>
+<span id="cb1146-6"><a href="fundementals.html#cb1146-6" aria-hidden="true" tabindex="-1"></a>Xs</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]
 ##  [1,] -0.121717156 -0.81233989  1.66102560
 ##  [2,] -0.565704894  0.31273963 -1.23151117
@@ -649,11 +649,11 @@ is the Pearson correlation coefficient between variables <span class="math inlin
 ##  [8,]  1.297945627  2.04462654 -0.01872963
 ##  [9,]  0.697496131  0.27445664  0.72022674
 ## [10,]  0.053640619  1.04625151 -0.68212986</code></pre>
-<div class="sourceCode" id="cb1147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1147-1"><a href="fundementals.html#cb1147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
-<span id="cb1147-2"><a href="fundementals.html#cb1147-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span>n, n, n)</span>
-<span id="cb1147-3"><a href="fundementals.html#cb1147-3" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">apply</span>(X, <span class="dv">2</span>, sd))</span>
-<span id="cb1147-4"><a href="fundementals.html#cb1147-4" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(D)</span>
-<span id="cb1147-5"><a href="fundementals.html#cb1147-5" aria-hidden="true" tabindex="-1"></a>Xs</span></code></pre></div>
+<div class="sourceCode" id="cb1148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1148-1"><a href="fundementals.html#cb1148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
+<span id="cb1148-2"><a href="fundementals.html#cb1148-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">/</span>n, n, n)</span>
+<span id="cb1148-3"><a href="fundementals.html#cb1148-3" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">apply</span>(X, <span class="dv">2</span>, sd))</span>
+<span id="cb1148-4"><a href="fundementals.html#cb1148-4" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(D)</span>
+<span id="cb1148-5"><a href="fundementals.html#cb1148-5" aria-hidden="true" tabindex="-1"></a>Xs</span></code></pre></div>
 <pre><code>##               [,1]        [,2]        [,3]
 ##  [1,] -0.121717156 -0.81233989  1.66102560
 ##  [2,] -0.565704894  0.31273963 -1.23151117
@@ -665,18 +665,18 @@ is the Pearson correlation coefficient between variables <span class="math inlin
 ##  [8,]  1.297945627  2.04462654 -0.01872963
 ##  [9,]  0.697496131  0.27445664  0.72022674
 ## [10,]  0.053640619  1.04625151 -0.68212986</code></pre>
-<div class="sourceCode" id="cb1149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1149-1"><a href="fundementals.html#cb1149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or </span></span>
-<span id="cb1149-2"><a href="fundementals.html#cb1149-2" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1149-3"><a href="fundementals.html#cb1149-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1149-4"><a href="fundementals.html#cb1149-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, the correlation Matrix</span></span>
-<span id="cb1149-5"><a href="fundementals.html#cb1149-5" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb1149-6"><a href="fundementals.html#cb1149-6" aria-hidden="true" tabindex="-1"></a>R</span></code></pre></div>
+<div class="sourceCode" id="cb1150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1150-1"><a href="fundementals.html#cb1150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or </span></span>
+<span id="cb1150-2"><a href="fundementals.html#cb1150-2" aria-hidden="true" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1150-3"><a href="fundementals.html#cb1150-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1150-4"><a href="fundementals.html#cb1150-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, the correlation Matrix</span></span>
+<span id="cb1150-5"><a href="fundementals.html#cb1150-5" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb1150-6"><a href="fundementals.html#cb1150-6" aria-hidden="true" tabindex="-1"></a>R</span></code></pre></div>
 <pre><code>##           [,1]       [,2]       [,3]
 ## [1,] 1.0000000  0.2745780  0.3885349
 ## [2,] 0.2745780  1.0000000 -0.2644881
 ## [3,] 0.3885349 -0.2644881  1.0000000</code></pre>
-<div class="sourceCode" id="cb1151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1151-1"><a href="fundementals.html#cb1151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check it</span></span>
-<span id="cb1151-2"><a href="fundementals.html#cb1151-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1152-1"><a href="fundementals.html#cb1152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check it</span></span>
+<span id="cb1152-2"><a href="fundementals.html#cb1152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X)</span></code></pre></div>
 <pre><code>##           [,1]       [,2]       [,3]
 ## [1,] 1.0000000  0.2745780  0.3885349
 ## [2,] 0.2745780  1.0000000 -0.2644881
@@ -709,23 +709,23 @@ Or,</p>
 \frac{-\rho \sigma_{x} \sigma_{y}}{\sigma_{x}^{2} \sigma_{y}^{2}\left(1-e^{2}\right)} \times \sqrt{\sigma_{x}^{2}\left(1-\rho^{2}\right)} \sqrt{\sigma_{y}^{2}\left(1-\rho^{2}\right)}=-\rho
 \]</span></p>
 <p>That was for a <span class="math inline">\(2 \times 2\)</span> variance-covariance matrix. When we have more columns, the correlation coefficient reflects partial correlations. Here is an example:</p>
-<div class="sourceCode" id="cb1153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1153-1"><a href="fundementals.html#cb1153-1" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">solve</span>(S) <span class="co"># precision matrix</span></span>
-<span id="cb1153-2"><a href="fundementals.html#cb1153-2" aria-hidden="true" tabindex="-1"></a>pm</span></code></pre></div>
+<div class="sourceCode" id="cb1154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1154-1"><a href="fundementals.html#cb1154-1" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> <span class="fu">solve</span>(S) <span class="co"># precision matrix</span></span>
+<span id="cb1154-2"><a href="fundementals.html#cb1154-2" aria-hidden="true" tabindex="-1"></a>pm</span></code></pre></div>
 <pre><code>##               [,1]          [,2]          [,3]
 ## [1,]  0.0007662131 -0.0003723763 -0.0005985624
 ## [2,] -0.0003723763  0.0010036440  0.0005770819
 ## [3,] -0.0005985624  0.0005770819  0.0018907421</code></pre>
-<div class="sourceCode" id="cb1155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1155-1"><a href="fundementals.html#cb1155-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Partial correlation of 1,2</span></span>
-<span id="cb1155-2"><a href="fundementals.html#cb1155-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>pm[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(pm[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(pm[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
+<div class="sourceCode" id="cb1156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1156-1"><a href="fundementals.html#cb1156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Partial correlation of 1,2</span></span>
+<span id="cb1156-2"><a href="fundementals.html#cb1156-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span>pm[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>(<span class="fu">sqrt</span>(pm[<span class="dv">1</span>,<span class="dv">1</span>])<span class="sc">*</span><span class="fu">sqrt</span>(pm[<span class="dv">2</span>,<span class="dv">2</span>])) </span></code></pre></div>
 <pre><code>## [1] 0.4246365</code></pre>
-<div class="sourceCode" id="cb1157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1157-1"><a href="fundementals.html#cb1157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
-<span id="cb1157-2"><a href="fundementals.html#cb1157-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(<span class="fu">solve</span>(S))</span></code></pre></div>
+<div class="sourceCode" id="cb1158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1158-1"><a href="fundementals.html#cb1158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
+<span id="cb1158-2"><a href="fundementals.html#cb1158-2" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fu">cov2cor</span>(<span class="fu">solve</span>(S))</span></code></pre></div>
 <pre><code>##            [,1]       [,2]       [,3]
 ## [1,] -1.0000000  0.4246365  0.4973000
 ## [2,]  0.4246365 -1.0000000 -0.4189204
 ## [3,]  0.4973000 -0.4189204 -1.0000000</code></pre>
-<div class="sourceCode" id="cb1159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1159-1"><a href="fundementals.html#cb1159-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
-<span id="cb1159-2"><a href="fundementals.html#cb1159-2" aria-hidden="true" tabindex="-1"></a>ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1160-1"><a href="fundementals.html#cb1160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
+<span id="cb1160-2"><a href="fundementals.html#cb1160-2" aria-hidden="true" tabindex="-1"></a>ppcor<span class="sc">::</span><span class="fu">pcor</span>(X)</span></code></pre></div>
 <pre><code>## $estimate
 ##           [,1]       [,2]       [,3]
 ## [1,] 1.0000000  0.4246365  0.4973000
@@ -788,7 +788,7 @@ r_{1(2.3)}=\frac{r_{1 2}-r_{1_{3}} r_{23}}{\sqrt{1-r_{23}^{2}}}
 \]</span></p>
 <p>The difference between the regression coefficient and the semi-partial coefficient is the square root in the denominator. Thus, the regression coefficient can exceed <span class="math inline">\(|1.0|\)</span>; the correlation cannot. In other words, semi-partial normalizes the coefficient between -1 and +1.</p>
 <p>The function <code>spcor</code> can calculate the pairwise semi-partial correlations for each pair of variables given others.</p>
-<div class="sourceCode" id="cb1161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1161-1"><a href="fundementals.html#cb1161-1" aria-hidden="true" tabindex="-1"></a>ppcor<span class="sc">::</span><span class="fu">spcor</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1162-1"><a href="fundementals.html#cb1162-1" aria-hidden="true" tabindex="-1"></a>ppcor<span class="sc">::</span><span class="fu">spcor</span>(X)</span></code></pre></div>
 <pre><code>## $estimate
 ##           [,1]       [,2]       [,3]
 ## [1,] 1.0000000  0.3912745  0.4781862

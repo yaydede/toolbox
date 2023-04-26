@@ -21,7 +21,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "H" "T" "H" "T" "H" "T"
+## [1] "H" "H" "T" "T" "T" "T" "H" "T"
 ```
 
 ```r
@@ -29,7 +29,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 3 4
+## [1] 2 1
 ```
 
 ```r
@@ -38,7 +38,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "H" "T" "T" "T" "T" "T"
+## [1] "H" "T" "H" "T" "T" "T" "T" "T"
 ```
 
 ```r
@@ -46,7 +46,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 2 3
+## [1] 2 1
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  

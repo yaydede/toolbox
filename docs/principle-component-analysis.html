@@ -498,11 +498,11 @@ div.csl-indent {
 \frac{\sum_{i=1}^{r} \lambda_{k}}{\sum_{i=1}^n \lambda_{k}}
 \]</span></p>
 <p>We use the <code>factorextra</code> package and the <code>decathlon2</code> data for an example.</p>
-<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1087-1"><a href="principle-component-analysis.html#cb1087-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;factoextra&quot;</span>)</span>
-<span id="cb1087-2"><a href="principle-component-analysis.html#cb1087-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(decathlon2)</span>
-<span id="cb1087-3"><a href="principle-component-analysis.html#cb1087-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1087-4"><a href="principle-component-analysis.html#cb1087-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(decathlon2[, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
-<span id="cb1087-5"><a href="principle-component-analysis.html#cb1087-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb1088"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1088-1"><a href="principle-component-analysis.html#cb1088-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;factoextra&quot;</span>)</span>
+<span id="cb1088-2"><a href="principle-component-analysis.html#cb1088-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(decathlon2)</span>
+<span id="cb1088-3"><a href="principle-component-analysis.html#cb1088-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1088-4"><a href="principle-component-analysis.html#cb1088-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(decathlon2[, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb1088-5"><a href="principle-component-analysis.html#cb1088-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div>
 <pre><code>##           X100m Long.jump Shot.put High.jump X400m X110m.hurdle Discus
 ## SEBRLE    11.04      7.58    14.83      2.07 49.81        14.69  43.75
 ## CLAY      10.76      7.40    14.26      1.86 49.37        14.05  50.72
@@ -517,10 +517,10 @@ div.csl-indent {
 ## YURKOV          4.72    63.44  276.4
 ## ZSIVOCZKY       4.42    55.37  268.0
 ## McMULLEN        4.42    56.37  285.1</code></pre>
-<div class="sourceCode" id="cb1089"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1089-1"><a href="principle-component-analysis.html#cb1089-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb1089-2"><a href="principle-component-analysis.html#cb1089-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1089-3"><a href="principle-component-analysis.html#cb1089-3" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">t</span>(B) <span class="sc">%*%</span> B <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb1089-4"><a href="principle-component-analysis.html#cb1089-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(C)</span></code></pre></div>
+<div class="sourceCode" id="cb1090"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1090-1"><a href="principle-component-analysis.html#cb1090-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb1090-2"><a href="principle-component-analysis.html#cb1090-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">scale</span>(X, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1090-3"><a href="principle-component-analysis.html#cb1090-3" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">t</span>(B) <span class="sc">%*%</span> B <span class="sc">/</span> (n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1090-4"><a href="principle-component-analysis.html#cb1090-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(C)</span></code></pre></div>
 <pre><code>##                   X100m  Long.jump   Shot.put  High.jump      X400m
 ## X100m         1.0000000 -0.7377932 -0.3703180 -0.3146495  0.5703453
 ## Long.jump    -0.7377932  1.0000000  0.3737847  0.2682078 -0.5036687
@@ -535,8 +535,8 @@ div.csl-indent {
 ## High.jump      -0.2022579  0.4210187 -0.55129583  0.21051789 -0.15699017
 ## X400m           0.5970140 -0.2545326  0.11156898  0.02350554  0.18346035
 ## X110m.hurdle    1.0000000 -0.4213608  0.12118697  0.09655757 -0.10331329</code></pre>
-<div class="sourceCode" id="cb1091"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1091-1"><a href="principle-component-analysis.html#cb1091-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check it</span></span>
-<span id="cb1091-2"><a href="principle-component-analysis.html#cb1091-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cov</span>(B))</span></code></pre></div>
+<div class="sourceCode" id="cb1092"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1092-1"><a href="principle-component-analysis.html#cb1092-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check it</span></span>
+<span id="cb1092-2"><a href="principle-component-analysis.html#cb1092-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cov</span>(B))</span></code></pre></div>
 <pre><code>##                   X100m  Long.jump   Shot.put  High.jump      X400m
 ## X100m         1.0000000 -0.7377932 -0.3703180 -0.3146495  0.5703453
 ## Long.jump    -0.7377932  1.0000000  0.3737847  0.2682078 -0.5036687
@@ -552,13 +552,13 @@ div.csl-indent {
 ## X400m           0.5970140 -0.2545326  0.11156898  0.02350554  0.18346035
 ## X110m.hurdle    1.0000000 -0.4213608  0.12118697  0.09655757 -0.10331329</code></pre>
 <p>Eigenvalues and vectors …</p>
-<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1093-1"><a href="principle-component-analysis.html#cb1093-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigens</span></span>
-<span id="cb1093-2"><a href="principle-component-analysis.html#cb1093-2" aria-hidden="true" tabindex="-1"></a>evalues <span class="ot">&lt;-</span> <span class="fu">eigen</span>(C)<span class="sc">$</span>values</span>
-<span id="cb1093-3"><a href="principle-component-analysis.html#cb1093-3" aria-hidden="true" tabindex="-1"></a>evalues</span></code></pre></div>
+<div class="sourceCode" id="cb1094"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1094-1"><a href="principle-component-analysis.html#cb1094-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigens</span></span>
+<span id="cb1094-2"><a href="principle-component-analysis.html#cb1094-2" aria-hidden="true" tabindex="-1"></a>evalues <span class="ot">&lt;-</span> <span class="fu">eigen</span>(C)<span class="sc">$</span>values</span>
+<span id="cb1094-3"><a href="principle-component-analysis.html#cb1094-3" aria-hidden="true" tabindex="-1"></a>evalues</span></code></pre></div>
 <pre><code>##  [1] 3.7499727 1.7451681 1.5178280 1.0322001 0.6178387 0.4282908 0.3259103
 ##  [8] 0.2793827 0.1911128 0.1122959</code></pre>
-<div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1095-1"><a href="principle-component-analysis.html#cb1095-1" aria-hidden="true" tabindex="-1"></a>evectors <span class="ot">&lt;-</span> <span class="fu">eigen</span>(C)<span class="sc">$</span>vectors</span>
-<span id="cb1095-2"><a href="principle-component-analysis.html#cb1095-2" aria-hidden="true" tabindex="-1"></a>evectors <span class="co">#Ordered</span></span></code></pre></div>
+<div class="sourceCode" id="cb1096"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1096-1"><a href="principle-component-analysis.html#cb1096-1" aria-hidden="true" tabindex="-1"></a>evectors <span class="ot">&lt;-</span> <span class="fu">eigen</span>(C)<span class="sc">$</span>vectors</span>
+<span id="cb1096-2"><a href="principle-component-analysis.html#cb1096-2" aria-hidden="true" tabindex="-1"></a>evectors <span class="co">#Ordered</span></span></code></pre></div>
 <pre><code>##              [,1]       [,2]         [,3]        [,4]       [,5]        [,6]
 ##  [1,]  0.42290657 -0.2594748 -0.081870461 -0.09974877  0.2796419 -0.16023494
 ##  [2,] -0.39189495  0.2887806  0.005082180  0.18250903 -0.3355025 -0.07384658
@@ -582,17 +582,17 @@ div.csl-indent {
 ##  [9,]  0.23324548  0.19922452  0.33300936 -0.02100398
 ## [10,]  0.34406521  0.09752169  0.19899138  0.18954698</code></pre>
 <p>Now with <code>prcomp()</code>. First, eigenvalues:</p>
-<div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1097-1"><a href="principle-component-analysis.html#cb1097-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With `prcomp()`</span></span>
-<span id="cb1097-2"><a href="principle-component-analysis.html#cb1097-2" aria-hidden="true" tabindex="-1"></a>Xpca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1097-3"><a href="principle-component-analysis.html#cb1097-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigenvalues</span></span>
-<span id="cb1097-4"><a href="principle-component-analysis.html#cb1097-4" aria-hidden="true" tabindex="-1"></a>Xpca<span class="sc">$</span>sdev </span></code></pre></div>
+<div class="sourceCode" id="cb1098"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1098-1"><a href="principle-component-analysis.html#cb1098-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With `prcomp()`</span></span>
+<span id="cb1098-2"><a href="principle-component-analysis.html#cb1098-2" aria-hidden="true" tabindex="-1"></a>Xpca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1098-3"><a href="principle-component-analysis.html#cb1098-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigenvalues</span></span>
+<span id="cb1098-4"><a href="principle-component-analysis.html#cb1098-4" aria-hidden="true" tabindex="-1"></a>Xpca<span class="sc">$</span>sdev </span></code></pre></div>
 <pre><code>##  [1] 1.9364846 1.3210481 1.2320016 1.0159725 0.7860272 0.6544393 0.5708855
 ##  [8] 0.5285666 0.4371645 0.3351059</code></pre>
 <p>They are the square root of the eigenvalues that we calculated before and they are ordered.#</p>
 <pre class="pca2b"><code>sqrt(evalues)</code></pre>
 <p>And, the “loadings” (Eigenvectors):</p>
-<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1100-1"><a href="principle-component-analysis.html#cb1100-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigenvectors </span></span>
-<span id="cb1100-2"><a href="principle-component-analysis.html#cb1100-2" aria-hidden="true" tabindex="-1"></a>Xpca<span class="sc">$</span>rotation <span class="co"># 10x10</span></span></code></pre></div>
+<div class="sourceCode" id="cb1101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1101-1"><a href="principle-component-analysis.html#cb1101-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigenvectors </span></span>
+<span id="cb1101-2"><a href="principle-component-analysis.html#cb1101-2" aria-hidden="true" tabindex="-1"></a>Xpca<span class="sc">$</span>rotation <span class="co"># 10x10</span></span></code></pre></div>
 <pre><code>##                      PC1        PC2          PC3         PC4        PC5
 ## X100m        -0.42290657  0.2594748 -0.081870461  0.09974877 -0.2796419
 ## Long.jump     0.39189495 -0.2887806  0.005082180 -0.18250903  0.3355025
@@ -615,33 +615,33 @@ div.csl-indent {
 ## Pole.vault    0.43606610  0.12654370 -0.16086549  0.02983660  0.40290423
 ## Javeline     -0.42368592 -0.23324548 -0.19922452 -0.33300936  0.02100398
 ## X1500m        0.10850981 -0.34406521 -0.09752169 -0.19899138 -0.18954698</code></pre>
-<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1102-1"><a href="principle-component-analysis.html#cb1102-1" aria-hidden="true" tabindex="-1"></a>loadings <span class="ot">&lt;-</span> Xpca<span class="sc">$</span>rotation</span></code></pre></div>
+<div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1103-1"><a href="principle-component-analysis.html#cb1103-1" aria-hidden="true" tabindex="-1"></a>loadings <span class="ot">&lt;-</span> Xpca<span class="sc">$</span>rotation</span></code></pre></div>
 <p>The signs of eigenvectors are flipped and opposites of what we calculated with <code>eigen()</code> above. This is because the definition of an eigenbasis is ambiguous of sign. There are multiple discussions about the sign reversals in eignevectores.</p>
 <p>Let’s visualize the order:</p>
-<div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1103-1"><a href="principle-component-analysis.html#cb1103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Xpca<span class="sc">$</span>sdev) <span class="co"># Eigenvalues</span></span></code></pre></div>
+<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1104-1"><a href="principle-component-analysis.html#cb1104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Xpca<span class="sc">$</span>sdev) <span class="co"># Eigenvalues</span></span></code></pre></div>
 <p><img src="27-PrincipalCompAnalysis_files/figure-html/pca4-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1104-1"><a href="principle-component-analysis.html#cb1104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(Xpca) <span class="co"># Cumulative with &quot;factoextra&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1105-1"><a href="principle-component-analysis.html#cb1105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(Xpca) <span class="co"># Cumulative with &quot;factoextra&quot;</span></span></code></pre></div>
 <p><img src="27-PrincipalCompAnalysis_files/figure-html/pca4-2.png" width="672" /></p>
-<div class="sourceCode" id="cb1105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1105-1"><a href="principle-component-analysis.html#cb1105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
-<span id="cb1105-2"><a href="principle-component-analysis.html#cb1105-2" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> (Xpca<span class="sc">$</span>sdev) <span class="sc">^</span> <span class="dv">2</span></span>
-<span id="cb1105-3"><a href="principle-component-analysis.html#cb1105-3" aria-hidden="true" tabindex="-1"></a>var_perc <span class="ot">&lt;-</span> var <span class="sc">/</span> <span class="fu">sum</span>(var) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb1105-4"><a href="principle-component-analysis.html#cb1105-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1105-5"><a href="principle-component-analysis.html#cb1105-5" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
-<span id="cb1105-6"><a href="principle-component-analysis.html#cb1105-6" aria-hidden="true" tabindex="-1"></a>  var_perc,</span>
-<span id="cb1105-7"><a href="principle-component-analysis.html#cb1105-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&#39;PC&#39;</span>,</span>
-<span id="cb1105-8"><a href="principle-component-analysis.html#cb1105-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&#39;Percent Variance&#39;</span>,</span>
-<span id="cb1105-9"><a href="principle-component-analysis.html#cb1105-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(var_perc),</span>
-<span id="cb1105-10"><a href="principle-component-analysis.html#cb1105-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>,</span>
-<span id="cb1105-11"><a href="principle-component-analysis.html#cb1105-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(var_perc)),</span>
-<span id="cb1105-12"><a href="principle-component-analysis.html#cb1105-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&#39;lightgreen&#39;</span></span>
-<span id="cb1105-13"><a href="principle-component-analysis.html#cb1105-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1105-14"><a href="principle-component-analysis.html#cb1105-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1105-15"><a href="principle-component-analysis.html#cb1105-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(var_perc), <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1106-1"><a href="principle-component-analysis.html#cb1106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or</span></span>
+<span id="cb1106-2"><a href="principle-component-analysis.html#cb1106-2" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> (Xpca<span class="sc">$</span>sdev) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb1106-3"><a href="principle-component-analysis.html#cb1106-3" aria-hidden="true" tabindex="-1"></a>var_perc <span class="ot">&lt;-</span> var <span class="sc">/</span> <span class="fu">sum</span>(var) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb1106-4"><a href="principle-component-analysis.html#cb1106-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1106-5"><a href="principle-component-analysis.html#cb1106-5" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb1106-6"><a href="principle-component-analysis.html#cb1106-6" aria-hidden="true" tabindex="-1"></a>  var_perc,</span>
+<span id="cb1106-7"><a href="principle-component-analysis.html#cb1106-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&#39;PC&#39;</span>,</span>
+<span id="cb1106-8"><a href="principle-component-analysis.html#cb1106-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&#39;Percent Variance&#39;</span>,</span>
+<span id="cb1106-9"><a href="principle-component-analysis.html#cb1106-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">names.arg =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(var_perc),</span>
+<span id="cb1106-10"><a href="principle-component-analysis.html#cb1106-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>,</span>
+<span id="cb1106-11"><a href="principle-component-analysis.html#cb1106-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(var_perc)),</span>
+<span id="cb1106-12"><a href="principle-component-analysis.html#cb1106-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&#39;lightgreen&#39;</span></span>
+<span id="cb1106-13"><a href="principle-component-analysis.html#cb1106-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1106-14"><a href="principle-component-analysis.html#cb1106-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1106-15"><a href="principle-component-analysis.html#cb1106-15" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">mean</span>(var_perc), <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
 <p><img src="27-PrincipalCompAnalysis_files/figure-html/pca4-3.png" width="672" /></p>
 <p>Since we have ten variables, if each variable contributed equally, they would each contribute 10% to the total variance (red line). This criterion suggests we should also include principal component 4 (but barely) in our interpretation.</p>
 <p>And principle component scores <span class="math inline">\(\mathbf{T} = \mathbf{X}\mathbf{V}\)</span> (a.k.a score matrix) with <code>prcomp()</code>:</p>
-<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1106-1"><a href="principle-component-analysis.html#cb1106-1" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">scale</span>(X) <span class="sc">%*%</span> Xpca<span class="sc">$</span>rotation</span>
-<span id="cb1106-2"><a href="principle-component-analysis.html#cb1106-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pc)</span></code></pre></div>
+<div class="sourceCode" id="cb1107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1107-1"><a href="principle-component-analysis.html#cb1107-1" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">scale</span>(X) <span class="sc">%*%</span> Xpca<span class="sc">$</span>rotation</span>
+<span id="cb1107-2"><a href="principle-component-analysis.html#cb1107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pc)</span></code></pre></div>
 <pre><code>##                  PC1        PC2        PC3         PC4         PC5        PC6
 ## SEBRLE     0.2727622 -0.5264068 -1.5556058  0.10384438  1.05453531  0.7177257
 ## CLAY       0.8879389 -2.0551314 -0.8249697  1.81612193 -0.40100595 -1.5039874
@@ -656,10 +656,10 @@ div.csl-indent {
 ## YURKOV    -0.29565551  0.09332310 -0.06769776  0.13791531
 ## ZSIVOCZKY -0.30752133  0.29476740 -0.48055837  0.44234659
 ## McMULLEN   0.02896393 -0.53358562  0.05116850  0.37610188</code></pre>
-<div class="sourceCode" id="cb1108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1108-1"><a href="principle-component-analysis.html#cb1108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pc)</span></code></pre></div>
+<div class="sourceCode" id="cb1109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1109-1"><a href="principle-component-analysis.html#cb1109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pc)</span></code></pre></div>
 <pre><code>## [1] 27 10</code></pre>
-<div class="sourceCode" id="cb1110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1110-1"><a href="principle-component-analysis.html#cb1110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># which is also given by `prcomp()`</span></span>
-<span id="cb1110-2"><a href="principle-component-analysis.html#cb1110-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Xpca<span class="sc">$</span>x)</span></code></pre></div>
+<div class="sourceCode" id="cb1111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1111-1"><a href="principle-component-analysis.html#cb1111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># which is also given by `prcomp()`</span></span>
+<span id="cb1111-2"><a href="principle-component-analysis.html#cb1111-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Xpca<span class="sc">$</span>x)</span></code></pre></div>
 <pre><code>##                  PC1        PC2        PC3         PC4         PC5        PC6
 ## SEBRLE     0.2727622 -0.5264068 -1.5556058  0.10384438  1.05453531  0.7177257
 ## CLAY       0.8879389 -2.0551314 -0.8249697  1.81612193 -0.40100595 -1.5039874
@@ -676,12 +676,12 @@ div.csl-indent {
 ## McMULLEN   0.02896393 -0.53358562  0.05116850  0.37610188</code></pre>
 <p>Now you can think that if we use <code>evectors</code> that we calculated earlier with filliped signs, the data would be different. It’s similar to multiply the entire data with -1. So the data would not change in a sense that that captures the variation between observations and variables. That’s why the sign of eigenvalues are arbitraray.</p>
 <p>Now, with SVD:</p>
-<div class="sourceCode" id="cb1112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1112-1"><a href="principle-component-analysis.html#cb1112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With SVD</span></span>
-<span id="cb1112-2"><a href="principle-component-analysis.html#cb1112-2" aria-hidden="true" tabindex="-1"></a>Xsvd <span class="ot">&lt;-</span> <span class="fu">svd</span>(<span class="fu">scale</span>(X))</span>
-<span id="cb1112-3"><a href="principle-component-analysis.html#cb1112-3" aria-hidden="true" tabindex="-1"></a>pc_2 <span class="ot">&lt;-</span> Xsvd<span class="sc">$</span>u <span class="sc">%*%</span> <span class="fu">diag</span>(Xsvd<span class="sc">$</span>d)</span>
-<span id="cb1112-4"><a href="principle-component-analysis.html#cb1112-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pc_2)</span></code></pre></div>
+<div class="sourceCode" id="cb1113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1113-1"><a href="principle-component-analysis.html#cb1113-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With SVD</span></span>
+<span id="cb1113-2"><a href="principle-component-analysis.html#cb1113-2" aria-hidden="true" tabindex="-1"></a>Xsvd <span class="ot">&lt;-</span> <span class="fu">svd</span>(<span class="fu">scale</span>(X))</span>
+<span id="cb1113-3"><a href="principle-component-analysis.html#cb1113-3" aria-hidden="true" tabindex="-1"></a>pc_2 <span class="ot">&lt;-</span> Xsvd<span class="sc">$</span>u <span class="sc">%*%</span> <span class="fu">diag</span>(Xsvd<span class="sc">$</span>d)</span>
+<span id="cb1113-4"><a href="principle-component-analysis.html#cb1113-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pc_2)</span></code></pre></div>
 <pre><code>## [1] 27 10</code></pre>
-<div class="sourceCode" id="cb1114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1114-1"><a href="principle-component-analysis.html#cb1114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pc_2)</span></code></pre></div>
+<div class="sourceCode" id="cb1115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1115-1"><a href="principle-component-analysis.html#cb1115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pc_2)</span></code></pre></div>
 <pre><code>##            [,1]       [,2]       [,3]        [,4]        [,5]       [,6]
 ## [1,]  0.2727622 -0.5264068 -1.5556058  0.10384438  1.05453531  0.7177257
 ## [2,]  0.8879389 -2.0551314 -0.8249697  1.81612193 -0.40100595 -1.5039874
@@ -697,10 +697,10 @@ div.csl-indent {
 ## [5,] -0.30752133  0.29476740 -0.48055837  0.44234659
 ## [6,]  0.02896393 -0.53358562  0.05116850  0.37610188</code></pre>
 <p>Here we can reduce the dimensionality by selecting only 4 PC (the first 4 PC’s are above the average, which explain more than 80% of the variation in the data - see the graph above)</p>
-<div class="sourceCode" id="cb1116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1116-1"><a href="principle-component-analysis.html#cb1116-1" aria-hidden="true" tabindex="-1"></a>reduced <span class="ot">&lt;-</span> pc[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
-<span id="cb1116-2"><a href="principle-component-analysis.html#cb1116-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(reduced)</span></code></pre></div>
+<div class="sourceCode" id="cb1117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1117-1"><a href="principle-component-analysis.html#cb1117-1" aria-hidden="true" tabindex="-1"></a>reduced <span class="ot">&lt;-</span> pc[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb1117-2"><a href="principle-component-analysis.html#cb1117-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(reduced)</span></code></pre></div>
 <pre><code>## [1] 27  4</code></pre>
-<div class="sourceCode" id="cb1118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1118-1"><a href="principle-component-analysis.html#cb1118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(reduced)</span></code></pre></div>
+<div class="sourceCode" id="cb1119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1119-1"><a href="principle-component-analysis.html#cb1119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(reduced)</span></code></pre></div>
 <pre><code>##                  PC1        PC2        PC3         PC4
 ## SEBRLE     0.2727622 -0.5264068 -1.5556058  0.10384438
 ## CLAY       0.8879389 -2.0551314 -0.8249697  1.81612193
