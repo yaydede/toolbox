@@ -675,29 +675,79 @@ df[, 8:11]
 ## 6  DECES 0.1666667   0.0745356          0.1
 ```
 
-We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  We now need to incorporate these weights and resample these six observations. Since incorrectly classified records have higher sample weights, the probability to select those records is very high.
-
-If we use a simple tree as our base classifier, we can directly incorporate these weights into `rpart`.  We can use other base classifier. In that case, we can do resampling with these probability weights: 
+We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  Let's see a simple example how weights affect Gini and a simple tree:
 
 
 ```r
-set.seed(123)
-ind <- sample(6, 6, replace = TRUE, prob = df$Norm_weights)
-df[ind, -c(9:12)] # After
+# Define the class labels and weights
+class_labels <- c(1, 1, 1, 0, 0, 0)
+weights <- rep(1/length(class_labels), length(class_labels))
+
+# Calculate the proportion of each class
+class_prop <- table(class_labels) / length(class_labels)
+
+# Calculate the Gini index
+gini_index <- 1 - sum(class_prop^2)
+print(gini_index)
 ```
 
 ```
-##     FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO
-## 1      90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 5      80  1.58  19.7    21  28.0  18.5  1418  DECES
-## 1.1    90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 6      80  1.13  14.1    18  23.5   9.0  1664  DECES
-## 2      90  1.68  18.7    24  31.0  14.0  1476  DECES
-## 1.2    90  1.71  19.0    16  19.5  16.0   912 SURVIE
+## [1] 0.5
 ```
 
-As we can see, the misclassified observation is repeated three times in the new sample.  Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+```r
+# Change the weight of the first observation to 0.5
+weights[1] <- 0.5
 
+# Recalculate the class proportions and Gini index
+class_prop <- table(class_labels, weights = weights) / sum(weights)
+gini_index <- 1 - sum(class_prop^2)
+print(gini_index)
+```
+
+```
+## [1] -6.875
+```
+
+Notice how the change in the weight of the first observation affects the Gini index.  The weights assigned to the observations in a decision tree can affect the splitting decisions made by the algorithm, and therefore can change the split point of the tree.
+
+In general, observations with higher weights will have a greater influence on the decision tree's splitting decisions. This is because the splitting criterion used by the decision tree algorithm, such as the Gini index or information gain, takes the weights of the observations into account when determining the best split. If there are observations with very high weights, they may dominate the splitting decisions and cause the decision tree to favor a split that is optimal for those observations, but not necessarily for the entire data set. 
+
+
+```r
+# Define the data
+x <- c(2, 4, 6, 8, 10, 12)
+y <- c(0, 1, 1, 0, 0, 0)
+weights1 <- rep(1/length(y), length(y))
+weights2 <- c(0.95, 0.01, 0.01, 0.01, 0.01, 0.01)
+
+# Build the decision tree with equal weights
+library(rpart)
+fit1 <- rpart(y ~ x, weights = weights1,
+              control =rpart.control(minsplit =1,minbucket=1, cp=0))
+
+# Build the decision tree with different weights
+fit2 <- rpart(y ~ x, weights = weights2,
+              control =rpart.control(minsplit =1,minbucket=1, cp=0))
+
+# Plot the two decision trees
+plot(fit1)
+text(fit1, use.n = TRUE)
+```
+
+<img src="12-Ensemble_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+```r
+plot(fit2)
+text(fit2, use.n = TRUE)
+```
+
+<img src="12-Ensemble_files/figure-html/unnamed-chunk-2-2.png" width="672" />
+
+By comparing the two decision trees, we can see that the weights have a significant impact on the splitting decisions made by the algorithm. In the decision tree built with equal weights, the algorithm splits on $x <= 7$ and then on $x < 3$ to separate the two classes. In contrast, in the decision tree built with different weights, the algorithm first splits on $x < 3$ to separate the first observation with $y = 0$ from the rest of the data. This split favors the first observation, which has a higher weight, and results in a simpler decision tree with fewer splits.
+
+Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+  
 7. Finally, in the output, the contributions from classifiers that fit the data better are given more weight (a larger $\alpha_b$ means a better fit).  Unlike a random forest algorithm where each tree gets an equal weight in final decision, here some stumps get more say in final classification.  Moreover, "forest of stumps" the order of trees is important.
 
 Hence, the final prediction on $y_i$ will be combined from all trees, $b$ to B, through a weighted majority vote:      
@@ -1007,7 +1057,7 @@ vip(tr_model,
 ```
 
 ```
-## [08:00:49] WARNING: src/learner.cc:553: 
+## [14:11:45] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:

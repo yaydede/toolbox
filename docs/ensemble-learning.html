@@ -936,19 +936,52 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 ## 4 SURVIE 0.1666667   0.0745356          0.1
 ## 5  DECES 0.1666667   0.0745356          0.1
 ## 6  DECES 0.1666667   0.0745356          0.1</code></pre>
-<p>We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations. We now need to incorporate these weights and resample these six observations. Since incorrectly classified records have higher sample weights, the probability to select those records is very high.</p>
-<p>If we use a simple tree as our base classifier, we can directly incorporate these weights into <code>rpart</code>. We can use other base classifier. In that case, we can do resampling with these probability weights:</p>
-<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="ensemble-learning.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb627-2"><a href="ensemble-learning.html#cb627-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">6</span>, <span class="dv">6</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> df<span class="sc">$</span>Norm_weights)</span>
-<span id="cb627-3"><a href="ensemble-learning.html#cb627-3" aria-hidden="true" tabindex="-1"></a>df[ind, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>)] <span class="co"># After</span></span></code></pre></div>
-<pre><code>##     FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO
-## 1      90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 5      80  1.58  19.7    21  28.0  18.5  1418  DECES
-## 1.1    90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 6      80  1.13  14.1    18  23.5   9.0  1664  DECES
-## 2      90  1.68  18.7    24  31.0  14.0  1476  DECES
-## 1.2    90  1.71  19.0    16  19.5  16.0   912 SURVIE</code></pre>
-<p>As we can see, the misclassified observation is repeated three times in the new sample. Hence, observations that are misclassified will have more influence in the next classifier. <strong>This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.</strong></p>
+<p>We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations. Let’s see a simple example how weights affect Gini and a simple tree:</p>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="ensemble-learning.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the class labels and weights</span></span>
+<span id="cb627-2"><a href="ensemble-learning.html#cb627-2" aria-hidden="true" tabindex="-1"></a>class_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb627-3"><a href="ensemble-learning.html#cb627-3" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">length</span>(class_labels), <span class="fu">length</span>(class_labels))</span>
+<span id="cb627-4"><a href="ensemble-learning.html#cb627-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-5"><a href="ensemble-learning.html#cb627-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the proportion of each class</span></span>
+<span id="cb627-6"><a href="ensemble-learning.html#cb627-6" aria-hidden="true" tabindex="-1"></a>class_prop <span class="ot">&lt;-</span> <span class="fu">table</span>(class_labels) <span class="sc">/</span> <span class="fu">length</span>(class_labels)</span>
+<span id="cb627-7"><a href="ensemble-learning.html#cb627-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-8"><a href="ensemble-learning.html#cb627-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the Gini index</span></span>
+<span id="cb627-9"><a href="ensemble-learning.html#cb627-9" aria-hidden="true" tabindex="-1"></a>gini_index <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(class_prop<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb627-10"><a href="ensemble-learning.html#cb627-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gini_index)</span></code></pre></div>
+<pre><code>## [1] 0.5</code></pre>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="ensemble-learning.html#cb629-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change the weight of the first observation to 0.5</span></span>
+<span id="cb629-2"><a href="ensemble-learning.html#cb629-2" aria-hidden="true" tabindex="-1"></a>weights[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb629-3"><a href="ensemble-learning.html#cb629-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb629-4"><a href="ensemble-learning.html#cb629-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Recalculate the class proportions and Gini index</span></span>
+<span id="cb629-5"><a href="ensemble-learning.html#cb629-5" aria-hidden="true" tabindex="-1"></a>class_prop <span class="ot">&lt;-</span> <span class="fu">table</span>(class_labels, <span class="at">weights =</span> weights) <span class="sc">/</span> <span class="fu">sum</span>(weights)</span>
+<span id="cb629-6"><a href="ensemble-learning.html#cb629-6" aria-hidden="true" tabindex="-1"></a>gini_index <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(class_prop<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb629-7"><a href="ensemble-learning.html#cb629-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gini_index)</span></code></pre></div>
+<pre><code>## [1] -6.875</code></pre>
+<p>Notice how the change in the weight of the first observation affects the Gini index. The weights assigned to the observations in a decision tree can affect the splitting decisions made by the algorithm, and therefore can change the split point of the tree.</p>
+<p>In general, observations with higher weights will have a greater influence on the decision tree’s splitting decisions. This is because the splitting criterion used by the decision tree algorithm, such as the Gini index or information gain, takes the weights of the observations into account when determining the best split. If there are observations with very high weights, they may dominate the splitting decisions and cause the decision tree to favor a split that is optimal for those observations, but not necessarily for the entire data set.</p>
+<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb631-1"><a href="ensemble-learning.html#cb631-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the data</span></span>
+<span id="cb631-2"><a href="ensemble-learning.html#cb631-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>)</span>
+<span id="cb631-3"><a href="ensemble-learning.html#cb631-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb631-4"><a href="ensemble-learning.html#cb631-4" aria-hidden="true" tabindex="-1"></a>weights1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">length</span>(y), <span class="fu">length</span>(y))</span>
+<span id="cb631-5"><a href="ensemble-learning.html#cb631-5" aria-hidden="true" tabindex="-1"></a>weights2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>)</span>
+<span id="cb631-6"><a href="ensemble-learning.html#cb631-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-7"><a href="ensemble-learning.html#cb631-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the decision tree with equal weights</span></span>
+<span id="cb631-8"><a href="ensemble-learning.html#cb631-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb631-9"><a href="ensemble-learning.html#cb631-9" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">weights =</span> weights1,</span>
+<span id="cb631-10"><a href="ensemble-learning.html#cb631-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">control =</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span><span class="dv">1</span>,<span class="at">minbucket=</span><span class="dv">1</span>, <span class="at">cp=</span><span class="dv">0</span>))</span>
+<span id="cb631-11"><a href="ensemble-learning.html#cb631-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-12"><a href="ensemble-learning.html#cb631-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the decision tree with different weights</span></span>
+<span id="cb631-13"><a href="ensemble-learning.html#cb631-13" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span> x, <span class="at">weights =</span> weights2,</span>
+<span id="cb631-14"><a href="ensemble-learning.html#cb631-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">control =</span><span class="fu">rpart.control</span>(<span class="at">minsplit =</span><span class="dv">1</span>,<span class="at">minbucket=</span><span class="dv">1</span>, <span class="at">cp=</span><span class="dv">0</span>))</span>
+<span id="cb631-15"><a href="ensemble-learning.html#cb631-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-16"><a href="ensemble-learning.html#cb631-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the two decision trees</span></span>
+<span id="cb631-17"><a href="ensemble-learning.html#cb631-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit1)</span>
+<span id="cb631-18"><a href="ensemble-learning.html#cb631-18" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(fit1, <span class="at">use.n =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="12-Ensemble_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="ensemble-learning.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit2)</span>
+<span id="cb632-2"><a href="ensemble-learning.html#cb632-2" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(fit2, <span class="at">use.n =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="12-Ensemble_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p>By comparing the two decision trees, we can see that the weights have a significant impact on the splitting decisions made by the algorithm. In the decision tree built with equal weights, the algorithm splits on <span class="math inline">\(x &lt;= 7\)</span> and then on <span class="math inline">\(x &lt; 3\)</span> to separate the two classes. In contrast, in the decision tree built with different weights, the algorithm first splits on <span class="math inline">\(x &lt; 3\)</span> to separate the first observation with <span class="math inline">\(y = 0\)</span> from the rest of the data. This split favors the first observation, which has a higher weight, and results in a simpler decision tree with fewer splits.</p>
+<p>Hence, observations that are misclassified will have more influence in the next classifier. <strong>This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.</strong></p>
 <ol start="7" style="list-style-type: decimal">
 <li>Finally, in the output, the contributions from classifiers that fit the data better are given more weight (a larger <span class="math inline">\(\alpha_b\)</span> means a better fit). Unlike a random forest algorithm where each tree gets an equal weight in final decision, here some stumps get more say in final classification. Moreover, “forest of stumps” the order of trees is important.</li>
 </ol>
@@ -965,69 +998,69 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 \end{array}\right.
 \]</span></p>
 <p>Here is a simple simulation to show how <span class="math inline">\(\alpha_b\)</span> will make the importance of each tree (<span class="math inline">\(\hat{m}_{b}(x)\)</span>) different:</p>
-<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="ensemble-learning.html#cb629-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb629-2"><a href="ensemble-learning.html#cb629-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb629-3"><a href="ensemble-learning.html#cb629-3" aria-hidden="true" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb629-4"><a href="ensemble-learning.html#cb629-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> err) <span class="sc">/</span> err)</span>
-<span id="cb629-5"><a href="ensemble-learning.html#cb629-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">=</span> <span class="fu">order</span>(err)</span>
-<span id="cb629-6"><a href="ensemble-learning.html#cb629-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb629-7"><a href="ensemble-learning.html#cb629-7" aria-hidden="true" tabindex="-1"></a>  err[ind],</span>
-<span id="cb629-8"><a href="ensemble-learning.html#cb629-8" aria-hidden="true" tabindex="-1"></a>  alpha[ind],</span>
-<span id="cb629-9"><a href="ensemble-learning.html#cb629-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;error (err)&quot;</span>,</span>
-<span id="cb629-10"><a href="ensemble-learning.html#cb629-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;alpha&quot;</span>,</span>
-<span id="cb629-11"><a href="ensemble-learning.html#cb629-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;o&quot;</span>,</span>
-<span id="cb629-12"><a href="ensemble-learning.html#cb629-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb629-13"><a href="ensemble-learning.html#cb629-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span></span>
-<span id="cb629-14"><a href="ensemble-learning.html#cb629-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="ensemble-learning.html#cb633-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb633-2"><a href="ensemble-learning.html#cb633-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb633-3"><a href="ensemble-learning.html#cb633-3" aria-hidden="true" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb633-4"><a href="ensemble-learning.html#cb633-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> err) <span class="sc">/</span> err)</span>
+<span id="cb633-5"><a href="ensemble-learning.html#cb633-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">=</span> <span class="fu">order</span>(err)</span>
+<span id="cb633-6"><a href="ensemble-learning.html#cb633-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb633-7"><a href="ensemble-learning.html#cb633-7" aria-hidden="true" tabindex="-1"></a>  err[ind],</span>
+<span id="cb633-8"><a href="ensemble-learning.html#cb633-8" aria-hidden="true" tabindex="-1"></a>  alpha[ind],</span>
+<span id="cb633-9"><a href="ensemble-learning.html#cb633-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;error (err)&quot;</span>,</span>
+<span id="cb633-10"><a href="ensemble-learning.html#cb633-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;alpha&quot;</span>,</span>
+<span id="cb633-11"><a href="ensemble-learning.html#cb633-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;o&quot;</span>,</span>
+<span id="cb633-12"><a href="ensemble-learning.html#cb633-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb633-13"><a href="ensemble-learning.html#cb633-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb633-14"><a href="ensemble-learning.html#cb633-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="12-Ensemble_files/figure-html/en24-1.png" width="672" /></p>
 <p>We can see that when there is no misclassification error (<code>err</code> = 0), “alpha” will be a large positive number. When the classifier very weak and predicts as good as a random guess (<code>err</code> = 0.5), the importance of the classifier will be 0. If all the observations are incorrectly classified (<code>err</code> = 1), our alpha value will be a negative integer.</p>
 <p>The AdaBoost.M1 is known as a “discrete classifier” because it directly calculates discrete class labels <span class="math inline">\(\hat{y}_i\)</span>, rather than predicted probabilities, <span class="math inline">\(\hat{p}_i\)</span>.</p>
 <p>What type of classifier, <span class="math inline">\(\hat{m}_{b}(x)\)</span>, would we choose? Usually a “weak classifier” like a “stump” (a two terminal-node classification tree, i.e one split) would be enough. The <span class="math inline">\(\hat{m}_{b}(x)\)</span> choose one variable to form a stump that gives the lowest Gini index.</p>
 <p>Here is our simple example with the <code>myocarde</code> data to show how we can boost a simple weak learner (stump) by using AdaBoost algorithm:</p>
-<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="ensemble-learning.html#cb630-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
-<span id="cb630-2"><a href="ensemble-learning.html#cb630-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb630-3"><a href="ensemble-learning.html#cb630-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
-<span id="cb630-4"><a href="ensemble-learning.html#cb630-4" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">&quot;myocarde.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span> ,</span>
-<span id="cb630-5"><a href="ensemble-learning.html#cb630-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">escape_double =</span> <span class="cn">FALSE</span>, <span class="at">trim_ws =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb630-6"><a href="ensemble-learning.html#cb630-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb630-7"><a href="ensemble-learning.html#cb630-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb630-8"><a href="ensemble-learning.html#cb630-8" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(myocarde)</span>
-<span id="cb630-9"><a href="ensemble-learning.html#cb630-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> (myocarde[ , <span class="st">&quot;PRONO&quot;</span>] <span class="sc">==</span> <span class="st">&quot;SURVIE&quot;</span>) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb630-10"><a href="ensemble-learning.html#cb630-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> myocarde[ , <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb630-11"><a href="ensemble-learning.html#cb630-11" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
-<span id="cb630-12"><a href="ensemble-learning.html#cb630-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb630-13"><a href="ensemble-learning.html#cb630-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting</span></span>
-<span id="cb630-14"><a href="ensemble-learning.html#cb630-14" aria-hidden="true" tabindex="-1"></a>rnd <span class="ot">=</span> <span class="dv">100</span> <span class="co"># number of rounds</span></span>
-<span id="cb630-15"><a href="ensemble-learning.html#cb630-15" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(x)</span>
-<span id="cb630-16"><a href="ensemble-learning.html#cb630-16" aria-hidden="true" tabindex="-1"></a>whts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m) <span class="co"># initial weights</span></span>
-<span id="cb630-17"><a href="ensemble-learning.html#cb630-17" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">list</span>() <span class="co"># container to save all stumps</span></span>
-<span id="cb630-18"><a href="ensemble-learning.html#cb630-18" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>, rnd) <span class="co"># container for alpha</span></span>
-<span id="cb630-19"><a href="ensemble-learning.html#cb630-19" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>, m) <span class="co"># container for final predictions</span></span>
-<span id="cb630-20"><a href="ensemble-learning.html#cb630-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb630-21"><a href="ensemble-learning.html#cb630-21" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb630-22"><a href="ensemble-learning.html#cb630-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>rnd) {</span>
-<span id="cb630-23"><a href="ensemble-learning.html#cb630-23" aria-hidden="true" tabindex="-1"></a>  st[[i]] <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span>., <span class="at">data =</span> df, <span class="at">weights =</span> whts, <span class="at">maxdepth =</span> <span class="dv">1</span>, <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
-<span id="cb630-24"><a href="ensemble-learning.html#cb630-24" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(st[[i]], x, <span class="at">type =</span> <span class="st">&quot;class&quot;</span>)</span>
-<span id="cb630-25"><a href="ensemble-learning.html#cb630-25" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(yhat))</span>
-<span id="cb630-26"><a href="ensemble-learning.html#cb630-26" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">sum</span>((yhat <span class="sc">!=</span> y) <span class="sc">*</span> whts)</span>
-<span id="cb630-27"><a href="ensemble-learning.html#cb630-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># alpha</span></span>
-<span id="cb630-28"><a href="ensemble-learning.html#cb630-28" aria-hidden="true" tabindex="-1"></a>  alpha[i] <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> e) <span class="sc">/</span> e)</span>
-<span id="cb630-29"><a href="ensemble-learning.html#cb630-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Updating weights </span></span>
-<span id="cb630-30"><a href="ensemble-learning.html#cb630-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note that, for true predictions, (y * yhat) will be +, otherwise -</span></span>
-<span id="cb630-31"><a href="ensemble-learning.html#cb630-31" aria-hidden="true" tabindex="-1"></a>  whts <span class="ot">&lt;-</span> whts <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>alpha[i] <span class="sc">*</span> y <span class="sc">*</span> yhat)</span>
-<span id="cb630-32"><a href="ensemble-learning.html#cb630-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Normalizing weights</span></span>
-<span id="cb630-33"><a href="ensemble-learning.html#cb630-33" aria-hidden="true" tabindex="-1"></a>  whts <span class="ot">&lt;-</span> whts <span class="sc">/</span> <span class="fu">sum</span>(whts)</span>
-<span id="cb630-34"><a href="ensemble-learning.html#cb630-34" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb630-35"><a href="ensemble-learning.html#cb630-35" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb630-36"><a href="ensemble-learning.html#cb630-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Using each stump for final predictions</span></span>
-<span id="cb630-37"><a href="ensemble-learning.html#cb630-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>rnd) {</span>
-<span id="cb630-38"><a href="ensemble-learning.html#cb630-38" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">predict</span>(st[[i]], df, <span class="at">type =</span> <span class="st">&quot;class&quot;</span>)</span>
-<span id="cb630-39"><a href="ensemble-learning.html#cb630-39" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(pred))</span>
-<span id="cb630-40"><a href="ensemble-learning.html#cb630-40" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="ot">=</span> y_hat <span class="sc">+</span> (alpha[i] <span class="sc">*</span> pred)</span>
-<span id="cb630-41"><a href="ensemble-learning.html#cb630-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb630-42"><a href="ensemble-learning.html#cb630-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb630-43"><a href="ensemble-learning.html#cb630-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s see what y_hat is</span></span>
-<span id="cb630-44"><a href="ensemble-learning.html#cb630-44" aria-hidden="true" tabindex="-1"></a>y_hat</span></code></pre></div>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="ensemble-learning.html#cb634-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb634-2"><a href="ensemble-learning.html#cb634-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-3"><a href="ensemble-learning.html#cb634-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Data</span></span>
+<span id="cb634-4"><a href="ensemble-learning.html#cb634-4" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">&quot;myocarde.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;;&quot;</span> ,</span>
+<span id="cb634-5"><a href="ensemble-learning.html#cb634-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">escape_double =</span> <span class="cn">FALSE</span>, <span class="at">trim_ws =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb634-6"><a href="ensemble-learning.html#cb634-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb634-7"><a href="ensemble-learning.html#cb634-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-8"><a href="ensemble-learning.html#cb634-8" aria-hidden="true" tabindex="-1"></a>myocarde <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(myocarde)</span>
+<span id="cb634-9"><a href="ensemble-learning.html#cb634-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> (myocarde[ , <span class="st">&quot;PRONO&quot;</span>] <span class="sc">==</span> <span class="st">&quot;SURVIE&quot;</span>) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb634-10"><a href="ensemble-learning.html#cb634-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> myocarde[ , <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb634-11"><a href="ensemble-learning.html#cb634-11" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb634-12"><a href="ensemble-learning.html#cb634-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-13"><a href="ensemble-learning.html#cb634-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting</span></span>
+<span id="cb634-14"><a href="ensemble-learning.html#cb634-14" aria-hidden="true" tabindex="-1"></a>rnd <span class="ot">=</span> <span class="dv">100</span> <span class="co"># number of rounds</span></span>
+<span id="cb634-15"><a href="ensemble-learning.html#cb634-15" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(x)</span>
+<span id="cb634-16"><a href="ensemble-learning.html#cb634-16" aria-hidden="true" tabindex="-1"></a>whts <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m) <span class="co"># initial weights</span></span>
+<span id="cb634-17"><a href="ensemble-learning.html#cb634-17" aria-hidden="true" tabindex="-1"></a>st <span class="ot">&lt;-</span> <span class="fu">list</span>() <span class="co"># container to save all stumps</span></span>
+<span id="cb634-18"><a href="ensemble-learning.html#cb634-18" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>, rnd) <span class="co"># container for alpha</span></span>
+<span id="cb634-19"><a href="ensemble-learning.html#cb634-19" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">&quot;numeric&quot;</span>, m) <span class="co"># container for final predictions</span></span>
+<span id="cb634-20"><a href="ensemble-learning.html#cb634-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-21"><a href="ensemble-learning.html#cb634-21" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb634-22"><a href="ensemble-learning.html#cb634-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>rnd) {</span>
+<span id="cb634-23"><a href="ensemble-learning.html#cb634-23" aria-hidden="true" tabindex="-1"></a>  st[[i]] <span class="ot">&lt;-</span> <span class="fu">rpart</span>(y <span class="sc">~</span>., <span class="at">data =</span> df, <span class="at">weights =</span> whts, <span class="at">maxdepth =</span> <span class="dv">1</span>, <span class="at">method =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb634-24"><a href="ensemble-learning.html#cb634-24" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(st[[i]], x, <span class="at">type =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb634-25"><a href="ensemble-learning.html#cb634-25" aria-hidden="true" tabindex="-1"></a>  yhat <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(yhat))</span>
+<span id="cb634-26"><a href="ensemble-learning.html#cb634-26" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">sum</span>((yhat <span class="sc">!=</span> y) <span class="sc">*</span> whts)</span>
+<span id="cb634-27"><a href="ensemble-learning.html#cb634-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># alpha</span></span>
+<span id="cb634-28"><a href="ensemble-learning.html#cb634-28" aria-hidden="true" tabindex="-1"></a>  alpha[i] <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">log</span>((<span class="dv">1</span> <span class="sc">-</span> e) <span class="sc">/</span> e)</span>
+<span id="cb634-29"><a href="ensemble-learning.html#cb634-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Updating weights </span></span>
+<span id="cb634-30"><a href="ensemble-learning.html#cb634-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note that, for true predictions, (y * yhat) will be +, otherwise -</span></span>
+<span id="cb634-31"><a href="ensemble-learning.html#cb634-31" aria-hidden="true" tabindex="-1"></a>  whts <span class="ot">&lt;-</span> whts <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>alpha[i] <span class="sc">*</span> y <span class="sc">*</span> yhat)</span>
+<span id="cb634-32"><a href="ensemble-learning.html#cb634-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Normalizing weights</span></span>
+<span id="cb634-33"><a href="ensemble-learning.html#cb634-33" aria-hidden="true" tabindex="-1"></a>  whts <span class="ot">&lt;-</span> whts <span class="sc">/</span> <span class="fu">sum</span>(whts)</span>
+<span id="cb634-34"><a href="ensemble-learning.html#cb634-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb634-35"><a href="ensemble-learning.html#cb634-35" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb634-36"><a href="ensemble-learning.html#cb634-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Using each stump for final predictions</span></span>
+<span id="cb634-37"><a href="ensemble-learning.html#cb634-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>rnd) {</span>
+<span id="cb634-38"><a href="ensemble-learning.html#cb634-38" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">predict</span>(st[[i]], df, <span class="at">type =</span> <span class="st">&quot;class&quot;</span>)</span>
+<span id="cb634-39"><a href="ensemble-learning.html#cb634-39" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(pred))</span>
+<span id="cb634-40"><a href="ensemble-learning.html#cb634-40" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="ot">=</span> y_hat <span class="sc">+</span> (alpha[i] <span class="sc">*</span> pred)</span>
+<span id="cb634-41"><a href="ensemble-learning.html#cb634-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb634-42"><a href="ensemble-learning.html#cb634-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-43"><a href="ensemble-learning.html#cb634-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Let&#39;s see what y_hat is</span></span>
+<span id="cb634-44"><a href="ensemble-learning.html#cb634-44" aria-hidden="true" tabindex="-1"></a>y_hat</span></code></pre></div>
 <pre><code>##  [1]   3.132649  -4.135656  -4.290437   7.547707  -3.118702  -6.946686
 ##  [7]   2.551433   1.960603   9.363346   6.221990   3.012195   6.982287
 ## [13]   9.765139   8.053999   8.494254   7.454104   4.112493   5.838279
@@ -1040,39 +1073,39 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 ## [55]   6.802687  -2.059754   2.832103   7.655197  10.635851   9.312842
 ## [61]  -5.804151   2.464149  -5.634676   1.938855   9.765139   7.023157
 ## [67]  -6.078756  -7.031840   5.651634  -1.867942   9.472835</code></pre>
-<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="ensemble-learning.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sign() function</span></span>
-<span id="cb632-2"><a href="ensemble-learning.html#cb632-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sign</span>(y_hat)</span>
-<span id="cb632-3"><a href="ensemble-learning.html#cb632-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb632-4"><a href="ensemble-learning.html#cb632-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
-<span id="cb632-5"><a href="ensemble-learning.html#cb632-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, y)</span></code></pre></div>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="ensemble-learning.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sign() function</span></span>
+<span id="cb636-2"><a href="ensemble-learning.html#cb636-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sign</span>(y_hat)</span>
+<span id="cb636-3"><a href="ensemble-learning.html#cb636-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb636-4"><a href="ensemble-learning.html#cb636-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb636-5"><a href="ensemble-learning.html#cb636-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, y)</span></code></pre></div>
 <pre><code>##     y
 ## pred -1  1
 ##   -1 29  0
 ##   1   0 42</code></pre>
 <p>This is our in-sample confusion table. We can also see several stumps:</p>
-<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="ensemble-learning.html#cb634-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
-<span id="cb634-2"><a href="ensemble-learning.html#cb634-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb634-3"><a href="ensemble-learning.html#cb634-3" aria-hidden="true" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">90</span>)</span>
-<span id="cb634-4"><a href="ensemble-learning.html#cb634-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb634-5"><a href="ensemble-learning.html#cb634-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
-<span id="cb634-6"><a href="ensemble-learning.html#cb634-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(plt)){</span>
-<span id="cb634-7"><a href="ensemble-learning.html#cb634-7" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(st[[i]], <span class="at">type =</span> <span class="dv">2</span>, <span class="at">extra =</span> <span class="dv">1</span>, <span class="at">split.col =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb634-8"><a href="ensemble-learning.html#cb634-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">split.border.col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">box.col =</span> <span class="st">&quot;pink&quot;</span>)</span>
-<span id="cb634-9"><a href="ensemble-learning.html#cb634-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="ensemble-learning.html#cb638-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
+<span id="cb638-2"><a href="ensemble-learning.html#cb638-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb638-3"><a href="ensemble-learning.html#cb638-3" aria-hidden="true" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">30</span>, <span class="dv">60</span>, <span class="dv">90</span>)</span>
+<span id="cb638-4"><a href="ensemble-learning.html#cb638-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb638-5"><a href="ensemble-learning.html#cb638-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb638-6"><a href="ensemble-learning.html#cb638-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(plt)){</span>
+<span id="cb638-7"><a href="ensemble-learning.html#cb638-7" aria-hidden="true" tabindex="-1"></a><span class="fu">prp</span>(st[[i]], <span class="at">type =</span> <span class="dv">2</span>, <span class="at">extra =</span> <span class="dv">1</span>, <span class="at">split.col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb638-8"><a href="ensemble-learning.html#cb638-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">split.border.col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">box.col =</span> <span class="st">&quot;pink&quot;</span>)</span>
+<span id="cb638-9"><a href="ensemble-learning.html#cb638-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="12-Ensemble_files/figure-html/en26-1.png" width="672" /></p>
-<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="ensemble-learning.html#cb635-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb639-1"><a href="ensemble-learning.html#cb639-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(p)</span></code></pre></div>
 <p>Let’s see it with the <code>JOUSBoost</code> <a href="https://cran.r-project.org/web/packages/JOUSBoost/vignettes/JOUS.pdf">package</a>:</p>
-<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="ensemble-learning.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(JOUSBoost)</span>
-<span id="cb636-2"><a href="ensemble-learning.html#cb636-2" aria-hidden="true" tabindex="-1"></a>ada <span class="ot">&lt;-</span> <span class="fu">adaboost</span>(<span class="fu">as.matrix</span>(x), y, <span class="at">tree_depth =</span> <span class="dv">1</span>, <span class="at">n_rounds =</span> rnd)</span>
-<span id="cb636-3"><a href="ensemble-learning.html#cb636-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ada)</span></code></pre></div>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="ensemble-learning.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(JOUSBoost)</span>
+<span id="cb640-2"><a href="ensemble-learning.html#cb640-2" aria-hidden="true" tabindex="-1"></a>ada <span class="ot">&lt;-</span> <span class="fu">adaboost</span>(<span class="fu">as.matrix</span>(x), y, <span class="at">tree_depth =</span> <span class="dv">1</span>, <span class="at">n_rounds =</span> rnd)</span>
+<span id="cb640-3"><a href="ensemble-learning.html#cb640-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ada)</span></code></pre></div>
 <pre><code>##                  Length Class  Mode   
 ## alphas           100    -none- numeric
 ## trees            100    -none- list   
 ## tree_depth         1    -none- numeric
 ## terms              3    terms  call   
 ## confusion_matrix   4    table  numeric</code></pre>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="ensemble-learning.html#cb638-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ada, x)</span>
-<span id="cb638-2"><a href="ensemble-learning.html#cb638-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, y)</span></code></pre></div>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="ensemble-learning.html#cb642-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ada, x)</span>
+<span id="cb642-2"><a href="ensemble-learning.html#cb642-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, y)</span></code></pre></div>
 <pre><code>##     y
 ## pred -1  1
 ##   -1 29  0
@@ -1085,81 +1118,81 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 <p>Extreme Gradient Boosting (XGBoost) the most efficient version of the gradient boosting framework by its capacity to implement parallel computation on a single machine. It can be used for regression and classification problems with two modes: linear models and tree learning algorithm. That means XGBoost can also be used for regularization in linear models (Section VIII). As decision trees are much better to catch a nonlinear link between predictors and outcome, comparison between two modes can provide quick information to the practitioner, specially in causal analyses, about the structure of alternative models.</p>
 <p>The XGBoost has several unique advantages: its speed is measured as “10 times faster than the <code>gbm</code>” (see its <a href="https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html">vignette</a>) and it accepts very efficient input data structures, such as a <em>sparse</em> matrix<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. This special input structure in <code>xgboost</code> requires some additional data preparation: a matrix input for the features and a vector for the response. Therefore, a matrix input of the features requires to encode our categorical variables. The matrix can also be selected several possible choices: a regular R matrix, a sparse matrix from the <code>Matrix</code> package, and its own class, <code>xgb.Matrix</code>.</p>
 <p>We start with a regression example here and leave the classification example to the next chapter in boosting applications. We will use the <a href="https://www.tmwr.org/ames.html">Ames housing data</a> to see the best “predictors” of the sale price.</p>
-<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="ensemble-learning.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span>
-<span id="cb640-2"><a href="ensemble-learning.html#cb640-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mltools)</span>
-<span id="cb640-3"><a href="ensemble-learning.html#cb640-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb640-4"><a href="ensemble-learning.html#cb640-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeldata) <span class="co"># This can also be loaded by the tidymodels package</span></span>
-<span id="cb640-5"><a href="ensemble-learning.html#cb640-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ames)</span>
-<span id="cb640-6"><a href="ensemble-learning.html#cb640-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ames)</span></code></pre></div>
+<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="ensemble-learning.html#cb644-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span>
+<span id="cb644-2"><a href="ensemble-learning.html#cb644-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mltools)</span>
+<span id="cb644-3"><a href="ensemble-learning.html#cb644-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb644-4"><a href="ensemble-learning.html#cb644-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeldata) <span class="co"># This can also be loaded by the tidymodels package</span></span>
+<span id="cb644-5"><a href="ensemble-learning.html#cb644-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ames)</span>
+<span id="cb644-6"><a href="ensemble-learning.html#cb644-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ames)</span></code></pre></div>
 <pre><code>## [1] 2930   74</code></pre>
 <p>Since, the <code>xgboost</code> algorithm accepts its input data as a matrix, all categorical variables have be one-hot coded, which creates a large matrix even with a small size data. That’s why using more memory efficient matrix types (sparse matrix etc.) speeds up the process. We ignore it here and use a regular R matrix, for now.</p>
-<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="ensemble-learning.html#cb642-1" aria-hidden="true" tabindex="-1"></a>ames_new <span class="ot">&lt;-</span> <span class="fu">one_hot</span>(<span class="fu">as.data.table</span>(ames))</span>
-<span id="cb642-2"><a href="ensemble-learning.html#cb642-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ames_new)</span>
-<span id="cb642-3"><a href="ensemble-learning.html#cb642-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb642-4"><a href="ensemble-learning.html#cb642-4" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb642-5"><a href="ensemble-learning.html#cb642-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df[ind,]</span>
-<span id="cb642-6"><a href="ensemble-learning.html#cb642-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind,]</span>
-<span id="cb642-7"><a href="ensemble-learning.html#cb642-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb642-8"><a href="ensemble-learning.html#cb642-8" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(train[,<span class="sc">-</span><span class="fu">which</span>(<span class="fu">names</span>(train) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)])</span>
-<span id="cb642-9"><a href="ensemble-learning.html#cb642-9" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> train<span class="sc">$</span>Sale_Price</span></code></pre></div>
+<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="ensemble-learning.html#cb646-1" aria-hidden="true" tabindex="-1"></a>ames_new <span class="ot">&lt;-</span> <span class="fu">one_hot</span>(<span class="fu">as.data.table</span>(ames))</span>
+<span id="cb646-2"><a href="ensemble-learning.html#cb646-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ames_new)</span>
+<span id="cb646-3"><a href="ensemble-learning.html#cb646-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb646-4"><a href="ensemble-learning.html#cb646-4" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb646-5"><a href="ensemble-learning.html#cb646-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> df[ind,]</span>
+<span id="cb646-6"><a href="ensemble-learning.html#cb646-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df[<span class="sc">-</span>ind,]</span>
+<span id="cb646-7"><a href="ensemble-learning.html#cb646-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb646-8"><a href="ensemble-learning.html#cb646-8" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(train[,<span class="sc">-</span><span class="fu">which</span>(<span class="fu">names</span>(train) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)])</span>
+<span id="cb646-9"><a href="ensemble-learning.html#cb646-9" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> train<span class="sc">$</span>Sale_Price</span></code></pre></div>
 <p>Now we are ready for finding the optimal tuning parameters. One strategy in tuning is to see if there is a substantial difference between train and CV errors. We first start with the number of trees and the learning rate. If the difference still persists, we introduce regularization parameters. There are three regularization parameters: <code>gamma</code>, <code>lambda</code>, and <code>alpha</code>. The last two are similar to what we will see in regularization in Section VIII.</p>
 <p>Here is our first run without a grid search. We will have a regression tree. The default booster is <code>gbtree</code> for tree-based models. For linear models it should be set to <code>gblinear</code>. The number of parameters and their combinations are very extensive in XGBoost. Please see them here: <a href="https://xgboost.readthedocs.io/en/latest/parameter.html#global-configuration" class="uri">https://xgboost.readthedocs.io/en/latest/parameter.html#global-configuration</a>. The combination of parameters we picked below is just an example.</p>
-<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb643-1"><a href="ensemble-learning.html#cb643-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb643-2"><a href="ensemble-learning.html#cb643-2" aria-hidden="true" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb643-3"><a href="ensemble-learning.html#cb643-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">eta =</span> <span class="fl">0.1</span>, <span class="co"># Step size in boosting (default is 0.3)</span></span>
-<span id="cb643-4"><a href="ensemble-learning.html#cb643-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">3</span>, <span class="co"># maximum depth of the tree (default is 6)</span></span>
-<span id="cb643-5"><a href="ensemble-learning.html#cb643-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_child_weight =</span> <span class="dv">3</span>, <span class="co"># minimum number of instances in each node</span></span>
-<span id="cb643-6"><a href="ensemble-learning.html#cb643-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="fl">0.8</span>, <span class="co"># Subsample ratio of the training instances</span></span>
-<span id="cb643-7"><a href="ensemble-learning.html#cb643-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="fl">1.0</span> <span class="co"># the fraction of columns to be subsampled</span></span>
-<span id="cb643-8"><a href="ensemble-learning.html#cb643-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb643-9"><a href="ensemble-learning.html#cb643-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb643-10"><a href="ensemble-learning.html#cb643-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb643-11"><a href="ensemble-learning.html#cb643-11" aria-hidden="true" tabindex="-1"></a>boost <span class="ot">&lt;-</span> <span class="fu">xgb.cv</span>(</span>
-<span id="cb643-12"><a href="ensemble-learning.html#cb643-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> X,</span>
-<span id="cb643-13"><a href="ensemble-learning.html#cb643-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> Y,</span>
-<span id="cb643-14"><a href="ensemble-learning.html#cb643-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrounds =</span> <span class="dv">3000</span>, <span class="co"># the max number of iterations</span></span>
-<span id="cb643-15"><a href="ensemble-learning.html#cb643-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">nthread =</span> <span class="dv">4</span>, <span class="co"># the number of CPU cores</span></span>
-<span id="cb643-16"><a href="ensemble-learning.html#cb643-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">&quot;reg:squarederror&quot;</span>, <span class="co"># regression tree</span></span>
-<span id="cb643-17"><a href="ensemble-learning.html#cb643-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">early_stopping_rounds =</span> <span class="dv">50</span>, <span class="co"># Stop if doesn&#39;t improve after 50 rounds </span></span>
-<span id="cb643-18"><a href="ensemble-learning.html#cb643-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfold =</span> <span class="dv">10</span>, <span class="co"># 10-fold-CV</span></span>
-<span id="cb643-19"><a href="ensemble-learning.html#cb643-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">params =</span> params,</span>
-<span id="cb643-20"><a href="ensemble-learning.html#cb643-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span> <span class="co">#silent</span></span>
-<span id="cb643-21"><a href="ensemble-learning.html#cb643-21" aria-hidden="true" tabindex="-1"></a>)  </span></code></pre></div>
+<div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb647-1"><a href="ensemble-learning.html#cb647-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb647-2"><a href="ensemble-learning.html#cb647-2" aria-hidden="true" tabindex="-1"></a>params <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb647-3"><a href="ensemble-learning.html#cb647-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">eta =</span> <span class="fl">0.1</span>, <span class="co"># Step size in boosting (default is 0.3)</span></span>
+<span id="cb647-4"><a href="ensemble-learning.html#cb647-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">3</span>, <span class="co"># maximum depth of the tree (default is 6)</span></span>
+<span id="cb647-5"><a href="ensemble-learning.html#cb647-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_child_weight =</span> <span class="dv">3</span>, <span class="co"># minimum number of instances in each node</span></span>
+<span id="cb647-6"><a href="ensemble-learning.html#cb647-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="fl">0.8</span>, <span class="co"># Subsample ratio of the training instances</span></span>
+<span id="cb647-7"><a href="ensemble-learning.html#cb647-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="fl">1.0</span> <span class="co"># the fraction of columns to be subsampled</span></span>
+<span id="cb647-8"><a href="ensemble-learning.html#cb647-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb647-9"><a href="ensemble-learning.html#cb647-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb647-10"><a href="ensemble-learning.html#cb647-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb647-11"><a href="ensemble-learning.html#cb647-11" aria-hidden="true" tabindex="-1"></a>boost <span class="ot">&lt;-</span> <span class="fu">xgb.cv</span>(</span>
+<span id="cb647-12"><a href="ensemble-learning.html#cb647-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> X,</span>
+<span id="cb647-13"><a href="ensemble-learning.html#cb647-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> Y,</span>
+<span id="cb647-14"><a href="ensemble-learning.html#cb647-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrounds =</span> <span class="dv">3000</span>, <span class="co"># the max number of iterations</span></span>
+<span id="cb647-15"><a href="ensemble-learning.html#cb647-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">nthread =</span> <span class="dv">4</span>, <span class="co"># the number of CPU cores</span></span>
+<span id="cb647-16"><a href="ensemble-learning.html#cb647-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">&quot;reg:squarederror&quot;</span>, <span class="co"># regression tree</span></span>
+<span id="cb647-17"><a href="ensemble-learning.html#cb647-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">early_stopping_rounds =</span> <span class="dv">50</span>, <span class="co"># Stop if doesn&#39;t improve after 50 rounds </span></span>
+<span id="cb647-18"><a href="ensemble-learning.html#cb647-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">nfold =</span> <span class="dv">10</span>, <span class="co"># 10-fold-CV</span></span>
+<span id="cb647-19"><a href="ensemble-learning.html#cb647-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">params =</span> params,</span>
+<span id="cb647-20"><a href="ensemble-learning.html#cb647-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span> <span class="co">#silent</span></span>
+<span id="cb647-21"><a href="ensemble-learning.html#cb647-21" aria-hidden="true" tabindex="-1"></a>)  </span></code></pre></div>
 <p>Let’s see the RMSE and the best iteration:</p>
-<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="ensemble-learning.html#cb644-1" aria-hidden="true" tabindex="-1"></a>best_it <span class="ot">&lt;-</span> boost<span class="sc">$</span>best_iteration</span>
-<span id="cb644-2"><a href="ensemble-learning.html#cb644-2" aria-hidden="true" tabindex="-1"></a>best_it</span></code></pre></div>
+<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb648-1"><a href="ensemble-learning.html#cb648-1" aria-hidden="true" tabindex="-1"></a>best_it <span class="ot">&lt;-</span> boost<span class="sc">$</span>best_iteration</span>
+<span id="cb648-2"><a href="ensemble-learning.html#cb648-2" aria-hidden="true" tabindex="-1"></a>best_it</span></code></pre></div>
 <pre><code>## [1] 1781</code></pre>
-<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="ensemble-learning.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(boost<span class="sc">$</span>evaluation_log<span class="sc">$</span>test_rmse_mean)</span></code></pre></div>
+<div class="sourceCode" id="cb650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb650-1"><a href="ensemble-learning.html#cb650-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(boost<span class="sc">$</span>evaluation_log<span class="sc">$</span>test_rmse_mean)</span></code></pre></div>
 <pre><code>## [1] 16807.16</code></pre>
-<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb648-1"><a href="ensemble-learning.html#cb648-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One possible grid would be:</span></span>
-<span id="cb648-2"><a href="ensemble-learning.html#cb648-2" aria-hidden="true" tabindex="-1"></a><span class="co"># param_grid &lt;- expand.grid(</span></span>
-<span id="cb648-3"><a href="ensemble-learning.html#cb648-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   eta = 0.01,</span></span>
-<span id="cb648-4"><a href="ensemble-learning.html#cb648-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   max_depth = 3,</span></span>
-<span id="cb648-5"><a href="ensemble-learning.html#cb648-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   min_child_weight = 3,</span></span>
-<span id="cb648-6"><a href="ensemble-learning.html#cb648-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   subsample = 0.5,</span></span>
-<span id="cb648-7"><a href="ensemble-learning.html#cb648-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   colsample_bytree = 0.5,</span></span>
-<span id="cb648-8"><a href="ensemble-learning.html#cb648-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   gamma = c(0, 1, 10, 100, 1000),</span></span>
-<span id="cb648-9"><a href="ensemble-learning.html#cb648-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   lambda = seq(0, 0.01, 0.1, 1, 100, 1000),</span></span>
-<span id="cb648-10"><a href="ensemble-learning.html#cb648-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   alpha = c(0, 0.01, 0.1, 1, 100, 1000)</span></span>
-<span id="cb648-11"><a href="ensemble-learning.html#cb648-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   )</span></span>
-<span id="cb648-12"><a href="ensemble-learning.html#cb648-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb648-13"><a href="ensemble-learning.html#cb648-13" aria-hidden="true" tabindex="-1"></a><span class="co"># After going through the grid in a loop with `xgb.cv`</span></span>
-<span id="cb648-14"><a href="ensemble-learning.html#cb648-14" aria-hidden="true" tabindex="-1"></a><span class="co"># we save multiple `test_rmse_mean` and `best_iteration`</span></span>
-<span id="cb648-15"><a href="ensemble-learning.html#cb648-15" aria-hidden="true" tabindex="-1"></a><span class="co"># and find the parameters that gives the minimum rmse</span></span></code></pre></div>
+<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="ensemble-learning.html#cb652-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One possible grid would be:</span></span>
+<span id="cb652-2"><a href="ensemble-learning.html#cb652-2" aria-hidden="true" tabindex="-1"></a><span class="co"># param_grid &lt;- expand.grid(</span></span>
+<span id="cb652-3"><a href="ensemble-learning.html#cb652-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   eta = 0.01,</span></span>
+<span id="cb652-4"><a href="ensemble-learning.html#cb652-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   max_depth = 3,</span></span>
+<span id="cb652-5"><a href="ensemble-learning.html#cb652-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   min_child_weight = 3,</span></span>
+<span id="cb652-6"><a href="ensemble-learning.html#cb652-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   subsample = 0.5,</span></span>
+<span id="cb652-7"><a href="ensemble-learning.html#cb652-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   colsample_bytree = 0.5,</span></span>
+<span id="cb652-8"><a href="ensemble-learning.html#cb652-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   gamma = c(0, 1, 10, 100, 1000),</span></span>
+<span id="cb652-9"><a href="ensemble-learning.html#cb652-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   lambda = seq(0, 0.01, 0.1, 1, 100, 1000),</span></span>
+<span id="cb652-10"><a href="ensemble-learning.html#cb652-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   alpha = c(0, 0.01, 0.1, 1, 100, 1000)</span></span>
+<span id="cb652-11"><a href="ensemble-learning.html#cb652-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   )</span></span>
+<span id="cb652-12"><a href="ensemble-learning.html#cb652-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb652-13"><a href="ensemble-learning.html#cb652-13" aria-hidden="true" tabindex="-1"></a><span class="co"># After going through the grid in a loop with `xgb.cv`</span></span>
+<span id="cb652-14"><a href="ensemble-learning.html#cb652-14" aria-hidden="true" tabindex="-1"></a><span class="co"># we save multiple `test_rmse_mean` and `best_iteration`</span></span>
+<span id="cb652-15"><a href="ensemble-learning.html#cb652-15" aria-hidden="true" tabindex="-1"></a><span class="co"># and find the parameters that gives the minimum rmse</span></span></code></pre></div>
 <p>Now after identifying the tuning parameters, we build the best model:</p>
-<div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb649-1"><a href="ensemble-learning.html#cb649-1" aria-hidden="true" tabindex="-1"></a>tr_model <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(</span>
-<span id="cb649-2"><a href="ensemble-learning.html#cb649-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">params =</span> params,</span>
-<span id="cb649-3"><a href="ensemble-learning.html#cb649-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> X,</span>
-<span id="cb649-4"><a href="ensemble-learning.html#cb649-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> Y,</span>
-<span id="cb649-5"><a href="ensemble-learning.html#cb649-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrounds =</span> best_it,</span>
-<span id="cb649-6"><a href="ensemble-learning.html#cb649-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">&quot;reg:squarederror&quot;</span>,</span>
-<span id="cb649-7"><a href="ensemble-learning.html#cb649-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
-<span id="cb649-8"><a href="ensemble-learning.html#cb649-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb653-1"><a href="ensemble-learning.html#cb653-1" aria-hidden="true" tabindex="-1"></a>tr_model <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(</span>
+<span id="cb653-2"><a href="ensemble-learning.html#cb653-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">params =</span> params,</span>
+<span id="cb653-3"><a href="ensemble-learning.html#cb653-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> X,</span>
+<span id="cb653-4"><a href="ensemble-learning.html#cb653-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> Y,</span>
+<span id="cb653-5"><a href="ensemble-learning.html#cb653-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrounds =</span> best_it,</span>
+<span id="cb653-6"><a href="ensemble-learning.html#cb653-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">&quot;reg:squarederror&quot;</span>,</span>
+<span id="cb653-7"><a href="ensemble-learning.html#cb653-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="dv">0</span></span>
+<span id="cb653-8"><a href="ensemble-learning.html#cb653-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>We can obtain the top 10 influential features in our final model using the impurity (gain) metric:</p>
-<div class="sourceCode" id="cb650"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb650-1"><a href="ensemble-learning.html#cb650-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
-<span id="cb650-2"><a href="ensemble-learning.html#cb650-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vip</span>(tr_model,</span>
-<span id="cb650-3"><a href="ensemble-learning.html#cb650-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">aesthetics =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;green&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>)) </span></code></pre></div>
-<pre><code>## [08:00:49] WARNING: src/learner.cc:553: 
+<div class="sourceCode" id="cb654"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb654-1"><a href="ensemble-learning.html#cb654-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
+<span id="cb654-2"><a href="ensemble-learning.html#cb654-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vip</span>(tr_model,</span>
+<span id="cb654-3"><a href="ensemble-learning.html#cb654-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">aesthetics =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;green&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;orange&quot;</span>)) </span></code></pre></div>
+<pre><code>## [14:11:45] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:
@@ -1169,11 +1202,11 @@ w_{i} \leftarrow w_{i} e^{\alpha_b}
 ##   for more details about differences between saving model and serializing.</code></pre>
 <p><img src="12-Ensemble_files/figure-html/en33-1.png" width="672" /></p>
 <p>Now, we can use our trained model for predictions using our test set. Note that, again, <code>xgboost</code> would only accept matrix inputs.</p>
-<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="ensemble-learning.html#cb652-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(tr_model,</span>
-<span id="cb652-2"><a href="ensemble-learning.html#cb652-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">as.matrix</span>(test[, <span class="sc">-</span><span class="fu">which</span>(<span class="fu">names</span>(test) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)]))</span>
-<span id="cb652-3"><a href="ensemble-learning.html#cb652-3" aria-hidden="true" tabindex="-1"></a>rmse_test <span class="ot">&lt;-</span></span>
-<span id="cb652-4"><a href="ensemble-learning.html#cb652-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((test[, <span class="fu">which</span>(<span class="fu">names</span>(train) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)] <span class="sc">-</span> yhat) <span class="sc">^</span> <span class="dv">2</span>))</span>
-<span id="cb652-5"><a href="ensemble-learning.html#cb652-5" aria-hidden="true" tabindex="-1"></a>rmse_test</span></code></pre></div>
+<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="ensemble-learning.html#cb656-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict</span>(tr_model,</span>
+<span id="cb656-2"><a href="ensemble-learning.html#cb656-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">as.matrix</span>(test[, <span class="sc">-</span><span class="fu">which</span>(<span class="fu">names</span>(test) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)]))</span>
+<span id="cb656-3"><a href="ensemble-learning.html#cb656-3" aria-hidden="true" tabindex="-1"></a>rmse_test <span class="ot">&lt;-</span></span>
+<span id="cb656-4"><a href="ensemble-learning.html#cb656-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>((test[, <span class="fu">which</span>(<span class="fu">names</span>(train) <span class="sc">==</span> <span class="st">&quot;Sale_Price&quot;</span>)] <span class="sc">-</span> yhat) <span class="sc">^</span> <span class="dv">2</span>))</span>
+<span id="cb656-5"><a href="ensemble-learning.html#cb656-5" aria-hidden="true" tabindex="-1"></a>rmse_test</span></code></pre></div>
 <pre><code>## [1] 23364.86</code></pre>
 <p>Note the big difference between training and test RMSPE’s. This is an indication that our “example grid” is not doing a good job. We should include regularization tuning parameters and run a full scale grid search. We will look at a classification example in the next chapter (Chapter 13).</p>
 

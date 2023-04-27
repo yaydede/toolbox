@@ -70,7 +70,7 @@ It is important to note that determining the values of p and q is an iterative p
 
 ## Hyndman-Khandakar algorithm
 
-The Hyndman-Khandakar algorithm ([Hyndman & Khandakar](https://www.jstatsoft.org/article/view/v027i03), [@JSSv027i03]) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
+The Hyndman-Khandakar [algorithm](https://www.jstatsoft.org/article/view/v027i03), [@JSSv027i03] combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
 
 1.  Plot the data to identify any outliers.
 2.  If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.

@@ -492,34 +492,34 @@ L(\beta)=\sum_{i=1}^n\left(y_i-x_i^{\prime} \beta\right)^2+\lambda_n \sum_{j=1}^
 <p>where, typically <span class="math inline">\(w_j=(\left|\hat{\beta}_{O L S_j}\right|)^{\gamma}\)</span> or <span class="math inline">\(w_j=(\left|\hat{\beta}_{Ridge_j}\right|)^{\gamma}\)</span>, where <span class="math inline">\(\gamma\)</span> is a positive constant for adjustment of the Adaptive Weights vector, and suggested to be the possible values of 0.5, 1, and 2.</p>
 <p>The weights in adaptive lasso (AL) provides a prior “intelligence” about variables such that,while the plain Lasso penalizes all parameters equally, the adaptive Lasso is likely to penalize non-zero coefficients less than the zero ones. This is because the weights can be obtained from the consistent least squares estimator. If <span class="math inline">\(\beta_{AL, j}=0\)</span>, then <span class="math inline">\(\hat{\beta}_{O L S, j}\)</span> is likely to be close to zero leading to a very small <span class="math inline">\(w_j\)</span>. Hence, truly zero coefficients are penalized a lot. Calculating the weights in adaptive lasso requires a two-step procedure</p>
 <p>Here is an example where we use the ridge weight in adaptive lasso:</p>
-<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb844-1"><a href="adaptive-lasso.html#cb844-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
-<span id="cb844-2"><a href="adaptive-lasso.html#cb844-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
-<span id="cb844-3"><a href="adaptive-lasso.html#cb844-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-4"><a href="adaptive-lasso.html#cb844-4" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb844-5"><a href="adaptive-lasso.html#cb844-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-6"><a href="adaptive-lasso.html#cb844-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Hitters)</span>
-<span id="cb844-7"><a href="adaptive-lasso.html#cb844-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary), ]</span>
-<span id="cb844-8"><a href="adaptive-lasso.html#cb844-8" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., df)[,<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb844-9"><a href="adaptive-lasso.html#cb844-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>Salary</span>
-<span id="cb844-10"><a href="adaptive-lasso.html#cb844-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-11"><a href="adaptive-lasso.html#cb844-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ridge weights with gamma = 1</span></span>
-<span id="cb844-12"><a href="adaptive-lasso.html#cb844-12" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb844-13"><a href="adaptive-lasso.html#cb844-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb844-14"><a href="adaptive-lasso.html#cb844-14" aria-hidden="true" tabindex="-1"></a>modelr <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
-<span id="cb844-15"><a href="adaptive-lasso.html#cb844-15" aria-hidden="true" tabindex="-1"></a>coefr <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">coef</span>(modelr, <span class="at">s =</span> modelr<span class="sc">$</span>lambda.min))</span>
-<span id="cb844-16"><a href="adaptive-lasso.html#cb844-16" aria-hidden="true" tabindex="-1"></a>w.r <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">abs</span>(coefr[<span class="sc">-</span><span class="dv">1</span>,]))<span class="sc">^</span>g</span>
-<span id="cb844-17"><a href="adaptive-lasso.html#cb844-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-18"><a href="adaptive-lasso.html#cb844-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Adaptive Lasso</span></span>
-<span id="cb844-19"><a href="adaptive-lasso.html#cb844-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb844-20"><a href="adaptive-lasso.html#cb844-20" aria-hidden="true" tabindex="-1"></a>alasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">penalty.factor =</span> w.r)</span>
-<span id="cb844-21"><a href="adaptive-lasso.html#cb844-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-22"><a href="adaptive-lasso.html#cb844-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Lasso</span></span>
-<span id="cb844-23"><a href="adaptive-lasso.html#cb844-23" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb844-24"><a href="adaptive-lasso.html#cb844-24" aria-hidden="true" tabindex="-1"></a>lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha=</span><span class="dv">1</span>)</span>
-<span id="cb844-25"><a href="adaptive-lasso.html#cb844-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb844-26"><a href="adaptive-lasso.html#cb844-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparsity</span></span>
-<span id="cb844-27"><a href="adaptive-lasso.html#cb844-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">LASSO =</span> <span class="fu">coef</span>(lasso, <span class="at">s=</span><span class="st">&quot;lambda.1se&quot;</span>),</span>
-<span id="cb844-28"><a href="adaptive-lasso.html#cb844-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">ALASSO =</span> <span class="fu">coef</span>(alasso, <span class="at">s=</span><span class="st">&quot;lambda.1se&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb848-1"><a href="adaptive-lasso.html#cb848-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb848-2"><a href="adaptive-lasso.html#cb848-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb848-3"><a href="adaptive-lasso.html#cb848-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-4"><a href="adaptive-lasso.html#cb848-4" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb848-5"><a href="adaptive-lasso.html#cb848-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-6"><a href="adaptive-lasso.html#cb848-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Hitters)</span>
+<span id="cb848-7"><a href="adaptive-lasso.html#cb848-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> Hitters[<span class="fu">complete.cases</span>(Hitters<span class="sc">$</span>Salary), ]</span>
+<span id="cb848-8"><a href="adaptive-lasso.html#cb848-8" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary<span class="sc">~</span>., df)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb848-9"><a href="adaptive-lasso.html#cb848-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> df<span class="sc">$</span>Salary</span>
+<span id="cb848-10"><a href="adaptive-lasso.html#cb848-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-11"><a href="adaptive-lasso.html#cb848-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ridge weights with gamma = 1</span></span>
+<span id="cb848-12"><a href="adaptive-lasso.html#cb848-12" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb848-13"><a href="adaptive-lasso.html#cb848-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb848-14"><a href="adaptive-lasso.html#cb848-14" aria-hidden="true" tabindex="-1"></a>modelr <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb848-15"><a href="adaptive-lasso.html#cb848-15" aria-hidden="true" tabindex="-1"></a>coefr <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">coef</span>(modelr, <span class="at">s =</span> modelr<span class="sc">$</span>lambda.min))</span>
+<span id="cb848-16"><a href="adaptive-lasso.html#cb848-16" aria-hidden="true" tabindex="-1"></a>w.r <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">abs</span>(coefr[<span class="sc">-</span><span class="dv">1</span>,]))<span class="sc">^</span>g</span>
+<span id="cb848-17"><a href="adaptive-lasso.html#cb848-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-18"><a href="adaptive-lasso.html#cb848-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Adaptive Lasso</span></span>
+<span id="cb848-19"><a href="adaptive-lasso.html#cb848-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb848-20"><a href="adaptive-lasso.html#cb848-20" aria-hidden="true" tabindex="-1"></a>alasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">penalty.factor =</span> w.r)</span>
+<span id="cb848-21"><a href="adaptive-lasso.html#cb848-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-22"><a href="adaptive-lasso.html#cb848-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Lasso</span></span>
+<span id="cb848-23"><a href="adaptive-lasso.html#cb848-23" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb848-24"><a href="adaptive-lasso.html#cb848-24" aria-hidden="true" tabindex="-1"></a>lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha=</span><span class="dv">1</span>)</span>
+<span id="cb848-25"><a href="adaptive-lasso.html#cb848-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb848-26"><a href="adaptive-lasso.html#cb848-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Sparsity</span></span>
+<span id="cb848-27"><a href="adaptive-lasso.html#cb848-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">LASSO =</span> <span class="fu">coef</span>(lasso, <span class="at">s=</span><span class="st">&quot;lambda.1se&quot;</span>),</span>
+<span id="cb848-28"><a href="adaptive-lasso.html#cb848-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">ALASSO =</span> <span class="fu">coef</span>(alasso, <span class="at">s=</span><span class="st">&quot;lambda.1se&quot;</span>))</span></code></pre></div>
 <pre><code>## 20 x 2 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                       s1          s1
 ## (Intercept) 127.95694754   -7.109481

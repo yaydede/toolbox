@@ -3,7 +3,7 @@ title: "Toolbox for Social Scientists and Policy Analysts"
 subtitle: "Applied Predictive Analytics with Machine Learning and R"
 titlerunning: "Toolbox"
 author: "[Yigit Aydede](https://yaydede.github.io/)"
-date: "This version: 2023-04-26"
+date: "This version: 2023-04-27"
 site: bookdown::bookdown_site
 output: 
   bookdown::gitbook
@@ -285,7 +285,7 @@ Sys.Date()
 ```
 
 ```
-## [1] "2023-04-26"
+## [1] "2023-04-27"
 ```
 
 ```r
@@ -294,7 +294,7 @@ Sys.time()
 ```
 
 ```
-## [1] "2023-04-26 07:59:54 ADT"
+## [1] "2023-04-27 14:10:36 ADT"
 ```
 
 ```r
@@ -303,7 +303,7 @@ now()
 ```
 
 ```
-## [1] "2023-04-26 07:59:54 ADT"
+## [1] "2023-04-27 14:10:36 ADT"
 ```
 
 ```r
@@ -555,8 +555,8 @@ rnorm(n = 10, mean = 2, sd = 5)
 ```
 
 ```
-##  [1]  4.474874 -5.305104  6.508647  2.277630 13.128407  5.760568  2.038199
-##  [8] -6.432537  1.122933  6.769191
+##  [1]  4.17039410 11.80166665  8.32287622  5.20167171  1.83890948  7.20121586
+##  [7]  0.85661363  0.02670677  8.42959524 -3.08919006
 ```
 
 These functions exist for many other distributions such as: `binom` (Binomial), `t` (Student's t), `pois` (Poisson), `f` (F), `chisq` (Chi-Squared) and so on.  
@@ -9065,8 +9065,8 @@ printcp(tree)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0   1.00000 1.00000 0.14282
-## 2 0.034483      1   0.27586 0.51724 0.11861
-## 3 0.010000      2   0.24138 0.51724 0.11861
+## 2 0.034483      1   0.27586 0.65517 0.12863
+## 3 0.010000      2   0.24138 0.58621 0.12399
 ```
 
 The `rel error` of each iteration of the tree is the fraction of mislabeled elements in the iteration relative to the fraction of mislabeled elements in the root. Hence it's 100\% (1.00000 in the table) in the root node. In other words, `rel error` gives the percentage of misclassified labels, when it's multiplied with the `Root node error` (0.40845 x 0.24138 = 0.0986). This is the error rate when the fitted model applied to the training sets used by `rpart`'s CV.  
@@ -9115,10 +9115,10 @@ printcp(cart)
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror     xstd
-## 1 0.586213      0   1.00000 1.05135 0.047604
-## 2 0.101694      1   0.41379 0.83095 0.164564
-## 3 0.028263      2   0.31209 0.70938 0.153379
-## 4 0.010000      3   0.28383 0.71958 0.154554
+## 1 0.586213      0   1.00000 1.02492 0.045978
+## 2 0.101694      1   0.41379 0.77237 0.158954
+## 3 0.028263      2   0.31209 0.71577 0.158889
+## 4 0.010000      3   0.28383 0.70973 0.155155
 ```
 
 As you see, when the outcome is not a factor variable, `rpart` applies a **regression tree** method, which minimizes the sum of squares, $\sum_{i=1}^{n}\left(y_i-f(x_i)\right)^2$. However, when $y_i$ is a binary number with two values 0 and 1, the sum of squares becomes $np(1-p)$, which gives the same relative gain as Gini.  This is clear as both relative gains (our calculation and the calculation by `rpart` above) are the same.  
@@ -9195,10 +9195,10 @@ printcp(tree2)
 ## 
 ##         CP nsplit rel error  xerror    xstd
 ## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.41379 0.10889
-## 5 0.000000      8  0.000000 0.37931 0.10513
+## 2 0.103448      1  0.275862 0.48276 0.11560
+## 3 0.034483      2  0.172414 0.41379 0.10889
+## 4 0.017241      6  0.034483 0.44828 0.11237
+## 5 0.000000      8  0.000000 0.44828 0.11237
 ```
 
 ```r
@@ -9213,7 +9213,7 @@ min_cp
 ```
 
 ```
-## [1] 0
+## [1] 0.03448276
 ```
 
 Remember `rpart` has a built-in process for cross-validation. The `xerror` is the cross-validation error, the classification error that is calculated on the test data with a cross-validation process. In general, the cross-validation error grows as the tree gets more levels (each row represents a different height of the tree).
@@ -9238,18 +9238,16 @@ printcp(ptree2)
 ##     control = rpart.control(minsplit = 2, minbucket = 1, cp = 0))
 ## 
 ## Variables actually used in tree construction:
-## [1] FRCAR INCAR INSYS PVENT REPUL
+## [1] INSYS PVENT
 ## 
 ## Root node error: 29/71 = 0.40845
 ## 
 ## n= 71 
 ## 
 ##         CP nsplit rel error  xerror    xstd
-## 1 0.724138      0  1.000000 1.00000 0.14282
-## 2 0.103448      1  0.275862 0.55172 0.12140
-## 3 0.034483      2  0.172414 0.44828 0.11237
-## 4 0.017241      6  0.034483 0.41379 0.10889
-## 5 0.000000      8  0.000000 0.37931 0.10513
+## 1 0.724138      0   1.00000 1.00000 0.14282
+## 2 0.103448      1   0.27586 0.48276 0.11560
+## 3 0.034483      2   0.17241 0.41379 0.10889
 ```
 
 ```r
@@ -9352,9 +9350,9 @@ printcp(titan)
 ##         CP nsplit rel error xerror     xstd
 ## 1 0.424000      0     1.000  1.000 0.035158
 ## 2 0.021000      1     0.576  0.576 0.029976
-## 3 0.015000      3     0.534  0.590 0.030234
-## 4 0.011333      5     0.504  0.576 0.029976
-## 5 0.010000      9     0.458  0.554 0.029556
+## 3 0.015000      3     0.534  0.560 0.029672
+## 4 0.011333      5     0.504  0.556 0.029595
+## 5 0.010000      9     0.458  0.542 0.029319
 ```
 
 ```r
@@ -10273,29 +10271,79 @@ df[, 8:11]
 ## 6  DECES 0.1666667   0.0745356          0.1
 ```
 
-We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  We now need to incorporate these weights and resample these six observations. Since incorrectly classified records have higher sample weights, the probability to select those records is very high.
-
-If we use a simple tree as our base classifier, we can directly incorporate these weights into `rpart`.  We can use other base classifier. In that case, we can do resampling with these probability weights: 
+We can see that the misclassified observation (the first one) has 5 times more likelihood than the other correctly classified observations.  Let's see a simple example how weights affect Gini and a simple tree:
 
 
 ```r
-set.seed(123)
-ind <- sample(6, 6, replace = TRUE, prob = df$Norm_weights)
-df[ind, -c(9:12)] # After
+# Define the class labels and weights
+class_labels <- c(1, 1, 1, 0, 0, 0)
+weights <- rep(1/length(class_labels), length(class_labels))
+
+# Calculate the proportion of each class
+class_prop <- table(class_labels) / length(class_labels)
+
+# Calculate the Gini index
+gini_index <- 1 - sum(class_prop^2)
+print(gini_index)
 ```
 
 ```
-##     FRCAR INCAR INSYS PRDIA PAPUL PVENT REPUL  PRONO
-## 1      90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 5      80  1.58  19.7    21  28.0  18.5  1418  DECES
-## 1.1    90  1.71  19.0    16  19.5  16.0   912 SURVIE
-## 6      80  1.13  14.1    18  23.5   9.0  1664  DECES
-## 2      90  1.68  18.7    24  31.0  14.0  1476  DECES
-## 1.2    90  1.71  19.0    16  19.5  16.0   912 SURVIE
+## [1] 0.5
 ```
 
-As we can see, the misclassified observation is repeated three times in the new sample.  Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+```r
+# Change the weight of the first observation to 0.5
+weights[1] <- 0.5
 
+# Recalculate the class proportions and Gini index
+class_prop <- table(class_labels, weights = weights) / sum(weights)
+gini_index <- 1 - sum(class_prop^2)
+print(gini_index)
+```
+
+```
+## [1] -6.875
+```
+
+Notice how the change in the weight of the first observation affects the Gini index.  The weights assigned to the observations in a decision tree can affect the splitting decisions made by the algorithm, and therefore can change the split point of the tree.
+
+In general, observations with higher weights will have a greater influence on the decision tree's splitting decisions. This is because the splitting criterion used by the decision tree algorithm, such as the Gini index or information gain, takes the weights of the observations into account when determining the best split. If there are observations with very high weights, they may dominate the splitting decisions and cause the decision tree to favor a split that is optimal for those observations, but not necessarily for the entire data set. 
+
+
+```r
+# Define the data
+x <- c(2, 4, 6, 8, 10, 12)
+y <- c(0, 1, 1, 0, 0, 0)
+weights1 <- rep(1/length(y), length(y))
+weights2 <- c(0.95, 0.01, 0.01, 0.01, 0.01, 0.01)
+
+# Build the decision tree with equal weights
+library(rpart)
+fit1 <- rpart(y ~ x, weights = weights1,
+              control =rpart.control(minsplit =1,minbucket=1, cp=0))
+
+# Build the decision tree with different weights
+fit2 <- rpart(y ~ x, weights = weights2,
+              control =rpart.control(minsplit =1,minbucket=1, cp=0))
+
+# Plot the two decision trees
+plot(fit1)
+text(fit1, use.n = TRUE)
+```
+
+<img src="12-Ensemble_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+```r
+plot(fit2)
+text(fit2, use.n = TRUE)
+```
+
+<img src="12-Ensemble_files/figure-html/unnamed-chunk-2-2.png" width="672" />
+
+By comparing the two decision trees, we can see that the weights have a significant impact on the splitting decisions made by the algorithm. In the decision tree built with equal weights, the algorithm splits on $x <= 7$ and then on $x < 3$ to separate the two classes. In contrast, in the decision tree built with different weights, the algorithm first splits on $x < 3$ to separate the first observation with $y = 0$ from the rest of the data. This split favors the first observation, which has a higher weight, and results in a simpler decision tree with fewer splits.
+
+Hence, observations that are misclassified will have more influence in the next classifier. **This is an incredible boost that forces the classification tree to adjust its prediction to do better job for misclassified observations.**  
+  
 7. Finally, in the output, the contributions from classifiers that fit the data better are given more weight (a larger $\alpha_b$ means a better fit).  Unlike a random forest algorithm where each tree gets an equal weight in final decision, here some stumps get more say in final classification.  Moreover, "forest of stumps" the order of trees is important.
 
 Hence, the final prediction on $y_i$ will be combined from all trees, $b$ to B, through a weighted majority vote:      
@@ -10605,7 +10653,7 @@ vip(tr_model,
 ```
 
 ```
-## [08:00:49] WARNING: src/learner.cc:553: 
+## [14:11:45] WARNING: src/learner.cc:553: 
 ##   If you are loading a serialized model (like pickle in Python, RDS in R) generated by
 ##   older XGBoost, please export the model by calling `Booster.save_model` from that version
 ##   first, then load it back in current version. See:
@@ -14505,7 +14553,7 @@ It is important to note that determining the values of p and q is an iterative p
 
 ## Hyndman-Khandakar algorithm
 
-The Hyndman-Khandakar algorithm ([Hyndman & Khandakar](https://www.jstatsoft.org/article/view/v027i03), [@JSSv027i03]) combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
+The Hyndman-Khandakar [algorithm](https://www.jstatsoft.org/article/view/v027i03), [@JSSv027i03] combines several steps for modeling (and estimation) of the ARIMA model: unit root tests, minimization of the AICc, and MLE to obtain an ARIMA model. The arguments to `ARIMA()` in the `fable` package provide for many variations for modeling ARIMA. The modeling procedure to a set of (non-seasonal) time series data for ARIMA is defined in FPP3 as follows:
 
 1.  Plot the data to identify any outliers.
 2.  If the data shows variation that increases or decreases with the level of the series, transform the data (Box-Cox transformation) to stabilize the variance.
@@ -17135,9 +17183,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   16   83   80
-## [2,]   49   60   32
-## [3,]   95    9   61
+## [1,]    4   95   66
+## [2,]   90   19   85
+## [3,]   25   89   30
 ```
 
 ```r
@@ -17147,13 +17195,13 @@ eigen(A)
 ```
 ## eigen() decomposition
 ## $values
-## [1] 162.40966 -61.62965  36.21999
+## [1] 168.49467 -87.30269 -28.19197
 ## 
 ## $vectors
 ##            [,1]       [,2]       [,3]
-## [1,] -0.6150411 -0.7860425 -0.1161330
-## [2,] -0.4878428  0.1595392 -0.7038007
-## [3,] -0.6194626  0.5972306  0.7008407
+## [1,] -0.5742667  0.4407898 -0.5402507
+## [2,] -0.6376543 -0.7578299 -0.3489267
+## [3,] -0.5134342  0.4810386  0.7657541
 ```
 
 ```r
@@ -17198,9 +17246,9 @@ A
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]   67   47   18
-## [2,]   14   55   15
-## [3,]   75   76   38
+## [1,]   64   54   76
+## [2,]   21   65   61
+## [3,]   93   37   13
 ```
 
 ```r
@@ -17212,10 +17260,10 @@ solve(A)
 ```
 
 ```
-##             [,1]        [,2]         [,3]
-## [1,]  0.02608242 -0.01147626 -0.007824726
-## [2,]  0.01628092  0.03283639 -0.020673750
-## [3,] -0.08404030 -0.04302227  0.083106828
+##              [,1]        [,2]         [,3]
+## [1,]  0.007090632 -0.01059577  0.008265708
+## [2,] -0.027117146  0.03131528  0.011590069
+## [3,]  0.026454283 -0.01332758 -0.015195645
 ```
 
 ```r
@@ -17224,10 +17272,10 @@ V %*% solve(Lam) %*% solve(V)
 ```
 
 ```
-##             [,1]        [,2]         [,3]
-## [1,]  0.02608242 -0.01147626 -0.007824726
-## [2,]  0.01628092  0.03283639 -0.020673750
-## [3,] -0.08404030 -0.04302227  0.083106828
+##              [,1]        [,2]         [,3]
+## [1,]  0.007090632 -0.01059577  0.008265708
+## [2,] -0.027117146  0.03131528  0.011590069
+## [3,]  0.026454283 -0.01332758 -0.015195645
 ```
 
 The inverse of $\mathbf{\Lambda}$ is just the inverse of each diagonal element (the eigenvalues).  But, this can only be done if a matrix is diagonalizable.  So if $\mathbf{A}$ is not $n \times n$, then we can use $\mathbf{A'A}$ or $\mathbf{AA'}$, both symmetric now.
@@ -17647,9 +17695,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.5386683
-## x2 1.5360611
-## x3 2.3660266
+## x1 0.4506104
+## x2 1.3020195
+## x3 1.6310219
 ```
 
 ```r
@@ -17686,9 +17734,9 @@ betahat_ginv
 
 ```
 ##           [,1]
-## [1,] 0.5386683
-## [2,] 1.5360611
-## [3,] 2.3660266
+## [1,] 0.4506104
+## [2,] 1.3020195
+## [3,] 1.6310219
 ```
 
 ```r
@@ -17697,9 +17745,9 @@ betahat_OLS
 
 ```
 ##         [,1]
-## x1 0.5386683
-## x2 1.5360611
-## x3 2.3660266
+## x1 0.4506104
+## x2 1.3020195
+## x3 1.6310219
 ```
   
 
@@ -19049,7 +19097,7 @@ pm <- solve(S) # precision
 ```
 
 ```
-## [1] -0.04435314
+## [1] -0.04809752
 ```
 
 ```r
@@ -19057,13 +19105,13 @@ pm <- solve(S) # precision
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,] -1.00000000 -0.04435314 -0.24995121  0.44841195 -0.35484190 -0.3214734
-## [2,] -0.04435314 -1.00000000  0.08209152 -0.06340283 -0.06666171 -0.2790987
-## [3,] -0.24995121  0.08209152 -1.00000000  0.48524439  0.03311335 -0.4752083
-## [4,]  0.44841195 -0.06340283  0.48524439 -1.00000000  0.28471597  0.3082221
-## [5,] -0.35484190 -0.06666171  0.03311335  0.28471597 -1.00000000  0.1495297
-## [6,] -0.32147337 -0.27909867 -0.47520834  0.30822215  0.14952965 -1.0000000
+##             [,1]         [,2]        [,3]         [,4]        [,5]        [,6]
+## [1,] -1.00000000 -0.048097515  0.66130750 -0.594328671  0.15069597  0.59639058
+## [2,] -0.04809752 -1.000000000  0.07772461 -0.009648396 -0.10664307 -0.03123464
+## [3,]  0.66130750  0.077724611 -1.00000000  0.175291009 -0.37189772 -0.58357305
+## [4,] -0.59432867 -0.009648396  0.17529101 -1.000000000 -0.25418324  0.23977103
+## [5,]  0.15069597 -0.106643073 -0.37189772 -0.254183236 -1.00000000 -0.08406626
+## [6,]  0.59639058 -0.031234642 -0.58357305  0.239771027 -0.08406626 -1.00000000
 ```
 
 ```r
@@ -19073,13 +19121,13 @@ pc$estimate
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,]  1.00000000 -0.04435314 -0.24995121  0.44841195 -0.35484190 -0.3214734
-## [2,] -0.04435314  1.00000000  0.08209152 -0.06340283 -0.06666171 -0.2790987
-## [3,] -0.24995121  0.08209152  1.00000000  0.48524439  0.03311335 -0.4752083
-## [4,]  0.44841195 -0.06340283  0.48524439  1.00000000  0.28471597  0.3082221
-## [5,] -0.35484190 -0.06666171  0.03311335  0.28471597  1.00000000  0.1495297
-## [6,] -0.32147337 -0.27909867 -0.47520834  0.30822215  0.14952965  1.0000000
+##             [,1]         [,2]        [,3]         [,4]        [,5]        [,6]
+## [1,]  1.00000000 -0.048097515  0.66130750 -0.594328671  0.15069597  0.59639058
+## [2,] -0.04809752  1.000000000  0.07772461 -0.009648396 -0.10664307 -0.03123464
+## [3,]  0.66130750  0.077724611  1.00000000  0.175291009 -0.37189772 -0.58357305
+## [4,] -0.59432867 -0.009648396  0.17529101  1.000000000 -0.25418324  0.23977103
+## [5,]  0.15069597 -0.106643073 -0.37189772 -0.254183236  1.00000000 -0.08406626
+## [6,]  0.59639058 -0.031234642 -0.58357305  0.239771027 -0.08406626  1.00000000
 ```
 
 ```r
@@ -19089,22 +19137,22 @@ glassoFast::glassoFast(S,rho=0)
 
 ```
 ## $w
-##             [,1]        [,2]        [,3]       [,4]        [,5]       [,6]
-## [1,]  1.43080205  0.05806079  0.02062258  0.2827703 -0.58186433 -0.4185777
-## [2,]  0.05806079  0.77255755  0.14893826 -0.0888121 -0.21923895 -0.4174922
-## [3,]  0.02062258  0.14893826  0.77708066  0.3095123  0.08559851 -0.4143897
-## [4,]  0.28277026 -0.08881210  0.30951234  0.8817595  0.34529866  0.1287705
-## [5,] -0.58186433 -0.21923895  0.08559851  0.3452987  2.02623289  0.5543381
-## [6,] -0.41857765 -0.41749219 -0.41438967  0.1287705  0.55433807  1.4758352
+##             [,1]        [,2]       [,3]       [,4]       [,5]       [,6]
+## [1,]  0.86798713 -0.06862559  0.4091374 -0.7476528  0.1409799  0.3148145
+## [2,] -0.06862559  1.46481933  0.1511977  0.1107803 -0.1803829 -0.1587835
+## [3,]  0.40913744  0.15119770  0.9012318 -0.2062035 -0.2402668 -0.3035370
+## [4,] -0.74765283  0.11078031 -0.2062035  1.5283185 -0.3755054 -0.1707714
+## [5,]  0.14097989 -0.18038289 -0.2402668 -0.3755054  0.6863162  0.1612670
+## [6,]  0.31481454 -0.15878354 -0.3035370 -0.1707714  0.1612670  1.0021283
 ## 
 ## $wi
-##             [,1]        [,2]        [,3]       [,4]        [,5]       [,6]
-## [1,]  1.04113932  0.05643964  0.36890574 -0.6267951  0.29854289  0.3573906
-## [2,]  0.05643964  1.55558063 -0.14810916  0.1083355  0.06855738  0.3792655
-## [3,]  0.36890574 -0.14810916  2.09215083 -0.9615085 -0.03949867  0.7489088
-## [4,] -0.62679513  0.10833551 -0.96150854  1.8766470 -0.32160106 -0.4600486
-## [5,]  0.29854289  0.06855738 -0.03949867 -0.3216011  0.67990164 -0.1343446
-## [6,]  0.35739062  0.37926547  0.74890881 -0.4600486 -0.13434457  1.1871165
+##             [,1]         [,2]       [,3]         [,4]       [,5]        [,6]
+## [1,]  4.04665335  0.081901882 -2.1937366  1.389610740 -0.4378114 -1.61542094
+## [2,]  0.08190188  0.716921308 -0.1085072  0.009481907  0.1304346  0.03562791
+## [3,] -2.19373664 -0.108507240  2.7194532 -0.335936326  0.8858451  1.29582210
+## [4,]  1.38961074  0.009481907 -0.3359363  1.351015531  0.4268013 -0.37522710
+## [5,] -0.43781138  0.130434640  0.8858451  0.426801347  2.0864829  0.16346012
+## [6,] -1.61542094  0.035627913  1.2958221 -0.375227097  0.1634601  1.81321815
 ## 
 ## $errflag
 ## [1] 0
@@ -19119,7 +19167,7 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-## [1] -0.04434897
+## [1] -0.04808506
 ```
 
 ```r
@@ -19127,13 +19175,13 @@ Rl <- glassoFast::glassoFast(S,rho=0)$wi #
 ```
 
 ```
-##             [,1]        [,2]        [,3]        [,4]        [,5]       [,6]
-## [1,] -1.00000000 -0.04434897 -0.24995653  0.44841475 -0.35483730 -0.3214712
-## [2,] -0.04434897 -1.00000000  0.08209924 -0.06340643 -0.06666300 -0.2790939
-## [3,] -0.24995653  0.08209924 -1.00000000  0.48524979  0.03311791 -0.4752102
-## [4,]  0.44841475 -0.06340643  0.48524979 -1.00000000  0.28471027  0.3082235
-## [5,] -0.35483730 -0.06666300  0.03311791  0.28471027 -1.00000000  0.1495376
-## [6,] -0.32147119 -0.27909392 -0.47521022  0.30822350  0.14953760 -1.0000000
+##             [,1]         [,2]        [,3]         [,4]        [,5]        [,6]
+## [1,] -1.00000000 -0.048085057  0.66129569 -0.594312671  0.15067168  0.59636573
+## [2,] -0.04808506 -1.000000000  0.07771094 -0.009634513 -0.10664728 -0.03124853
+## [3,]  0.66129569  0.077710942 -1.00000000  0.175261288 -0.37188577 -0.58355199
+## [4,] -0.59431267 -0.009634513  0.17526129 -1.000000000 -0.25420740  0.23973917
+## [5,]  0.15067168 -0.106647280 -0.37188577 -0.254207402 -1.00000000 -0.08403871
+## [6,]  0.59636573 -0.031248531 -0.58355199  0.239739168 -0.08403871 -1.00000000
 ```
 
 ## High-dimensional data
@@ -19780,7 +19828,7 @@ dir()
 ## [135] "irates.dat"                     "mnist.Rdata"                   
 ## [137] "myocarde.csv"                   "packages.bib"                  
 ## [139] "png"                            "preamble.tex"                  
-## [141] "README.md"                      "render171943a8fdeb.rds"        
+## [141] "README.md"                      "render5ce716af0452.rds"        
 ## [143] "style.css"                      "table1.text"                   
 ## [145] "toolbox.Rproj"                  "toronto2.rds"                  
 ## [147] "wineQualityReds.csv"            "YA_TextBook.md"                
@@ -20774,7 +20822,7 @@ str(B)
 ##  $ c: chr "Hello!"
 ##  $ d:function (arg = 1)  
 ##   ..- attr(*, "srcref")= 'srcref' int [1:8] 12 15 12 55 15 55 12 12
-##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fea4a8b87c0> 
+##   .. ..- attr(*, "srcfile")=Classes 'srcfilecopy', 'srcfile' <environment: 0x7fadd14d44e0> 
 ##  $ X: num [1:4, 1:4] 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
@@ -21202,8 +21250,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  3 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.741 -0.073 6.956 0.895 -1.687 ...
-##  $ c: Factor w/ 3 levels "(-3.11,0.256]",..: 2 1 3 2 1 3 1 3 3 2
+##  $ b: num  8.97 3.11 -9.42 -1.16 1.83 ...
+##  $ c: Factor w/ 3 levels "(-9.44,-2.95]",..: 3 2 1 2 2 3 3 3 3 1
 ```
 
 ```r
@@ -21215,8 +21263,8 @@ str(my_data)
 ```
 ## 'data.frame':	10 obs. of  4 variables:
 ##  $ a: int  1 2 3 4 5 6 7 8 9 10
-##  $ b: num  0.741 -0.073 6.956 0.895 -1.687 ...
-##  $ c: Factor w/ 3 levels "(-3.11,0.256]",..: 2 1 3 2 1 3 1 3 3 2
+##  $ b: num  8.97 3.11 -9.42 -1.16 1.83 ...
+##  $ c: Factor w/ 3 levels "(-9.44,-2.95]",..: 3 2 1 2 2 3 3 3 3 1
 ##  $ d: num [1:10, 1] -1.486 -1.156 -0.826 -0.495 -0.165 ...
 ##   ..- attr(*, "scaled:center")= num 5.5
 ##   ..- attr(*, "scaled:scale")= num 3.03
@@ -21232,17 +21280,17 @@ my_data
 ```
 
 ```
-##     a           b             c          d          f          g         h
-## 1   1  0.74143341  (0.256,3.61] -1.4863011         NA -1.1560120 -1.486301
-## 2   2 -0.07303122 (-3.11,0.256] -1.1560120 -1.4863011 -0.8257228 -2.642313
-## 3   3  6.95627210   (3.61,6.98] -0.8257228 -1.1560120 -0.4954337 -3.468036
-## 4   4  0.89504104  (0.256,3.61] -0.4954337 -0.8257228 -0.1651446 -3.963470
-## 5   5 -1.68684832 (-3.11,0.256] -0.1651446 -0.4954337  0.1651446 -4.128614
-## 6   6  3.64592253   (3.61,6.98]  0.1651446 -0.1651446  0.4954337 -3.963470
-## 7   7 -3.10271409 (-3.11,0.256]  0.4954337  0.1651446  0.8257228 -3.468036
-## 8   8  3.67281628   (3.61,6.98]  0.8257228  0.4954337  1.1560120 -2.642313
-## 9   9  6.97280152   (3.61,6.98]  1.1560120  0.8257228  1.4863011 -1.486301
-## 10 10  2.98407047  (0.256,3.61]  1.4863011  1.1560120         NA  0.000000
+##     a         b             c          d          f          g         h
+## 1   1  8.966843   (3.51,9.99] -1.4863011         NA -1.1560120 -1.486301
+## 2   2  3.112891  (-2.95,3.51] -1.1560120 -1.4863011 -0.8257228 -2.642313
+## 3   3 -9.416222 (-9.44,-2.95] -0.8257228 -1.1560120 -0.4954337 -3.468036
+## 4   4 -1.158192  (-2.95,3.51] -0.4954337 -0.8257228 -0.1651446 -3.963470
+## 5   5  1.825810  (-2.95,3.51] -0.1651446 -0.4954337  0.1651446 -4.128614
+## 6   6  7.999474   (3.51,9.99]  0.1651446 -0.1651446  0.4954337 -3.963470
+## 7   7  9.377652   (3.51,9.99]  0.4954337  0.1651446  0.8257228 -3.468036
+## 8   8  9.969036   (3.51,9.99]  0.8257228  0.4954337  1.1560120 -2.642313
+## 9   9  5.228105   (3.51,9.99]  1.1560120  0.8257228  1.4863011 -1.486301
+## 10 10 -3.066697 (-9.44,-2.95]  1.4863011  1.1560120         NA  0.000000
 ```
 
 ### Categorical Variables in Data Frames
@@ -21654,7 +21702,7 @@ apply(X, 2, sum)
 ```
 
 ```
-## [1]  2.56883243  5.95383754 -0.07510216  3.26757947 -2.95067509  0.97802215
+## [1] -2.056893  0.382727  1.170431  4.711441 -3.105062 -2.254164
 ```
 
 ```r
@@ -21700,12 +21748,12 @@ X_new
 ```
 
 ```
-##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
-## [1,] 3.394617 4.313274 3.687656 4.083465 3.386550 4.535575
-## [2,] 4.111127 2.417370 3.213682 3.036969 2.388254 4.385663
-## [3,] 2.635893 4.287597 3.441128 3.478164 1.642112 2.693953
-## [4,] 4.784207 4.801889 2.395754 3.610247 3.406598 2.655617
-## [5,] 2.642989 5.133708 2.186678 4.058734 1.225811 1.707214
+##          [,1]     [,2]     [,3]     [,4]       [,5]     [,6]
+## [1,] 1.647245 3.419565 2.514875 4.740692  3.6294829 3.777802
+## [2,] 3.606483 1.725867 2.284246 3.953271  2.4960225 3.811347
+## [3,] 3.578847 4.394105 4.936690 4.561833  2.9032966 1.105594
+## [4,] 2.797883 3.725603 4.086729 3.390421 -0.1309846 2.133459
+## [5,] 1.312649 2.117587 2.347892 3.065223  2.9971211 1.917634
 ```
 
 Since `apply()` is used only for matrices, if you apply `apply()` to a data frame, it first coerces your data.frame to an array which means all the columns must have the same type. Depending on your context, this could have unintended consequences.  For a safer practice in data frames, we can use `lappy()` and `sapply()`:  
@@ -23341,7 +23389,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "T" "H" "T" "H" "H" "H" "T" "T"
+## [1] "T" "T" "H" "H" "T" "H" "H" "H"
 ```
 
 ```r
@@ -23349,7 +23397,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 1 1
+## [1] 3 2
 ```
 
 ```r
@@ -23358,7 +23406,7 @@ sample(c("H","T"), size = 8, replace = TRUE)  # fair coin
 ```
 
 ```
-## [1] "H" "T" "T" "H" "T" "H" "T" "H"
+## [1] "T" "H" "T" "H" "T" "H" "H" "T"
 ```
 
 ```r
@@ -23366,7 +23414,7 @@ sample(1:6, size = 2, replace = TRUE, prob=c(3,3,3,4,4,4))
 ```
 
 ```
-## [1] 5 2
+## [1] 6 3
 ```
 
 The results are different. If we use `set.seed()` then we can get the same results each time. Lets try now:  
@@ -25225,7 +25273,7 @@ A good summary of tools for optimization in R given in this guide: [Optimization
 5. If the gradient and Hessian are available, we can also use the Newton-Raphson Method. This is only possible if the dataset is not high-dimensional, as calculating the Hessian would otherwise be very expensive.  
 6. Usually the Nelder-Mead method is slower than the Gradient Descent method. `Optim()` uses the Nelder-Mead method, but the optimization method can be chosen in its arguments.  
 
-More details can be found in this educational [slides](http://bigdatasummerinst.sph.umich.edu/wiki/images/a/ad/Bdsi_optimization_2019.pdf).  The most detailed and advance source is [Numerical Recipes](https://en.wikipedia.org/wiki/Numerical_Recipes), which uses `C++` and `R`. 
+The most detailed and advance source is [Numerical Recipes](https://en.wikipedia.org/wiki/Numerical_Recipes), which uses `C++` and `R`. 
 
 
 <!--chapter:end:35-Appendix1.Rmd-->
@@ -25236,7 +25284,7 @@ Classification with imbalanced data is characterized by the uneven proportion of
 
 There are two simple methods to overcome imbalance data in classification problems: oversampling and undersampling, both of which are used to adjust the class distribution in a data set. While oversampling simply randomly replicates the minority class, undersampling randomly selects a subset of majority class and reduces the overall sample size.  Thus, it can discard useful data.  
 
-There are also more complex oversampling techniques, including the creation of artificial data points. The most common technique is known as `SMOTE`, Synthetic Minority Oversampling Technique [Chawla et al.](https://jair.org/index.php/jair/article/view/10302) [-@Chawla_2002. This method generates synthetic data based on the feature space similarities between existing minority instances. In order to create a synthetic instance, it finds the k-nearest neighbors of each minority instance, randomly selects one of them, and then calculate linear interpolations to produce a new minority instance in the neighborhood.  
+There are also more complex oversampling techniques, including the creation of artificial data points. The most common technique is known as `SMOTE`, [Synthetic Minority Oversampling Technique](https://jair.org/index.php/jair/article/view/10302) [-@Chawla_2002]. This method generates synthetic data based on the feature space similarities between existing minority instances. In order to create a synthetic instance, it finds the k-nearest neighbors of each minority instance, randomly selects one of them, and then calculate linear interpolations to produce a new minority instance in the neighborhood.  
 
 The other methods is the adaptive synthetic sampling approach (`ADASYN`), which builds on the methodology of `SMOTE`, by shifting the importance of the classification boundary to those minority classes.  
 
